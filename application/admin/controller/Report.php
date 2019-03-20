@@ -354,4 +354,68 @@ class Report extends Base
         $this->assign('page',$Page);
         return $this->fetch();
     }
+
+    /**
+     * 统计报表 - 业绩排行
+     * @return mixed
+     */
+	public function performance(){
+
+		// $mobile = I('mobile');
+		// $email = I('email');
+        // $order_where = [
+        //     'o.add_time'=>['Between',"$this->begin,$this->end"],
+        //     'o.pay_status'=>1,
+        //     'o.order_status'=>['notIn','3,5']
+        // ];
+		// if($mobile){
+		// 	$user_where['mobile'] =$mobile;
+		// }		
+		// if($email){
+        //     $user_where['email'] = $email;
+		// }
+        // if($user_where){   //有查询单个用户的条件就去找出user_id
+        //     $user_id = Db::name('users')->where($user_where)->getField('user_id');
+        //     $order_where['o.user_id']=$user_id;
+        // }
+
+        // $count = Db::name('order')->alias('o')->where($order_where)->group('o.user_id')->count();  //统计数量
+        // $Page = new Page($count,$this->page_size);
+        // $list = Db::name('order')->alias('o')
+        //     ->field('count(o.order_id) as order_num,sum(o.total_amount) as amount,o.user_id,u.mobile,u.email,u.nickname')
+        //     ->join('users u','o.user_id=u.user_id','LEFT')
+        //     ->where($order_where)
+        //     ->group('o.user_id')
+        //     ->order('amount DESC')
+        //     ->limit($Page->firstRow,$Page->listRows)
+        //     ->cache(true)->select();   //以用户ID分组查询
+        // $this->assign('page',$Page);
+        // $this->assign('p',I('p/d',1));
+        // $this->assign('page_size',$this->page_size);
+        // $this->assign('list',$list);
+        // return $this->fetch();
+        if ($_POST) {
+            $order_sn = input('user_id/s');
+            $where = "and  order_sn like '%$order_sn%' ";
+            $cwhere['user_id'] = "like '%$order_sn%' ";
+        }
+
+        // $order_sn = input('order_sn/s');
+        // if (empty($order_sn)) {
+        //     $res = D('order')->select();
+        // } else {
+        //     $res = DB::name('order')->where(['order_sn' => ['like', '%' . $order_sn . '%']])->order('order_id')->select();
+        // }
+
+        $count = Db::table("tp_users")->join('tp_agent_performance',' tp_users.user_id=tp_agent_performance.user_id')->where($cwhere)->count();
+        $page = new Page($count,10);
+        $Pickup =  Db::query("select * from tp_agent_performance as a,tp_users as b where a.user_id = b.user_id $where order by a.user_id desc limit $page->firstRow,$page->listRows");
+        // var_dump($Pickup);exit;
+        // $res = $Pickup->order('order_id desc')->select();
+        $this->assign('page',$page);
+        $this->assign('list',$Pickup);
+
+
+        return $this->fetch();
+	}
 }
