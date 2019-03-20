@@ -153,10 +153,10 @@ return array(
         array('name' => '会员管理', 'child' => array(
             array('name' => '会员列表', 'act' => 'index', 'op' => 'User'),
             array('name' => '快速更改等级', 'act' => 'changelevel', 'op' => 'User'),
-            array('name'=>'会员等级','act'=>'levelList','op'=>'User'),
+            // array('name'=>'会员等级','act'=>'levelList','op'=>'User'),
         )),
 		array('name' => '团队管理','child'=>array(
-			array('name'=>'团队排名','act'=>'teamRank','op'=>'User'),
+			// array('name'=>'团队排名','act'=>'teamRank','op'=>'User'),
 			array('name'=>'分红列表','act'=>'bonusSystem','op'=>'User'),
 			// array('name'=>'会员等级','act'=>'levelList','op'=>'User'),
 		)),
@@ -170,7 +170,6 @@ return array(
             array('name' => '签到规则', 'act' => 'signRule', 'op' => 'Sign'),
         )),
     )),
-
 			array('name' => '新闻','child'=>array(
 					array('name' => '新闻列表', 'act'=>'newsList', 'op'=>'News'),
 					array('name' => '新闻分类', 'act'=>'categoryList', 'op'=>'News'),
@@ -210,15 +209,6 @@ return array(
 				array('name' => '分成日志列表', 'act' => 'rebate_log', 'op' => 'Distribut'),
 				array('name' => '消费日志列表', 'act' => 'consume_log', 'op' => 'Distribut'),
 			)),
-	     
-    	    array('name' => '微信接入','child' => array(
-    	        array('name' => '公众号配置', 'act'=>'index', 'op'=>'Wechat'),
-    	        array('name' => '微信菜单管理', 'act'=>'menu', 'op'=>'Wechat'),
-    	        array('name' => '自动回复', 'act'=>'auto_reply', 'op'=>'Wechat'),
-                array('name' => '粉丝列表', 'act'=>'fans_list', 'op'=>'Wechat'),
-                array('name' => '模板消息', 'act'=>'template_msg', 'op'=>'Wechat'),
-                array('name' => '素材管理', 'act'=>'materials', 'op'=>'Wechat'),
-    	    )),
 	)),
 
     'data' => array('name' => '数据', 'child' => array(
