@@ -26,26 +26,90 @@
                     <p class="notic">设置会员等级名称</p>
                 </dd>
             </dl>
+			<dl class="row">
+			    <dt class="tit">
+			        <label for="level_name"><em>*</em>等级</label>
+			    </dt>
+			    <dd class="opt">
+			        <input type="text" name="level_id" value="{$info.level_id}" id="level_id" class="input-txt">
+			        <span>级</span>
+			        <p class="notic">设置会员等级大小</p>
+			    </dd>
+			</dl>
             <dl class="row">
                 <dt class="tit">
-                    <label for="amount"><em>*</em>累计消费额度</label>
+                    <label for="amount"><em>*</em>等级所需条件</label>
                 </dt>
                 <dd class="opt">
-                    <input type="text" name="amount" value="{$info.amount}" id="amount" class="input-txt" onkeyup="this.value=/^\d+\.?\d{0,2}$/.test(this.value) ? this.value : ''">
+					<div style="margin-bottom: 10px;">
+					<input type="button" name="101" id="goods" value="商品"/>
+					<input type="button" name="102" id="nums" value="直推人数"/>
+					<input type="button" name="103" id="shares" value="分享购物"/>
+					</div>
+					<dl class="row" id="goods_is" style="display: block;">
+					    <dt class="tit">
+					        <label><em>*</em>选择商品</label>
+					    </dt>
+					    <dd class="opt">
+					        <input type="text" id="goods_name" readonly name="goods_name" value="{$info.goods_name}" class="input-txt">
+					        <div style="overflow: hidden" id="selected_group_goods">
+					            <if condition="$info['goods_id'] gt 0">
+					                <div style="float: left;margin-right: 10px" class="selected-group-goods">
+					                    <div class="goods-thumb"><img style="width: 162px;height: 162px"  <notempty name="info['specGoodsPrice']">src="{$info['specGoodsPrice']['spec_img']}"<else/>src="{$info['goods_id']|goods_thum_images=162,162}"</notempty>/></div>
+					                    <div class="goods-name">
+					                        <a target="_blank" href="{:U('Home/Goods/goodsInfo',array('id'=>$info['goods_id']))}">{$info.goods_name}</a>
+					                    </div>
+					                    <div class="goods-price">
+					                        <notempty name="info['specGoodsPrice']">
+					                            商城价：￥{$info['specGoodsPrice']['price']}库存:{$info['specGoodsPrice']['store_count']}
+					                            <else/>
+					                            商城价：￥{$info['goods']['shop_price']}库存:{$info['goods']['store_count']}
+					                        </notempty>
+					                    </div>
+					                </div>
+					            </if>
+					        </div>
+					        <span class="err" id="err_goods_name"></span>
+					        <p class="notic">
+					            <a onclick="selectGoods()" class="ncap-btn" id="select_goods_button"><i class="fa fa-search"></i>选择商品</a>
+					        </p>
+					    </dd>
+					</dl>
+					<div id="nums_is" style="display: none;">
+						<input type="text" name="discount" value="{$info.discount}"  class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')"><span>人</span>
+					</div>
+					<div id="shares_is" style="display: none;">
+						<input type="text" name="discount" value="{$info.discount}"  class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')"><span>元</span>
+					</div>
                     <span class="err" id="err_amount"></span>
-                    <p class="notic">达到该等级，会员累计所需消费的额度,单位：元</p>
+                    <p class="notic">达到该等级，会员所需条件(三选一)!直推人数等级为同等级。</p>
                 </dd>
             </dl>
+			
             <dl class="row">
                 <dt class="tit">
-                    <label for="discount"><em>*</em>折扣率</label>
+                    <label for="discount"><em>*</em>分享购物返利</label>
                 </dt>
                 <dd class="opt">
                     <input type="text" name="discount" value="{$info.discount}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
-                    <span class="err" id="err_discount"></span>
-                    <p class="notic">折扣率单位为百分比，如输入90，表示该会员等级的用户可以以商品原价的90%购买</p>
+                    <span>%</span>
+                    <p class="notic">返利单位为百分比，如输入10，表示该会员等级的用户分享商品原价的10%。</p>
                 </dd>
             </dl>
+			<dl class="row">
+			    <dt class="tit">
+			        直推奖励
+			    </dt>
+			    <dd class="opt">
+			        <select>
+						<option></option>
+					</select>
+					<input type="text" name="discount" value="{$info.discount}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+			        <span>元</span>
+			        <p class="notic">直推一名达到一定等级获得奖励！</p>
+			    </dd>
+			</dl>
+			
             <dl class="row">
                 <dt class="tit">
                     等级描述
@@ -84,6 +148,57 @@
             }
         });
     }
+	function selectGoods(){
+	    var url = "{:U('Promotion/search_goods',array('tpl'=>'select_goods','prom_type'=>1,'prom_id'=>$info[id]))}";
+	    layer.open({
+	        type: 2,
+	        title: '选择商品',
+	        shadeClose: true,
+	        shade: 0.2,
+	        area: ['75%', '75%'],
+	        content: url,
+	    });
+	}
+	function call_back(goodsItem){
+	    $('#goods_id').val(goodsItem.goods_id);
+	    $('input[name=item_id]').val(''); //将规格ID重置一下
+	    var html = '';
+	    if(goodsItem.spec != null){
+	        //有规格
+	        html = '<div style="float: left;margin: 10px auto;" class="selected-group-goods"><div class="goods-thumb">' +
+	                '<img style="width: 162px;height: 162px" src="'+goodsItem.spec.spec_img+'"/></div> <div class="goods-name"> ' +
+	                '<a target="_blank" href="/index.php?m=Home&c=Goods&a=goodsInfo&id='+goodsItem.goods_id+'">'+goodsItem.goods_name+goodsItem.spec.key_name+'</a> </div>' +
+	                ' <div class="goods-price">商城价：￥'+goodsItem.spec.price+'库存:'+goodsItem.spec.store_count+'</div> </div>';
+	        $('input[name=item_id]').val(goodsItem.spec.item_id)
+	        $('input[name=goods_name]').val(goodsItem.goods_name + goodsItem.spec.key_name);
+	    }else{
+	        html = '<div style="float: left;margin: 10px auto;" class="selected-group-goods"><div class="goods-thumb">' +
+	                '<img style="width: 162px;height: 162px" src="'+goodsItem.goods_image+'"/></div> <div class="goods-name"> ' +
+	                '<a target="_blank" href="/index.php?m=Home&c=Goods&a=goodsInfo&id='+goodsItem.goods_id+'">'+goodsItem.goods_name+'</a> </div>' +
+	                ' <div class="goods-price">商城价：￥'+goodsItem.goods_price+'库存:'+goodsItem.store_count+'</div> </div>';
+	        $('input[name=goods_name]').val(goodsItem.goods_name);
+	    }
+	    $('#select_goods_button').attr('data-goods-id',goodsItem.goods_id);
+	    $('#selected_group_goods').empty().html(html);
+	    $('.selected-group-goods').show();
+	    layer.closeAll('iframe');
+	}
+	//写死选择
+	$('#goods').click(function(){
+		$('#goods_is').css('display','block');
+		$('#nums_is').css('display','none');
+		$('#shares_is').css('display','none');
+	});
+	$('#nums').click(function(){
+		$('#goods_is').css('display','none');
+		$('#nums_is').css('display','block');
+		$('#shares_is').css('display','none');
+	});
+	$('#shares').click(function(){
+		$('#goods_is').css('display','none');
+		$('#nums_is').css('display','none');
+		$('#shares_is').css('display','block');
+	});
 </script>
 </body>
 </html>

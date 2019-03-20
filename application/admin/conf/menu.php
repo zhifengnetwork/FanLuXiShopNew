@@ -153,8 +153,13 @@ return array(
         array('name' => '会员管理', 'child' => array(
             array('name' => '会员列表', 'act' => 'index', 'op' => 'User'),
             array('name' => '快速更改等级', 'act' => 'changelevel', 'op' => 'User'),
-            // array('name'=>'会员等级','act'=>'levelList','op'=>'User'),
+            array('name'=>'会员等级','act'=>'levelList','op'=>'User'),
         )),
+		array('name' => '团队管理','child'=>array(
+			array('name'=>'团队排名','act'=>'teamRank','op'=>'User'),
+			array('name'=>'分红列表','act'=>'bonusSystem','op'=>'User'),
+			// array('name'=>'会员等级','act'=>'levelList','op'=>'User'),
+		)),
         array('name' => '充值提现', 'child' => array(
             array('name' => '充值记录', 'act' => 'recharge', 'op' => 'User'),
             array('name' => '提现申请', 'act' => 'withdrawals', 'op' => 'User'),

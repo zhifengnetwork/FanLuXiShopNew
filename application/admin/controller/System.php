@@ -26,6 +26,7 @@ class System extends Base
             // 'oss'       => '对象存储',
             'express'	=> '物流设置',
             // 'poster'	=> '海报设置'
+			'bonus'		=> '奖金池设置'
         ];		
 		$this->assign('group_list',$group_list);
 		$inc_type =  I('get.inc_type','shop_info');
@@ -535,5 +536,29 @@ class System extends Base
         */ 
          
     }        
-        
+	public function bonus_set(){//奖金池配置
+		if($_POST){
+		$inc_type = input('inc_type/s');
+		$bonus_pool =input('bonus_pool/s');
+		$ranking1 = input('ranking1/s');
+		$ranking2 = input('ranking2/s');
+		$ranking3 = input('ranking3/s');
+		$ranking4 = input('ranking4/s');
+		$data = array(
+			'bonus_pool'=>$bonus_pool,
+			'ranking1' =>$ranking1,
+			'ranking2' =>$ranking2,
+			'ranking3' =>$ranking3,
+			'ranking4' =>$ranking4
+			);
+		foreach($data as $k =>$v){
+			$updata = Db::query("update tp_config set value='$v' where inc_type='$inc_type' and name='$k'");
+			// isset("$k",$v);
+		}
+		delFile(RUNTIME_PATH);
+		clearCache();
+		$quick = I('quick',0);
+		$this->success("操作成功");
+		}
+	}
 }

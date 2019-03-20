@@ -953,4 +953,7 @@ exit("请联系DC环球直供网络客服购买高级版支持此功能");
         }
         $this->ajaxReturn($return);
     }
+	public function bonusSystem(){
+		return $this->fetch();
+	}
 }
