@@ -395,21 +395,14 @@ class Report extends Base
         // $this->assign('list',$list);
         // return $this->fetch();
         if ($_POST) {
-            $order_sn = input('user_id/s');
-            $where = "and  order_sn like '%$order_sn%' ";
-            $cwhere['user_id'] = "like '%$order_sn%' ";
+            $user_id = input('user_id/s');
+            $where = "and  b.user_id like '%$user_id%' ";
+            $cwhere = "tp_users.user_id like '%$user_id%' ";
         }
-
-        // $order_sn = input('order_sn/s');
-        // if (empty($order_sn)) {
-        //     $res = D('order')->select();
-        // } else {
-        //     $res = DB::name('order')->where(['order_sn' => ['like', '%' . $order_sn . '%']])->order('order_id')->select();
-        // }
 
         $count = Db::table("tp_users")->join('tp_agent_performance',' tp_users.user_id=tp_agent_performance.user_id')->where($cwhere)->count();
         $page = new Page($count,10);
-        $Pickup =  Db::query("select * from tp_agent_performance as a,tp_users as b where a.user_id = b.user_id $where order by a.user_id desc limit $page->firstRow,$page->listRows");
+        $Pickup =  Db::query("select * from tp_agent_performance as a,tp_users as b where a.user_id = b.user_id $where order by b.user_id desc limit $page->firstRow,$page->listRows");
         // var_dump($Pickup);exit;
         // $res = $Pickup->order('order_id desc')->select();
         $this->assign('page',$page);

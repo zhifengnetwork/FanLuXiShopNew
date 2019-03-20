@@ -29,7 +29,7 @@
 				<h5>(共{$page->totalRows}条记录)</h5>
 			</div>
 			<div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
-			<form class="navbar-form form-inline" id="search-form" method="post" action="{:U('Report/performance')}" onSubmit="return check_form();">
+			<form class="navbar-form form-inline" id="search-form" method="post" action="{:U('Report/performance')}" onSubmit="">
 				<div class="sDiv">
 					<!-- <div class="sDiv2" style="margin-right: 10px;">
 						<input type="text" size="30" name="start_time" id="start_time" value="{$start_time}" placeholder="起始时间" class="qsbox">
@@ -47,7 +47,7 @@
 						<input class="btn" value="搜索" type="submit">
                     </div> -->
                     <div class="sDiv2">
-                        <input type="text" size="30" name="user_id" value="" class="qsbox" placeholder="请输入订单号">
+                        <input type="text" size="30" name="user_id" value="" class="qsbox" placeholder="请输入ID号">
                     </div>
                     <div class="sDiv2">
                         <input class="btn" value="搜索" type="submit">
