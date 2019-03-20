@@ -226,14 +226,15 @@ return array(
             array('name' => '销售概况', 'act' => 'index', 'op' => 'Report'),
             array('name' => '销售排行', 'act' => 'saleTop', 'op' => 'Report'),
             array('name' => '会员排行', 'act' => 'userTop', 'op' => 'Report'),
+            array('name' => '业绩排行', 'act' => 'performance', 'op' => 'Report'),
             array('name' => '销售明细', 'act' => 'saleList', 'op' => 'Report'),
             array('name' => '会员统计', 'act' => 'user', 'op' => 'Report'),
             array('name' => '运营概览', 'act' => 'finance', 'op' => 'Report'),
             array('name' => '平台支出记录', 'act' => 'expense_log', 'op' => 'Report'),
         )),
-        // array('name' => 'App','child' => array(
-        // 	array('name' => '安卓APP管理', 'act'=>'index', 'op'=>'MobileApp'),
-        //     array('name' => '苹果APP管理', 'act'=>'ios_audit', 'op'=>'MobileApp'),
+        // array('name' => '业绩','child' => array(
+        // 	array('name' => '个人业绩', 'act'=>'personal', 'op'=>'results'),
+        //     array('name' => '团队业绩', 'act'=>'team', 'op'=>'results'),
         // ))
     )),
 
