@@ -957,6 +957,9 @@ exit("请联系DC环球直供网络客服购买高级版支持此功能");
 		return $this->fetch();
 	}
 	public function bonusSystem(){//分红列表
+		$settle = M('config')->where(['name'=>'settlement','inc_type'=>'settle'])->select();
+		$this->assign('settle',$settle[0]);
+		
 		$list = Db::name('share')->order('grade','desc')->select();
 		
 		$this->assign('list',$list);
@@ -1023,5 +1026,22 @@ exit("请联系DC环球直供网络客服购买高级版支持此功能");
 				$this->ajaxReturn([status=>0,msg=>'参数失败']);
 			}
 		}
+	}
+	
+	public function settle($id=""){
+		$info = M('config')->where('id',$id)->select();
+		$this->assign('info',$info['0']);
+		if($_POST){
+			$id=I('id');
+			$value = I('value');
+			$zz = preg_match("/^\d*$/",$value);
+			if($zz==false){
+				$this->ajaxReturn([status=>0,msg=>'请输入数字格式！']);
+			}else{
+				$res = Db::name('config')->update(['value'=>$value,'id'=>$id]);
+				$this->ajaxReturn([status=>1,msg=>'操作成功']);
+			}
+		}
+		return $this->fetch();
 	}
 }
