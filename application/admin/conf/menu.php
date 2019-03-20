@@ -208,6 +208,11 @@ return array(
 				// array('name' => '分销设置', 'act' => 'distribut', 'op' => 'System'),
 				array('name' => '分成日志列表', 'act' => 'rebate_log', 'op' => 'Distribut'),
 				array('name' => '消费日志列表', 'act' => 'consume_log', 'op' => 'Distribut'),
+            )),
+            
+            array('name' => '奖金池', 'child' => array(
+				array('name' => '奖励排名表', 'act' => 'ranking', 'op' => 'BonusPool'),
+				array('name' => '领取日志列表', 'act' => 'receive_log', 'op' => 'BonusPool'),
 			)),
 	)),
 
