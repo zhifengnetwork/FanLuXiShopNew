@@ -24,7 +24,7 @@
 	<div class="flexigrid">
 		<div class="mDiv">
 			<div class="ftitle">
-				<h3>会员等级列表</h3>
+				<h3>分红等级列表</h3>
 				<h5>(共{$list|count}条记录)</h5>
 			</div>
 			<div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
@@ -37,11 +37,14 @@
 						<th class="sign" axis="col0">
 							<div style="width: 24px;"><i class="ico-check"></i></div>
 						</th>
-						<th align="left" abbr="ac_id" axis="col4" class="">
-							<div style="text-align: left; width: 100px;" class="">业绩下限</div>
+						<th align="center" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: center; width: 70px;" class="">业绩等级</div>
+						</th>
+						<th align="center" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: center; width: 200px;" class="">业绩下限</div>
 						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
-							<div style="text-align: center; width: 100px;" class="">业绩上限</div>
+							<div style="text-align: center; width: 200px;" class="">业绩上限</div>
 						</th>
 						<th align="center" abbr="article_time" axis="col6" class="">
 							<div style="text-align: center; width: 70px;" class="">分红比例</div>
@@ -62,9 +65,9 @@
 		</div>
 		<div class="tDiv">
 			<div class="tDiv2">
-				<div class="fbutton"> <a href="{:U('User/level')}">
-					<div class="add" title="新增会员等级">
-						<span><i class="fa fa-plus"></i>新增会员等级</span>
+				<div class="fbutton"> <a href="{:U('User/bonusSystem_add')}">
+					<div class="add" title="新增分红等级">
+						<span><i class="fa fa-plus"></i>新增分红等级</span>
 					</div>
 				</a> </div>
 			</div>
@@ -79,24 +82,31 @@
 							<td class="sign">
 								<div style="width: 24px;"><i class="ico-check"></i></div>
 							</td>
-							<td align="left" class="">
-								<div style="text-align: left; width: 100px;">{$vo.level_name}</div>
+							<td align="center" class="">
+								<div style="text-align: center; width: 70px;">{$vo.grade}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 100px;">
-									{$vo.amount}
+								<div style="text-align: center; width: 200px;"><if condition="$vo['upper'] eq 0">{$vo.lower}元以上<elseif condition="$vo['lower'] eq 0"/><else/>{$vo.lower}元</if></div>
+							</td>
+							<td align="center" class="">
+								<div style="text-align: center; width: 200px;">
+									<if condition="$vo['lower'] eq 0">
+									{$vo.upper}元以内
+									<elseif condition="$vo['upper'] eq 0"/>
+									<else/>{$vo.upper}元
+									</if>
 								</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 70px;">{$vo.discount}%</div>
+								<div style="text-align: center; width: 70px;">{$vo.rate}%</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 100px;">{$vo.describe}</div>
 							</td>
 							<td align="center" class="handle">
 								<div style="text-align: center; width: 150px; max-width:170px;">
-									<a href="{:U('User/level',array('act'=>'edit','level_id'=>$vo['level_id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>编辑</a>
-									<a class="btn red"  href="javascript:void(0)" data-url="{:U('User/levelHandle')}" data-id="{$vo.level_id}" onClick="delfun(this)"><i class="fa fa-trash-o"></i>删除</a>
+									<a href="{:U('User/bonusSystem_add',array('rate_id'=>$vo['rate_id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>编辑</a>
+									<a class="btn red"  href="javascript:void(0)" data-url="{:U('User/dels')}" data-id="{$vo.rate_id}" onClick="delfun(this)"><i class="fa fa-trash-o"></i>删除</a>
 								</div>
 							</td>
 							<td align="" class="" style="width: 100%;">
@@ -135,7 +145,7 @@
 			$.ajax({
 				type: 'post',
 				url: $(obj).attr('data-url'),
-				data : {act:'del',level_id:$(obj).attr('data-id')},
+				data : {act:'del',rate_id:$(obj).attr('data-id')},
 				dataType: 'json',
 				success: function (data) {
 					layer.closeAll();

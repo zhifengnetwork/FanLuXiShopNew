@@ -6,8 +6,8 @@
 	<div class="fixed-bar">
 		<div class="item-title">
 			<div class="subject">
-				<h3>会员等级管理</h3>
-				<h5>网站系统会员等级索引与管理</h5>
+				<h3>团队排名</h3>
+				<h5>网站系统团队索引与管理</h5>
 			</div>
 		</div>
 	</div>
@@ -18,13 +18,13 @@
 			<span title="收起提示" id="explanationZoom" style="display: block;"></span>
 		</div>
 		<ul>
-			<li>会员等级管理， 不同会员等级可设置不同折扣</li>
+			<li>团队排名</li>
 		</ul>
 	</div>
 	<div class="flexigrid">
 		<div class="mDiv">
 			<div class="ftitle">
-				<h3>会员等级列表</h3>
+				<h3>团队排名列表</h3>
 				<h5>(共{$list|count}条记录)</h5>
 			</div>
 			<div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
@@ -37,20 +37,20 @@
 						<th class="sign" axis="col0">
 							<div style="width: 24px;"><i class="ico-check"></i></div>
 						</th>
-						<th align="left" abbr="article_title" axis="col3" class="">
-							<div style="text-align: left; width: 50px;" class="">等级</div>
+						<th align="center" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: center; width: 70px;" class="">业绩等级</div>
 						</th>
-						<th align="left" abbr="ac_id" axis="col4" class="">
-							<div style="text-align: left; width: 70px;" class="">等级名称</div>
+						<th align="center" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: center; width: 100px;" class="">业绩下限</div>
 						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
-							<div style="text-align: center; width: 100px;" class="">条件</div>
+							<div style="text-align: center; width: 100px;" class="">业绩上限</div>
 						</th>
 						<th align="center" abbr="article_time" axis="col6" class="">
-							<div style="text-align: center; width: 60px;" class="">返利</div>
+							<div style="text-align: center; width: 70px;" class="">分红比例</div>
 						</th>
 						<th align="center" abbr="article_time" axis="col6" class="">
-							<div style="text-align: center; width: 100px;" class="">等级描述</div>
+							<div style="text-align: center; width: 100px;" class="">业绩描述</div>
 						</th>
 						<th align="center" axis="col1" class="handle">
 							<div style="text-align: center; width: 150px;">操作</div>
@@ -63,16 +63,6 @@
 				</table>
 			</div>
 		</div>
-		<div class="tDiv">
-			<div class="tDiv2">
-				<div class="fbutton"> <a href="{:U('User/level')}">
-					<div class="add" title="新增会员等级">
-						<span><i class="fa fa-plus"></i>新增会员等级</span>
-					</div>
-				</a> </div>
-			</div>
-			<div style="clear:both"></div>
-		</div>
 		<div class="bDiv" style="height: auto;">
 			<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
 				<table>
@@ -82,11 +72,11 @@
 							<td class="sign">
 								<div style="width: 24px;"><i class="ico-check"></i></div>
 							</td>
-							<td align="left" class="">
-								<div style="text-align: left; width: 50px;">{$vo.level_id}</div>
+							<td align="center" class="">
+								<div style="text-align: center; width: 70px;">{$vo.level_name}</div>
 							</td>
-							<td align="left" class="">
-								<div style="text-align: left; width: 70px;">{$vo.level_name}</div>
+							<td align="center" class="">
+								<div style="text-align: center; width: 100px;">{$vo.level_name}</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 100px;">
@@ -94,7 +84,7 @@
 								</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 60px;">{$vo.discount}%</div>
+								<div style="text-align: center; width: 70px;">{$vo.discount}%</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 100px;">{$vo.describe}</div>

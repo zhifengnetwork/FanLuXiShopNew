@@ -953,7 +953,75 @@ exit("请联系DC环球直供网络客服购买高级版支持此功能");
         }
         $this->ajaxReturn($return);
     }
-	public function bonusSystem(){
+	public function teamRank(){
 		return $this->fetch();
+	}
+	public function bonusSystem(){//分红列表
+		$list = Db::name('share')->order('grade','desc')->select();
+		
+		$this->assign('list',$list);
+		return $this->fetch();
+	}
+	public function bonusSystem_add($rate_id=""){//分红列表操作
+		if($rate_id>0){
+			$info = Db::name('share')->where('rate_id',$rate_id)->select();
+			$this->assign('info',$info['0']);
+		}
+		if($_POST){
+			$rate_id = I('rate_id');
+			
+			$grade = I('grade');
+			$lower = I('lower');
+			$upper = I('upper');
+			$rate = I('rate');
+			$describe = I('describe');
+			$zz = preg_match("/^\d*$/",$grade);
+			$zz1 = preg_match("/^\d*$/",$lower);
+			$zz2 = preg_match("/^\d*$/",$upper);
+			$zz3 = preg_match("/^\d*$/",$rate);
+			if($grade==""||$zz==false){
+				$this->ajaxReturn([status=>'0',msg=>'请填写等级(数字格式)！',name=>'grade']);
+			}
+			if($lower==""&&$upper==""){
+				$this->ajaxReturn([status=>'0',msg=>'上限和下限不能都为空且数字格式',name=>'lower']);
+			}
+			if($rate==''){
+				$rate=0;
+			}elseif($zz3==false){
+				$this->ajaxReturn([status=>'0',msg=>'分红比例为数字格式',name=>'lower']);
+			}
+			$data = array(
+				'grade' =>$grade,
+				'lower' =>$lower,
+				'upper' =>$upper,
+				'rate' =>$rate,
+				'describe' =>$describe
+			);
+			if($rate_id>0){
+				$data['update_time'] = time();
+				$res = Db::name('share')->where('rate_id',$rate_id)->update($data);
+			}else{
+				$data['create_time'] = time();
+				$res = Db::name('share')->insert($data);
+			}
+			if($res){
+				$this->ajaxReturn([status=>'1',msg=>'操作成功']);
+			}else{
+				$this->ajaxReturn([status=>'0',msg=>'参数失败']);
+			}
+			
+		}
+		return $this->fetch();
+	}
+	public function dels(){
+		$rate_id = I('rate_id');
+		if($rate_id>0){
+			$del = Db::name('share')->where('rate_id',$rate_id)->delete();
+			if($del){
+				$this->ajaxReturn([status=>1,msg=>'操作成功']);
+			}else{
+				$this->ajaxReturn([status=>0,msg=>'参数失败']);
+			}
+		}
 	}
 }
