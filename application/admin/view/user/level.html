@@ -42,39 +42,11 @@
                 </dt>
                 <dd class="opt">
 					<div style="margin-bottom: 10px;">
-					<input type="button" name="101" id="goods" value="商品"/>
-					<input type="button" name="102" id="nums" value="直推人数"/>
-					<input type="button" name="103" id="shares" value="分享购物"/>
+					<select name="type" onchange="showMsg(this)">
+						<option value="102">直推人数</option>
+						<option value="103">分享购物金额</option>
+					</select>
 					</div>
-					<dl class="row" id="goods_is" style="display: block;">
-					    <dt class="tit">
-					        <label><em>*</em>选择商品</label>
-					    </dt>
-					    <dd class="opt">
-					        <input type="text" id="goods_name" readonly name="goods_name" value="{$info.goods_name}" class="input-txt">
-					        <div style="overflow: hidden" id="selected_group_goods">
-					            <if condition="$info['goods_id'] gt 0">
-					                <div style="float: left;margin-right: 10px" class="selected-group-goods">
-					                    <div class="goods-thumb"><img style="width: 162px;height: 162px"  <notempty name="info['specGoodsPrice']">src="{$info['specGoodsPrice']['spec_img']}"<else/>src="{$info['goods_id']|goods_thum_images=162,162}"</notempty>/></div>
-					                    <div class="goods-name">
-					                        <a target="_blank" href="{:U('Home/Goods/goodsInfo',array('id'=>$info['goods_id']))}">{$info.goods_name}</a>
-					                    </div>
-					                    <div class="goods-price">
-					                        <notempty name="info['specGoodsPrice']">
-					                            商城价：￥{$info['specGoodsPrice']['price']}库存:{$info['specGoodsPrice']['store_count']}
-					                            <else/>
-					                            商城价：￥{$info['goods']['shop_price']}库存:{$info['goods']['store_count']}
-					                        </notempty>
-					                    </div>
-					                </div>
-					            </if>
-					        </div>
-					        <span class="err" id="err_goods_name"></span>
-					        <p class="notic">
-					            <a onclick="selectGoods()" class="ncap-btn" id="select_goods_button"><i class="fa fa-search"></i>选择商品</a>
-					        </p>
-					    </dd>
-					</dl>
 					<div id="nums_is" style="display: none;">
 						<input type="text" name="discount" value="{$info.discount}"  class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')"><span>人</span>
 					</div>
@@ -91,6 +63,9 @@
                     <label for="discount"><em>*</em>分享购物返利</label>
                 </dt>
                 <dd class="opt">
+					<select>
+						<option></option>
+					</select>
                     <input type="text" name="discount" value="{$info.discount}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
                     <span>%</span>
                     <p class="notic">返利单位为百分比，如输入10，表示该会员等级的用户分享商品原价的10%。</p>
