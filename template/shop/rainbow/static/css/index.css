@@ -217,11 +217,12 @@ img{
 .seckill-box .seckillMsg .seckillTit{
     font-size:.3rem;
     color:#ff0000;
-    padding-left:.4rem;
-    padding-right: .48rem;
+    /*padding-left:.4rem;*/
+    padding-right: .38rem;
 }
 .seckill-box .seckillMsg  .count{
     font-size:.2rem;
+    padding-right: .14rem;
 }
 
 .seckillMsg .countTime{

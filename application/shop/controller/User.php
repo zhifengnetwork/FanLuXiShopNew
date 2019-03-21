@@ -6,6 +6,7 @@ namespace app\shop\controller;
 use app\common\logic\CartLogic;
 use app\common\logic\Message;
 use app\common\logic\UsersLogic;
+use app\common\logic\DistributLogic;
 use app\common\logic\OrderLogic;
 use app\common\model\MenuCfg;
 use app\common\model\UserAddress;
@@ -50,9 +51,9 @@ class User extends MobileBase
         $is_bind_account = tpCache('basic.is_bind_account');
         if (!$this->user_id && !in_array(ACTION_NAME, $nologin)) {
             if(strstr($_SERVER['HTTP_USER_AGENT'],'MicroMessenger') && $is_bind_account){
-                header("location:" . U('Mobile/User/bind_guide'));//微信浏览器, 调到绑定账号引导页面
+                header("location:" . U('Shop/User/bind_guide'));//微信浏览器, 调到绑定账号引导页面
             }else{
-                header("location:" . U('Mobile/User/login'));
+                header("location:" . U('Shop/User/login'));
             }
             exit;
         }
@@ -68,6 +69,11 @@ class User extends MobileBase
 
     public function index()
     {
+
+        $map['user_id'] = $this->user_id;
+        if ($cat_id > 0) $map['a.cat_id'] = $cat_id;
+        $this->user['visit_count'] = M('goods_visit')->where($map)->count();
+        $this->user['collect_count'] = M('goods_collect')->where($map)->count();
 
         $MenuCfg = new MenuCfg();
         $menu_list = $MenuCfg->where('is_show', 1)->order('menu_id asc')->select();
@@ -90,14 +96,12 @@ class User extends MobileBase
 
     
     public function wallet(){
-
-        $user = session('user');
         //获取账户资金记录
         $logic = new UsersLogic();
         $data = $logic->get_account_log($this->user_id, I('get.type'));
         $account_log = $data['result'];
 
-        $this->assign('user', $user);
+        $this->assign('user', $this->user);
         $this->assign('account_log', $account_log);
         $this->assign('page', $data['show']);
 
@@ -121,12 +125,67 @@ class User extends MobileBase
         return $this->fetch();
     }
     
+    private function child_agent($user_id)
+    {
+        $performance = M('agent_performance')->where(['user_id'=>$user_id])->find();
+        if(empty($performance)) return false;
+        return $performance;
+    }
+
     /**
      * 分销
      */
     public function member()
     {
+        $user = session('user');
+        $field = "user_id,first_leader,is_distribut,is_agent"; 
+        $users = M('users')->where(['first_leader'=>$user['user_id']])->field($field)->select();
+        if($users)
+        {
+            if(empty($users)) return false;
+            $money_array = [];
+            foreach($users as $key=>$val){
+                $get_child_agent = $this->child_agent($val['user_id']);
+                $money_array[]=$get_child_agent['agent_per'];
+                // dump($get_child_agent['agent_per']);
+                // $$money_array[] = $get_child_agent['agent_per'];
+            }
+            if(empty($money_array)){
+                return false;
+            };
+            $moneys = array_filter($money_array);
+            rsort($moneys);
+            //最大业绩用户
+            if(count($moneys) >= 2){
+                $max_moneys = max($moneys);
+            }else{
+                $max_moneys = $moneys[0];
+            }
+            array_shift($moneys);
+            //去掉最大业绩之和
+            $moneys = array_sum($moneys);
+            $agent = $this->child_agent($user['user_id']);
+            $money_total1 = $agent['ind_per']+$agent['agent_per'];
+            $money_total = array(
+                'money_total'=>$money_total1,
+                'max_moneys'=>$max_moneys,
+                'moneys'=>$money_total1-$max_moneys
+            );
+            $this->assign('money_total',$money_total);
+        }
 
+        //上级用户信息
+        $leader_id = M('users')->where('user_id', $user['user_id'])->value('first_leader');
+        if($leader_id){
+            $leader = M('users')->where('user_id', $leader_id)->field('user_id, nickname')->find();
+            if($leader){
+                $this->assign('leader',$leader);
+            }
+        }
+        
+        $this->assign('user_id', $user['user_id']);
+        $underling_number = M('users')->where(['user_id'=>$user['user_id']])->value('underling_number');
+        $this->assign('underling_number', $underling_number);
 
         return $this->fetch();
     }
@@ -205,7 +264,7 @@ class User extends MobileBase
         setcookie('user_id','',time()-3600,'/');
         setcookie('PHPSESSID','',time()-3600,'/');
         //$this->success("退出成功",U('Mobile/Index/index'));
-        header("Location:" . U('Mobile/Index/index'));
+        header("Location:" . U('Shop/Index/index'));
         exit();
     }
 
@@ -286,12 +345,12 @@ class User extends MobileBase
     {
         if ($this->user_id > 0) {
 //            header("Location: " . U('Mobile/User/index'));
-            $this->redirect('Mobile/User/index');
+            $this->redirect('Shop/User/index');
         }
-        $referurl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : U("Mobile/User/index");
+        $referurl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : U("Shop/User/index");
         $this->assign('referurl', $referurl);
         // 新版支付宝跳转链接
-        $this->assign('alipay_url', urlencode(SITE_URL.U("Mobile/LoginApi/login",['oauth'=>'alipaynew'])));
+        $this->assign('alipay_url', urlencode(SITE_URL.U("Shop/LoginApi/login",['oauth'=>'alipaynew'])));
         return $this->fetch();
     }
 
@@ -353,7 +412,7 @@ class User extends MobileBase
     {
 
         if($this->user_id > 0) {
-            $this->redirect(U('Mobile/User/index'));
+            $this->redirect(U('Shop/User/index'));
         }
         $reg_sms_enable = tpCache('sms.regis_sms_enable');
         $reg_smtp_enable = tpCache('sms.regis_smtp_enable');
@@ -607,7 +666,7 @@ class User extends MobileBase
             if ($data['status'] != 1){
                 $this->ajaxReturn($data);
             } else {
-                $data['url']= U('/Mobile/User/address_list');
+                $data['url']= U('/Shop/User/address_list');
                 $this->ajaxReturn($data);
             }
         }
@@ -631,23 +690,23 @@ class User extends MobileBase
             $logic = new UsersLogic();
             $data = $logic->add_address($this->user_id, $id, $post_data);
             if ($source == 'cart2') {
-                $data['url']=U('/Mobile/Cart/cart2', array('address_id' => $data['result'],'goods_id'=>$post_data['goods_id'],'goods_num'=>$post_data['goods_num'],'item_id'=>$post_data['item_id'],'action'=>$post_data['action']));
+                $data['url']=U('/Shop/Cart/cart2', array('address_id' => $data['result'],'goods_id'=>$post_data['goods_id'],'goods_num'=>$post_data['goods_num'],'item_id'=>$post_data['item_id'],'action'=>$post_data['action']));
                 $this->ajaxReturn($data);
             } elseif ($source == 'integral') {
-                $data['url'] = U('/Mobile/Cart/integral', array('address_id' => $data['result'],'goods_id'=>$post_data['goods_id'],'goods_num'=>$post_data['goods_num'],'item_id'=>$post_data['item_id']));
+                $data['url'] = U('/Shop/Cart/integral', array('address_id' => $data['result'],'goods_id'=>$post_data['goods_id'],'goods_num'=>$post_data['goods_num'],'item_id'=>$post_data['item_id']));
                 $this->ajaxReturn($data);
             } elseif($source == 'pre_sell_cart'){
-                $data['url'] = U('/Mobile/Cart/pre_sell_cart', array('address_id' => $data['result'],'act_id'=>$post_data['act_id'],'goods_num'=>$post_data['goods_num']));
+                $data['url'] = U('/Shop/Cart/pre_sell_cart', array('address_id' => $data['result'],'act_id'=>$post_data['act_id'],'goods_num'=>$post_data['goods_num']));
                 $this->ajaxReturn($data);
             } elseif($source == 'team'){
-                $data['url']= U('/Mobile/Team/order', array('address_id' => $data['result'],'order_id'=>$post_data['order_id']));
+                $data['url']= U('/Shop/Team/order', array('address_id' => $data['result'],'order_id'=>$post_data['order_id']));
                 $this->ajaxReturn($data);
             } elseif ($_POST['source'] == 'pre_sell') {
                 $prom_id = input('prom_id/d');
-                $data['url'] = U('/Mobile/Cart/pre_sell', array('address_id' => $data['result'],'goods_num' => $goods_num,'prom_id' => $prom_id));
+                $data['url'] = U('/Shop/Cart/pre_sell', array('address_id' => $data['result'],'goods_num' => $goods_num,'prom_id' => $prom_id));
                 $this->ajaxReturn($data);
             } else {
-                $data['url']= U('/Mobile/User/address_list');
+                $data['url']= U('/Shop/User/address_list');
                 $this->ajaxReturn($data);
             }
         }
@@ -676,10 +735,10 @@ class User extends MobileBase
         M('user_address')->where(array('user_id' => $this->user_id))->save(array('is_default' => 0));
         $row = M('user_address')->where(array('user_id' => $this->user_id, 'address_id' => $id))->save(array('is_default' => 1));
         if ($source == 'cart2') {
-            header("Location:" . U('Mobile/Cart/cart2'));
+            header("Location:" . U('Shop/Cart/cart2'));
             exit;
         } else {
-            header("Location:" . U('Mobile/User/address_list'));
+            header("Location:" . U('Shop/User/address_list'));
         }
     }
 
@@ -1033,12 +1092,12 @@ class User extends MobileBase
             $data = $logic->get_info($this->user_id);
             $user = $data['result'];
             if ($user['mobile'] == '' && $user['email'] == '')
-                $this->ajaxReturn(['status'=>-1,'msg'=>'请先绑定手机或邮箱','url'=>U('/Mobile/User/index')]);
+                $this->ajaxReturn(['status'=>-1,'msg'=>'请先绑定手机或邮箱','url'=>U('/Shop/User/index')]);
             $userLogic = new UsersLogic();
             $data = $userLogic->password($this->user_id, I('post.old_password'), I('post.new_password'), I('post.confirm_password'));
             if ($data['status'] == -1)
                 $this->ajaxReturn(['status'=>-1,'msg'=>$data['msg']]);
-            $this->ajaxReturn(['status'=>1,'msg'=>$data['msg'],'url'=>U('/Mobile/User/index')]);
+            $this->ajaxReturn(['status'=>1,'msg'=>$data['msg'],'url'=>U('/Shop/User/index')]);
             exit;
         }
         return $this->fetch();
@@ -1098,7 +1157,7 @@ class User extends MobileBase
     public function set_pwd()
     {
         if ($this->user_id > 0) {
-            $this->redirect('Mobile/User/index');
+            $this->redirect('Shop/User/index');
         }
         $check = session('validate_code');
         $find_password = session('find_password');
@@ -1223,6 +1282,47 @@ class User extends MobileBase
     	return $this->fetch();
     }
 
+    public function performance_log(){
+        $DistributLogic = new DistributLogic;
+        $result= $DistributLogic->get_recharge_log($this->user_id,'','agent_performance_log');  //业务记录
+        // dump($this->user_id);
+        $this->assign('page', $result['show']);
+        $this->assign('lists', $result['result']);
+        if (I('is_ajax')) {
+            return $this->fetch('ajax_log_list');
+        }
+        return $this->fetch();
+    }
+
+    public function commision(){
+        $DistributLogic = new DistributLogic;
+        $result= $DistributLogic->get_commision_log($this->user_id);  //佣金明细
+        $this->assign('page', $result['show']);
+        $this->assign('lists', $result['result']);
+        if (I('is_ajax')) {
+            return $this->fetch('ajax_commision_list');
+        }
+
+        return $this->fetch();
+    }
+
+    //团队列表
+    public function team_list(){
+        $first_leader = I('first_leader');
+        if(!$first_leader){
+            $first_leader = session('user.user_id');
+        }
+        //用户信息
+        $user = M('users')->field('user_id,nickname,mobile')->where(['user_id'=>$first_leader])->find();
+        //下级信息
+        $users = M('users')->field('user_id,nickname,mobile')->where(['first_leader'=>$first_leader])->select();
+        
+        $this->assign('user', $user);
+        $this->assign('lists', $users);
+
+        return $this->fetch();
+    }
+    
     //添加、编辑提现支付宝账号
     public function add_card(){
         $user_id=$this->user_id;
@@ -1555,7 +1655,7 @@ class User extends MobileBase
         if ($step > 1) {
             $check = session('validate_code');
             if (empty($check)) {
-                $this->error('验证码还未验证通过', U('mobile/User/paypwd'));
+                $this->error('验证码还未验证通过', U('Shop/User/paypwd'));
             }
         }
         if (IS_POST && $step == 2) {

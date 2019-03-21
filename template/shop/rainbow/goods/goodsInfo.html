@@ -1,4 +1,4 @@
-<include file="public/header_goods_info" title="商品详情" body=""/>
+<include file="public/header" title="商品详情" body=""/>
 <style>
     .plusshopcar-buy .buy_bt_disable{
         background: #ebebeb;
@@ -101,7 +101,7 @@
                         <div class="fl">
                             <span class="firde">促销</span>
                             <span class="desal-proinfo">
-                            	<b><i>换购</i>购买一件可换购更优惠商品</b>
+                                <b><i>换购</i>购买一件可换购更优惠商品</b>
                                 <b><i>组合购</i>加价可购买更优惠的xx商品</b>
                                 <b><i>加价购</i>优惠套餐更加实惠，总体打8折</b>
                             </span>
@@ -266,13 +266,13 @@
                             </a>
                         </li>
                     </if>
-					<if condition="$goods.is_virtual neq 1">
-	                    <li>
-	                        <a href="javascript:void(0);">
-	                            <i><em>{$tpshop_config['shopping_auto_service_date']}</em></i>
-	                            <p>{$tpshop_config['shopping_auto_service_date']}天退款</p>
-	                        </a>
-	                    </li>
+                    <if condition="$goods.is_virtual neq 1">
+                        <li>
+                            <a href="javascript:void(0);">
+                                <i><em>{$tpshop_config['shopping_auto_service_date']}</em></i>
+                                <p>{$tpshop_config['shopping_auto_service_date']}天退款</p>
+                            </a>
+                        </li>
                     </if>
                 </ul>
             </div>
@@ -299,7 +299,7 @@
 
     </div>
     <script type="text/javascript">
-    	$(".Combination-list ul").css("width",$(".Combination-list ul li").length*10.5+"rem");
+        $(".Combination-list ul").css("width",$(".Combination-list ul li").length*10.5+"rem");
     </script>
      <!--搭配套餐 e-->
     <!--为你推荐 s-->
@@ -405,7 +405,7 @@
                         </a>
                         <else />
                         <!--早先客服-->
-                        <!--<a href="tel:{$tpshop_config['shop_info_phone']}">tencent://message/?uin={$tpshop_config['shop_info_qq']}&Site=TPshop商城&Menu=yes-->
+                        <!--<a href="tel:{$tpshop_config['shop_info_phone']}">tencent://message/?uin={$tpshop_config['shop_info_qq']}&Site=DC环球直供网络&Menu=yes-->
                         <a href="mqqwpa://im/chat?chat_type=wpa&uin={$tpshop_config['shop_info_qq']}&version=1&src_type=web&web_src=">
                             <i></i>
                             <p>客服</p>
@@ -445,31 +445,31 @@
 
 <!--促销活动弹窗 start--------------------------------------------------------------------------------->
 <div class="salpro_aready p">
-	<div class="salpro-tit">
-    	<b>促销信息</b>
+    <div class="salpro-tit">
+        <b>促销信息</b>
         <div class="price_or fr"><i class="xxgro"></i></div>
     </div>
     <div class="salpro-con">
         <div class="salpro-list">
-        	<span><i>换购</i>购买一件可换购更优惠商品</span>
+            <span><i>换购</i>购买一件可换购更优惠商品</span>
             <div class="fr"><i class="Mright"></i></div>
         </div>
         <div class="salpro-list">
-        	<span><i>组合购</i>加价可购买更优惠的xx商品</span>
+            <span><i>组合购</i>加价可购买更优惠的xx商品</span>
             <div class="fr"><i class="Mright"></i></div>
         </div>
         <div class="salpro-list">
-        	<span><i>加价购</i>优惠套餐更加实惠，总体打8折</span>
+            <span><i>加价购</i>优惠套餐更加实惠，总体打8折</span>
             <div class="fr"><i class="Mright"></i></div>
         </div>
-	</div>
+    </div>
 </div>
 <!--促销活动弹窗 end--------------------------------------------------------------------------------->
 
 <!--领取优惠券弹窗 start--------------------------------------------------------------------------------->
 <div class="recive_aready p" id="recive_aready_pop">
-	<div class="salpro-tit">
-    	<b>优惠券列表</b>
+    <div class="salpro-tit">
+        <b>优惠券列表</b>
         <div class="price_or fr"><i class="xxgro"></i></div>
     </div>
     <div class="deta-coucon">
@@ -496,6 +496,7 @@
     <input type="hidden" name="prom_id" value="{$goods.prom_id}"/><!-- 活动ID -->
     <input type="hidden" name="exchange_integral" value="{$goods.exchange_integral}"/><!-- 积分 -->
     <input type="hidden" name="point_rate" value="{$tpshop_config['integral_point_rate']}"/><!-- 积分兑换比 -->
+    <input type="hidden" name="is_sign" value="{$goods.cat_id}"/><!-- 签到免费领取 -->
     <input type="hidden" name="is_virtual" value="{$goods.is_virtual}"/><!-- 是否是虚拟商品 -->
     <input type="hidden" name="virtual_limit" id="virtual_limit" value="{$goods.virtual_limit|default=0}"/>
     <input type="hidden" name="deposit_price" value=""/><!-- 订金 -->
@@ -574,13 +575,13 @@
 <include file="public/wx_share"/>
 <!--优惠卷弹窗打开和关闭-->
 <script type="text/javascript">
-	$(document).on("click","#zYHJ-POP",function  () {
-		$("#recive_aready_pop").show();
-	})
-	$(document).on("click","#recive_aready_pop .xxgro",function  () {
-		$("#recive_aready_pop").hide();
-	})
-	
+    $(document).on("click","#zYHJ-POP",function  () {
+        $("#recive_aready_pop").show();
+    })
+    $(document).on("click","#recive_aready_pop .xxgro",function  () {
+        $("#recive_aready_pop").hide();
+    })
+    
 </script>
 <script type="text/javascript">
     $(function(){
@@ -612,6 +613,7 @@
         var exchange_integral = $("input[name='exchange_integral']").val();//是否是为积分商品
         var goods_prom_type = $('input[name="goods_prom_type"]').attr('value');//活动商品
         var activity_is_on = $('input[name="activity_is_on"]').attr('value'); //活动是否进行中
+        var is_sign = $('input[name="is_sign"]').attr('value'); //签到免费商品
         buy_now.hide();
         buy_now_li.hide();
         join_cart.hide();
@@ -635,7 +637,12 @@
             buy_now.html('立即预订').show();
             return;
         }
-
+        if(is_sign == 584 || is_sign == 585){
+            buy_now_li.find('.choise_num').html('免费领取');
+            buy_now_li.width('100%').show();
+            buy_now.html('免费领取').show();
+            return;
+        }
 
         //判断是点了购物车还是立即购买
         if($('#buy_now').attr('data-id')==1){
@@ -675,11 +682,15 @@
             var goods_num = parseInt($("input[name='goods_num']").val());
             var goods_prom_type = $('input[name="goods_prom_type"]').attr('value');//活动商品
             var activity_is_on = $('input[name="activity_is_on"]').attr('value'); //活动是否进行中
+            var is_sign = $('input[name="is_sign"]').attr('value'); //是否签到兑换商品
             var form = $('#buy_goods_form');
+
+
+
             if (is_virtual == 1) {
                 var virtual_limit = parseInt($('#virtual_limit').val());
                 if ((goods_num <= store_count && goods_num <= virtual_limit) || (goods_num < store_count && virtual_limit == 0)) {
-                    form.attr('action', "{:U('Shop/Cart/cart2',['action'=>'buy_now'])}").submit();
+                    form.attr('action', "{:U('shop/Cart/cart2',['action'=>'buy_now'])}").submit();
                 } else {
                     layer.open({icon: 2, content: "购买数量超过此商品购买上限", time: 2});
                 }
@@ -690,12 +701,22 @@
                 return;
             }
             if(goods_prom_type == 4 && activity_is_on == 1){
-                form.attr('action', "{:U('Shop/Cart/pre_sell')}").submit();
+                form.attr('action', "{:U('shop/Cart/pre_sell')}").submit();
                 return;
             }
+
+            // 免费领取
+            if(is_sign == 584 || is_sign == 585){
+                if (goods_num <= store_count) {
+                    sign_receive(is_sign);
+                    return;
+                }
+            }
+
             //普通流程
             if (goods_num <= store_count) {
-                form.attr('action', "{:U('Shop/Cart/cart2',['action'=>'buy_now'])}").submit();
+                
+                form.attr('action', "{:U('shop/Cart/cart2',['action'=>'buy_now'])}").submit();
             } else {
                 layer.open({icon: 2, content: "购买数量超过此商品购买上限", time: 2});
             }
@@ -805,12 +826,31 @@
             }
         });
     }
+    
+    //验证是否可以免费领取
+    function sign_receive(cat_id){
+        $.ajax({
+            type : "GET",
+            dataType: "json",
+            url:"/index.php?m=mobile&c=goods&a=sign_receive",//+tab,
+            data: {cat_id:cat_id},
+            success: function(data){
+                if(data.status == 0){
+                    layer.open({content:data.msg, time:3});
+                    return false;
+                }else{
+                    $('#buy_goods_form').attr('action', "{:U('Shop/Cart/cart2',['action'=>'buy_now'])}").submit();
+                }
+            }
+        });
+    }
+
     //点击收藏商品
     function collect_goods(goods_id){
         $.ajax({
             type : "GET",
             dataType: "json",
-            url:"/index.php?m=Shop&c=goods&a=collect_goods",//+tab,
+            url:"/index.php?m=mobile&c=goods&a=collect_goods",//+tab,
             data: {goods_id:goods_id},
             success: function(data){
                 layer.open({content:data.msg, time:2});
@@ -1008,7 +1048,7 @@
     function ajaxComment(commentType,page){
         $.ajax({
             type : "GET",
-            url:"/index.php?m=Shop&c=goods&a=ajaxComment&goods_id={$goods['goods_id']}&commentType="+commentType+"&p="+page,//+tab,
+            url:"/index.php?m=Mobile&c=goods&a=ajaxComment&goods_id={$goods['goods_id']}&commentType="+commentType+"&p="+page,//+tab,
             success: function(data){
                 $(".my_comment_list").empty().append(data);
             }
@@ -1062,7 +1102,7 @@
                     $('.team-pies').show();
                     var prom_id = $('input[name="prom_id"]').attr('value');
                     var goods_id = $('input[name="goods_id"]').attr('value');
-                    $('.team_button').attr('href',"/index.php?m=Shop&c=Team&a=info&team_id="+prom_id+"&goods_id="+goods_id);
+                    $('.team_button').attr('href',"/index.php?m=Mobile&c=Team&a=info&team_id="+prom_id+"&goods_id="+goods_id);
                     setNormalGoodsPrice();
                     break;
                 default:
@@ -1208,7 +1248,7 @@
                 goods_id:$('input[name=goods_id]').val(),
                 item_id:$('input[name=item_id]').val()
             },
-            url: "/index.php?m=Shop&c=Goods&a=checkGoodsPromotionType",//+tab,
+            url: "/index.php?m=Mobile&c=Goods&a=checkGoodsPromotionType",//+tab,
             success: function (data) {
                 if(data.status == 1 && data.result == 3){
                     $("#price").html("￥" + prom_goods_price); //变动价格显示
@@ -1291,7 +1331,7 @@
             type: "POST",
             data: {comment_id: comment_id},
             dataType: 'json',
-            url: "/index.php?m=Shop&c=Order&a=ajaxZan",
+            url: "/index.php?m=Mobile&c=Order&a=ajaxZan",
             success: function (data) {
                 ajax_return_stauts = 1
                 if (data.status==1) {
@@ -1385,7 +1425,7 @@ function combinationCurl(goods_id,item,combination_id) {
     function couponList() {
         var goods_id = parseInt($("input[name='goods_id']").val());
         var item_id = $("input[name='item_id']").val();
-        var url = "/index.php?m=Shop&c=Goods&a=couponList";
+        var url = "/index.php?m=Mobile&c=Goods&a=couponList";
         $.ajax({
             type: "Post",
             url: url,

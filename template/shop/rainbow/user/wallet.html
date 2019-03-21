@@ -12,7 +12,7 @@
     <div class="wtf_head">
         <div class="wtf_wrap">
             <span>
-                <a href="javascript:history.go(-1);">
+                <a href="{:U('Shop/User/index')}">
                     <img src="__STATIC__/images/wallet/wtf_Back.png" />
                 </a>
             </span>
@@ -35,7 +35,7 @@
                         积分<span>{$user.pay_points}分</span>
                     </div>
                     <div class="wtf_yhq">
-                        优惠券<span>3张</span>
+                        优惠券<span>0张</span>
                     </div>
                 </div>
             </div>
@@ -43,15 +43,15 @@
             <div class="wtf_list">
                 <p class="p1">
                     账单明细
-                    <a href="#"><img src="__STATIC__/images/wallet/wtf_Back2.png" /></a>
+                    <a href="{:U('Shop/User/account_list')}"><img src="__STATIC__/images/wallet/wtf_Back2.png" /></a>
+                </p>
+                <p class="p1 p3">
+                    提现明细
+                    <a href="{:U('Shop/User/withdrawals_list')}"><img src="__STATIC__/images/wallet/wtf_Back2.png" /></a>
                 </p>
                 <p class="p1 p2">
                     我的银行卡
                     <a href="#"><span>未添加</span><img src="__STATIC__/images/wallet/wtf_Back2.png" /></a>
-                </p>
-                <p class="p1 p3">
-                    我的支付宝
-                    <a href="#"><span>已添加</span><img src="__STATIC__/images/wallet/wtf_Back2.png" /></a>
                 </p>
             </div>
 

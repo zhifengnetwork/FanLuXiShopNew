@@ -64,18 +64,17 @@
 		<!-- 八宫格 -->
 		<div class="gongGe">
 			<div class="choiceness gongGeItem">
-				<a href="/shop/handpick/index.html">
+				<a href="{:U('shop/activity/auction_list')}">
 					<img src="__STATIC__/images/t_6.png" alt="">
-					<p class="gongGeItemTit">精选</p>
-				</a>
-
-			</div>
-			<div class="choiceness gongGeItem">
-				<a href="javascript:alert('未开发');">
-					<img src="__STATIC__/images/t_14.png" alt="">
-					<p class="gongGeItemTit">视频直播</p>
+					<p class="gongGeItemTit">竞拍</p>
 				</a>
 			</div>
+            <div class="choiceness gongGeItem">
+                <a href="{:U('shop/groupbuy/grouplist')}">
+                    <img src="__STATIC__/images/icon_15.png" alt="">
+                    <p class="gongGeItemTit">拼团</p>
+                </a>
+            </div>
 			<div class="choiceness gongGeItem">
 				<a href="/shop/sign/index">
 					<img src="__STATIC__/images/t_10.png" alt="">
@@ -90,12 +89,6 @@
 			</div>
 			<div class="choiceness gongGeItem">
 				<a href="">
-					<img src="__STATIC__/images/t_7.png" alt="">
-					<p class="gongGeItemTit">美容专区</p>
-				</a>
-			</div>
-			<div class="choiceness gongGeItem">
-				<a href="">
 					<img src="__STATIC__/images/t_9.png" alt="">
 					<p class="gongGeItemTit">佣金排行榜</p>
 				</a>
@@ -106,10 +99,16 @@
 					<p class="gongGeItemTit">素材区</p>
 				</a>
 			</div>
+            <div class="choiceness gongGeItem">
+                <a href="{:U('Shop/Order/order_list')}">
+                    <img src="__STATIC__/images/icon_16.png" alt="">
+                    <p class="gongGeItemTit">我的订单</p>
+                </a>
+            </div>
 			<div class="choiceness gongGeItem">
-				<a href="">
-					<img src="__STATIC__/images/t_13.png" alt="">
-					<p class="gongGeItemTit">小游戏</p>
+				<a href="{:U('Shop/Cart/index')}">
+					<img src="__STATIC__/images/icon_17.png" alt="">
+					<p class="gongGeItemTit">购物车</p>
 				</a>
 			</div>
 		</div>
@@ -117,7 +116,7 @@
 		<div class="interval"></div>
 		<!-- 消息头条 -->
 		<div class="msgHeadline">
-			<h4 class="Headline">DC环球直供头条</h4>
+			<h4 class="Headline">今日最新</h4>
 			<a href="">
 				<p class="shopRed">雪山旗舰店入送卷了</p>  
 			</a>
@@ -130,17 +129,16 @@
 		<div class="seckill-box">
 			<!-- 秒杀 -->
 			<div class="seckillMsg">
-				<h4 class="seckillTit">DC环球直供秒杀</h4>
-				<p class="count">剩下时间</p>
-				<div class="countTime">
-					<span class="countTimeImg">
-						<img src="__STATIC__/images/t_8.png" alt="">
-					</span>
-					<!-- <span class="tiemNum">{:date('H',$start_time)}</span>:
-					<span class="tiemNum">{:date('m',$start_time)}</span>:
-					<span class="tiemNum">{:date('s',$start_time)}</span> -->
-					<span class="hms"></span>
-
+                <div class="countTime">
+                    <span class="countTimeImg">
+                        <img src="__STATIC__/images/t_8.png" alt="">
+                    </span>
+    				<h4 class="seckillTit">秒杀</h4>
+    				<p class="count"><span style="color:#e23435" id="">{:date('H',$start_time)}点场</span> 剩下时间 </p>
+    					<!-- <span class="tiemNum">{:date('H',$start_time)}</span>:
+    					<span class="tiemNum">{:date('m',$start_time)}</span>:
+    					<span class="tiemNum">{:date('s',$start_time)}</span> -->
+    					<span class="hms"></span>
 				</div>
 				<div class="more">
 					<a href="{:U('Shop/Activity/flash_sale_list')}">
@@ -162,7 +160,11 @@
 							</div>
 						</a>
 					</li>
-				</foreach>					
+				</foreach>
+
+                    <if condition="count($flash_sale_list) eq nll">
+                        <div style="text-align: center; color: #6f6d6d; font-size: .1rem;">暂无抢购商品。。。。</div>
+                    </if>				
 				</ul>
 			</div>
 		</div>

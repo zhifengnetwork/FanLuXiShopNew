@@ -28,7 +28,7 @@
 	margin-bottom: 0.2rem;
 }
 .user-info-zp{
-	width: 2.6rem;
+	/*width: 2.6rem;*/
 	display: flex;
 	align-items: center;
 	position: relative;
@@ -54,7 +54,7 @@
 	font-family: "微软雅黑";
 	position: absolute;
 	left: 0;
-	bottom: 0;
+	bottom: -14px;
 }
 
 .user-top-zp .sign-wrap-zp{
@@ -136,7 +136,7 @@
 	padding: 0.25rem 0;
 }
 .user-nav-zp li{
-	margin: 0 0.3rem;
+	margin: 0 0.48rem;
 }
 .user-nav-zp li img{
 	width: 0.4rem;

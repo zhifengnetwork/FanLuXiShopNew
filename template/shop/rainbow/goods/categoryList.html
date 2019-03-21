@@ -35,21 +35,6 @@
 						<foreach name="categoryList" item="list">
 							<li <if condition="$list[id] eq 31"> class="active" </if> ><i></i>{$list[name]}</li>
 						</foreach>
-						<!--<li class="active"><i></i>为您推荐</li>-->
-						<!--<li><i></i>品牌墙</li>-->
-						<!--<li><i></i>美容彩妆</li>-->
-						<!--<li><i></i>奶粉纸尿裤</li>-->
-						<!--<li><i></i>外部专区</li>-->
-						<!--<li><i></i>轻奢</li>-->
-						<!--<li><i></i>个人洗护</li>-->
-						<!--<li><i></i>手表配饰</li>-->
-						<!--<li><i></i>数码家电</li>-->
-						<!--<li><i></i>家居生活</li>-->
-						<!--<li><i></i>环球美食</li>-->
-						<!--<li><i></i>服饰鞋靴</li>-->
-						<!--<li><i></i>家用家电</li>-->
-						<!--<li><i></i>医药保健</li>-->
-						<!--<li><i></i>汽车生活</li>-->
 					</ul>
 				</div>
 				<!--右边分类内容-->
@@ -74,7 +59,7 @@
 								<ul class="cate-list">
 									<foreach name="catelist.child" item="child">
 										<li class="item">
-											<a href="###">
+                                            <a href="/Shop/Goods/goodsList/id/{$child[id]}.html">
 												<img src="{$child[image]}" />
 												<p>{$child[name]}</p>
 											</a>

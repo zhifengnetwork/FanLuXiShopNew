@@ -1,11 +1,11 @@
 <include file="public/header" title="我的订单" body="g4"/>
 <include file="public/header_nav" title="我的订单" href="{:U('/Shop/User/index')}"/>
-<div class="top_search_wrap">
+<!-- <div class="top_search_wrap">
     <div class="top_search">
         <img src="__STATIC__/images/t_12.png">
         <input class="Search" type="text" placeholder="商品名称/商品编号/订单号">
     </div>
-</div>
+</div> -->
 <div class="tit-flash-sale p mytit_flash">
     <div class="maleri30">
         <ul class="">
@@ -18,7 +18,6 @@
             <li id="WAITSEND" <if condition="$Request.param.type eq 'WAITSEND'">class="red"</if>>
                 <a href="{:U('/Shop/Order/order_list',array('type'=>'WAITSEND'))}"  class="tab_head">待发货</a>
             </li>
-            <li id="WAITRECEIVE"><a href="{:U('/Shop/User/order_list',array('type'=>'WAITRECEIVE'))}"  class="tab_head <if condition="$Request.param.type eq 'WAITRECEIVE'">on</if>">待收货</a></li>
             <li id="WAITCCOMMENT"  <if condition="$Request.param.type eq 'FINISH'">class="red"</if>>
                 <a href="{:U('/Shop/Order/order_list',array('type'=>'FINISH'))}" class="tab_head">已完成</a>
             </li>
@@ -42,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            <!--没有内容时-e--->
+            <!-- 没有内容时-e- -->
         </if>
         <volist name="order_list" id="order">
             <div class="mypackeg ma-to-20 getmore">
@@ -50,8 +49,8 @@
                     <div class="maleri30">
                         <div class="fl">
                             <h1><span></span><span class="bgnum"></span></h1>
-                            <!-- <p class="bgnum"><span>订单编号:</span><span>{$order.order_sn}</span></p> -->
-                            <p>2019/03/07<span>00:00:00</span></p>
+                            <p class="bgnum"><span>订单编号:</span><span>{$order.order_sn}</span></p>
+                            <!-- <p>2019/03/07<span>00:00:00</span></p> -->
                         </div>
                         <div class="fr">
                             <span>{$order['order_status_detail']}</span>
