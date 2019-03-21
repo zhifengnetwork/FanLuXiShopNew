@@ -417,6 +417,9 @@ class User extends Base
 
     public function level()
     {
+		$goods = M('goods')->select();
+		$this->assign('goods',$goods);
+		
         $act = I('get.act', 'add');
         $this->assign('act', $act);
         $level_id = I('get.level_id');

@@ -24,9 +24,11 @@ class Goods extends Base {
      *  商品分类列表
      */
     public function categoryList(){                
-        $GoodsLogic = new GoodsLogic();               
+        /* $GoodsLogic = new GoodsLogic();               
         $cat_list = $GoodsLogic->goods_cat_list();
-        $this->assign('cat_list',$cat_list);        
+        $this->assign('cat_list',$cat_list); */ 
+		$cat_list = M('goods_category')->select();
+		$this->assign('list',$cat_list);
         return $this->fetch();
     }
     
@@ -39,8 +41,8 @@ class Goods extends Base {
         insert into `tp_goods_category` (`parent_id`,`name`) values 
         ('393','时尚饰品'),
      */
-    public function addEditCategory(){
-        
+    public function addEditCategory($id=""){
+        /* 
             $GoodsLogic = new GoodsLogic();        
             if(IS_GET)
             {
@@ -136,15 +138,46 @@ class Goods extends Base {
                     $this->ajaxReturn($return_arr);
 
                 }  
-            }
-
+            } */
+			$cat = M('goods_category')->where('id',$id)->select();
+			$this->assign('cat',$cat['0']);
+			if($_POST){
+				$id= I('id');
+				
+				$name = I('name');
+				$image = I('image');
+				$sort_order = I('sort_order');
+				
+				$data = array(
+				'name'=>$name,
+				'image'=>$image,
+				'sort_order'=>$sort_order
+				);
+				if($name==""){
+					$return_arr = array('status' => 0,'msg'   => '名称不为空！');
+				}
+				if($id>0){
+					$res = M('goods_category')->where('id',$id)->data($data)->save();
+				}else{
+					$res = M('goods_category')->insert($data);
+				}
+				if($res){
+					$return_arr = array(
+					'status' => 1,
+					'msg'   => '操作成功！',
+					);
+				}
+				$this->ajaxReturn($return_arr);
+			}
+			
+			return $this->fetch('_category');
     }
 
     /**
      * 删除分类
      */
     public function delGoodsCategory(){
-        $ids = I('post.ids','');
+        /* $ids = I('post.ids','');
         empty($ids) &&  $this->ajaxReturn(['status' => -1,'msg' =>"非法操作！",'data'  =>'']);
         // 判断子分类
         $count = Db::name("goods_category")->where("parent_id = {$ids}")->count("id");
@@ -154,7 +187,16 @@ class Goods extends Base {
         $goods_count > 0 && $this->ajaxReturn(['status' => -1,'msg' =>'该分类下有商品不得删除!']);
         // 删除分类
         DB::name('goods_category')->where('id',$ids)->delete();
-        $this->ajaxReturn(['status' => 1,'msg' =>'操作成功','url'=>U('Admin/Goods/categoryList')]);
+        $this->ajaxReturn(['status' => 1,'msg' =>'操作成功','url'=>U('Admin/Goods/categoryList')]); */
+		$id=I('id');
+		if($id>0){
+			$res = M('goods_category')->where('id',$id)->delete();
+			if($res){
+				$this->ajaxReturn(['status'=>1,'msg'=>'操作成功']);
+			}else{
+				$this->ajaxReturn(['status'=>1,'msg'=>'参数失败']);
+			}
+		}
     }
     
     
@@ -163,8 +205,8 @@ class Goods extends Base {
      */
     public function goodsList(){      
         $GoodsLogic = new GoodsLogic();        
-        $brandList = $GoodsLogic->getSortBrands();
-        $categoryList = $GoodsLogic->getSortCategory();
+        // $brandList = $GoodsLogic->getSortBrands();
+        // $categoryList = $GoodsLogic->getSortCategory();
         $this->assign('categoryList',$categoryList);
         $this->assign('brandList',$brandList);
         return $this->fetch();
@@ -313,15 +355,16 @@ class Goods extends Base {
         $goods_id = input('id');
         if($goods_id){
             $goods = $Goods->where('goods_id', $goods_id)->find();
-            $level_cat = $GoodsLogic->find_parent_cat($goods['cat_id']); // 获取分类默认选中的下拉框
-            $level_cat2 = $GoodsLogic->find_parent_cat($goods['extend_cat_id']); // 获取分类默认选中的下拉框
-            $brandList = $GoodsLogic->getSortBrands($goods['cat_id']);   //获取三级分类下的全部品牌
+			
+            //$GoodsLogic->find_parent_cat($goods['cat_id']); // 获取分类默认选中的下拉框
+            //$level_cat2 = $GoodsLogic->find_parent_cat($goods['extend_cat_id']); // 获取分类默认选中的下拉框
+            //$brandList = $GoodsLogic->getSortBrands($goods['cat_id']);   //获取三级分类下的全部品牌
             $this->assign('goods', $goods);
-            $this->assign('level_cat', $level_cat);
+            /* $this->assign('level_cat', $level_cat);
             $this->assign('level_cat2', $level_cat2);
-            $this->assign('brandList', $brandList);
+            $this->assign('brandList', $brandList); */
         }
-        $cat_list = Db::name('goods_category')->where("parent_id = 0")->select(); // 已经改成联动菜单
+        $cat_list = Db::name('goods_category')->select(); // 已经改成联动菜单
         $goodsType = Db::name("GoodsType")->select();
         $suppliersList = Db::name("suppliers")->where(['is_check'=>1])->select();
         $freight_template = Db::name('freight_template')->where('')->select();

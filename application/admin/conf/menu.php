@@ -73,7 +73,7 @@ return array(
             array('name' => '商品分类', 'act' => 'categoryList', 'op' => 'Goods'),
             array('name' => '库存管理', 'act' => 'stockList', 'op' => 'Goods'),
             array('name' => '商品模型', 'act' => 'type_list', 'op' => 'Goods'),
-            array('name' => '品牌列表', 'act' => 'brandList', 'op' => 'Goods'),
+            // array('name' => '品牌列表', 'act' => 'brandList', 'op' => 'Goods'),
             array('name' => '评论列表', 'act' => 'index', 'op' => 'Comment'),
             array('name' => '商品咨询', 'act' => 'ask_list', 'op' => 'Comment'),
         )),
@@ -153,7 +153,7 @@ return array(
         array('name' => '会员管理', 'child' => array(
             array('name' => '会员列表', 'act' => 'index', 'op' => 'User'),
             array('name' => '快速更改等级', 'act' => 'changelevel', 'op' => 'User'),
-            // array('name'=>'会员等级','act'=>'levelList','op'=>'User'),
+            array('name'=>'会员等级','act'=>'levelList','op'=>'User'),
         )),
 		array('name' => '团队管理','child'=>array(
 			// array('name'=>'团队排名','act'=>'teamRank','op'=>'User'),
@@ -197,11 +197,9 @@ return array(
 	)),
 		
 	'distribution'=>array('name'=>'分销','child'=>array(
-		
 			array('name' => '模式管理', 'child' => array(
 				// array('name' => '分销商品', 'act' => 'goods_list', 'op' => 'Distribut'),
 				// array('name' => '分销商列表', 'act' => 'distributor_list', 'op' => 'Distribut'),
-				
 				array('name' => '分销商设置', 'act' => 'grade_list', 'op' => 'Distribut'),
                 array('name' => '代理商设置', 'act' => 'agent_grade_list', 'op' => 'Distribut'),
                 // array('name' => '等级关系', 'act' => 'tree', 'op' => 'Distribut'),
@@ -222,7 +220,7 @@ return array(
             array('name' => '销售排行', 'act' => 'saleTop', 'op' => 'Report'),
             array('name' => '会员排行', 'act' => 'userTop', 'op' => 'Report'),
             array('name' => '业绩排行', 'act' => 'performance', 'op' => 'Report'),
-            array('name' => '销售明细', 'act' => 'saleList', 'op' => 'Report'),
+            // array('name' => '销售明细', 'act' => 'saleList', 'op' => 'Report'),
             array('name' => '会员统计', 'act' => 'user', 'op' => 'Report'),
             array('name' => '运营概览', 'act' => 'finance', 'op' => 'Report'),
             array('name' => '平台支出记录', 'act' => 'expense_log', 'op' => 'Report'),

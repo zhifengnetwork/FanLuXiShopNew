@@ -148,16 +148,10 @@
                     <select name="cat_id" id="cat_id" class="small form-control">
                         <option value="0">请选择商品分类</option>
                         <foreach name="cat_list" item="v" key="k">
-                            <option value="{$v['id']}" <if condition="$v['id'] eq $level_cat['1']">selected="selected"</if>>
+                            <option value="{$v['id']}" <if condition="$v['id'] eq $goods['cat_id']">selected="selected"</if>>
                             {$v['name']}
                             </option>
                         </foreach>
-                    </select>
-                    <select name="cat_id_2" id="cat_id_2" onChange="get_category(this.value,'cat_id_3','0');getCategoryBrandList(this.value)" class="small form-control">
-                        <option value="0">请选择商品分类</option>
-                    </select>
-                    <select name="cat_id_3" id="cat_id_3" class="small form-control">
-                        <option value="0">请选择商品分类</option>
                     </select>
                     <span class="err" id="err_cat_id"></span>
                 </dd>
