@@ -838,7 +838,7 @@ class GoodsLogic extends Model
     {
         $brandList =  M("Brand")->select();
         $brandIdArr =  M("Brand")->where("name in (select `name` from `".C('database.prefix')."brand` group by name having COUNT(id) > 1)")->getField('id,cat_id');
-        $goodsCategoryArr = M('goodsCategory')->where("level = 1")->getField('id,name');
+        $goodsCategoryArr = M('goodsCategory')->getField('id,name');
         $nameList = array();
         foreach($brandList as $k => $v)
         {
@@ -966,7 +966,9 @@ class GoodsLogic extends Model
      */
     function getSortCategory()
     {
-        $categoryList =  M("GoodsCategory")->getField('id,name,parent_id,level');
+        $categoryList =  M("GoodsCategory")->getField('id,name');
+
+
         $nameList = array();
         foreach($categoryList as $k => $v)
         {
