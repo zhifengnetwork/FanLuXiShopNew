@@ -1,8 +1,6 @@
 <?php
 
-// namespace app\mobile\controller;
 namespace app\shop\controller;
-header("Content-type: text/html; charset=utf-8");
 
 use app\common\logic\ActivityLogic;
 use app\common\logic\GoodsLogic;
@@ -25,60 +23,10 @@ class Goods extends MobileBase
     /**
      * 分类列表显示
      */
-//    public function categoryList()
-//    {
-//        $categoryGoods = new GoodsCategory;
-//
-//        $category = $categoryGoods->where('level', 1)->where('is_show',1)->order('sort_order','asc')->column('id,name,mobile_name,parent_id,parent_id_path,level,image');
-//
-//        $parentId = array_column($category, 'id');
-//
-//        $firstLevel = $categoryGoods->where('level', 2)->where('parent_id','in',$parentId)->where('is_show',1)->order('sort_order desc,is_hot desc')->column('id,name,mobile_name,parent_id,parent_id_path,level,image');
-//
-//        $childId = array_column($firstLevel, 'id');
-//
-//        $secondLevel = $categoryGoods->where('level', 3)->where('is_show',1)->where('parent_id','in',$childId)->order('sort_order desc,is_hot desc')->column('id,name,mobile_name,parent_id,parent_id_path,level,image');
-//
-//        // $goods = array_map(function($secondLevel){
-//        //     $result = array(
-//        //         'id' => $secondLevel['id'],
-//        //         'name' => $secondLevel['name'],
-//        //         'moblie_name' => $secondLevel['mobile_name'],
-//        //         'parent_id' => $secondLevel['parent_id'],
-//        //         'parent_id_path' => $secondLevel['parent_id_path'],
-//        //         'level' => $secondLevel['level'],
-//        //         'image' => "<img src='".$secondLevel['image']."'/>"
-//        //     );
-//        //     // return $result;
-//        // },$secondLevel);
-//
-//
-//        // $firstLevel = $categoryGoods->getParentListAttr(1,['parent_id_path'=>"0_12_13_17"]);
-//        // foreach ($firstLevel as $key => $value) {
-//        //     $secondLevel[] = $categoryGoods->getParentListAttr(1,['parent_id_path'=>$value['parent_id_path']]);
-//        // }
-//
-//        // $secondLevel = array_map(function($sLevel){
-//        //     $sLevel['image'] = "<img src='".$sLevel['image']."'/>";
-//        //     return $sLevel;
-//        // },$secondLevel);
-//
-//        // for ($i=0; $i < count($firstLevel); $i++) {
-//        //     for ($i=0; $i < count($secondLevel); $i++) {
-//        //         if ($secondLevel['parent_id'] == $firstLevel['id']) {
-//        //             $result[] = $firstLevel[$i];
-//        //         }
-//        //     }
-//        // }
-//
-//        $this->assign('category', $category);
-//        $this->assign('first_level', $firstLevel);
-//        $this->assign('second_level', $secondLevel);
-//        // $this->assign('img', $img);
-//
-//        return $this->fetch();
-//    }
-
+    // public function categoryList()
+    // {
+    //     return $this->fetch();
+    // }
     public function categoryList(){
 
         //获取要访问的一级分类的ID  如果没有传ID默认展示为你推荐栏目
@@ -86,24 +34,34 @@ class Goods extends MobileBase
 
         $category=new GoodsCategory();
 
-        //获取所有要展示的一级分类
-        $categoryList = $category->get_first_level_category();
-        //获取当前要展示的分类的2，3级信息
-        $ids=array_column($categoryList,'id');
-        //创建数组包含所有的2，3级分类
-//        var_dump($ids);
-        $categorys=array();
-        foreach($ids as $k=>$v){
-            $categorys[$k]=$category->get_children_category($v);
-//            $cids=array_column($categorys[$k],'id');
-            foreach($categorys[$k] as $ke=>$va){
-                $categorys[$k][$ke]['child']=$category->get_children_category($va['id']);
+        //获取所有要展示的二级分类
+        $secondCategoryList = $category->get_level_category(2);
+//        $ids=array_column($secondCategoryList,'id');
+        //获取所有要展示的三级分类
+//        $threadCategoryList = $category->get_level_category(3);
+//        $ids=array_column($threadCategoryList,'id');
+        //获取这些三级栏目的商品
+        foreach($secondCategoryList as $key=>$value){
+            $threadCategorys=$category->get_children_category($value['id']);
+            if(empty($threadCategorys)){
+                continue;
+            }
+            $secondCategoryList[$key]['child']=$threadCategorys;
+            foreach($secondCategoryList[$key]['child'] as $k=>$v){
+                $threadCategorysGoods=$category->get_by_parensid_goods($v['id']);
+                if(empty($threadCategorysGoods)){
+                    continue;
+                }
+                $secondCategoryList[$key]['child'][$k]['child']=$category->get_by_parensid_goods($v);
             }
         }
+        
+//        $goods=$category->get_by_parensid_goods(implode(',',$ids));
 //        var_dump(array_column($categorys[0],'id'));
-        $this->assign('categoryList',$categoryList);
-        $this->assign('categorys',$categorys);
-//        print_r($categorys[0]);die;
+        $this->assign('secondCategoryList',$secondCategoryList);
+//        $this->assign('threadCategoryList',$threadCategoryList);
+//        $this->assign('goods',$goods);
+//        print_r($secondCategoryList);die;
         return $this->fetch();
     }
 
@@ -281,7 +239,6 @@ class Goods extends MobileBase
         C('TOKEN_ON', true);
         $goodsLogic = new GoodsLogic();
         $goods_id = I("get.id/d");
-       
         $goodsModel = new \app\common\model\Goods();
         $goods = $goodsModel::get($goods_id);
         if (empty($goods) || ($goods['is_on_sale'] == 0)) {
@@ -300,7 +257,6 @@ class Goods extends MobileBase
 
         $recommend_goods = M('goods')->where("is_recommend=1 and is_on_sale=1 and cat_id = {$goods['cat_id']}")->cache(7200)->limit(9)->field("goods_id, goods_name, shop_price")->select();
         $this->assign('recommend_goods', $recommend_goods);
-      
         $this->assign('goods', $goods);
         return $this->fetch();
     }
@@ -368,10 +324,18 @@ class Goods extends MobileBase
 
         $goods['activity_is_on'] = 0;
         $specGoodsPrice = SpecGoodsPrice::get($item_id, '');
+      
         if($specGoodsPrice){
-            $goods->shop_price = $specGoodsPrice->price;
+            // $goods->shop_price = $specGoodsPrice->price;
+            $goods['shop_price'] = $specGoodsPrice->price;
+
         }
-        $goods->shop_price = $goodsLogic->getGoodsPriceByLadder($goods_num, $goods['shop_price'], $goods['price_ladder']);//先使用价格阶梯
+
+        // $goods->shop_price = $goodsLogic->getGoodsPriceByLadder($goods_num, $goods['shop_price'], $goods['price_ladder']);//先使用价格阶梯
+        $goods['shop_price'] = $goodsLogic->getGoodsPriceByLadder($goods_num, $goods['shop_price'], $goods['price_ladder']);//先使用价格阶梯
+        $goods['shop_price'] =  $goods['shop_price'] == null ? 0 :  $goods['shop_price'];
+        
+
         if ($goodsPromFactory->checkPromType($goods['prom_type'])) {
             $goodsPromLogic = $goodsPromFactory->makeModule($goods, $specGoodsPrice);
             if ($goodsPromLogic->checkActivityIsAble()) {
@@ -569,7 +533,6 @@ class Goods extends MobileBase
         }
         $goods_category = M('goods_category')->where('is_show=1')->cache(true)->getField('id,name,parent_id,level'); // 键值分类数组
         $this->assign('goods_list', $goods_list);
-       
         $this->assign('goods_category', $goods_category);
         $this->assign('goods_images', $goods_images);  // 相册图片
         $this->assign('filter_menu', $filter_menu);  // 帅选菜单
@@ -627,6 +590,25 @@ class Goods extends MobileBase
         $goods_id = I('goods_id/d');
         $goodsLogic = new GoodsLogic();
         $result = $goodsLogic->collect_goods(cookie('user_id'), $goods_id);
+        $this->ajaxReturn($result);
+    }
+
+    /**
+     * 是否可以免费领取商品
+     */
+    public function sign_receive()
+    {
+        $cat_id = I('cat_id/d');
+        $goods_num = I('num', 0);
+
+        $user = Db::name('users')->where(['user_id' => cookie('user_id')])->find();
+
+        if(empty($user)){
+            $result = ['status' => -9, 'msg' => '未找到用户', 'result' => ''];
+        }
+
+        $result = provingReceive($user, $cat_id, $goods_num);
+
         $this->ajaxReturn($result);
     }
 

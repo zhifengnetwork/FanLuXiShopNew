@@ -708,7 +708,7 @@
             // 免费领取
             if(is_sign == 584 || is_sign == 585){
                 if (goods_num <= store_count) {
-                    sign_receive(is_sign);
+                    sign_receive(is_sign, goods_num);
                     return;
                 }
             }
@@ -828,12 +828,12 @@
     }
     
     //验证是否可以免费领取
-    function sign_receive(cat_id){
+    function sign_receive(cat_id,num){
         $.ajax({
             type : "GET",
             dataType: "json",
-            url:"/index.php?m=mobile&c=goods&a=sign_receive",//+tab,
-            data: {cat_id:cat_id},
+            url:"/index.php?m=shop&c=goods&a=sign_receive",//+tab,
+            data: {cat_id:cat_id,num:num},
             success: function(data){
                 if(data.status == 0){
                     layer.open({content:data.msg, time:3});

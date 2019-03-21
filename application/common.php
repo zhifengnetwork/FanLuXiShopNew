@@ -1790,10 +1790,11 @@ function continue_sign($user_id){
 
     /*
     * 判断是否可领取免费商品
-    * $cat_id 分类id
     * $user_id 用户id
+    * $cat_id 分类id
+    * $num 领取数量
     */
-    function provingReceive($user, $cat_id){
+    function provingReceive($user, $cat_id, $num = 1){
 
         if ($user['is_distribut'] == 0 && $cat_id == 584) {
             $result = array('status'=>0,'msg'=>'成为分销商才可领取','result'=>array());
@@ -1810,12 +1811,12 @@ function continue_sign($user_id){
         $user = M('Users')->where('user_id',$user['user_id'])->find();
 
         // 是分销并且有领取次数
-        if ($user['is_distribut'] == 1 && $cat_id == 584 &&  $user['distribut_free_num'] <= 0 ) {
+        if ($user['is_distribut'] == 1 && $cat_id == 584 &&  $user['distribut_free_num'] < $num ) {
             $result = array('status'=>0,'msg'=>'没有领取资格，坚持签到可获得资格！','result'=>array());
             return $result;
         }
         // 是代理并且有领取次数
-        if ($user['is_agent'] == 1 && $cat_id == 585 &&  $user['agent_free_num'] <= 0 ) {
+        if ($user['is_agent'] == 1 && $cat_id == 585 &&  $user['agent_free_num'] < $num ) {
             $result = array('status'=>0,'msg'=>'没有领取资格，坚持签到可获得资格！','result'=>array());
             return $result;
         }
