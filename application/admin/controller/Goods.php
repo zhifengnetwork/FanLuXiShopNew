@@ -355,15 +355,16 @@ class Goods extends Base {
         $goods_id = input('id');
         if($goods_id){
             $goods = $Goods->where('goods_id', $goods_id)->find();
-            $level_cat = $GoodsLogic->find_parent_cat($goods['cat_id']); // 获取分类默认选中的下拉框
-            $level_cat2 = $GoodsLogic->find_parent_cat($goods['extend_cat_id']); // 获取分类默认选中的下拉框
-            $brandList = $GoodsLogic->getSortBrands($goods['cat_id']);   //获取三级分类下的全部品牌
+			
+            //$GoodsLogic->find_parent_cat($goods['cat_id']); // 获取分类默认选中的下拉框
+            //$level_cat2 = $GoodsLogic->find_parent_cat($goods['extend_cat_id']); // 获取分类默认选中的下拉框
+            //$brandList = $GoodsLogic->getSortBrands($goods['cat_id']);   //获取三级分类下的全部品牌
             $this->assign('goods', $goods);
-            $this->assign('level_cat', $level_cat);
+            /* $this->assign('level_cat', $level_cat);
             $this->assign('level_cat2', $level_cat2);
-            $this->assign('brandList', $brandList);
+            $this->assign('brandList', $brandList); */
         }
-        $cat_list = Db::name('goods_category')->where("parent_id = 0")->select(); // 已经改成联动菜单
+        $cat_list = Db::name('goods_category')->select(); // 已经改成联动菜单
         $goodsType = Db::name("GoodsType")->select();
         $suppliersList = Db::name("suppliers")->where(['is_check'=>1])->select();
         $freight_template = Db::name('freight_template')->where('')->select();
