@@ -43,7 +43,7 @@ class GoodsCategory extends Model {
      * 获取 获取所有的$n级分类
      */
     public function get_level_category($n){
-        return Db::name('goods_category')->where('level', $n)->where('is_show',1)->order('sort_order','asc')->column('id,name,mobile_name,parent_id,parent_id_path,level,image');
+        return Db::name('goods_category')->where('is_show',1)->order('sort_order','asc')->column('id,name,image');
     }
 
 
