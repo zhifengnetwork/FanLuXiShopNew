@@ -81,6 +81,16 @@
 			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking4" value="{$config.ranking4|default=0}" class="input-txt" type="text">
 			        <span>%</span>
 			    </dd>
+            </dl>
+            
+            <dl class="row">
+			    <dt class="tit">
+			        <label for="reg_integral">按天数发放</label>
+			    </dt>
+			    <dd class="opt">
+			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking0" value="{$config.ranking0|default=0}" class="input-txt" type="text">
+			        <span>天</span>
+			    </dd>
 			</dl>
 
             
