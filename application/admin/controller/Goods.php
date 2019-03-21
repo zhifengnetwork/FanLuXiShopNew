@@ -205,8 +205,8 @@ class Goods extends Base {
      */
     public function goodsList(){      
         $GoodsLogic = new GoodsLogic();        
-        $brandList = $GoodsLogic->getSortBrands();
-        $categoryList = $GoodsLogic->getSortCategory();
+        // $brandList = $GoodsLogic->getSortBrands();
+        // $categoryList = $GoodsLogic->getSortCategory();
         $this->assign('categoryList',$categoryList);
         $this->assign('brandList',$brandList);
         return $this->fetch();
