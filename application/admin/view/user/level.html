@@ -99,7 +99,15 @@
 			        <p class="notic">直推一名达到一定等级获得奖励！</p>
 			    </dd>
 			</dl>
-			
+			<dl class="row">
+			    <dt class="tit">
+			        <label for="level_name">领取产品数量</label>
+			    </dt>
+			    <dd class="opt">
+			        <input type="text" name="get" value="{$info.get}" id="get" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+			        <p class="notic">设置免费领取产品数量(付邮费)。</p>
+			    </dd>
+			</dl>
             <dl class="row">
                 <dt class="tit">
                     等级描述

@@ -529,6 +529,7 @@ class User extends Base
 			$rebate = I('rebate');
 			$reward_id = I('reward_id');
 			$reward = I('reward');
+			$get = I('get');
 			$describe = I('describe');
 			if($level_id==""){
 				$this->ajaxReturn(['status' => 0, 'msg' => '等级不可为空']);
@@ -552,6 +553,7 @@ class User extends Base
 				'rebate'=>$rebate,
 				'reward_id'=>$reward_id,
 				'reward'=>$reward,
+				'get'=>$get,
 				'describe'=>$describe,
 			);
 			if($id>0){
