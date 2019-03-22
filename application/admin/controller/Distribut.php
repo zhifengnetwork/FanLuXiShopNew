@@ -197,38 +197,38 @@ class Distribut extends Base {
     public function levelHandle1()
     {
         $data = I('post.');
-
+        // dump($data);exit;
         //验证规则
         $rules = [
-            'level' => 'require|number|unique:distribut_level,level^level_id',
+            'level_type' => 'require|number|unique:distribut_level,level_type',
             'level_name' => 'require|unique:distribut_level',
             'max_money' => 'number',
             'remaining_money' => 'number',
-            'rate' => 'require|between:0,100',
+            'rate1' => 'require|between:0,100',
         ];
 
         //错误提示
         $msg = [
-            'level.require'          => '等级必填',
-            'level.number'           => '等级必须是数字',
-            'level.unique'           => '已存在相同的等级',
+            'level_type.require'     => '等级必填',
+            'level_type.number'      => '等级必须是数字',
+            'level_type.unique'      => '已存在相同的等级',
             'level_name.require'     => '名称必填',
             'level_name.unique'      => '已存在相同等级名称',
             'max_money.number'       => '最大代理佣金必须是数字',
             'remaining_money.number' => '代理拥金总和必须是数字',
-            'rate.require'           => '佣金占比必填',
-            'rate.between'           => '佣金占比在0-100之间',
+            'rate1.require'          => '佣金占比必填',
+            'rate1.between'          => '佣金占比在0-100之间',
         ];
 
         $validate = new Validate($rules,$msg);
-
+        // dump($validate);exit;
         $return = ['status' => 0, 'msg' => '参数错误', 'result' => ''];//初始化返回信息
         if ($data['act'] == 'add') {
             if (!$validate->batch()->check($data)) {
                 $return = ['status' => 0, 'msg' => '添加失败', 'result' => $validate->getError()];
             } else {
-                $rateCount = M('distribut_level')->sum('rate');
-                if (($rateCount+$data['rate']) > 100) {
+                $rateCount = M('distribut_level')->sum('rate1');
+                if (($rateCount+$data['rate1']) > 100) {
                     $return = ['status' => 0, 'msg' => '编辑失败，所有等级佣金比率总和在100内', 'result' => ''];
                 } else {
                     $r = D('distribut_level')->add($data);
@@ -242,12 +242,12 @@ class Distribut extends Base {
         }
         if ($data['act'] == 'edit') {
             if($data['level_id'] == 12){
-                if ($data['rate'] > 100) {
+                if ($data['rate1'] > 100) {
                     $return = ['status' => 0, 'msg' => '编辑失败，所有等级佣金比率总和在100内', 'result' => ''];
                 } else {
                     $r = D('distribut_level')->where('level_id=' . $data['level_id'])->save($data);
                     if ($r !== false) {
-                        $data['rate'] = $data['rate'] / 100;
+                        $data['rate1'] = $data['rate1'] / 100;
                         D('users')->where(['level' => $data['level_id']])->save($data);
                         $return = ['status' => 1, 'msg' => '编辑成功', 'result' => $validate->getError()];
                     } else {
@@ -258,13 +258,13 @@ class Distribut extends Base {
                 if (!$validate->batch()->check($data)) {
                     $return = ['status' => 0, 'msg' => '编辑失败', 'result' => $validate->getError()];
                 } else {
-                    $rateCount = M('distribut_level')->where('level_id','neq',$data['level_id'])->sum('rate');
-                    if (($rateCount+$data['rate']) > 100) {
+                    $rateCount = M('distribut_level')->where('level_id','neq',$data['level_id'])->sum('rate1');
+                    if (($rateCount+$data['rate1']) > 100) {
                         $return = ['status' => 0, 'msg' => '编辑失败，所有等级佣金比率总和在100内', 'result' => ''];
                     } else {
                         $r = D('distribut_level')->where('level_id=' . $data['level_id'])->save($data);
                         if ($r !== false) {
-                            $data['rate'] = $data['rate'] / 100;
+                            $data['rate1'] = $data['rate1'] / 100;
                             D('users')->where(['level' => $data['level_id']])->save($data);
                             $return = ['status' => 1, 'msg' => '编辑成功', 'result' => $validate->getError()];
                         } else {

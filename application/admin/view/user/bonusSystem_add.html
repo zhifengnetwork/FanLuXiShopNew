@@ -21,7 +21,7 @@
                     <label for="grade"><em>*</em>分红等级</label>
                 </dt>
                 <dd class="opt">
-                    <input type="text" name="grade" value="{$info.grade}" id="grade" class="input-txt">
+                    <input type="text" name="grade" value="{$info.grade}" id="grade" class="input-txt"onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
                     <span class="err" id="err_grade"></span>
                     <p class="notic">设置业绩分红等级大小</p>
                 </dd>
@@ -33,11 +33,11 @@
 			    </dt>
 			    <dd class="opt">
 					<span>下限</span>
-			        <input type="text" name="lower" value="{$info.lower}" class="input-txt">
+			        <input type="text" name="lower" value="{$info.lower}" class="input-txt"onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
 			        <span>元</span>
 					<span>——</span>
 					<span>上限</span>
-					<input type="text" name="upper" value="{$info.upper}" class="input-txt">
+					<input type="text" name="upper" value="{$info.upper}" class="input-txt"onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
 					<span>元</span>
 					<span class="err" id="err_lower"></span>
 			        <p class="notic">设置业绩分红,若填一个象限(下限为以上、上限为以内)。</p>
@@ -49,7 +49,7 @@
 			        <label for="rate">分红率</label>
 			    </dt>
 			    <dd class="opt">
-			        <input type="text" name="rate" value="{$info.rate}" id="rate" class="input-txt">
+			        <input type="text" name="rate" value="{$info.rate}" id="rate" class="input-txt"onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
 			        <span>%</span>
 					<span class="err" id="err_rate"></span>
 			        <p class="notic">设置业绩分红率,不填为无分红！</p>
