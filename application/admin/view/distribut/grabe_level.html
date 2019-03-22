@@ -40,7 +40,7 @@
                         <label for="level"><em>*</em>等级</label>
                     </dt>
                     <dd class="opt">
-                        <input type="text" name="level" value="{$info.level_type}" id="level" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                        <input type="text" name="level_type" value="{$info.level_type}" id="level" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
                         <span class="err" id="err_level"></span>
                         <p class="notic">设置等级(整型)</p>
                     </dd>
@@ -60,7 +60,7 @@
                         <label for="rate"><em>*</em>佣金占比</label>
                     </dt>
                     <dd class="opt">
-                        <input type="text" name="rate" value="{$info.rate1}" id="rate1" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                        <input type="text" name="rate1" value="{$info.rate1}" id="rate1" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
                         <span class="err" id="err_rate"></span>
                         <p class="notic">佣金占比单位为百分比，如输入10，表示该等级的用户可获得商品原价10%的佣金</p>
                     </dd>
