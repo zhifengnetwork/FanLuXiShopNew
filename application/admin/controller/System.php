@@ -539,19 +539,23 @@ class System extends Base
 	public function bonus_set(){//奖金池配置
 		if($_POST){
 		$inc_type = input('inc_type/s');
+        $bonus_total = input('bonus_total/s');
 		$bonus_pool =input('bonus_pool/s');
 		$ranking1 = input('ranking1/s');
 		$ranking2 = input('ranking2/s');
 		$ranking3 = input('ranking3/s');
         $ranking4 = input('ranking4/s');
         $day = input('day/s');
+        $time = input('time/s');
 		$data = array(
+            'bonus_total' => $bonus_total,
 			'bonus_pool'=>$bonus_pool,
 			'ranking1' =>$ranking1,
 			'ranking2' =>$ranking2,
 			'ranking3' =>$ranking3,
             'ranking4' =>$ranking4,
-            'day' =>$day
+            'day' =>$day,
+            'time' =>$time,
 			);
 		foreach($data as $k =>$v){
 			$updata = Db::query("update tp_config set value='$v' where inc_type='$inc_type' and name='$k'");
