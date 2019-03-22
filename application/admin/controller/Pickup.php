@@ -138,8 +138,6 @@ class Pickup extends Base {
         $Pickup =  M('shop'); 
         $res = $Pickup->order('shop_id desc')->select();
         $this->assign('res',$res);
-
-
         return $this->fetch();
     }
 

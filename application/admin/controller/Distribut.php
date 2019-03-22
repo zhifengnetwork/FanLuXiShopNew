@@ -145,33 +145,144 @@ class Distribut extends Base {
     }
     
     /**
-    * 分销商设置
+    * 分销设置
     **/
     public function grade_list()
     {
-        $data = input('post.');
-        $distribut = M('distribut')->find();
+        // $data = input('post.');
+        // $distribut = M('distribut')->find();
 
-        //是否接收到数据
-        if ($data) {
-            if ($distribut) {
-                $bool = M('distribut')->where('distribut_id',$distribut['distribut_id'])->update(['rate'=>$data['rate'],'time'=>$data['date'],'update_time'=>time()]);
+        // //是否接收到数据
+        // if ($data) {
+        //     if ($distribut) {
+        //         $bool = M('distribut')->where('distribut_id',$distribut['distribut_id'])->update(['rate'=>$data['rate'],'time'=>$data['date'],'update_time'=>time()]);
+        //     } else {
+        //         $bool = M('distribut')->insert(['rate'=>$data['rate'],'time'=>$data['date'],'create_time'=>time(),'update_time'=>time()]);
+        //     }
+
+        //     if ($bool !== false) {
+        //         $distribut['rate'] = $data['rate'];
+        //     }
+        // }
+
+        // $config['qr_back'] = M('config')->where(['name'=>'qr_back'])->value('value');
+        // $this->assign('config',$config);
+        // $this->assign('rate', $distribut['rate']);
+        // return $this->fetch();
+        
+        $list = M('distribut_level');
+        $list = $list->order('level_id')->select();
+        $this->assign('list',$list);
+        return $this->fetch();
+    }
+
+    /**
+     * 分销等级编辑
+     */
+    public function grabe_level()
+    {
+        $act = I('get.act', 'add');
+        $this->assign('act', $act);
+        $level_id = I('get.level_id');
+        if ($level_id) {
+            $level_info = D('distribut_level')->where('level_id=' . $level_id)->find();
+            $this->assign('info', $level_info);
+        }
+        return $this->fetch();
+    }
+
+    /**
+     *分销等级添加编辑删除
+     */
+    public function levelHandle1()
+    {
+        $data = I('post.');
+
+        //验证规则
+        $rules = [
+            'level' => 'require|number|unique:distribut_level,level^level_id',
+            'level_name' => 'require|unique:distribut_level',
+            'max_money' => 'number',
+            'remaining_money' => 'number',
+            'rate' => 'require|between:0,100',
+        ];
+
+        //错误提示
+        $msg = [
+            'level.require'          => '等级必填',
+            'level.number'           => '等级必须是数字',
+            'level.unique'           => '已存在相同的等级',
+            'level_name.require'     => '名称必填',
+            'level_name.unique'      => '已存在相同等级名称',
+            'max_money.number'       => '最大代理佣金必须是数字',
+            'remaining_money.number' => '代理拥金总和必须是数字',
+            'rate.require'           => '佣金占比必填',
+            'rate.between'           => '佣金占比在0-100之间',
+        ];
+
+        $validate = new Validate($rules,$msg);
+
+        $return = ['status' => 0, 'msg' => '参数错误', 'result' => ''];//初始化返回信息
+        if ($data['act'] == 'add') {
+            if (!$validate->batch()->check($data)) {
+                $return = ['status' => 0, 'msg' => '添加失败', 'result' => $validate->getError()];
             } else {
-                $bool = M('distribut')->insert(['rate'=>$data['rate'],'time'=>$data['date'],'create_time'=>time(),'update_time'=>time()]);
-            }
-
-            if ($bool !== false) {
-                $distribut['rate'] = $data['rate'];
+                $rateCount = M('distribut_level')->sum('rate');
+                if (($rateCount+$data['rate']) > 100) {
+                    $return = ['status' => 0, 'msg' => '编辑失败，所有等级佣金比率总和在100内', 'result' => ''];
+                } else {
+                    $r = D('distribut_level')->add($data);
+                    if ($r !== false) {
+                        $return = ['status' => 1, 'msg' => '添加成功', 'result' => $validate->getError()];
+                    } else {
+                        $return = ['status' => 0, 'msg' => '添加失败，数据库未响应', 'result' => ''];
+                    }
+                }
             }
         }
-
-        $config['qr_back'] = M('config')->where(['name'=>'qr_back'])->value('value');
-        $this->assign('config',$config);
-
-
-        $this->assign('rate', $distribut['rate']);
-
-        return $this->fetch();
+        if ($data['act'] == 'edit') {
+            if($data['level_id'] == 12){
+                if ($data['rate'] > 100) {
+                    $return = ['status' => 0, 'msg' => '编辑失败，所有等级佣金比率总和在100内', 'result' => ''];
+                } else {
+                    $r = D('distribut_level')->where('level_id=' . $data['level_id'])->save($data);
+                    if ($r !== false) {
+                        $data['rate'] = $data['rate'] / 100;
+                        D('users')->where(['level' => $data['level_id']])->save($data);
+                        $return = ['status' => 1, 'msg' => '编辑成功', 'result' => $validate->getError()];
+                    } else {
+                        $return = ['status' => 0, 'msg' => '编辑失败，数据库未响应', 'result' => ''];
+                    }
+                }
+            }else{
+                if (!$validate->batch()->check($data)) {
+                    $return = ['status' => 0, 'msg' => '编辑失败', 'result' => $validate->getError()];
+                } else {
+                    $rateCount = M('distribut_level')->where('level_id','neq',$data['level_id'])->sum('rate');
+                    if (($rateCount+$data['rate']) > 100) {
+                        $return = ['status' => 0, 'msg' => '编辑失败，所有等级佣金比率总和在100内', 'result' => ''];
+                    } else {
+                        $r = D('distribut_level')->where('level_id=' . $data['level_id'])->save($data);
+                        if ($r !== false) {
+                            $data['rate'] = $data['rate'] / 100;
+                            D('users')->where(['level' => $data['level_id']])->save($data);
+                            $return = ['status' => 1, 'msg' => '编辑成功', 'result' => $validate->getError()];
+                        } else {
+                            $return = ['status' => 0, 'msg' => '编辑失败，数据库未响应', 'result' => ''];
+                        }
+                    }
+                }
+            }
+        }
+        if ($data['act'] == 'del') {
+            $r = D('distribut_level')->where('level_id=' . $data['level_id'])->delete();
+            if ($r !== false) {
+                $return = ['status' => 1, 'msg' => '删除成功', 'result' => ''];
+            } else {
+                $return = ['status' => 0, 'msg' => '删除失败，数据库未响应', 'result' => ''];
+            }
+        }
+        $this->ajaxReturn($return);
     }
 
 
