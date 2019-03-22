@@ -38,19 +38,25 @@
 							<div style="width: 24px;"><i class="ico-check"></i></div>
 						</th>
 						<th align="center" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: center; width: 70px;" class="">排名</div>
+						</th>
+						<th align="center" abbr="ac_id" axis="col4" class="">
 							<div style="text-align: center; width: 70px;" class="">业绩等级</div>
 						</th>
 						<th align="center" abbr="ac_id" axis="col4" class="">
-							<div style="text-align: center; width: 100px;" class="">业绩下限</div>
+							<div style="text-align: center; width: 100px;" class="">团队(用户名)</div>
+						</th>
+						<th align="center" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: center; width: 150px;" class="">团队(用户名)等级</div>
 						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
-							<div style="text-align: center; width: 100px;" class="">业绩上限</div>
+							<div style="text-align: center; width: 100px;" class="">团队业绩</div>
 						</th>
 						<th align="center" abbr="article_time" axis="col6" class="">
 							<div style="text-align: center; width: 70px;" class="">分红比例</div>
 						</th>
 						<th align="center" abbr="article_time" axis="col6" class="">
-							<div style="text-align: center; width: 100px;" class="">业绩描述</div>
+							<div style="text-align: center; width: 150px;" class="">是否开启全球分红</div>
 						</th>
 						<th align="center" axis="col1" class="handle">
 							<div style="text-align: center; width: 150px;">操作</div>
@@ -76,7 +82,13 @@
 								<div style="text-align: center; width: 70px;">{$vo.level_name}</div>
 							</td>
 							<td align="center" class="">
+								<div style="text-align: center; width: 70px;">{$vo.level_name}</div>
+							</td>
+							<td align="center" class="">
 								<div style="text-align: center; width: 100px;">{$vo.level_name}</div>
+							</td>
+							<td align="center" class="">
+								<div style="text-align: center; width: 150px;">{$vo.level_name}</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 100px;">
@@ -87,12 +99,11 @@
 								<div style="text-align: center; width: 70px;">{$vo.discount}%</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 100px;">{$vo.describe}</div>
+								<div style="text-align: center; width: 150px;">{$vo.describe}</div>
 							</td>
 							<td align="center" class="handle">
 								<div style="text-align: center; width: 150px; max-width:170px;">
-									<a href="{:U('User/level',array('act'=>'edit','level_id'=>$vo['level_id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>编辑</a>
-									<a class="btn red"  href="javascript:void(0)" data-url="{:U('User/levelHandle')}" data-id="{$vo.level_id}" onClick="delfun(this)"><i class="fa fa-trash-o"></i>删除</a>
+									<a href="{:U('User/level',array('act'=>'edit','level_id'=>$vo['level_id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>查看团队</a>
 								</div>
 							</td>
 							<td align="" class="" style="width: 100%;">

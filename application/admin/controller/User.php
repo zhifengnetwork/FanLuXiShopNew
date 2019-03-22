@@ -419,6 +419,8 @@ class User extends Base
     {
 		$user_level = M('user_level')->select();
 		$this->assign('level',$user_level);
+		
+		
 		// exit;
 		/* $goods = M('goods')->select();
 		$this->assign('goods',$goods);
@@ -439,6 +441,8 @@ class User extends Base
 
     public function levelList()
     {
+		$benefits = Db::query("select * from tp_config where name='benefits' and inc_type='user_level'");
+		$this->assign('benefits',$benefits['0']);
         $Ad = M('user_level');
         $p = $this->request->param('p');
         $res = $Ad->order('level_id')->page($p . ',10')->select();
@@ -454,6 +458,22 @@ class User extends Base
         $this->assign('page', $show);
         return $this->fetch();
     }
+	
+	public function benefits($id=""){//平级管理津贴
+		$info = M('config')->where('id',$id)->select();
+		$this->assign('info',$info[0]);
+		if($_POST){
+			$id = I('id');
+			$value = I('value');
+			$res = M('config')->update(['value'=>$value,'id'=>$id]);
+			if($res){
+				$this->ajaxReturn(['status' => 1, 'msg' => '操作成功']);
+			}else{
+				$this->ajaxReturn(['status' => 0, 'msg' => '参数失败']);
+			}
+		}
+		return $this->fetch();
+	}
 
     /**
      * 会员等级添加编辑删除
