@@ -544,14 +544,14 @@ class System extends Base
 		$ranking2 = input('ranking2/s');
 		$ranking3 = input('ranking3/s');
         $ranking4 = input('ranking4/s');
-        $ranking0 = input('ranking0/s');
+        $day = input('day/s');
 		$data = array(
 			'bonus_pool'=>$bonus_pool,
 			'ranking1' =>$ranking1,
 			'ranking2' =>$ranking2,
 			'ranking3' =>$ranking3,
             'ranking4' =>$ranking4,
-            'ranking0' =>$ranking0
+            'day' =>$day
 			);
 		foreach($data as $k =>$v){
 			$updata = Db::query("update tp_config set value='$v' where inc_type='$inc_type' and name='$k'");

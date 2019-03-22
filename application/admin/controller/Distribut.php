@@ -209,15 +209,15 @@ class Distribut extends Base {
 
         //错误提示
         $msg = [
-            'level_type.require'          => '等级必填',
-            'level_type.number'           => '等级必须是数字',
-            'level_type.unique'           => '已存在相同的等级',
+            'level_type.require'     => '等级必填',
+            'level_type.number'      => '等级必须是数字',
+            'level_type.unique'      => '已存在相同的等级',
             'level_name.require'     => '名称必填',
             'level_name.unique'      => '已存在相同等级名称',
             'max_money.number'       => '最大代理佣金必须是数字',
             'remaining_money.number' => '代理拥金总和必须是数字',
-            'rate1.require'           => '佣金占比必填',
-            'rate1.between'           => '佣金占比在0-100之间',
+            'rate1.require'          => '佣金占比必填',
+            'rate1.between'          => '佣金占比在0-100之间',
         ];
 
         $validate = new Validate($rules,$msg);
