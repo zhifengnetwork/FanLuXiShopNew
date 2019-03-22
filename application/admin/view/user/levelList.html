@@ -44,10 +44,13 @@
 							<div style="text-align: left; width: 70px;" class="">等级名称</div>
 						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
-							<div style="text-align: center; width: 100px;" class="">条件</div>
+							<div style="text-align: center; width: 150px;" class="">条件</div>
 						</th>
 						<th align="center" abbr="article_time" axis="col6" class="">
 							<div style="text-align: center; width: 60px;" class="">返利</div>
+						</th>
+						<th align="center" abbr="article_time" axis="col6" class="">
+							<div style="text-align: center; width: 60px;" class="">奖励</div>
 						</th>
 						<th align="center" abbr="article_time" axis="col6" class="">
 							<div style="text-align: center; width: 100px;" class="">等级描述</div>
@@ -89,20 +92,31 @@
 								<div style="text-align: left; width: 70px;">{$vo.level_name}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 100px;">
-									{$vo.amount}
+								<div style="text-align: center; width: 150px;">
+									<if condition="$vo['type'] eq 201">
+										直推{$vo.con_name}人
+									<elseif condition="$vo['type'] eq 301"/>
+										分享购物金额{$vo.con_name}元
+									<elseif condition="$vo['type'] eq 101">
+										购买任意商品
+									<elseif condition="$vo['type'] eq 401">
+										申请
+									</if>
 								</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 60px;">{$vo.discount}%</div>
+								<div style="text-align: center; width: 60px;">{$vo.rebate}%</div>
+							</td>
+							<td align="center" class="">
+								<div style="text-align: center; width: 60px;">{$vo.reward}元</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 100px;">{$vo.describe}</div>
 							</td>
 							<td align="center" class="handle">
 								<div style="text-align: center; width: 150px; max-width:170px;">
-									<a href="{:U('User/level',array('act'=>'edit','level_id'=>$vo['level_id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>编辑</a>
-									<a class="btn red"  href="javascript:void(0)" data-url="{:U('User/levelHandle')}" data-id="{$vo.level_id}" onClick="delfun(this)"><i class="fa fa-trash-o"></i>删除</a>
+									<a href="{:U('User/level',array('id'=>$vo['id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>编辑</a>
+									<a class="btn red"  href="javascript:void(0)" data-url="{:U('User/leveldel')}" data-id="{$vo.id}" onClick="delfun(this)"><i class="fa fa-trash-o"></i>删除</a>
 								</div>
 							</td>
 							<td align="" class="" style="width: 100%;">
@@ -141,7 +155,7 @@
 			$.ajax({
 				type: 'post',
 				url: $(obj).attr('data-url'),
-				data : {act:'del',level_id:$(obj).attr('data-id')},
+				data : {act:'del',id:$(obj).attr('data-id')},
 				dataType: 'json',
 				success: function (data) {
 					layer.closeAll();

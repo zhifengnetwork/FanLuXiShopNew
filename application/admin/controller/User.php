@@ -415,9 +415,12 @@ class User extends Base
         return $this->fetch();
     }
 
-    public function level()
+    public function level($id="")
     {
-		$goods = M('goods')->select();
+		$user_level = M('user_level')->select();
+		$this->assign('level',$user_level);
+		// exit;
+		/* $goods = M('goods')->select();
 		$this->assign('goods',$goods);
 		
         $act = I('get.act', 'add');
@@ -426,7 +429,11 @@ class User extends Base
         if ($level_id) {
             $level_info = D('user_level')->where('level_id=' . $level_id)->find();
             $this->assign('info', $level_info);
-        }
+        } */
+		if($id>0){
+			$res = M('user_level')->where('id',$id)->select();
+			$this->assign('info', $res['0']);
+		}
         return $this->fetch();
     }
 
@@ -453,7 +460,7 @@ class User extends Base
      */
     public function levelHandle()
     {
-        $data = I('post.');
+        /* $data = I('post.');
         $userLevelValidate = Loader::validate('UserLevel');
         $return = ['status' => 0, 'msg' => '参数错误', 'result' => ''];//初始化返回信息
         if ($data['act'] == 'add') {
@@ -490,8 +497,68 @@ class User extends Base
                 $return = ['status' => 0, 'msg' => '删除失败，数据库未响应', 'result' => ''];
             }
         }
-        $this->ajaxReturn($return);
+        $this->ajaxReturn($return); */
+		if($_POST){
+			$id = I('id');
+			
+			$level_id = I('level_id');
+			$level_name = I('level_name');
+			$type = I('type');
+			$con_name = I('con_name');
+			$rebate_id = I('rebate_id');
+			$rebate = I('rebate');
+			$reward_id = I('reward_id');
+			$reward = I('reward');
+			$describe = I('describe');
+			if($level_id==""){
+				$this->ajaxReturn(['status' => 0, 'msg' => '等级不可为空']);
+			}
+			$verify = Db::query("select * from tp_user_level");
+			foreach($verify as $k =>$v){
+				if($v['id']!=$id&&$v['level_id']==$level_id){
+					$this->ajaxReturn(['status' => 0, 'msg' => '等级:已存在相同等级']);
+				}
+			}
+			if($level_name=="")$this->ajaxReturn(['status' => 0, 'msg' => '等级名称不可为空']);
+			if($type==0&&$con_name!="")$this->ajaxReturn(['status' => 0, 'msg' => '请选择等级所需条件']);
+			if($rebate_id==0&&$rebate!="")$this->ajaxReturn(['status' => 0, 'msg' => '请选择直推返利等级']);
+			if($reward_id==0&&$reward!="")$this->ajaxReturn(['status' => 0, 'msg' => '请选择直推奖励等级']);
+			$data = array(
+				'level_id'=>$level_id,
+				'level_name'=>$level_name,
+				'type'=>$type,
+				'con_name'=>$con_name,
+				'rebate_id'=>$rebate_id,
+				'rebate'=>$rebate,
+				'reward_id'=>$reward_id,
+				'reward'=>$reward,
+				'describe'=>$describe,
+			);
+			if($id>0){
+				$res = M('user_level')->where('id',$id)->data($data)->save();
+			}else{
+				$data['create_time'] = time();
+				$res = M('user_level')->insert($data);
+			}
+			if($res){
+				$this->ajaxReturn(['status' => 1, 'msg' => '操作成功']);
+			}else{
+				$this->ajaxReturn(['status' => 0, 'msg' => '参数失败']);
+			}
+		}
     }
+	
+	public function leveldel(){
+		if($_POST){
+			$id = I('id');
+			$res = M('user_level')->where('id',$id)->delete();
+			if($res){
+				$this->ajaxReturn(['status' => 1, 'msg' => '操作成功']);
+			}else{
+				$this->ajaxReturn(['status' => 0, 'msg' => '参数失败']);
+			}
+		}
+	}
 
     /**
      * 搜索用户名
