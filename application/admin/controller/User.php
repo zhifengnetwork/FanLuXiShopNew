@@ -40,14 +40,14 @@ class User extends Base
 
                 if($is_cun){
                     
-                    M('agent_info')->where(['uid'=>$post['user_id']])->update(['head_id'=>$head_id,'level_id'=>$post['level'],'update_time'=>time()]);
+                    M('agent_info')->where(['uid'=>$post['user_id']])->update(['head_id'=>$head_id,'level'=>$post['level'],'update_time'=>time()]);
 
                 }else{
 
                     $model = new AgentInfo();
                     $model->uid = $post['user_id'];
                     $model->head_id = $head_id;
-                    $model->level_id = $post['level'];
+                    $model->level = $post['level'];
                     $model->create_time = time();
                     $model->update_time = time();
                     $model->save();
@@ -158,13 +158,13 @@ class User extends Base
                  $c && exit($this->error('手机号不得和已有用户重复'));
              }
              if(!empty($_POST['level'])){
-                 $userLevel = D('user_level')->where('level_id=' . $_POST['level'])->value('level');
+                 $userLevel = D('user_level')->where('level=' . $_POST['level'])->value('level');
                  $_POST['agent_user'] = $userLevel;
              }
              // dump($_POST);die;
              $agent = M('agent_info')->where(['uid'=>$uid])->find();
              if ($agent) {
-                 $data = array('level_id'=>$userLevel);
+                 $data = array('level'=>$userLevel);
                  M('agent_info')->where(['uid'=>$uid])->save($data);
              }else{
                  $this->agent_add($user['user_id'],$user['first_leader'],$userLevel);
@@ -185,12 +185,12 @@ class User extends Base
          return $this->fetch();
      }
  
-     private function agent_add($user_id,$head_id,$level_id)
+     private function agent_add($user_id,$head_id,$level)
      {
          $data = array(
              'uid'=>$user_id,
              'head_id'=>$head_id,
-             'level_id'=>$level_id,
+             'level'=>$level,
              'create_time'=>time(),
              'update_time'=>time(),
              'note'=>"后台增加等级"
@@ -427,9 +427,9 @@ class User extends Base
 		
         $act = I('get.act', 'add');
         $this->assign('act', $act);
-        $level_id = I('get.level_id');
-        if ($level_id) {
-            $level_info = D('user_level')->where('level_id=' . $level_id)->find();
+        $level = I('get.level');
+        if ($level) {
+            $level_info = D('user_level')->where('level=' . $level)->find();
             $this->assign('info', $level_info);
         } */
 		if($id>0){
@@ -445,7 +445,7 @@ class User extends Base
 		$this->assign('benefits',$benefits['0']);
         $Ad = M('user_level');
         $p = $this->request->param('p');
-        $res = $Ad->order('level_id')->page($p . ',10')->select();
+        $res = $Ad->order('level')->page($p . ',10')->select();
         if ($res) {
             foreach ($res as $val) {
                 $list[] = $val;
@@ -499,10 +499,10 @@ class User extends Base
             if (!$userLevelValidate->scene('edit')->batch()->check($data)) {
                 $return = ['status' => 0, 'msg' => '编辑失败', 'result' => $userLevelValidate->getError()];
             } else {
-                $r = D('user_level')->where('level_id=' . $data['level_id'])->save($data);
+                $r = D('user_level')->where('level=' . $data['level'])->save($data);
                 if ($r !== false) {
                     $discount = $data['discount'] / 100;
-                    D('users')->where(['level' => $data['level_id']])->save(['discount' => $discount]);
+                    D('users')->where(['level' => $data['level']])->save(['discount' => $discount]);
                     $return = ['status' => 1, 'msg' => '编辑成功', 'result' => $userLevelValidate->getError()];
                 } else {
                     $return = ['status' => 0, 'msg' => '编辑失败，数据库未响应', 'result' => ''];
@@ -510,7 +510,7 @@ class User extends Base
             }
         }
         if ($data['act'] == 'del') {
-            $r = D('user_level')->where('level_id=' . $data['level_id'])->delete();
+            $r = D('user_level')->where('level=' . $data['level'])->delete();
             if ($r !== false) {
                 $return = ['status' => 1, 'msg' => '删除成功', 'result' => ''];
             } else {
@@ -521,7 +521,7 @@ class User extends Base
 		if($_POST){
 			$id = I('id');
 			
-			$level_id = I('level_id');
+			$level = I('level');
 			$level_name = I('level_name');
 			$type = I('type');
 			$con_name = I('con_name');
@@ -531,12 +531,12 @@ class User extends Base
 			$reward = I('reward');
 			$get = I('get');
 			$describe = I('describe');
-			if($level_id==""){
+			if($level==""){
 				$this->ajaxReturn(['status' => 0, 'msg' => '等级不可为空']);
 			}
 			$verify = Db::query("select * from tp_user_level");
 			foreach($verify as $k =>$v){
-				if($v['id']!=$id&&$v['level_id']==$level_id){
+				if($v['id']!=$id&&$v['level']==$level){
 					$this->ajaxReturn(['status' => 0, 'msg' => '等级:已存在相同等级']);
 				}
 			}
@@ -545,7 +545,7 @@ class User extends Base
 			if($rebate_id==0&&$rebate!="")$this->ajaxReturn(['status' => 0, 'msg' => '请选择直推返利等级']);
 			if($reward_id==0&&$reward!="")$this->ajaxReturn(['status' => 0, 'msg' => '请选择直推奖励等级']);
 			$data = array(
-				'level_id'=>$level_id,
+				'level'=>$level,
 				'level_name'=>$level_name,
 				'type'=>$type,
 				'con_name'=>$con_name,

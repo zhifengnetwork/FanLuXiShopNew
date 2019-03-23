@@ -213,6 +213,9 @@ return array(
                 array('name' => '领取日志列表', 'act' => 'receive_log', 'op' => 'BonusPool'),
                 array('name' => '奖励日志列表', 'act' => 'bonus_log', 'op' => 'BonusPool'),
 			)),
+                 array('name' => '业绩统计', 'child' => array(
+                array('name' => '业绩统计列表', 'act' => 'preform', 'op' => 'PreForm'),
+            )),
 	)),
 
     'data' => array('name' => '数据', 'child' => array(

@@ -40,7 +40,7 @@
 			        <label for="level_name"><em>*</em>等级</label>
 			    </dt>
 			    <dd class="opt">
-			        <input type="text" name="level_id" value="{$info.level_id}" id="level_id" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+			        <input type="text" name="level" value="{$info.level}" id="level" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
 			        <span>级</span>
 			        <p class="notic">设置会员等级大小</p>
 			    </dd>
@@ -75,10 +75,10 @@
 					<select name="rebate_id">
 						<option value="0">选择返利等级</option>
 						<volist name="level" id="vo">
-						<option value="{$vo.level_id}" <if condition="$info['rebate_id'] eq $vo['rebate_id']"> selected</if>>{$vo.level_name}</option>
+						<option value="{$vo.level}" <if condition="$info['rebate_id'] eq $vo['rebate_id']"> selected</if>>{$vo.level_name}</option>
 						</volist>
 					</select>
-                    <input type="text" name="rebate" value="{$info.rebate}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <input type="text" name="rate" value="{$info.rate}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
                     <span>%</span>
                     <p class="notic">返利单位为百分比，如输入10，表示该会员等级的用户分享商品原价的10%。</p>
                 </dd>
@@ -91,7 +91,7 @@
 			        <select name="reward_id">
 						<option value="0">选择直推等级</option>
 						<volist name="level" id="vv">
-						<option <if condition="$info['reward_id'] eq $vv['reward_id']"> selected</if> value="{$vv.level_id}">{$vv.level_name}</option>
+						<option <if condition="$info['reward_id'] eq $vv['reward_id']"> selected</if> value="{$vv.level}">{$vv.level_name}</option>
 						</volist>
 					</select>
 					<input type="text" name="reward" value="{$info.reward}" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">

@@ -4,6 +4,7 @@ use think\Log;
 use think\Db;
 
 use app\common\logic\BonusLogic;
+use app\common\logic\FanliLogic;
 
 define('EXTEND_MODULE', 1);
 define('EXTEND_ANDROID', 2);
@@ -1039,6 +1040,7 @@ function update_pay_status($order_sn,$ext=array())
         //if($distribut_condition == 1)  // 购买商品付款才可以成为分销商
             //M('users')->where("user_id", $order['user_id'])->save(array('is_distribut'=>1));
         change_role($order['order_id']);
+        fanli($order['order_id']);
 
         //虚拟服务类商品支付
         if($order['prom_type'] == 5){
@@ -1093,7 +1095,37 @@ function update_pay_status($order_sn,$ext=array())
     jichadaili($order_id);
 }
 
+/**
+ * 设置分享返利
+ * 
+ * 登记会vip返利，店主返利，总监返利，大区董事返利
+ */
+ function fanli($order_id){
 
+    $r = M('order_divide')->where(['order_id'=>$order_id])->find();
+  
+    //记录表
+    //if($r['status'] == 1){
+    //    return false;
+    //}
+
+    $order = M('order')->where(['order_id'=>$order_id])->find();
+
+
+    $userId = $order['user_id'];
+    $orderSn = $order['order_sn'];
+
+    $goods_list = M('order_goods')->where(['order_id'=>$order_id])->select();
+    agent_performance($order_id);
+    foreach($goods_list as $k => $v){
+
+        $goodId = $v['goods_id'];
+        $goodNum = $v['goods_num'];
+       
+        $model = new FanliLogic($userId, $goodId,$goodNum,$orderSn,$order_id);
+        $res = $model->fanliModel();
+    }
+ }
 /**
  * 订单确认收货
  * @param $id 订单id
