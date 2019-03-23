@@ -125,15 +125,12 @@ class BonusPoolLogic extends Model
 	//奖金池奖励
 	public function bonus_reward()
 	{
-		//查询排名奖励表是否已经奖励
-
-		//判断奖金池金额是否不为0
-		$bonus_total = M('config')->where('name', 'bonus_total')->value('value');
-		if(!$bonus_total) return false;
-
+		$satisfy = $this->is_satisfy();
+		if(!$satisfy) return false;
+		
 		//按数量取最大的前四条记录
 		Db::startTrans();
-		$result = Db::name('bonus_rank')->order('nums DESC')->limit(4)->select();
+		$result = Db::name('bonus_rank')->where('status', 0)->order('nums DESC')->limit(4)->select();
 		//截止时间,用于更新排名表时不更新后面
 		$stop_time = time();
 		if(!$result) return false;
@@ -168,23 +165,45 @@ class BonusPoolLogic extends Model
 
 			$i++;
 		}
-
-		$result = Db::name('bonus_rank')->where('status', 0)->update(['status'=>1]);
-		if($result){
+		$log_result = M('bonus_log')->inset($log);
+		$result = Db::name('bonus_rank')->whereTime('create_time', '<', $stop_time)
+				->where('status', 0)->update(['status'=>1]);
+		if($result && $log_result){
 			Db::commit();
 			return true;
 		}else{
 			Db::rollback();
 			return false;
 		}
-
-		// $log_result = M('bonus_log')->inset($log);
-
-		// if(!$log_result && !$user_result){
-		// 	M()->rollback();
-		// 	return false;
-		// }
-
-
 	}
+
+	//判断是否满足条件
+	public function is_satisfy()
+	{
+		//判断是否达到后台设定的奖励时间
+		$pre_day = date('d');
+		$pre_time = date('H');
+		$time_data = array('day', 'time');
+		$time_data = M('config')->where('name', ['in', $time_data])->select();
+		if($time_data[0]['name'] == 'day'){
+			$day = $time_data[0]['value'];
+			$time = $time_data[1]['value'];
+		}else{
+			$day = $time_data[1]['value'];
+			$time = $time_data[0]['value'];
+		}
+		if(($pre_day < $day) or ($pre_time < $time) return false;
+
+		//查询排名奖励表是否已经奖励
+		$is_reward = M('bonus_rank')->whereTime('create_time','month')->find();
+		if($is_reward) return false;
+
+		//判断奖金池金额是否不为0
+		$bonus_total = M('config')->where('name', 'bonus_total')->value('value');
+		if(!$bonus_total) return false;
+
+		return true;
+	}
+
+
 }
