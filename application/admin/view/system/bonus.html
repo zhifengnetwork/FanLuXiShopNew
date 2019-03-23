@@ -31,19 +31,19 @@
             
             <dl class="row">
                 <dt class="tit">
-                    <label for="bonus_total">奖金池:</label>
+                    <label for="bonus_total">奖金池总额:</label>
                 </dt>
                 <dd class="opt">
                     <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$" id="bonus_total" name="bonus_total" value="{$config.bonus_total|default=0}" class="input-txt" type="text">
                     <span>元</span>
-                    <p class="notic">当前奖金池总额</p>
+                    <p class="notic">奖金池当前总金额</p>
                 </dd>
             </dl>
 
 
             <dl class="row">
                 <dt class="tit">
-                    <label for="reg_integral">抽取邮费:</label>
+                    <label for="bonus_pool">抽取邮费:</label>
                 </dt>
                 <dd class="opt">
                     <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$" id="bonus_pool" name="bonus_pool" value="{$config.bonus_pool|default=0}" class="input-txt" type="text">
@@ -54,54 +54,55 @@
 			
 			<dl class="row">
 			    <dt class="tit">
-			        <label for="reg_integral">排名前四名奖励:</label>
+			        <label for="reg_integral">排名前三名奖励:</label>
 			    </dt>
 			</dl>
 			<dl class="row">
 			    <dt class="tit">
-			        <label for="reg_integral">第一名</label>
+			        <label for="ranking1">第一名</label>
 			    </dt>
 			    <dd class="opt">
-			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking1" value="{$config.ranking1|default=0}" class="input-txt" type="text">
+			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking1"
+                    id="ranking1" value="{$config.ranking1|default=0}" class="input-txt" type="text">
 			        <span>%</span>
 			    </dd>
 			</dl>
 			<dl class="row">
 			    <dt class="tit">
-			        <label for="reg_integral">第二名</label>
+			        <label for="ranking2">第二名</label>
 			    </dt>
 			    <dd class="opt">
-			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking2" value="{$config.ranking2|default=0}" class="input-txt" type="text">
+			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking2" id="ranking2" value="{$config.ranking2|default=0}" class="input-txt" type="text">
 			        <span>%</span>
 			    </dd>
 			</dl>
 			<dl class="row">
 			    <dt class="tit">
-			        <label for="reg_integral">第三名</label>
+			        <label for="ranking3">第三名</label>
 			    </dt>
 			    <dd class="opt">
-			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking3" value="{$config.ranking3|default=0}" class="input-txt" type="text">
+			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking3" id="ranking3" value="{$config.ranking3|default=0}" class="input-txt" type="text">
 			        <span>%</span>
 			    </dd>
 			</dl>
 			
-			<dl class="row">
+			<!-- <dl class="row">
 			    <dt class="tit">
 			        <label for="reg_integral">第四名</label>
 			    </dt>
 			    <dd class="opt">
-			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking4" value="{$config.ranking4|default=0}" class="input-txt" type="text">
+			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking4" id="ranking4" value="{$config.ranking4|default=0}" class="input-txt" type="text">
 			        <span>%</span>
 			    </dd>
-            </dl>
+            </dl> -->
             
             <dl class="row">
                 <dt class="tit">
-                    <label for="reg_integral">每月奖励发放时间:</label>
+                    <label for="day">每月奖励发放时间:</label>
                 </dt>
                 <dd class="opt">
                     <!-- <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking0" value="{$config.ranking0|default=0}" class="input-txt" type="text"> -->
-                    <select name="day">
+                    <select name="day" id="day">
                         <option value="1" <if condition="$config.day eq 1">selected</if>>1</option>
                         <option value="2" <if condition="$config.day eq 2">selected</if>>2</option>
                         <option value="3" <if condition="$config.day eq 3">selected</if>>3</option>
@@ -135,34 +136,6 @@
                         <option value="31" <if condition="$config.day eq 31">selected</if>>31</option>
                     </select>
                     <span>号</span>
-
-                    <select name="time">
-                        <option value="1" <if condition="$config.time eq 1">selected</if>>1</option>
-                        <option value="2" <if condition="$config.time eq 2">selected</if>>2</option>
-                        <option value="3" <if condition="$config.time eq 3">selected</if>>3</option>
-                        <option value="4" <if condition="$config.time eq 4">selected</if>>4</option>
-                        <option value="5" <if condition="$config.time eq 5">selected</if>>5</option>
-                        <option value="6" <if condition="$config.time eq 6">selected</if>>6</option>
-                        <option value="7" <if condition="$config.time eq 7">selected</if>>7</option>
-                        <option value="8" <if condition="$config.time eq 8">selected</if>>8</option>
-                        <option value="9" <if condition="$config.time eq 9">selected</if>>9</option>
-                        <option value="10" <if condition="$config.time eq 10">selected</if>>10</option>
-                        <option value="11" <if condition="$config.time eq 11">selected</if>>11</option>
-                        <option value="12" <if condition="$config.time eq 12">selected</if>>12</option>
-                        <option value="13" <if condition="$config.time eq 13">selected</if>>13</option>
-                        <option value="14" <if condition="$config.time eq 14">selected</if>>14</option>
-                        <option value="15" <if condition="$config.time eq 15">selected</if>>15</option>
-                        <option value="16" <if condition="$config.time eq 16">selected</if>>16</option>
-                        <option value="17" <if condition="$config.time eq 17">selected</if>>17</option>
-                        <option value="18" <if condition="$config.time eq 18">selected</if>>18</option>
-                        <option value="19" <if condition="$config.time eq 19">selected</if>>19</option>
-                        <option value="20" <if condition="$config.time eq 20">selected</if>>20</option>
-                        <option value="21" <if condition="$config.time eq 21">selected</if>>21</option>
-                        <option value="22" <if condition="$config.time eq 22">selected</if>>22</option>
-                        <option value="23" <if condition="$config.time eq 23">selected</if>>23</option>
-                        <option value="24" <if condition="$config.time eq 24">selected</if>>00</option>
-                    </select>
-                    <span>点</span>
                 </dd>
             </dl>   
             <div class="bot"><a href="JavaScript:void(0);" class="ncap-btn-big ncap-btn-green" onclick="fromsubmit();">确认提交</a></div>
@@ -171,8 +144,16 @@
 </div>
 <script type="text/javascript">
     function fromsubmit(){
-        var bonus_pool=$("#bonus_pool").val();
-        if(bonus_pool<=0){
+        var bonus_total = $("#bonus_total").val();
+        var ranking1 = $("#ranking1").val();
+        var ranking2 = $("#ranking2").val();
+        var ranking3 = $("#ranking3").val();
+        var total = ranking1 + ranking2 + ranking3;
+        if(total > 100){
+            layer.msg('排名比例总和不能超过100%！', {icon: 2,time: 1000});
+            return false;
+        }
+        if(bonus_total<=0){
             layer.msg('奖金池必须大于0！', {icon: 2,time: 1000});
             return false;
         }

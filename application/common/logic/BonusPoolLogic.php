@@ -2,8 +2,8 @@
 
 namespace app\common\logic;
 
-use app\common\model\Users;
-use app\common\model\BonusRank;
+use think\Exception;
+use think\Cache;
 use think\Model;
 use think\Db;
 
@@ -16,13 +16,8 @@ class BonusPoolLogic extends Model
 	public function is_receive($order_id)
 	{
 		$goods = array();
-		//领取产品的用户
-		$user_id = M('order')->where('order_id', $order_id)->value('user_id');
-		$user = M('users')->where('user_id', $user_id)->field('user_id, nickname, first_leader')->find();
-
 		//订单中的所有产品ID
 		$good_ids = M('order_goods')->where('order_id', $order_id)->field('goods_id')->select();
-
 		//获取领取类目的产品
 		foreach ($good_ids as $key => $value) {
 			$good = M('goods')->where('goods_id', $value['goods_id'])->where('cat_id', 1)->value('goods_id');
@@ -30,28 +25,37 @@ class BonusPoolLogic extends Model
 				$goods[] = $good;
 			}
 		}
-
 		//计算产品数量
 		$num = count($good_ids);
 		if($num <= 0) return false;
 
+		//领取产品的用户
+		$user_id = M('order')->where('order_id', $order_id)->value('user_id');
+		$user = M('users')->where('user_id', $user_id)->field('user_id, nickname, first_leader')->find();
+		if(!$user) return false;
+
 		//开启事务
 		Db::startTrans();
-		$money = $this->put_in($num);
-		
-		if(!$money) return false;
+		try{
+			//将邮费放进奖金池
+			$money = $this->put_in($num);
+	
+			//记录下级领取的日志
+			$this->write_log($num, $money, $user, $order_id);
 
-		$log_result = $this->write_log($num, $money, $user, $order_id);
-
-		if(!$log_result) return false;
-
-		$rank_result = $this->write_ranking($num, $money, $user);
-		
-		if($rank_result){
+			//没有上级则不记录上级排名
+			dump($user['first_leader']);
+			if($user['first_leader']){
+				$leader = M('users')->where('user_id', $user['first_leader'])->find();
+				if($leader){
+					//累计上级排名
+					$this->write_ranking($num, $money, $user);
+				}
+			}
 			// 提交事务
-            Db::commit();  
-            return true;
-		}else{
+			Db::commit();  
+	        return true;
+		}catch(\Exception $e){
 			// 回滚事务
             Db::rollback();
             return false;
@@ -62,14 +66,16 @@ class BonusPoolLogic extends Model
 	public function put_in($num)
 	{
 		//获每个产品抽取的邮费
-		$bonus_pool = M('config')->where('name', 'bonus_pool')->value('value');
-		if(!$bonus_pool) return false;
+		$bonus_pool = $this->getDate('bonus_pool');
+		if(!$bonus_pool['bonus_pool']) return false;
 
-		$money = $num * $bonus_pool;
-		$bonus_total = M('config')->where('name', 'bonus_total')->value('value');
-		$bonus_total = $bonus_total + $money;
+		//抽取的邮费
+		$money = $num * $bonus_pool['bonus_pool'];
+		$bonus_total = $this->getDate('bonus_total');
+		$bonus_total = $bonus_total['bonus_total'] + $money;
 
-		$result = Db::name('config')->where('name', 'bonus_total')->update(['value' => $bonus_total]);
+		$result = Db::name('config')->where('name', 'bonus_total')
+				->update(['value' => $bonus_total]);
 		if($result){
 			return $money;
 		}else{
@@ -97,9 +103,18 @@ class BonusPoolLogic extends Model
 	//记录上级排名
 	public function write_ranking($num, $money, $user)
 	{
+		//结算排名的时间戳
+		$cache_time = tpCache('bonus_time');
+		if($cache_time){
+			$bonus_time['create_time'] = ['>', $cache_time];
+		}else{
+			$bonus_time = array();
+		}
+	
 		//查询用户是否已经存在排名
-		$users = M('bonus_rank')->where('user_id', $user['first_leader'])->find();
-
+		$users = M('bonus_rank')->where($bonus_time)
+				->where('user_id', $user['first_leader'])->where('status', 0)->find();
+		
 		//用户已存在排名则更新数据, 否则插入一条新记录
 		if($users){
 			$data = array(
@@ -107,7 +122,7 @@ class BonusPoolLogic extends Model
 				'money' => $users['money'] + $money,
 				'update_time' => time(), 
 			);
-			$result = Db::name('bonus_rank')->insert($data);
+			$result = Db::name('bonus_rank')->where('user_id', $users['user_id'])->update($data);
 			return $result;
 		}else{
 			$data = array(
@@ -125,83 +140,111 @@ class BonusPoolLogic extends Model
 	//奖金池奖励
 	public function bonus_reward()
 	{
+		//判断是否满足奖励的条件
 		$satisfy = $this->is_satisfy();
 		if(!$satisfy) return false;
+
+		//获取后台设置的奖励信息
+		$data = array('bonus_total', 'ranking1', 'ranking2', 'ranking3');
+		$data = $this->getDate($data);
 		
-		//按数量取最大的前四条记录
+		//截止时间,用于修改排名表时不更新后面新增的数据
+		$bonus_time = time();
+		Cache::set('bonus_time', $bonus_time);
+
+		//按数量取最大的前3条记录
 		Db::startTrans();
-		$result = Db::name('bonus_rank')->where('status', 0)->order('nums DESC')->limit(4)->select();
-		//截止时间,用于更新排名表时不更新后面
-		$stop_time = time();
+		$result = Db::name('bonus_rank')->alias('rank')->join('users', 'rank.user_id = users.user_id')
+				->field('rank.*, users.user_money')->whereTime('rank.create_time', '<=', $bonus_time)->where('rank.status', 0)
+				->order('rank.nums DESC')->limit(3)->select();
+				dump($result);
 		if(!$result) return false;
-
-		// //查询排名奖励比例
-		$data = array('ranking1', 'ranking2', 'ranking3', 'ranking4');
-		$rate = M('config')->where('name',['in', $data])->select();
-
-		foreach ($rate as $key => $value) {
-			$rates[] = $value['value']; 	
-		}
-
-		$i = 0;
-		$log = array();
-		$user = array();
-		foreach ($result as $key => $value) {
-			$money = ($rates[$i] / 100) * $bonus_total;
-			$user_money = M('users')->where('user_id', $value['user_id'])->value('user_money');
-			$result = Db::name('users')->where('user_id', $value['user_id'])->update(['user_money' => $money]);
-			if(!$result){
-				Db::rollback();
-				return false;
+		try{
+			$count = 0;
+			$log = array();
+			foreach ($result as $key => $value) {
+				//奖励总金额
+				$num = $key + 1;
+				$money = ($data['ranking'. $num] / 100) * $data['bonus_total'];
+				$count = $count + $money;
+				$user_money = $money + $value['user_money'];
+				Db::name('users')->where('user_id', $value['user_id'])->update(['user_money' => $user_money]);
+				
+				$log[$key]['user_id'] = $value['user_id'];
+				$log[$key]['money'] = $money;
+				$log[$key]['ranking'] = $num;
+				$log[$key]['bonus_total'] = $data['bonus_total'];
+				$log[$key]['create_time'] = time();
+				$log[$key]['desc'] = '奖金池排名奖励';
 			}
-			// $user[$i]['user_id'] = $value['user_id'];
-			// $user[$i]['user_money'] = $user_money + $money;
 
-			$log[$i]['user_id'] = $value['user_id'];
-			$log[$i]['money'] = $money;
-			$log[$i]['rangking'] = $i + 1;
-			$log[$i]['create_time'] = time();
-			$log[$i]['desc'] = '奖金池排名奖励';
-
-			$i++;
-		}
-		$log_result = M('bonus_log')->inset($log);
-		$result = Db::name('bonus_rank')->whereTime('create_time', '<', $stop_time)
-				->where('status', 0)->update(['status'=>1]);
-		if($result && $log_result){
+			//记录奖励日志,修改排名记录为过期
+			Db::name('bonus_log')->insertAll($log);
+			Db::name('bonus_rank')->whereTime('create_time', '<=', $bonus_time)
+							->where('status', 0)->update(['status'=>1]);
+			//剩余金额
+			$remanent = $data['bonus_total'] - $count;
+			Db::name('config')->where('name', 'bonus_total')->update(['value'=>$remanent]);
 			Db::commit();
 			return true;
-		}else{
-			Db::rollback();
-			return false;
+		}catch (\Exception $e) {
+		    // 回滚事务
+		    Db::rollback();
+		    return false;
 		}
 	}
+
+	//获取奖励设置信息
+	// public function getDate()
+	// {
+	// 	//获取奖金池金额
+	// 	$bonus_total = M('config')->where('name', 'bonus_total')->value('value');
+	// 	if(!$bonus_total) return false;
+
+	// 	// //查询排名奖励比例
+	// 	$data = array('ranking1', 'ranking2', 'ranking3', 'ranking4');
+	// 	$rates = M('config')->where('name',['in', $data])->select();
+	// 	$data = array();
+	// 	foreach ($rates as $key => $value) {
+	// 		$data[] = $value['value']; 	
+	// 	}
+	// 	$data['bonus_total'] = $bonus_total;
+	// 	return $data;
+	// }
+	//获取奖励设置信息
+	public function getDate($data = '')
+	{
+		if(is_array($data)){
+			$condition['name'] = ['in', $data];
+		}else if($data != ''){
+			$condition['name'] = $data;
+		}else{
+			$condition = array();
+		}
+
+		$result = M('config')->where($condition)
+				->where('inc_type', 'bonus')
+				->column('name, value');
+		return $result;
+	}
+
 
 	//判断是否满足条件
 	public function is_satisfy()
 	{
-		//判断是否达到后台设定的奖励时间
+		//判断是否达到后台设定的奖励日期
+		//默认晚上3点结算奖励
+		$time = 3;
 		$pre_day = date('d');
 		$pre_time = date('H');
-		$time_data = array('day', 'time');
-		$time_data = M('config')->where('name', ['in', $time_data])->select();
-		if($time_data[0]['name'] == 'day'){
-			$day = $time_data[0]['value'];
-			$time = $time_data[1]['value'];
-		}else{
-			$day = $time_data[1]['value'];
-			$time = $time_data[0]['value'];
-		}
-		if(($pre_day < $day) or ($pre_time < $time) return false;
+		$day = $this->getDate('day');
+
+		if(($pre_day < $day['day']) or ($pre_time < $time)) return false;
 
 		//查询排名奖励表是否已经奖励
-		$is_reward = M('bonus_rank')->whereTime('create_time','month')->find();
+		$is_reward = M('bonus_log')->whereTime('create_time','month')->find();
 		if($is_reward) return false;
-
-		//判断奖金池金额是否不为0
-		$bonus_total = M('config')->where('name', 'bonus_total')->value('value');
-		if(!$bonus_total) return false;
-
+		
 		return true;
 	}
 

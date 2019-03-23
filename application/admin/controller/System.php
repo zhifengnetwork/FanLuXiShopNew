@@ -544,9 +544,13 @@ class System extends Base
 		$ranking1 = input('ranking1/s');
 		$ranking2 = input('ranking2/s');
 		$ranking3 = input('ranking3/s');
-        $ranking4 = input('ranking4/s');
+        // $ranking4 = input('ranking4/s');
         $day = input('day/s');
-        $time = input('time/s');
+
+        $total = $ranking1 + $ranking2 + $ranking3;
+        if($total > 100){
+            $this->error("比例总和不能超过100%");
+        }
 		$data = array(
             'bonus_total' => $bonus_total,
 			'bonus_pool'=>$bonus_pool,
@@ -555,7 +559,6 @@ class System extends Base
 			'ranking3' =>$ranking3,
             'ranking4' =>$ranking4,
             'day' =>$day,
-            'time' =>$time,
 			);
 		foreach($data as $k =>$v){
 			$updata = Db::query("update tp_config set value='$v' where inc_type='$inc_type' and name='$k'");
