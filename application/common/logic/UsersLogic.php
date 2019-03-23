@@ -48,7 +48,7 @@ class UsersLogic extends Model
             $this->isEmptyingIntegral($user);
             //查询用户信息之后, 查询用户的登记昵称
             $levelId = $user['level'];
-            $levelName = Db::name("user_level")->where("level_id", $levelId)->getField("level_name");
+            $levelName = Db::name("user_level")->where("level", $levelId)->getField("level_name");
             $user['level_name'] = $levelName;
             Db::name('users')->where("user_id", $user['user_id'])->save(['last_login'=>time()]);
 
@@ -77,7 +77,7 @@ class UsersLogic extends Model
             $this->isEmptyingIntegral($user);
             //查询用户信息之后, 查询用户的登记昵称
             $levelId = $user['level'];
-            $levelName = M("user_level")->where("level_id", $levelId)->getField("level_name");
+            $levelName = M("user_level")->where("level", $levelId)->getField("level_name");
             $user['level_name'] = $levelName;            
             $user['token'] = md5(time().mt_rand(1,999999999));
             $data = ['token' => $user['token'], 'last_login' => time()];
