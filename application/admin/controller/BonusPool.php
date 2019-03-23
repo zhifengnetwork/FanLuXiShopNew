@@ -11,6 +11,14 @@ class BonusPool extends Base {
      */
     public function ranking()
     {
+        $count = M('bonus_rank')->alias('rank')->join('users', 'users.user_id = rank.user_id')
+                ->count();
+        $page = new Page($count, 2);
+        $rank_list = M('bonus_rank')->alias('rank')->join('users', 'users.user_id = rank.user_id')
+                ->field('rank.*, users.nickname')->where('rank.status', 0)->limit($page->firstRow, $page->listRows)
+                ->order('nums DESC')->select();
+        $this->assign('pager', $page);
+        $this->assign('rank_list', $rank_list);
         return $this->fetch();
     }
 
@@ -19,29 +27,7 @@ class BonusPool extends Base {
      */
     public function receive_log()
     {
-        $timegap = urldecode(I('timegap'));
-        $search_type = I('search_type');
-        $search_value = I('search_value');
-        $map = array();
-        if ($timegap) {
-            $gap = explode(',', $timegap);
-            $begin = $gap[0];
-            $end = $gap[1];
-            $map['change_time'] = array('between', array(strtotime($begin), strtotime($end)));
-            $this->assign('begin', $begin);
-            $this->assign('end', $end);
-        }
-        if ($search_value) {
-            if($search_type == 'account'){
-                $map['users.mobile|users.email'] = array('like', "%$search_value%");
-            }else{
-                $map['users.'.$search_type] = array('like', "%$search_value%");
-            }
-            
-            $this->assign('search_type', $search_type);
-            $this->assign('search_value', $search_value);
-        }
-
+        $map = $this->search();
         $count = M('receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id')->where($map)->count(); 
         $page = new Page($count, 20);
         $receive_list = M('receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id')->where($map)
@@ -57,6 +43,20 @@ class BonusPool extends Base {
      */
     public function bonus_log()
     {
+        $map = $this->search();
+        $count = M('bonus_log')->alias('bonus')->join('users','users.user_id = bonus.user_id')->where($map)->count(); 
+        $page = new Page($count, 20);
+        $bonus_list = M('bonus_log')->alias('bonus')->join('users','users.user_id = bonus.user_id')->where($map)
+                ->field('users.nickname, bonus.*')->order('id DESC')->limit($page->firstRow, $page->listRows)
+                ->select();
+        $this->assign('bonus_list', $bonus_list);
+        $this->assign('pager', $page);
+        return $this->fetch();
+    }
+
+    //搜索条件
+    public function search()
+    {
         $timegap = urldecode(I('timegap'));
         $search_type = I('search_type');
         $search_value = I('search_value');
@@ -65,7 +65,7 @@ class BonusPool extends Base {
             $gap = explode(',', $timegap);
             $begin = $gap[0];
             $end = $gap[1];
-            $map['change_time'] = array('between', array(strtotime($begin), strtotime($end)));
+            $map['create_time'] = array('between', array(strtotime($begin), strtotime($end)));
             $this->assign('begin', $begin);
             $this->assign('end', $end);
         }
@@ -80,13 +80,6 @@ class BonusPool extends Base {
             $this->assign('search_value', $search_value);
         }
 
-        $count = M('bonus_log')->alias('bonus')->join('users','users.user_id = bonus.user_id')->where($map)->count(); 
-        $page = new Page($count, 20);
-        $bonus_list = M('bonus_log')->alias('bonus')->join('users','users.user_id = bonus.user_id')->where($map)
-                ->field('users.nickname, bonus.*')->order('id DESC')->limit($page->firstRow, $page->listRows)
-                ->select();
-        $this->assign('bonus_list', $bonus_list);
-        $this->assign('pager', $page);
-        return $this->fetch();
+        return $map;
     }
 }

@@ -58,16 +58,25 @@
 							<div style="width: 24px;"><i class="ico-check"></i></div>
 						</th>
 						<th align="center" abbr="article_title" axis="col3" class="">
-							<div style="text-align: center; width: 50px;" class="">排名</div>
+							<div style="text-align: center; width: 50px;" class="">ID</div>
 						</th>
 						<th align="center" abbr="ac_id" axis="col4" class="">
 							<div style="text-align: center; width: 100px;" class="">用户</div>
 						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
-							<div style="text-align: center; width: 200px;" class="">下级领取产品数量</div>
+							<div style="text-align: center; width: 200px;" class="">下级领取产品总数量</div>
 						</th>
 						<th align="center" abbr="article_time" axis="col6" class="">
-							<div style="text-align: center; width: 200px;" class="">下级奖金池累积金额</div>
+							<div style="text-align: center; width: 200px;" class="">下级奖金池累积总金额</div>
+						</th>
+						<th align="center" abbr="article_time" axis="col6" class="">
+							<div style="text-align: center; width: 200px;" class="">创建时间</div>
+						</th>
+						<th align="center" abbr="article_time" axis="col6" class="">
+							<div style="text-align: center; width: 200px;" class="">更新时间</div>
+						</th>
+						<th align="center" abbr="article_time" axis="col6" class="">
+							<div style="text-align: center; width: 200px;" class="">状态</div>
 						</th>
 						<th align="center" axis="col1" class="handle">
 							<div style="text-align: center; width: 200px;">操作</div>
@@ -84,22 +93,31 @@
 			<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
 				<table>
 					<tbody>
-					<foreach name="log" item="vo" key="k" >
+					<foreach name="rank_list" item="vo" key="k" >
 						<tr>
 							<td class="sign">
 								<div style="width: 24px;"><i class="ico-check"></i></div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 50px;">{$vo.log_id}</div>
+								<div style="text-align: center; width: 50px;">{$vo.id}</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 100px;">{$vo.nickname}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 200px;">{$vo.user_money}</div>
+								<div style="text-align: center; width: 200px;">{$vo.nums}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 200px;">{$vo.desc}</div>
+								<div style="text-align: center; width: 200px;">{$vo.money}</div>
+							</td>
+							<td align="center" class="">
+								<div style="text-align: center; width: 200px;">{$vo.create_time}</div>
+							</td>
+							<td align="center" class="">
+								<div style="text-align: center; width: 200px;">{$vo.update_time}</div>
+							</td>
+							<td align="center" class="">
+								<div style="text-align: center; width: 200px;">{$vo.status}</div>
 							</td>
 							<td align="center" class="handle">
 								<div style="text-align: center; width: 200px; max-width:200px;">
@@ -117,7 +135,7 @@
 			<div class="iDiv" style="display: none;"></div>
 		</div>
 		<!--分页位置-->
-			
+			{$pager->show()}
 		 </div>
 </div>
 <script src="__ROOT__/public/static/js/layer/laydate/laydate.js"></script>

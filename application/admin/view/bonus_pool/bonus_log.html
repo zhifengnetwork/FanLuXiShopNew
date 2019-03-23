@@ -147,6 +147,22 @@
 		// 起始位置日历控件
         $('#start_time').layDate();
         $('#end_time').layDate();
+
+        //选中全部
+	    $('.hDivBox .sign').click(function(){
+	       var sign = $('#flexigrid > table>tbody>tr');
+	       if($(this).parent().hasClass('trSelected')){
+	           sign.each(function(){
+	               $(this).removeClass('trSelected');
+	           });
+	           $(this).parent().removeClass('trSelected');
+	       }else{
+	           sign.each(function(){
+	               $(this).addClass('trSelected');
+	           });
+	           $(this).parent().addClass('trSelected');
+	       }
+	    })
 	});
 
 	function check_form(){
