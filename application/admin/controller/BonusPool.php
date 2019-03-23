@@ -12,7 +12,7 @@ class BonusPool extends Base {
     public function ranking()
     {
         $count = M('bonus_rank')->alias('rank')->join('users', 'users.user_id = rank.user_id')
-                ->count();
+                ->where('rank.status', 0)->count();
         $page = new Page($count, 2);
         $rank_list = M('bonus_rank')->alias('rank')->join('users', 'users.user_id = rank.user_id')
                 ->field('rank.*, users.nickname')->where('rank.status', 0)->limit($page->firstRow, $page->listRows)

@@ -63,6 +63,9 @@
 						<th align="center" abbr="ac_id" axis="col4" class="">
 							<div style="text-align: center; width: 100px;" class="">用户</div>
 						</th>
+						<th align="center" abbr="article_time" axis="col6" class="">
+							<div style="text-align: center; width: 200px;" class="">当前排名</div>
+						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
 							<div style="text-align: center; width: 200px;" class="">下级领取产品总数量</div>
 						</th>
@@ -74,12 +77,6 @@
 						</th>
 						<th align="center" abbr="article_time" axis="col6" class="">
 							<div style="text-align: center; width: 200px;" class="">更新时间</div>
-						</th>
-						<th align="center" abbr="article_time" axis="col6" class="">
-							<div style="text-align: center; width: 200px;" class="">状态</div>
-						</th>
-						<th align="center" axis="col1" class="handle">
-							<div style="text-align: center; width: 200px;">操作</div>
 						</th>
 						<th style="width:100%" axis="col7">
 							<div></div>
@@ -105,24 +102,19 @@
 								<div style="text-align: center; width: 100px;">{$vo.nickname}</div>
 							</td>
 							<td align="center" class="">
+								<div style="text-align: center; width: 200px;">{$k+1}</div>
+							</td>
+							<td align="center" class="">
 								<div style="text-align: center; width: 200px;">{$vo.nums}</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 200px;">{$vo.money}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 200px;">{$vo.create_time}</div>
+								<div style="text-align: center; width: 200px;">{$vo.create_time|date='Y-m-d H:i', ###}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 200px;">{$vo.update_time}</div>
-							</td>
-							<td align="center" class="">
-								<div style="text-align: center; width: 200px;">{$vo.status}</div>
-							</td>
-							<td align="center" class="handle">
-								<div style="text-align: center; width: 200px; max-width:200px;">
-									<a class="btn blue" href="{:U('Distribut/log_detail',array('id'=>$vo['log_id']))}"><i class="fa fa-search"></i>查看</a>
-								</div>
+								<div style="text-align: center; width: 200px;">{$vo.update_time|date='Y-m-d H:i', ###}</div>
 							</td>
 							<td align="" class="" style="width: 100%;">
 								<div>&nbsp;</div>
@@ -155,6 +147,22 @@
 		// 起始位置日历控件
         $('#start_time').layDate();
         $('#end_time').layDate();
+
+        //选中全部
+	    $('.hDivBox .sign').click(function(){
+	       var sign = $('#flexigrid > table>tbody>tr');
+	       if($(this).parent().hasClass('trSelected')){
+	           sign.each(function(){
+	               $(this).removeClass('trSelected');
+	           });
+	           $(this).parent().removeClass('trSelected');
+	       }else{
+	           sign.each(function(){
+	               $(this).addClass('trSelected');
+	           });
+	           $(this).parent().addClass('trSelected');
+	       }
+	    })
 	});
 
 	function check_form(){
