@@ -162,6 +162,7 @@ class BonusPoolLogic extends Model
 		try{
 			$count = 0;
 			$log = array();
+			$reward_time = time()
 			foreach ($result as $key => $value) {
 				//奖励总金额
 				$num = $key + 1;
@@ -174,7 +175,7 @@ class BonusPoolLogic extends Model
 				$log[$key]['money'] = $money;
 				$log[$key]['ranking'] = $num;
 				$log[$key]['bonus_total'] = $data['bonus_total'];
-				$log[$key]['create_time'] = time();
+				$log[$key]['create_time'] = $reward_time;
 				$log[$key]['desc'] = '奖金池排名奖励';
 			}
 
