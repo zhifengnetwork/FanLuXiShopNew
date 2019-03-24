@@ -538,36 +538,36 @@ class System extends Base
     }        
 	public function bonus_set(){//奖金池配置
 		if($_POST){
-		$inc_type = input('inc_type/s');
-        $bonus_total = input('bonus_total/s');
-		$bonus_pool =input('bonus_pool/s');
-		$ranking1 = input('ranking1/s');
-		$ranking2 = input('ranking2/s');
-		$ranking3 = input('ranking3/s');
-        // $ranking4 = input('ranking4/s');
-        $day = input('day/s');
+    		$inc_type = input('inc_type/s');
+            $bonus_total = input('bonus_total/s');
+    		$bonus_pool =input('bonus_pool/s');
+    		$ranking1 = input('ranking1/s');
+    		$ranking2 = input('ranking2/s');
+    		$ranking3 = input('ranking3/s');
+            // $ranking4 = input('ranking4/s');
+            $day = input('day/s');
 
-        $total = $ranking1 + $ranking2 + $ranking3;
-        if($total > 100){
-            $this->error("比例总和不能超过100%");
-        }
-		$data = array(
-            'bonus_total' => $bonus_total,
-			'bonus_pool'=>$bonus_pool,
-			'ranking1' =>$ranking1,
-			'ranking2' =>$ranking2,
-			'ranking3' =>$ranking3,
-            'ranking4' =>$ranking4,
-            'day' =>$day,
-			);
-		foreach($data as $k =>$v){
-			$updata = Db::query("update tp_config set value='$v' where inc_type='$inc_type' and name='$k'");
-			// isset("$k",$v);
-		}
-		delFile(RUNTIME_PATH);
-		clearCache();
-		$quick = I('quick',0);
-		$this->success("操作成功");
+            // $total = $ranking1 + $ranking2 + $ranking3;
+            // if($total > 100){
+            //     $this->error("比例总和不能超过100%");
+            // }
+    		$data = array(
+                'bonus_total' => $bonus_total,
+    			'bonus_pool'=>$bonus_pool,
+    			'ranking1' =>$ranking1,
+    			'ranking2' =>$ranking2,
+    			'ranking3' =>$ranking3,
+                'ranking4' =>$ranking4,
+                'day' =>$day,
+    			);
+    		foreach($data as $k =>$v){
+    			$updata = Db::query("update tp_config set value='$v' where inc_type='$inc_type' and name='$k'");
+    			// isset("$k",$v);
+    		}
+    		delFile(RUNTIME_PATH);
+    		clearCache();
+    		$quick = I('quick',0);
+    		$this->success("操作成功");
 		}
 	}
 }

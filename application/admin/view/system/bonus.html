@@ -149,10 +149,10 @@
         var ranking2 = $("#ranking2").val();
         var ranking3 = $("#ranking3").val();
         var total = ranking1 + ranking2 + ranking3;
-        if(total > 100){
-            layer.msg('排名比例总和不能超过100%！', {icon: 2,time: 1000});
-            return false;
-        }
+        // if(total > 100){
+        //     layer.msg('排名比例总和不能超过100%！', {icon: 2,time: 1000});
+        //     return false;
+        // }
         if(bonus_total<=0){
             layer.msg('奖金池必须大于0！', {icon: 2,time: 1000});
             return false;

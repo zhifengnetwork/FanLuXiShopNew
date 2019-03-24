@@ -8,9 +8,7 @@ use think\Page;
 class Pool extends MobileBase {
 	public $user_id = 0;
 
-	/*
-    * 初始化操作
-    */
+	//初始化操作
     public function _initialize()
     {
         parent::_initialize();
@@ -25,10 +23,15 @@ class Pool extends MobileBase {
         $this->user_id = $user['user_id'];
     }
 
+    //排名
 	public function index()
 	{
 		$user_id = $this->user_id;
-		$bonus_time = tpCache('bonus_time');
+		$data = array('bonus_time', 'bonus_total', 'day');
+		$data = M('config')->where('name', ['in', $data])
+						   ->column('name, value');
+
+		$bonus_time = (int)$data['bonus_time'];
 		$condition = array(
 			'rank.status' => 0,
 		);
@@ -36,15 +39,14 @@ class Pool extends MobileBase {
 			$condition['rank.create_time'] = ['>', $bonus_time];
 		}
 
-		$bonus_total = M('config')->where('name', 'bonus_total')->value('value');
 		$my_rank = M('bonus_rank')->alias('rank')->join('users','users.user_id = rank.user_id' )
 				->where($condition)->where(['rank.user_id' => $user_id])->field('rank.*,users.nickname')
 				->order('id DESC')->find();
 
 		$rank = M('bonus_rank')->alias('rank')->join('users','users.user_id = rank.user_id' )
-				->where($condition)->field('rank.*,users.nickname')->order('id DESC, nums DESC')
+				->where($condition)->field('rank.*,users.nickname')->order('nums DESC, id DESC')
 				->limit(4)->select();
-		$this->assign('bonus_total', $bonus_total);
+		$this->assign('data', $data);
 		$this->assign('my_rank', $my_rank);
 		$this->assign('rank', $rank);
 		return $this->fetch();
@@ -62,7 +64,7 @@ class Pool extends MobileBase {
 
 		//上一期前三名的奖励记录
 		$rank = M('bonus_log')->alias('log')->join('users', 'users.user_id = log.user_id' )
-			  ->field('log.*, users.nickname')->order('id DESC')
+			  ->where('log.status', 1)->field('log.*, users.nickname')->order('id DESC')
 			  ->limit(3)->select();
 		foreach ($rank as $key => $value) {
 			if($key != 0){

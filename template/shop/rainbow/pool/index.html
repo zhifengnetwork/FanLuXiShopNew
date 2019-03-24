@@ -21,7 +21,7 @@
 		
 		   <div class="bonuspool_priceear">  
 		   	   <div>
-		   	   	   <p>{$bonus_total}</p>
+		   	   	   <p>{$data['bonus_total']}</p>
 		   	   	   <p>奖金池总金额(元)</p> 
 		   	   </div>
 		   	   <div onclick="pageJump('/shop/pool/past_period')">往期排名</div> 
@@ -105,7 +105,7 @@
 		   
 		   <!--注意提示-->
 		   <div class="notice">
-		   		<p>注：任意领取商品付的费用显示，根据直推人领取产品数量排名，排名前三名可得相应的返利。</p> 	
+		   		<p>注：任意领取商品付的费用显示，根据直推人领取产品数量排名，排名前三名可得相应的返利。在该月{$data['day']}号进行奖励。</p> 	
 		   </div>	
 	  </div>	
 	  <script src="__STATIC__/js/public/jquery-1.8.3.min.js"></script>

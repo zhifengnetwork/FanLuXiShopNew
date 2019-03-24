@@ -11,12 +11,19 @@ class BonusPool extends Base {
      */
     public function ranking()
     {
+        $bonus_time = M('config')->where('name', 'bonus_time')->value('value');
+        $bonus_time = (int)$bonus_time;
+        $condition['rank.status'] = 0;
+        if($bonus_time){
+            $condition['rank.create_time'] = ['>', $bonus_time];
+        }
+
         $count = M('bonus_rank')->alias('rank')->join('users', 'users.user_id = rank.user_id')
-                ->where('rank.status', 0)->count();
+                ->where($condition)->count();
         $page = new Page($count, 2);
         $rank_list = M('bonus_rank')->alias('rank')->join('users', 'users.user_id = rank.user_id')
-                ->field('rank.*, users.nickname')->where('rank.status', 0)->limit($page->firstRow, $page->listRows)
-                ->order('nums DESC')->select();
+                ->field('rank.*, users.nickname')->where($condition)->limit($page->firstRow, $page->listRows)
+                ->order('nums DESC, id DESC')->select();
         $this->assign('pager', $page);
         $this->assign('rank_list', $rank_list);
         return $this->fetch();
@@ -28,11 +35,14 @@ class BonusPool extends Base {
     public function receive_log()
     {
         $map = $this->search();
-        $count = M('receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id')->where($map)->count(); 
+        $count = M('receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id', 'LEFT')
+               ->where($map)->count(); 
+               
         $page = new Page($count, 20);
-        $receive_list = M('receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id')->where($map)
-                ->field('users.nickname as leader, receive.*')->order('id DESC')->limit($page->firstRow, $page->listRows)
-                ->select();
+        $receive_list = M('receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id', 'LEFT')
+                ->where($map)->field('users.nickname as leader, receive.*')->order('id DESC')
+                ->limit($page->firstRow, $page->listRows)->select();
+
         $this->assign('receive_list', $receive_list);
         $this->assign('pager', $page);
         return $this->fetch();
@@ -44,7 +54,8 @@ class BonusPool extends Base {
     public function bonus_log()
     {
         $map = $this->search();
-        $count = M('bonus_log')->alias('bonus')->join('users','users.user_id = bonus.user_id')->where($map)->count(); 
+        $count = M('bonus_log')->alias('bonus')->join('users','users.user_id = bonus.user_id')
+               ->where($map)->count(); 
         $page = new Page($count, 20);
         $bonus_list = M('bonus_log')->alias('bonus')->join('users','users.user_id = bonus.user_id')->where($map)
                 ->field('users.nickname, bonus.*')->order('id DESC')->limit($page->firstRow, $page->listRows)
