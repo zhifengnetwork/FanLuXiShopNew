@@ -30,7 +30,7 @@ class FanliLogic extends Model
 		$this->goodNum = $goodNum;
 		$this->orderSn = $orderSn;
 		$this->orderId = $orderId;
-		$this->tgoodsid = 11;
+		$this->tgoodsid = $this->catgoods();
 	}
 
     //会员返利
@@ -51,6 +51,7 @@ class FanliLogic extends Model
         //判断是否特殊产品成为店主，则不走返利流程
         //用户购买后检查升级
 		$this->checkuserlevel($this->userId,$this->orderId);
+		//echo $this->goodId.'-'.$this->tgoodsid.'-'.$user_info['level'];exit;
         if($this->goodId==$this->tgoodsid && $user_info['level']<2)
         {
             $this->addhostmoney($user_id,$parent_info);
@@ -110,16 +111,25 @@ class FanliLogic extends Model
          //自动升级为vip，店主，总监，大区董事自动申请
 		
 		 //扫码登陆
+
 		 $order = M('order')->where(['order_id'=>$this->orderId])->find();
 		 $user_info = M('users')->where('user_id',$user_id)->field('first_leader,level,is_code')->find();
-		if($user_info['is_code']==1 && $order['pay_status']==1)//自动升级vip
+		if($user_info['is_code']==1 && $order['pay_status']==1 && $user_info['level']==1)//自动升级vip
 		{
-		
               $res = M('users')->where(['user_id'=>$user_id])->update(['level'=>2]);
+              	$desc = "购买产品成为vip";
+	        	$log = $this->writeLog($user_info['user_id'],'',$desc,101); //写入日志
 		}
 		else if($this->goodId==$this->tgoodsid  && $order['pay_status']==1)//自动升级店主
 		{
-			$res = M('users')->where(['user_id'=>$user_id])->update(['level'=>3]);
+
+			$res_s = M('users')->where(['user_id'=>$user_id])->update(['level'=>3]);
+			$desc = "购买指定产品获得店主";
+	        $log = $this->writeLog($user_info['user_id'],'398',$desc,101); //写入日志
+	        if($res_s)
+	        {
+	        	$this->addhostmoney2();//产生店主获得金额和津贴
+	        }
 		}
 		else if($user_info['level']==3)//自动升级总监
 		{
@@ -128,6 +138,8 @@ class FanliLogic extends Model
              if($num>=30)
              {
                   $res = M('users')->where(['user_id'=>$user_id])->update(['level'=>4]);
+                  $desc = "直推店主30个成为总监";
+	        	  $log = $this->writeLog($user_info['first_leader'],'',$desc,101); //写入日志
              }
 
 		}
@@ -174,10 +186,22 @@ class FanliLogic extends Model
 		return $goods;$goods = M('goods')->field("shop_price,cat_id")->where(['goods_id'=>$this->goodId])->find();
 		return $goods;
 	}
-	 //总监，大区董事产生一个店主的金额
-	public function addhostmoney2($userinfo,$goods)
+	 //总监，大区董事产生一个店主的金额和管理津贴
+	public function addhostmoney2($user_id)
 	{
-       
+		//查询会员当前等级
+		$user_info = M('users')->where('user_id',$this->userId)->field('first_leader,level')->find();
+		//查询上一级信息
+		$parent_info = M('users')->where('user_id',$user_info['first_leader'])->field('level')->find();
+		if($parent_info['level']==4 || $parent_info['level']==5)
+		{
+           $fanli = M('user_level')->where('level',$parent_info['level'])->field('chan')->find();
+	         //计算返利金额
+	       $commission = $fanli['chan']; //计算佣金
+	          //按上一级等级各自比例分享返利
+	       $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
+		}
+
 	}
 	//记录日志
 	public function writeLog($userId,$money,$desc,$states)
@@ -214,6 +238,13 @@ class FanliLogic extends Model
 	public function goods(){
 		$goods = M('goods')->field("shop_price,cat_id")->where(['goods_id'=>$this->goodId])->find();
 		return $goods;
+	}
+	//特殊产品
+	public function catgoods()
+	{
+		$goods = M('goods')->field("goods_id")->where(['cat_id'=>8])->find();
+		if(!$goods) return 0;
+		return $goods['goods_id'];
 	}
 
 	
