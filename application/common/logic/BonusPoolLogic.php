@@ -74,7 +74,7 @@ class BonusPoolLogic extends Model
 		//抽取的邮费
 		$money = $nums * $bonus_pool['bonus_pool'];
 		$bonus_total = $this->getDate('bonus_total');
-		$bonus_total = $bonus_total['bonus_total'] + $money;
+		$bonus_total = round(($bonus_total['bonus_total'] + $money), 2);
 
 		$result = Db::name('config')->where('name', 'bonus_total')
 				->update(['value' => $bonus_total]);
@@ -154,26 +154,17 @@ class BonusPoolLogic extends Model
 		//截止时间,用于修改排名表时不更新后面新增的数据
 		$bonus_time = time();
 		$last_time = (int)$data['bonus_time'];
-		M('config')->where('name', 'bonus_time')->update(['value'=>$bonus_time]);
-		$condition['rank.status'] = 0;
-		if($last_time){
-			$condition['rank.create_time'] = ['between', [$last_time, $bonus_time]];
-		}else{
-			$condition['rank.create_time'] = ['<', $bonus_time];
-		}
-	dump($condition);
+		$result = $this->getUser($last_time, $bonus_time);
+		if(!$result) return false;
+
 		//按数量取最大的前3条记录
 		Db::startTrans();
-		$result = Db::name('bonus_rank')->alias('rank')->join('users', 'rank.user_id = users.user_id')
-				->field('rank.*, users.user_money')->where($condition)
-				->order('rank.nums DESC')->limit(3)->select();
-				
-		if(!$result) return false;
 		try{
 			//记录奖励的总额
 			$count = 0;
 			$log = array();
 			foreach ($result as $key => $value) {
+				dump($value);
 				//奖励总金额
 				$num = $key + 1;
 				$money = ($data['ranking'. $num] / 100) * $data['bonus_total'];
@@ -196,7 +187,8 @@ class BonusPoolLogic extends Model
 			Db::name('bonus_rank')->whereTime('create_time', '<=', $bonus_time)
 								  ->where('status', 0)->update(['status'=>1]);
 			//剩余金额
-			$remanent = $data['bonus_total'] - $count;
+			$remanent = round(($data['bonus_total'] - $count), 2);
+			dump($remanent);
 			Db::name('config')->where('name', 'bonus_total')->update(['value'=>$remanent]);
 			Db::commit();
 			return true;
@@ -206,6 +198,23 @@ class BonusPoolLogic extends Model
 		    $this->fail_reward($bonus_time);
 		    return false;
 		}
+	}
+
+	//获取奖励用户
+	public function getUser($last_time, $bonus_time)
+	{
+		M('config')->where('name', 'bonus_time')->update(['value'=>$bonus_time]);
+		$condition['rank.status'] = 0;
+		if($last_time){
+			$condition['rank.create_time'] = ['between', [$last_time, $bonus_time]];
+		}else{
+			$condition['rank.create_time'] = ['<', $bonus_time];
+		}
+
+		$result = Db::name('bonus_rank')->alias('rank')->join('users', 'rank.user_id = users.user_id')
+				->field('rank.*, users.user_money')->where($condition)
+				->order('rank.nums DESC')->limit(3)->select();
+		return $result;
 	}
 
 	//奖励失败时插入记录

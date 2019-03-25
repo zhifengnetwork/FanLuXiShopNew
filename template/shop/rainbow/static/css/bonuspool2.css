@@ -156,11 +156,21 @@
 	font-size: .8rem;
 	color:#747474;
 	
-	
-	
-	
 }
+.rank_none{
 
+	text-align: center;
+	height: 30px;
+	margin-top: 5px;
+
+
+}
+.rank_none span{
+
+  font-size: 12px;
+  color: gray;
+
+}
 
 
 
