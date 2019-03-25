@@ -231,25 +231,6 @@ class BonusPoolLogic extends Model
 	    M('bonus_log')->insert($data);
 	}
 
-	//
-
-	//获取奖励设置信息
-	// public function getDate()
-	// {
-	// 	//获取奖金池金额
-	// 	$bonus_total = M('config')->where('name', 'bonus_total')->value('value');
-	// 	if(!$bonus_total) return false;
-
-	// 	// //查询排名奖励比例
-	// 	$data = array('ranking1', 'ranking2', 'ranking3', 'ranking4');
-	// 	$rates = M('config')->where('name',['in', $data])->select();
-	// 	$data = array();
-	// 	foreach ($rates as $key => $value) {
-	// 		$data[] = $value['value']; 	
-	// 	}
-	// 	$data['bonus_total'] = $bonus_total;
-	// 	return $data;
-	// }
 	//获取奖励设置信息
 	public function getDate($data = '')
 	{
