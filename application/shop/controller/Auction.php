@@ -22,11 +22,11 @@ class Auction extends MobileBase
         if (session('?user')) {
             $user = session('user');
             $user = M('users')->where("user_id", $user['user_id'])->find();
+            dump($user);exit;
             session('user', $user);  //覆盖session 中的 user
             $this->user = $user;
             $this->user_id = $user['user_id'];
             $this->assign('user', $user); //存储用户信息
-
         }
     }
 
@@ -57,22 +57,12 @@ class Auction extends MobileBase
         }
     }
 
-     /**
-     * 竞拍
-     */
-    public function index()
-    {
-       
-        return $this->fetch();
-    }
-
 
     /**
      * 竞拍详情
      */
     public function auction_detail()
     {
-
         $auction_id = I("get.id/d");
         $goodsModel = new \app\common\model\Auction();
         $auction = $goodsModel::get($auction_id);
@@ -105,11 +95,14 @@ class Auction extends MobileBase
      */
     public function offerPrice()
     {
+
         $auction_id = input("goods_id/d"); // 竞拍商品id
         $price = input("price/f");// 竞拍价格
-//        if ($this->user_id == 0){
-//            $this->ajaxReturn(['status' => -100, 'msg' => '请先登录', 'result' => '']);
-//        }
+
+        if ($this->user_id == 0){
+            $this->ajaxReturn(['status' => -100, 'msg' => '请先登录', 'result' => '']);
+        }
+
         $auction = \app\common\model\Auction::get($auction_id);
         $isBond = $this->getUserIsBond($this->user_id, $auction_id);
         if(empty($isBond)){
@@ -215,7 +208,12 @@ class Auction extends MobileBase
      */
     public function addBond()
     {
+
         $goods_id = I("get.goods_id/d");
+
+        if ($this->user_id == 0){
+            $this->ajaxReturn(['status' => -100, 'msg' => '请先登录', 'result' => '']);
+        }
 
         $money = Db::name('Auction')->where('id',$goods_id)->value('deposit');
 
@@ -279,6 +277,7 @@ class Auction extends MobileBase
      */
     public function addAuctionOffer($uid,$auction_id,$money)
     {
+
         // 启动事务
         Db::startTrans();
         try{
