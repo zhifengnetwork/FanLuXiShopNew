@@ -197,7 +197,7 @@ class BonusPoolLogic extends Model
 								  ->where('status', 0)->update(['status'=>1]);
 			//剩余金额
 			$remanent = $data['bonus_total'] - $count;
-			Db::name('config')->where('name', 'bonus_total')->update(['value'=>$remanent]);die;
+			Db::name('config')->where('name', 'bonus_total')->update(['value'=>$remanent]);
 			Db::commit();
 			return true;
 		}catch (\Exception $e) {
