@@ -360,7 +360,6 @@ class Report extends Base
      * @return mixed
      */
 	public function performance(){
-
 		// $mobile = I('mobile');
 		// $email = I('email');
         // $order_where = [

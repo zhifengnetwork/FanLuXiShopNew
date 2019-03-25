@@ -20,7 +20,7 @@
 		  <span title="收起提示" id="explanationZoom" style="display: block;"></span>
 		</div>
 		 <ul>
-			<li>业绩统计列表</li>
+			<li>业绩统计列表(业绩10万内按3%发放，业绩达10-40万按5发放，业绩达10-40万按5发放，业绩达10-40万按5发放，业绩达10-40万按5发放)</li>
 		</ul>
 	</div>
 	
@@ -64,19 +64,19 @@
 							<div style="text-align: center; width: 50px;" class="">用户</div>
 						</th>
 							<th align="center" abbr="ac_id" axis="col4" class="">
-							<div style="text-align: center; width: 50px;" class="">等级</div>
+							<div style="text-align: center; width: 50px;" class="">手机</div>
 						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
-							<div style="text-align: center; width: 150px;" class="">第一季度</div>
+							<div style="text-align: center; width: 150px;" class="">第一季度(团队业绩)</div>
 						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
-							<div style="text-align: center; width: 150px;" class="">第二季度</div>
+							<div style="text-align: center; width: 150px;" class="">第二季度(团队业绩)</div>
 						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
-							<div style="text-align: center; width: 150px;" class="">第三季度</div>
+							<div style="text-align: center; width: 150px;" class="">第三季度(团队业绩)</div>
 						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
-							<div style="text-align: center; width: 150px;" class="">第四季度</div>
+							<div style="text-align: center; width: 150px;" class="">第四季度(团队业绩)</div>
 						</th>
 						<th align="center" axis="col1" class="handle">
 							<div style="text-align: center; width: 200px;">操作</div>
@@ -93,22 +93,22 @@
 			<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
 				<table>
 					<tbody>
-					<foreach name="list" item="vo" key="k" >
+					<foreach name="new_list" item="vo" key="k" >
 						<tr>
 							<td class="sign">
 								<div style="width: 24px;"><i class="ico-check"></i></div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 50px;">{$vo.user_id}</div>
+								<div style="text-align: center; width: 50px;">{$k}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 50px;">{$vo.nickname}</div>
+								<div style="text-align: center; width: 50px;">{$vo.realname}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 50px;">{$vo.level_name}</div>
+								<div style="text-align: center; width: 50px;">{$vo.mobile}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 150px;">{$vo.desc}</div>
+								<div style="text-align: center; width: 150px;">{$vo.first}</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 150px;">{$vo.desc}</div>

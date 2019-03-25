@@ -171,7 +171,7 @@ class Distribut extends Base {
         // return $this->fetch();
         
         $list = M('distribut_level');
-        $list = $list->order('level_id')->select();
+        $list = $list->order('level')->select();
         $this->assign('list',$list);
         return $this->fetch();
     }
@@ -183,9 +183,9 @@ class Distribut extends Base {
     {
         $act = I('get.act', 'add');
         $this->assign('act', $act);
-        $level_id = I('get.level_id');
-        if ($level_id) {
-            $level_info = D('distribut_level')->where('level_id=' . $level_id)->find();
+        $level = I('get.level');
+        if ($level) {
+            $level_info = D('distribut_level')->where('level=' . $level)->find();
             $this->assign('info', $level_info);
         }
         return $this->fetch();
@@ -241,14 +241,14 @@ class Distribut extends Base {
             }
         }
         if ($data['act'] == 'edit') {
-            if($data['level_id'] == 12){
+            if($data['level'] == 12){
                 if ($data['rate1'] > 100) {
                     $return = ['status' => 0, 'msg' => '编辑失败，所有等级佣金比率总和在100内', 'result' => ''];
                 } else {
-                    $r = D('distribut_level')->where('level_id=' . $data['level_id'])->save($data);
+                    $r = D('distribut_level')->where('level=' . $data['level'])->save($data);
                     if ($r !== false) {
                         $data['rate1'] = $data['rate1'] / 100;
-                        D('users')->where(['level' => $data['level_id']])->save($data);
+                        D('users')->where(['level' => $data['level']])->save($data);
                         $return = ['status' => 1, 'msg' => '编辑成功', 'result' => $validate->getError()];
                     } else {
                         $return = ['status' => 0, 'msg' => '编辑失败，数据库未响应', 'result' => ''];
@@ -258,14 +258,14 @@ class Distribut extends Base {
                 if (!$validate->batch()->check($data)) {
                     $return = ['status' => 0, 'msg' => '编辑失败', 'result' => $validate->getError()];
                 } else {
-                    $rateCount = M('distribut_level')->where('level_id','neq',$data['level_id'])->sum('rate1');
+                    $rateCount = M('distribut_level')->where('level','neq',$data['level'])->sum('rate1');
                     if (($rateCount+$data['rate1']) > 100) {
                         $return = ['status' => 0, 'msg' => '编辑失败，所有等级佣金比率总和在100内', 'result' => ''];
                     } else {
-                        $r = D('distribut_level')->where('level_id=' . $data['level_id'])->save($data);
+                        $r = D('distribut_level')->where('level=' . $data['level'])->save($data);
                         if ($r !== false) {
                             $data['rate1'] = $data['rate1'] / 100;
-                            D('users')->where(['level' => $data['level_id']])->save($data);
+                            D('users')->where(['level' => $data['level']])->save($data);
                             $return = ['status' => 1, 'msg' => '编辑成功', 'result' => $validate->getError()];
                         } else {
                             $return = ['status' => 0, 'msg' => '编辑失败，数据库未响应', 'result' => ''];
@@ -275,7 +275,7 @@ class Distribut extends Base {
             }
         }
         if ($data['act'] == 'del') {
-            $r = D('distribut_level')->where('level_id=' . $data['level_id'])->delete();
+            $r = D('distribut_level')->where('level=' . $data['level'])->delete();
             if ($r !== false) {
                 $return = ['status' => 1, 'msg' => '删除成功', 'result' => ''];
             } else {
@@ -293,13 +293,13 @@ class Distribut extends Base {
     {
         $Ad = M('user_level');
         $p = $this->request->param('p');
-        $res = $Ad->order('level_id')->where("level_id <> 12")->page($p . ',10')->select();
+        $res = $Ad->order('level')->where("level <> 12")->page($p . ',10')->select();
         if ($res) {
             foreach ($res as $val) {
                 $list[] = $val;
             }
         }
-        $level_12 = $Ad->where(['level_id'=>12])->find();
+        $level_12 = $Ad->where(['level'=>12])->find();
         $this->assign('level_12', $level_12);
         $this->assign('list', $list);
         $count = $Ad->count();
@@ -317,9 +317,9 @@ class Distribut extends Base {
     {
         $act = I('get.act', 'add');
         $this->assign('act', $act);
-        $level_id = I('get.level_id');
-        if ($level_id) {
-            $level_info = D('user_level')->where('level_id=' . $level_id)->find();
+        $level = I('get.level');
+        if ($level) {
+            $level_info = D('user_level')->where('level=' . $level)->find();
             $this->assign('info', $level_info);
         }
         return $this->fetch();
@@ -334,7 +334,7 @@ class Distribut extends Base {
 
         //验证规则
         $rules = [
-            'level' => 'require|number|unique:user_level,level^level_id',
+            'level' => 'require|number|unique:user_level,level^level',
             'level_name' => 'require|unique:user_level',
             'max_money' => 'number',
             'remaining_money' => 'number',
@@ -375,14 +375,14 @@ class Distribut extends Base {
             }
         }
         if ($data['act'] == 'edit') {
-            if($data['level_id'] == 12){
+            if($data['level'] == 12){
                 if ($data['rate'] > 100) {
                     $return = ['status' => 0, 'msg' => '编辑失败，所有等级佣金比率总和在100内', 'result' => ''];
                 } else {
-                    $r = D('user_level')->where('level_id=' . $data['level_id'])->save($data);
+                    $r = D('user_level')->where('level=' . $data['level'])->save($data);
                     if ($r !== false) {
                         $data['rate'] = $data['rate'] / 100;
-                        D('users')->where(['level' => $data['level_id']])->save($data);
+                        D('users')->where(['level' => $data['level']])->save($data);
                         $return = ['status' => 1, 'msg' => '编辑成功', 'result' => $validate->getError()];
                     } else {
                         $return = ['status' => 0, 'msg' => '编辑失败，数据库未响应', 'result' => ''];
@@ -392,14 +392,14 @@ class Distribut extends Base {
                 if (!$validate->batch()->check($data)) {
                     $return = ['status' => 0, 'msg' => '编辑失败', 'result' => $validate->getError()];
                 } else {
-                    $rateCount = M('user_level')->where('level_id','neq',$data['level_id'])->sum('rate');
+                    $rateCount = M('user_level')->where('level','neq',$data['level'])->sum('rate');
                     if (($rateCount+$data['rate']) > 100) {
                         $return = ['status' => 0, 'msg' => '编辑失败，所有等级佣金比率总和在100内', 'result' => ''];
                     } else {
-                        $r = D('user_level')->where('level_id=' . $data['level_id'])->save($data);
+                        $r = D('user_level')->where('level=' . $data['level'])->save($data);
                         if ($r !== false) {
                             $data['rate'] = $data['rate'] / 100;
-                            D('users')->where(['level' => $data['level_id']])->save($data);
+                            D('users')->where(['level' => $data['level']])->save($data);
                             $return = ['status' => 1, 'msg' => '编辑成功', 'result' => $validate->getError()];
                         } else {
                             $return = ['status' => 0, 'msg' => '编辑失败，数据库未响应', 'result' => ''];
@@ -409,7 +409,7 @@ class Distribut extends Base {
             }
         }
         if ($data['act'] == 'del') {
-            $r = D('user_level')->where('level_id=' . $data['level_id'])->delete();
+            $r = D('user_level')->where('level=' . $data['level'])->delete();
             if ($r !== false) {
                 $return = ['status' => 1, 'msg' => '删除成功', 'result' => ''];
             } else {

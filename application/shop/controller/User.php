@@ -1893,5 +1893,32 @@ class User extends MobileBase
     public function store(){
         return $this->fetch();
     }
+    //用户的二维码 、
+    public function usercode()
+    {
+        vendor('phpqrcode.phpqrcode');
+
+        $qr_code_path = UPLOAD_PATH.'usercode/';
+        if (!file_exists($qr_code_path)) {
+            mkdir($qr_code_path,777,true);
+        }
+
+        $qr_code_file=$this->user['code_url'];
+        if(empty($qr_code_file))
+        {
+            $session = session('user');
+            $url = U('Shop/User/login',array('u'=>$session['user_id']));
+            /* 生成二维码 */
+            $qr_code_file = $qr_code_path.time().rand(1, 10000).'.png';
+            \QRcode::png($url, $qr_code_file, QR_ECLEVEL_M,10,2,true);
+            if(file_exists($qr_code_file))
+            {
+              M('users')->where(['user_id'=>$session['user_id']])->update(['code_url'=>$qr_code_file]);  
+            }
+        }
+
+        $this->assign('qr_code_file',  $qr_code_file);
+         return $this->fetch();
+    }
 
 }
