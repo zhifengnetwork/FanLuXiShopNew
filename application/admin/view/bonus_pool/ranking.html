@@ -88,6 +88,7 @@
 		</div>
 		<div class="bDiv" style="height: auto;">
 			<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+				<input type="hidden" name="start" value="{$page}">
 				<table>
 					<tbody>
 					<foreach name="rank_list" item="vo" key="k" >
@@ -102,7 +103,7 @@
 								<div style="text-align: center; width: 100px;">{$vo.nickname}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 200px;">{$k+1}</div>
+								<div style="text-align: center; width: 200px;">{$page = $page + 1}</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 200px;">{$vo.nums}</div>
