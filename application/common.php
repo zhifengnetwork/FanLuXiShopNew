@@ -3,6 +3,7 @@
 use think\Log;
 use think\Db;
 
+use app\common\logic\BonusPoolLogic;
 use app\common\logic\BonusLogic;
 use app\common\logic\FanliLogic;
 
@@ -1041,6 +1042,10 @@ function update_pay_status($order_sn,$ext=array())
             //M('users')->where("user_id", $order['user_id'])->save(array('is_distribut'=>1));
         change_role($order['order_id']);
         fanli($order['order_id']);
+
+        //奖金池
+        $BonusPoolLogic = new BonusPoolLogic();
+        $BonusPoolLogic->is_receive($order['order_id']);
 
         //虚拟服务类商品支付
         if($order['prom_type'] == 5){
