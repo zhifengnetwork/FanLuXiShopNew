@@ -25,7 +25,7 @@
 		<div class="mDiv">
 			<div class="ftitle">
 				<h3>团队排名列表</h3>
-				<h5>(共{$list|count}条记录)</h5>
+				<!-- <h5>(共{$list|count}条记录)</h5> -->
 			</div>
 			<div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
 		</div>
@@ -38,29 +38,23 @@
 							<div style="width: 24px;"><i class="ico-check"></i></div>
 						</th>
 						<th align="center" abbr="ac_id" axis="col4" class="">
-							<div style="text-align: center; width: 70px;" class="">排名</div>
+							<div style="text-align: center; width: 50px;" class="">团队排名</div>
+						</th>
+						<th align="center" abbr="article_show" axis="col5" class="">
+							<div style="text-align: center; width: 100px;" class="">业绩等级</div>
 						</th>
 						<th align="center" abbr="ac_id" axis="col4" class="">
-							<div style="text-align: center; width: 70px;" class="">业绩等级</div>
-						</th>
-						<th align="center" abbr="ac_id" axis="col4" class="">
-							<div style="text-align: center; width: 100px;" class="">团队(用户名)</div>
-						</th>
-						<th align="center" abbr="ac_id" axis="col4" class="">
-							<div style="text-align: center; width: 150px;" class="">团队(用户名)等级</div>
+							<div style="text-align: center; width: 100px;" class="">团队(用户ID)</div>
 						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
 							<div style="text-align: center; width: 100px;" class="">团队业绩</div>
 						</th>
-						<th align="center" abbr="article_time" axis="col6" class="">
-							<div style="text-align: center; width: 70px;" class="">分红比例</div>
+						<th align="center" abbr="article_show" axis="col5" class="">
+							<div style="text-align: center; width: 100px;" class="">业绩分红</div>
 						</th>
-						<th align="center" abbr="article_time" axis="col6" class="">
-							<div style="text-align: center; width: 150px;" class="">是否开启全球分红</div>
-						</th>
-						<th align="center" axis="col1" class="handle">
+						<!-- <th align="center" axis="col1" class="handle">
 							<div style="text-align: center; width: 150px;">操作</div>
-						</th>
+						</th> -->
 						<th style="width:100%" axis="col7">
 							<div></div>
 						</th>
@@ -73,51 +67,50 @@
 			<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
 				<table>
 					<tbody>
-					<foreach name="list" item="vo" key="k" >
+					<volist name="list" id="vo" >
+							<volist name="nums" id="vv" >
+									<if condition="$vo['user_id'] eq $vv['first_leader']">
 						<tr>
 							<td class="sign">
 								<div style="width: 24px;"><i class="ico-check"></i></div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 70px;">{$vo.level_name}</div>
+								<div style="text-align: center; width: 50px;"></div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 70px;">{$vo.level_name}</div>
+								<div style="text-align: center; width: 100px;"></div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 100px;">{$vo.level_name}</div>
-							</td>
-							<td align="center" class="">
-								<div style="text-align: center; width: 150px;">{$vo.level_name}</div>
+								<div style="text-align: center; width: 150px;"></div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 100px;">
-									{$vo.amount}
+										
 								</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 70px;">{$vo.discount}%</div>
+								<div style="text-align: center; width: 100px;">
+										
+								</div>
 							</td>
-							<td align="center" class="">
-								<div style="text-align: center; width: 150px;">{$vo.describe}</div>
-							</td>
-							<td align="center" class="handle">
+							<!-- <td align="center" class="handle">
 								<div style="text-align: center; width: 150px; max-width:170px;">
-									<a href="{:U('User/level',array('act'=>'edit','level_id'=>$vo['level_id']))}" class="btn blue"><i class="fa fa-pencil-square-o"></i>查看团队</a>
+									<a href="#" class="btn blue"><i class="fa fa-pencil-square-o"></i>查看团队</a>
 								</div>
-							</td>
+							</td> -->
 							<td align="" class="" style="width: 100%;">
 								<div>&nbsp;</div>
 							</td>
 						</tr>
-					</foreach>
+							</if>
+						</volist>
+					</volist>
 					</tbody>
 				</table>
 			</div>
 			<div class="iDiv" style="display: none;"></div>
 		</div>
-		<!--分页位置-->
-		{$page} </div>
+		 </div>
 </div>
 <script>
 	$(document).ready(function(){

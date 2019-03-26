@@ -1045,9 +1045,10 @@ exit("请联系DC环球直供网络客服购买高级版支持此功能");
         }
         $this->ajaxReturn($return);
     }
-	public function teamRank(){//团队管理
+	public function teamRank(){
+        $list = Db::query("SELECT *,sum(total_amount) AS num FROM tp_users WHERE first_leader!=0 GROUP BY first_leader ORDER BY num desc");
         
-
+        $this->assign('list',$list);
 		return $this->fetch();
 	}
 	public function bonusSystem(){//分红列表

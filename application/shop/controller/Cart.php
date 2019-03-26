@@ -124,7 +124,7 @@ class Cart extends MobileBase {
         $item_id = input("item_id/d"); // 商品规格id
         $action = input("action/s"); // 行为
         if ($this->user_id == 0){
-            $this->error('请先登录', U('Mobile/User/login'));
+            $this->error('请先登录', U('Shop/User/login'));
         }
         $cartLogic = new CartLogic();
         $couponLogic = new CouponLogic();
@@ -258,7 +258,7 @@ class Cart extends MobileBase {
         $order = $Order->where($order_where)->find();
         empty($order) && $this->error('订单不存在！');
         if($order['order_status'] == 3){
-            $this->error('该订单已取消',U("Mobile/Order/order_detail",array('id'=>$order['order_id'])));
+            $this->error('该订单已取消',U("Shop/Order/order_detail",array('id'=>$order['order_id'])));
         }
         if(empty($order) || empty($this->user_id)){
             $order_order_list = U("User/login");
@@ -267,7 +267,7 @@ class Cart extends MobileBase {
         }
         // 如果已经支付过的订单直接到订单详情页面. 不再进入支付页面
         if($order['pay_status'] == 1){
-            $order_detail_url = U("Mobile/Order/order_detail",array('id'=>$order['order_id']));
+            $order_detail_url = U("Shop/Order/order_detail",array('id'=>$order['order_id']));
             header("Location: $order_detail_url");
             exit;
         }
