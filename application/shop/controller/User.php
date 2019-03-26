@@ -453,7 +453,14 @@ class User extends MobileBase
                 }
             }
             
-            $invite = I('invite');
+           $invite = I('invite');
+            $u = I('u');
+            $is_code = I('is_code');
+            if(!empty($u) && !empty($is_code))
+            {
+               $new_u['uid'] = $u;
+               $new_u['is_code'] =1;
+            }
             if(!empty($invite)){
                 $invite = get_user_info($invite,2);//根据手机号查找邀请人
                 if(empty($invite)){
@@ -465,7 +472,7 @@ class User extends MobileBase
             if($is_bind_account && session("third_oauth")){ //绑定第三方账号
                 $thirdUser = session("third_oauth");
                 $head_pic = $thirdUser['head_pic'];
-                $data = $logic->reg($username, $password, $password2, 0, $invite ,$nickname , $head_pic);
+                $data = $logic->reg($username, $password, $password2, 0, $invite ,$nickname , $head_pic,$new_u);
                 //用户注册成功后, 绑定第三方账号
                 $userLogic = new UsersLogic();
                 $data = $userLogic->oauth_bind_new($data['result']);
@@ -1902,12 +1909,12 @@ class User extends MobileBase
         if (!file_exists($qr_code_path)) {
             mkdir($qr_code_path,777,true);
         }
-
+            
         $qr_code_file=$this->user['code_url'];
         if(empty($qr_code_file))
         {
             $session = session('user');
-            $url = U('Shop/User/login',array('u'=>$session['user_id']));
+            $url = "http://".$_SERVER['HTTP_HOST'].'/'.U('Shop/User/login',array('u'=>$session['user_id'],'is_code'=>1));
             /* 生成二维码 */
             $qr_code_file = $qr_code_path.time().rand(1, 10000).'.png';
             \QRcode::png($url, $qr_code_file, QR_ECLEVEL_M,10,2,true);
