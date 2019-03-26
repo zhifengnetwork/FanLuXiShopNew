@@ -1216,7 +1216,7 @@
         }
         $.ajax({
             type: "POST",
-            url: '/index.php?m=Shop&c=Cart&a=cart4',
+            url: '/index.php?m=Shop&c=Cart&a=cart3',
             data: cart2_form.serialize(),
             dataType: "json",
             success: function (data) {
@@ -1289,7 +1289,7 @@
         ajax_return_status = 0;
         $.ajax({
             type: "POST",
-            url: "{:U('Shop/Cart/cart4')}",//+tab,
+            url: "{:U('Shop/Cart/cart3')}",//+tab,
             data: cart2_form.serialize() + "&act=submit_order",// 你的formid
             dataType: "json",
             success: function (data) {
