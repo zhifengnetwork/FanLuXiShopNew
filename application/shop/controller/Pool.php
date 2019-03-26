@@ -43,8 +43,13 @@ class Pool extends MobileBase {
 				->where($condition)->where(['rank.user_id' => $user_id])->field('rank.*,users.nickname')
 				->order('id DESC')->find();
 
+		$rank_sort = M('bonus_rank')->where('status', 0)->where('create_time', '>', $bonus_time)
+					->order('money DESC, nums DESC, create_time ASC')->column('user_id');
+		$rank_sort = array_flip($rank_sort);
+		$my_rank['ranking'] = $rank_sort[$my_rank['user_id']]+1; 
+
 		$rank = M('bonus_rank')->alias('rank')->join('users','users.user_id = rank.user_id' )
-				->where($condition)->field('rank.*,users.nickname')->order('nums DESC, id DESC')
+				->where($condition)->field('rank.*,users.nickname')->order('rank.nums DESC, rank.money DESC, rank.create_time ASC')
 				->limit(4)->select();
 		$this->assign('data', $data);
 		$this->assign('my_rank', $my_rank);
