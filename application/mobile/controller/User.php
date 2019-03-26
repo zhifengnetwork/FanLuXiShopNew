@@ -186,7 +186,7 @@ class User extends MobileBase
         	
         	$pic = "/public/share/picture_ok44/".$user_id.".jpg";
         }
-    
+        $pic = $pic.'?v='.time();
         $this->assign('pic',$pic);
 
         return $this->fetch();
