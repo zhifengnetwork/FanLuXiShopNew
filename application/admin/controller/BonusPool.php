@@ -20,7 +20,7 @@ class BonusPool extends Base {
 
         $count = M('bonus_rank')->alias('rank')->join('users', 'users.user_id = rank.user_id')
                 ->where($condition)->count();
-        $page = new Page($count, 2);
+        $page = new Page($count, 20);
         $rank_list = M('bonus_rank')->alias('rank')->join('users', 'users.user_id = rank.user_id')
                 ->field('rank.*, users.nickname')->where($condition)->limit($page->firstRow, $page->listRows)
                 ->order('nums DESC, id DESC')->select();

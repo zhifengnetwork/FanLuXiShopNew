@@ -45,7 +45,6 @@ class BonusPoolLogic extends Model
 			$this->write_log($nums, $money, $user, $order_id);
 
 			//没有上级则不记录上级排名
-			dump($user['first_leader']);
 			if($user['first_leader']){
 				$leader = M('users')->where('user_id', $user['first_leader'])->find();
 				if($leader){
@@ -164,14 +163,14 @@ class BonusPoolLogic extends Model
 			$count = 0;
 			$log = array();
 			foreach ($result as $key => $value) {
-				dump($value);
+				// dump($value);
 				//奖励总金额
 				$num = $key + 1;
 				$money = ($data['ranking'. $num] / 100) * $data['bonus_total'];
 				$count = $count + $money;
 				$user_money = $money + $value['user_money'];
-				dump($money);
-				dump($user_money);
+				// dump($money);
+				// dump($user_money);
 				Db::name('users')->where('user_id', $value['user_id'])->update(['user_money' => $user_money]);
 				
 				$log[$key]['user_id'] = $value['user_id'];
@@ -213,7 +212,7 @@ class BonusPoolLogic extends Model
 
 		$result = Db::name('bonus_rank')->alias('rank')->join('users', 'rank.user_id = users.user_id')
 				->field('rank.*, users.user_money')->where($condition)
-				->order('rank.nums DESC')->limit(3)->select();
+				->order('rank.nums DESC, rank.create_time ASC')->limit(3)->select();
 		return $result;
 	}
 
