@@ -75,7 +75,7 @@ class FanliLogic extends Model
 
 	         if ($bool !== false) {
 	        	$desc = "分享返利";
-	        	$log = $this->writeLog($user_info['first_leader'],$commission,$desc,101); //写入日志
+	        	$log = $this->writeLog($user_info['first_leader'],$commission,$desc,1); //写入日志
 
 	        	//return true;
 	         } else {
@@ -91,7 +91,7 @@ class FanliLogic extends Model
 
 	         if ($bool !== false) {
 	        	$desc = "复购返利";
-	        	$log = $this->writeLog($user_info['user_id'],$commission,$desc,101); //写入日志
+	        	$log = $this->writeLog($user_info['user_id'],$commission,$desc,1); //写入日志
 
 	        	//return true;
 	         } else {
@@ -118,14 +118,14 @@ class FanliLogic extends Model
 		{
               $res = M('users')->where(['user_id'=>$user_id])->update(['level'=>2]);
               	$desc = "购买产品成为vip";
-	        	$log = $this->writeLog($user_info['user_id'],'',$desc,101); //写入日志
+	        	$log = $this->writeLog($user_info['user_id'],'',$desc,2); //写入日志
 		}
 		else if($this->goodId==$this->tgoodsid  && $order['pay_status']==1)//自动升级店主
 		{
 
 			$res_s = M('users')->where(['user_id'=>$user_id])->update(['level'=>3]);
 			$desc = "购买指定产品获得店主";
-	        $log = $this->writeLog($user_info['user_id'],'398',$desc,101); //写入日志
+	        $log = $this->writeLog($user_info['user_id'],'398',$desc,2); //写入日志
 	        if($res_s)
 	        {
 	        	$this->addhostmoney2();//产生店主获得金额和津贴
@@ -139,7 +139,7 @@ class FanliLogic extends Model
              {
                   $res = M('users')->where(['user_id'=>$user_id])->update(['level'=>4]);
                   $desc = "直推店主30个成为总监";
-	        	  $log = $this->writeLog($user_info['first_leader'],'',$desc,101); //写入日志
+	        	  $log = $this->writeLog($user_info['first_leader'],'',$desc,2); //写入日志
              }
 
 		}
@@ -165,7 +165,7 @@ class FanliLogic extends Model
 
 	         if ($bool !== false) {
 	        	$desc = "推荐店主获得金额";
-	        	$log = $this->writeLog($user_info['first_leader'],$commission,$desc,101); //写入日志
+	        	$log = $this->writeLog($user_info['first_leader'],$commission,$desc,3); //写入日志
 
 	        	return true;
 	         } else {
@@ -200,6 +200,8 @@ class FanliLogic extends Model
 	       $commission = $fanli['chan']; //计算佣金
 	          //按上一级等级各自比例分享返利
 	       $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
+	       	$desc = "推荐店主获得金额";
+	        $log = $this->writeLog($user_info['first_leader'],$commission,$desc,4); //写入日志
 		}
 
 	}
@@ -213,10 +215,10 @@ class FanliLogic extends Model
 			'desc'=>$desc,
 			'order_sn'=>$this->orderSn,
 			'order_id'=>$this->orderId,
-			'states'=>$states
+			'log_type'=>$states
 		);
 
-		$bool = M('account_log')->insert($data);
+		$bool = M('fan_log')->insert($data);
 
 
 		if($bool){
