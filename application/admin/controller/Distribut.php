@@ -171,7 +171,7 @@ class Distribut extends Base {
         // return $this->fetch();
         
         $list = M('distribut_level');
-        $list = $list->order('level')->select();
+        $list = $list->order('level_id')->select();
         $this->assign('list',$list);
         return $this->fetch();
     }
