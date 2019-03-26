@@ -18,7 +18,7 @@
 		<div class="category-wrap">
 			<div class="top-bar">
 				<div class="search">
-					<form action="/mobile/Goods/search.html" method="get">
+					<form action="/shop/Goods/search.html" method="get">
 						<input type="submit" class="search-btn" value="" />
 						<input type="text" class="search-text" placeholder="SK ll" name="q" />
 						<i class="scan"></i>
@@ -61,7 +61,7 @@
 								<ul class="cate-list">
 									<foreach name="category.child" item="child">
 										<li class="item">
-											<a href="/Mobile/Goods/goodsInfo/id/{$child[goods_id]}.html">
+											<a href="/shop/Goods/goodsInfo/id/{$child[goods_id]}.html">
 												<img src="{$child[original_img]}" />
 												<p>{$child[goods_name]}</p>
 											</a>
