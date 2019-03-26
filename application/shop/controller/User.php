@@ -1914,7 +1914,7 @@ class User extends MobileBase
         if(empty($qr_code_file))
         {
             $session = session('user');
-            $url = "http://".$_SERVER['HTTP_HOST'].'/'.U('Shop/User/login',array('u'=>$session['user_id'],'is_code'=>1));
+            $url = "http://".$_SERVER['HTTP_HOST']."/User/login/u/".$session['user_id']."/is_code/1";
             /* 生成二维码 */
             $qr_code_file = $qr_code_path.time().rand(1, 10000).'.png';
             \QRcode::png($url, $qr_code_file, QR_ECLEVEL_M,10,2,true);
