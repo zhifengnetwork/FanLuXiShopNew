@@ -36,10 +36,10 @@ class Sign extends MobileBase {
         $user_id = session('user.user_id');
         $this->assign('user_id',$user_id);
 
-        $config = Db::query("select value from tp_config where name='sign_require_level' and inc_type ='sign'");
+        $config = Db::query("select value from tp_config where name='sign_require_level' and inc_type ='sign'");//查询XX级别要求
         $level = Db::name('user_level')->where('level',$config[0]['value'])->select();
 
-        $this->assign('level',$level[0]);
+        $this->assign('level',$level[0]);//输出
         return $this->fetch();
     }
 
@@ -89,6 +89,10 @@ class Sign extends MobileBase {
         if($cunzai){
             return $this->ajaxReturn(['status'=>1,'msg'=>'今日已签到','date'=>$date]);
         }else{
+
+            // 连续签到
+            $days = continue_sign($user_id);
+
             $r = M('sign_log')->save(['user_id'=>$user_id,'sign_day'=>date('Y-m-d H:i:s')]);
             if($r){
                 if($r){

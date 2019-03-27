@@ -244,6 +244,10 @@ class Goods extends MobileBase
         }
 
         $recommend_goods = M('goods')->where("is_recommend=1 and is_on_sale=1 and cat_id = {$goods['cat_id']}")->cache(7200)->limit(9)->field("goods_id, goods_name, shop_price")->select();
+
+        //查询是否签到免费领取的商品
+        // $
+
         $this->assign('recommend_goods', $recommend_goods);
         $this->assign('goods', $goods);
         return $this->fetch();
