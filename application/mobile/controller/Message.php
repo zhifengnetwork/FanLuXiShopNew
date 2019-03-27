@@ -77,12 +77,11 @@ class Message extends Controller
             $xiaji_user_id = M('users')->add($new_data);
 
             //先注册 users 表
-
-            // $oauth_data = array(
-            //     'openid' => $xiaji_openid,
-            //     'user_id' => $xiaji_user_id
-            // );
-            M('oauth_users')->add($new_data);
+            $oauth_data = array(
+                'openid' => $xiaji_openid,
+                'user_id' => $xiaji_user_id
+            );
+            M('oauth_users')->add($oauth_data);
 
             $this->write_log($xiaji_user_id.'------注册成功-----'.$shangji_user_id);
         }else{
