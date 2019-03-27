@@ -48,21 +48,20 @@ class PlaceOrder
 
     public function addNormalOrder()
     {
-        $this->check();
-        $this->queueInc();
-        $this->addOrder();
-        $this->addOrderGoods();
-        $this->addShopOrder();
-
+        $this->check();//提交订单前检查
+        $this->queueInc();//是否排队
+        $this->addOrder();//插入订单表
+        $this->addOrderGoods();//插入订单商品表
         Hook::listen('user_add_order', $this->order);//下单行为
         $reduce = tpCache('shopping.reduce');
         if($reduce== 1 || empty($reduce)){
             minus_stock($this->order);//下单减库存
         }
         // 如果应付金额为0  可能是余额支付 + 积分 + 优惠券 这里订单支付状态直接变成已支付
-        if ($this->order['order_amount'] == 0) {
+        if ($this->order['order_amount'] == '0') {
             update_pay_status($this->order['order_sn']);
         }
+        $this->addShopOrder();
         $this->deductionCoupon();//扣除优惠券
         $this->addOrderSignReceive();//添加免费领取记录
         $this->changUserPointMoney($this->order);//扣除用户积分余额
