@@ -48,7 +48,7 @@ class UsersLogic extends Model
             $this->isEmptyingIntegral($user);
             //查询用户信息之后, 查询用户的登记昵称
             $levelId = $user['level'];
-            $levelName = Db::name("user_level")->where("level", $levelId)->getField("level_name");
+            $levelName = Db::name("user_level")->where("level_id", $levelId)->getField("level_name");
             $user['level_name'] = $levelName;
             Db::name('users')->where("user_id", $user['user_id'])->save(['last_login'=>time()]);
 
@@ -77,7 +77,7 @@ class UsersLogic extends Model
             $this->isEmptyingIntegral($user);
             //查询用户信息之后, 查询用户的登记昵称
             $levelId = $user['level'];
-            $levelName = M("user_level")->where("level", $levelId)->getField("level_name");
+            $levelName = M("user_level")->where("level_id", $levelId)->getField("level_name");
             $user['level_name'] = $levelName;            
             $user['token'] = md5(time().mt_rand(1,999999999));
             $data = ['token' => $user['token'], 'last_login' => time()];
@@ -262,7 +262,7 @@ class UsersLogic extends Model
             if ($r) {
                 return array('status' => 1, 'msg' => '绑定成功', 'result' => $user2);
             } else {
-                return array('status' => -1, 'msg' => '您的' . $data['oauth'] . '账号已经绑定过账号', 'bind_status' => 0);
+                return array('status' => 1, 'msg' => '您的' . $data['oauth'] . '账号已经绑定过账号', 'bind_status' => 0,'result' => $user2);
             }
         }
 
@@ -271,6 +271,7 @@ class UsersLogic extends Model
         $map['last_login'] = time();
         
         $user = $this->getThirdUser($data);
+ 
         if(!$user){
             //账户不存在 注册一个
             $map['password'] = '';
@@ -278,9 +279,10 @@ class UsersLogic extends Model
             $map['nickname'] = $data['nickname'];
             $map['reg_time'] = time();
             $map['oauth'] = $data['oauth'];
+            $map['first_leader'] = $data['first_leader'];
             $map['head_pic'] = !empty($data['head_pic']) ? $data['head_pic'] : '/public/images/icon_goods_thumb_empty_300.png';
             $map['sex'] = $data['sex'] === null ? 0 :  $data['sex'];
-            $map['first_leader'] = cookie('first_leader'); // 推荐人id
+            // $map['first_leader'] = cookie('first_leader'); // 推荐人id
             if(!empty(I('first_leader')) && I('first_leader') > 0)
                 $map['first_leader'] = I('first_leader'); // 微信授权登录返回时 get 带着参数的
 
@@ -301,7 +303,15 @@ class UsersLogic extends Model
             // if($distribut_condition == 0){    // 直接成为分销商, 每个人都可以做分销
             //     $map['is_distribut']  = 1;
             // } 
-            $row_id = Db::name('users')->add($map);
+
+            $is_cunzai = Db::name('users')->where(array('openid'=>$map['openid']))->find();
+            if(!$is_cunzai){
+                $row_id = Db::name('users')->add($map);
+            }else{
+                Db::name('users')->where(array('openid'=>$map['openid']))->update($map);
+                $row_id = $is_cunzai['user_id'];
+
+            }
 
             $user = Db::name('users')->where(array('user_id'=>$row_id))->find();
             
@@ -313,14 +323,22 @@ class UsersLogic extends Model
             $data['user_id'] = $user['user_id'];
             $user_level =Db::name('user_level')->where('amount = 0')->find(); //折扣
             $data['discount'] = !empty($user_level) ? $user_level['discount']/100 : 1;  //新注册的会员都不打折
-            Db::name('OauthUsers')->save($data);
+
+         
+            $OauthUsers_is_cunzai = Db::name('OauthUsers')->where(array('openid'=>$map['openid']))->find();
+            if(!$OauthUsers_is_cunzai){
+                Db::name('OauthUsers')->add($map);
+            }else{
+                Db::name('OauthUsers')->where(array('openid'=>$map['openid']))->update($data);
+            }
+            
 
             //生成小程序专属二维码
-            if ($data['oauth'] == 'miniapp') {
-                $qrcode = $this->checkUserQrcode($row_id);
-                if(!$user['xcx_qrcode'])
-                    $user['xcx_qrcode'] = $qrcode;
-            }
+            // if ($data['oauth'] == 'miniapp') {
+            //     $qrcode = $this->checkUserQrcode($row_id);
+            //     if(!$user['xcx_qrcode'])
+            //         $user['xcx_qrcode'] = $qrcode;
+            // }
             
         } else {
             //兼容以前登录的小程序用户没有获取到openid
@@ -377,7 +395,7 @@ class UsersLogic extends Model
      * @param string $head_pic
      * @return array
      */
-    public function reg($username,$password,$password2,$push_id = 0,$invite=array(),$nickname="",$head_pic="",$new_u){
+    public function reg($username,$password,$password2,$push_id = 0,$invite=array(),$nickname="",$head_pic=""){
     	$is_validated = 0 ;
         if(check_email($username)){
             $is_validated = 1;
@@ -439,10 +457,7 @@ class UsersLogic extends Model
 		}/*  else if(tpCache('basic.invite') ==1 && empty($invite)){
 		    return array('status'=>-1,'msg'=>'请填写正确的推荐人手机号');
 		} */
-        if(is_array($new_u) && !empty($new_u)){
-            $map['first_leader'] = $new_u['uid'];
-            $map['is_code'] = 1;
-        }
+
         // 成为分销商条件  
         // $distribut_condition = tpCache('distribut.condition'); 
         // if($distribut_condition == 0)  // 直接成为分销商, 每个人都可以做分销        
