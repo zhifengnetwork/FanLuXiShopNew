@@ -131,6 +131,11 @@ class User extends MobileBase
 
     public function index()
     {
+        $this->redirect('shop/user/fenxiang');
+
+        exit;
+
+        
         $MenuCfg = new MenuCfg();
         $menu_list = $MenuCfg->where('is_show', 1)->order('menu_id asc')->select();
         
@@ -148,48 +153,7 @@ class User extends MobileBase
      */
     public function fenxiang()
     {
-        $user_id = session('user.user_id');
-
-        $logic = new ShareLogic();
-        $ticket = $logic->get_ticket($user_id);
-
-        
-        if( strlen($ticket) < 3){
-            $this->error("ticket不能为空");
-            exit;
-        }
-        $url= "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=".$ticket;
-
-        $url222 = '/www/wwwroot/www.dchqzg1688.com/public/share/code/'.$user_id.'.jpg';
-        if( @fopen( $url222, 'r' ) )
-        {
-            //已经有二维码了
-        	$url_code = '/www/wwwroot/www.dchqzg1688.com/public/share/code/'.$user_id.'.jpg';
-        }else{
-            //还没有二维码
-            $re = $logic->getImage($url,'/www/wwwroot/www.dchqzg1688.com/public/share/code', $user_id.'.jpg');
-            $url_code = $re['save_path'];
-        }
-        
-        //得到二维码的绝对路径
-
-        $pic = "/www/wwwroot/www.dchqzg1688.com/public/share/picture_ok44/'.$user_id.'.jpg";
-        if( @fopen( $pic, 'r' ) )
-        {
-        	$pic = "/share/picture_ok44/".$uid.".jpg";
-        }
-        else
-        {
-        	$image = \think\Image::open('/www/wwwroot/www.dchqzg1688.com/public/share/bg1.jpg');
-        	// 给原图左上角添加水印并保存water_image.png
-        	$image->water($url_code,\think\Image::DCHQZG)->save('/www/wwwroot/www.dchqzg1688.com/public/share/picture_ok44/'.$user_id.'.jpg');
-        	
-        	$pic = "/public/share/picture_ok44/".$user_id.".jpg";
-        }
-        $pic = $pic.'?v='.time();
-        $this->assign('pic',$pic);
-
-        return $this->fetch();
+        $this->redirect('shop/user/fenxiang');
     }
     
 
@@ -219,8 +183,8 @@ class User extends MobileBase
         setcookie('cn','',time()-3600,'/');
         setcookie('user_id','',time()-3600,'/');
         setcookie('PHPSESSID','',time()-3600,'/');
-        //$this->success("退出成功",U('Mobile/Index/index'));
-        header("Location:" . U('Mobile/Index/index'));
+       
+        header("Location:" . U('shop/Index/index'));
         exit();
     }
 
@@ -299,21 +263,7 @@ class User extends MobileBase
      */
     public function login()
     {
-        if ($this->user_id > 0) {
-//            header("Location: " . U('Mobile/User/index'));
-            $this->redirect('Mobile/User/index');
-        }else{
-
-            //登录页面改了
-            header("location:" . U('shop/User/login'));
-
-            exit;
-        }
-        $referurl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : U("Mobile/User/index");
-        $this->assign('referurl', $referurl);
-        // 新版支付宝跳转链接
-        $this->assign('alipay_url', urlencode(SITE_URL.U("Mobile/LoginApi/login",['oauth'=>'alipaynew'])));
-        return $this->fetch();
+        $this->redirect('shop/user/index');
     }
 
     /**
