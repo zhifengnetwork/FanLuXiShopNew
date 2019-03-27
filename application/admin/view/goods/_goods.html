@@ -253,6 +253,27 @@
                     <span class="err" id="err_cost_price"></span>
                 </dd>
             </dl>
+             <dl class="row">
+                <dt class="tit">
+                    <label>返利</label>
+                </dt>
+                <dd class="opt">
+                    vip返利<input type="text" value="{$goods.cost_price}" name="rebate[2]" class="t_mane"
+                           onKeyUp="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')"/>
+                    <span class="err" id="err_cost_price"></span> 
+              
+                    店主返利<input type="text" value="{$goods.cost_price}" name="rebate[3]" class="t_mane"
+                           onKeyUp="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')"/> 
+                    <span class="err" id="err_cost_price"></span>
+                    总监返利<input type="text" value="{$goods.cost_price}" name="rebate[4]" class="t_mane"
+                           onKeyUp="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')"/> 
+                    <span class="err" id="err_cost_price"></span>
+                    大区返利<input type="text" value="{$goods.cost_price}" name="rebate[5]" class="t_mane"
+                           onKeyUp="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')"/> 
+                    <span class="err" id="err_cost_price"></span>
+                    <p class="notic">单位是%</p>
+                </dd>
+            </dl>
             <!--<dl class="row">-->
                 <!--<dt class="tit">-->
                     <!--<label>佣金</label>-->
