@@ -68,19 +68,22 @@ function share_deal_after($xiaji, $shangji)
     $res = M('users')->where(['user_id' => $xiaji])->update(['first_leader' => $shangji]);
     if ($res) {
         $before = '成功';
+
+
+        //给上级发送消息
+        $shangji_openid = M('users')->where(['user_id' => $shangji])->value('openid');
+        if($shangji_openid){
+            $xiaji_nickname = M('users')->where(['user_id' => $xiaji])->value('nickname');
+            if($xiaji_nickname == ''){
+                $xiaji_nickname = get_nickname_new($xiaji);
+            }
+            $wx_content = "您的一级创客[" . $xiaji_nickname . "][ID:" . $xiaji . "]" . $before . "关注了公众号";
+            $wechat = new \app\common\logic\wechat\WechatUtil();
+            $wechat->sendMsg($shangji_openid, 'text', $wx_content);
+        }
+
     }
 
-    //给上级发送消息
-    $shangji_openid = M('users')->where(['user_id' => $shangji])->value('openid');
-    if($shangji_openid){
-        $xiaji_nickname = M('users')->where(['user_id' => $xiaji])->value('nickname');
-        if($xiaji_nickname == ''){
-            $xiaji_nickname = get_nickname_new($xiaji);
-        }
-        $wx_content = "您的一级创客[" . $xiaji_nickname . "][ID:" . $xiaji . "]" . $before . "关注了公众号";
-        $wechat = new \app\common\logic\wechat\WechatUtil();
-        $wechat->sendMsg($shangji_openid, 'text', $wx_content);
-    }
 
     return true;
 }
