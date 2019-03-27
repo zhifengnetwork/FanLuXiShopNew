@@ -115,6 +115,7 @@ class Preform extends Base {
          return $res;
 
     }
+    //记录会员升级，返利，推荐店主等
     public function checklog()
     {
         $start_time = strtotime(0);
