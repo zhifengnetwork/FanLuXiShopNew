@@ -36,6 +36,10 @@ class Sign extends MobileBase {
         $user_id = session('user.user_id');
         $this->assign('user_id',$user_id);
 
+        $config = Db::query("select value from tp_config where name='sign_require_level' and inc_type ='sign'");
+        $level = Db::name('user_level')->where('level',$config[0]['value'])->select();
+
+        $this->assign('level',$level[0]);
         return $this->fetch();
     }
 
@@ -205,9 +209,10 @@ class Sign extends MobileBase {
      */
     private function check_auth($user_id){
         //检查身份
-        //只有  分销 和 代理 可以签到
-        $is_ok = M('users')->where(['user_id'=>$user_id])->field('is_distribut,is_agent')->find();
-        if($is_ok['is_distribut'] == 1 || $is_ok['is_agent'] == 1){
+        //只有  只有达到店主以上等级才可签到
+        $config = Db::query("select value from tp_config where name='sign_require_level' and inc_type ='sign'");
+        $user = M('users')->where(['user_id'=>$user_id])->field('level')->find();
+        if($config[0]['value']<=$user['level']){
             return 1;
         }else{
             return 0;

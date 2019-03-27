@@ -25,8 +25,8 @@
         <ul>
             <li>签到列表：签到人员记录，签到记录最多保持一个月</li>
             <!-- <li>签到规则：可设置功能开启关闭，签到积分和连续签到额外奖励</li> -->
-            <li>签到规则1：店主以上级别才可以签到</li>
-            <li>签到规则2：允许签到,连续签到3天可领取指定产品[自付邮费]</li>
+            <li>签到规则1：XX以上级别才可以签到</li>
+            <li>签到规则2：允许签到,连续签到X天可领取指定产品[自付邮费]</li>
             <!-- <li>签到规则2：代理允许签到,连续签到10天可领取指定产品[免邮]</li> -->
         </ul>
     </div>
@@ -41,11 +41,12 @@
                   <div id="gcategory">
                    <select name="level_name" id="" class="form-control" >
                         <option value="0"selected="selected">请选择等級</option> 
-                        <foreach name="res" item="v" >	                         <option value="{$v[id]}">{$v[level_name]}</option>
+                        <foreach name="res" item="v" >	                         
+                            <option value="{$v['level']}" <if condition="$config['sign_require_level'] eq $v['level']">selected</if> >{$v[level_name]}</option>
                         </foreach>                                        
                     </select>
                   </div>
-                  <p class="notic">店主以上级别才可以签到</p>
+                  <p class="notic">该以上级别才可以签到</p>
                 </dd>
             </dl>
             <dl class="row">
