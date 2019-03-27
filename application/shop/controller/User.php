@@ -19,6 +19,7 @@ use think\Verify;
 use think\Loader;
 use think\db;
 use think\Image;
+use app\common\logic\ShareLogic;
 
 class User extends MobileBase
 {
@@ -1928,5 +1929,84 @@ class User extends MobileBase
         $this->assign('qr_code_file',  $qr_code_file);
          return $this->fetch();
     }
+
+    /**
+     * 新的分享
+     */
+    public function fenxiang()
+    {
+        $user_id = session('user.user_id');
+
+        $logic = new ShareLogic();
+        $ticket = $logic->get_ticket($user_id);
+
+        
+        if( strlen($ticket) < 3){
+            $this->error("ticket不能为空");
+            exit;
+        }
+        $url= "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=".$ticket;
+
+        $url222 = '/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/code/'.$user_id.'.jpg';
+        if( @fopen( $url222, 'r' ) )
+        {
+            //已经有二维码了
+        	$url_code = '/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/code/'.$user_id.'.jpg';
+        }else{
+            //还没有二维码
+            $re = $logic->getImage($url,'/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/code', $user_id.'.jpg');
+            $url_code = $re['save_path'];
+        }
+        
+        //得到二维码的绝对路径
+
+        $pic = "/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/picture_ok44/'.$user_id.'.jpg";
+        if( @fopen( $pic, 'r' ) )
+        {
+        	$pic = "/share/picture_ok44/".$uid.".jpg";
+        }
+        else
+        {
+        	$image = \think\Image::open('/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/bg1.jpg');
+        	// 给原图左上角添加水印并保存water_image.png
+        	$image->water($url_code,\think\Image::DCHQZG)->save('/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/picture_ok44/'.$user_id.'.jpg');
+        	
+        	$pic = "/public/share/picture_ok44/".$user_id.".jpg";
+        }
+        $pic = $pic.'?v='.time();
+        $this->assign('pic',$pic);
+
+        return $this->fetch();
+    }
+
+    public function fen()
+    {
+        $user_id = session('user.user_id');
+        $url = SITE_URL.'?first_leader='.$user_id;
+        $this->assign('url',$url);
+        $qr_back = M('config')->where(['name'=>'qr_back'])->value('value');
+        $this->assign('qr_back',$qr_back);
+
+        $head_pic = session('user.head_pic');
+        $this->assign('head_pic',$head_pic);
+
+        $nickname = session('user.nickname');
+        $this->assign('nickname',$nickname);
+
+        return $this->fetch();
+    }
+
+    // public function logout()
+    // {
+    //     session_unset();
+    //     session_destroy();
+    //     setcookie('uname','',time()-3600,'/');
+    //     setcookie('cn','',time()-3600,'/');
+    //     setcookie('user_id','',time()-3600,'/');
+    //     setcookie('PHPSESSID','',time()-3600,'/');
+    //     //$this->success("退出成功",U('Mobile/Index/index'));
+    //     header("Location:" . U('Mobile/Index/index'));
+    //     exit();
+    // }
 
 }
