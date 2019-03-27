@@ -38,21 +38,47 @@ function access_token(){
     return $return['access_token'];
 }
 
+function write_log($content)
+{
+    $content = "[" . date('Y-m-d H:i:s') . "]" . $content . "\r\n";
+    $dir = rtrim(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']), '/') . '/logs';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0777, true);
+    }
+    if (!is_dir($dir)) {
+        mkdir($dir, 0777, true);
+    }
+    $path = $dir . '/' . date('Ymd') . '.txt';
+    file_put_contents($path, $content, FILE_APPEND);
+}
 
-function share_deal_after($xiaji,$shangji){
-   
-    if($xiaji == $shangji){
+
+function share_deal_after($xiaji, $shangji)
+{
+    write_log("xiaji:" . $xiaji);
+    write_log("shangji:" . $shangji);
+    if ($xiaji == $shangji) {
         return false;
     }
-    $is_shangji = M('users')->where(['user_id'=>$xiaji])->value('first_leader');
-    if($is_shangji  && (int)$is_shangji > 0){
+    $is_shangji = M('users')->where(['user_id' => $xiaji])->value('first_leader');
+    if ($is_shangji && (int)$is_shangji > 0) {
         return false;
     }
 
-    M('users')->where(['user_id'=>$xiaji])->save(['first_leader'=>$shangji]);
+    $res = M('users')->where(['user_id' => $xiaji])->update(['first_leader' => $shangji]);
+    if ($res) {
+        $before = '成功';
+    }
+    //给上级发送消息
+    $shangji_openid = M('users')->where(['user_id' => $shangji])->value('openid');
+    $xiaji_nickname = M('users')->where(['user_id' => $xiaji])->value('nickname');
+    $wx_content = "您的一级创客[" . $xiaji_nickname . "][ID:" . $xiaji . "]" . $before . "关注了公众号";
+    $wechat = new \app\common\logic\wechat\WechatUtil();
+    $wechat->sendMsg($shangji_openid, 'text', $wx_content);
 
     return true;
 }
+
 
 //获取推荐上级
 function get_uper_user($data)
