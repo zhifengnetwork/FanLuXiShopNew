@@ -80,7 +80,8 @@ class User extends MobileBase
         $menu_list = $MenuCfg->where('is_show', 1)->order('menu_id asc')->select();
         $this->assign('menu_list', $menu_list);
 
-        
+        $level = Db::query('select level_name from tp_users as a,tp_user_level as b where a.level = b.level and a.user_id = '.$this->user_id);
+        $this->assign('level',$level);
 
         return $this->fetch();
     }

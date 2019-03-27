@@ -21,11 +21,12 @@
 						</a>
 						<p class="user-name-zp">{$user['nickname']}&nbsp&nbspID:{$user['user_id']}</p>
 						<span class="sign">
-                            <if condition="($user.is_distribut == 1)">
+                            <!-- <if condition="($user.is_distribut == 1)">
                                 分销商
                             <else/>
                                 普通用户
-                            </if>
+                            </if> -->
+                            {$level.0.level_name}
                         </span>
 					</div>
 					<!-- <div class="sign-wrap-zp">

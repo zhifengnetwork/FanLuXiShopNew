@@ -90,9 +90,9 @@ class Sign extends MobileBase {
             return $this->ajaxReturn(['status'=>1,'msg'=>'今日已签到','date'=>$date]);
         }else{
 
-            // 连续签到
+            /*// 连续签到
             $days = continue_sign($user_id);
-
+            return $this->ajaxReturn(['status'=>0,'msg'=>$days]);*/
             $r = M('sign_log')->save(['user_id'=>$user_id,'sign_day'=>date('Y-m-d H:i:s')]);
             if($r){
                 if($r){
