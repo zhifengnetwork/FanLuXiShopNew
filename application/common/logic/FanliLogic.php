@@ -32,6 +32,12 @@ class FanliLogic extends Model
 		$this->orderId = $orderId;
 		$this->tgoodsid = $this->catgoods();
 	}
+	//获取返利数据
+	public function getconfing()
+	{
+         $goods_info = M('goods')->where(['goods_id'=>$this->goodId])->field('rebate')->find();
+         return unserialize($goods_info['rebate']);
+	}
 
     //会员返利
 	public function fanliModel()
@@ -44,6 +50,8 @@ class FanliLogic extends Model
 				->where('goods_id', $this->goodId)
 				->field('is_distribut,is_agent')
                 ->find();
+           //获取每个产品返利数据
+         $rebase = $this->getconfing();
         //查询会员当前等级
 		$user_info = M('users')->where('user_id',$this->userId)->field('first_leader,level')->find();
 		//查询上一级信息
@@ -60,11 +68,18 @@ class FanliLogic extends Model
 	       
 		    if( $user_info['level']==1 || $user_info['level']==2) //不是复购
 		    {
-		     if(empty($user_info['first_leader'])) return false;//如果没有上一级则返回
-		   
+		    // if(empty($user_info['first_leader'])) return false;//如果没有上一级则返回
+
 	          //查询会员等级返利数据
-	        if($parent_info['level']==1) return false; //上一级是普通会员则不反钱
-	          $fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
+	        if($parent_info['level']!=1 && !empty($parent_info)){ //上一级是普通会员则不反钱
+	          if(empty($rebase)) //如果产品没返利信息就读取总平台的
+	          {
+	          	$fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
+	          }else
+	          {
+	          	$fanli['rate'] = $rebase[$parent_info['level']];
+	          }
+	          
 
 	         //计算返利金额
 	           $goods = $this->goods();
@@ -81,9 +96,18 @@ class FanliLogic extends Model
 	         } else {
 	        	return false;
 	         }
+		     }else{
+		     	return false;
+		     }
 		    }elseif($user_info['level']>=2) //是复购
 		    {
-	           $fanli = M('user_level')->where('level',$user_info['level'])->field('rate')->find();
+	           if(empty($rebase)) //如果产品没返利信息就读取总平台的
+	          {
+	          	$fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
+	          }else
+	          {
+	          	$fanli['rate'] = $rebase[$parent_info['level']];
+	          }
 	         //计算返利金额
 	          $commission = $goods['shop_price'] * ($fanli['rate'] / 100) * $this->goodNum; //计算佣金
 	          //按上一级等级各自比例分享返利
@@ -204,6 +228,11 @@ class FanliLogic extends Model
 	        $log = $this->writeLog($user_info['first_leader'],$commission,$desc,4); //写入日志
 		}
 
+	}
+	//总监大区间接邀请店主获得金额
+	public function ppInvitation()
+	{
+		
 	}
 	//记录日志
 	public function writeLog($userId,$money,$desc,$states)

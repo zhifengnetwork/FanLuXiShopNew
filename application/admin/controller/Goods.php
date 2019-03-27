@@ -380,6 +380,10 @@ class Goods extends Base {
         $data = input('post.');
         $spec_item = input('item/a');
         $validate = Loader::validate('Goods');// 数据验证
+        if(!empty($data['rebate']))
+        {
+            $data['rebate'] = serialize($data['rebate']);
+        }
         if (!$validate->batch()->check($data)) {
             $error = $validate->getError();
             $error_msg = array_values($error);
