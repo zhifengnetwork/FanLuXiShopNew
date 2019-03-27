@@ -128,7 +128,7 @@ class User extends Base
      */
      public function detail()
      {
- 
+
          $uid = I('get.id');
          $user = D('users')->where(array('user_id' => $uid))->find();
          if (!$user)
