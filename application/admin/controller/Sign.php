@@ -44,7 +44,7 @@ class Sign extends Base
 
         // $list = M('sign_log')->group("user_id")->select();
 
-        $list =  Db::query("select * from tp_user_sign as a,tp_users  as b where a.user_id = b.user_id order by a.user_id desc");
+        $list =  Db::query("select * from tp_sign_log as a,tp_users  as b where a.user_id = b.user_id order by a.sign_day desc");
         $this->assign('list',$list);
 
         return $this->fetch();

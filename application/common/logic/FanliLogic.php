@@ -53,16 +53,21 @@ class FanliLogic extends Model
            //获取每个产品返利数据
          $rebase = $this->getconfing();
         //查询会员当前等级
-		$user_info = M('users')->where('user_id',$this->userId)->field('first_leader,level')->find();
+		$user_info = M('users')->where('user_id',$this->userId)->field('first_leader,level,user_id')->find();
 		//查询上一级信息
 		$parent_info = M('users')->where('user_id',$user_info['first_leader'])->field('level')->find();
         //判断是否特殊产品成为店主，则不走返利流程
         //用户购买后检查升级
 		$this->checkuserlevel($this->userId,$this->orderId);
 		//echo $this->goodId.'-'.$this->tgoodsid.'-'.$user_info['level'];exit;
-        if($this->goodId==$this->tgoodsid && $user_info['level']<2)
+        if($this->goodId==$this->tgoodsid )
         {
-            $this->addhostmoney($user_id,$parent_info);
+        	if($user_info['level']<2)
+        	{
+        		$this->addhostmoney($user_id,$parent_info);
+        	}
+             $this->ppInvitation($user_info['first_leader']);//总监下线推荐店主金额
+             $this->ccInvitation($user_info['first_leader']);//大区下线推荐店主金额
         }else
         {
 	       
@@ -91,7 +96,8 @@ class FanliLogic extends Model
 	         if ($bool !== false) {
 	        	$desc = "分享返利";
 	        	$log = $this->writeLog($user_info['first_leader'],$commission,$desc,1); //写入日志
-
+	            //检查返利管理津贴
+	            $this->jintie($user_info['first_leader'],$commission);
 	        	//return true;
 	         } else {
 	        	return false;
@@ -108,7 +114,13 @@ class FanliLogic extends Model
 	          {
 	          	$fanli['rate'] = $rebase[$parent_info['level']];
 	          }
-	         //计算返利金额
+
+	          if(!empty($fanli['rate']))
+	          {
+
+
+	          //计算返利金额
+	          $goods = $this->goods();
 	          $commission = $goods['shop_price'] * ($fanli['rate'] / 100) * $this->goodNum; //计算佣金
 	          //按上一级等级各自比例分享返利
 	          $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
@@ -116,6 +128,8 @@ class FanliLogic extends Model
 	         if ($bool !== false) {
 	        	$desc = "复购返利";
 	        	$log = $this->writeLog($user_info['user_id'],$commission,$desc,1); //写入日志
+	          }
+	      
 
 	        	//return true;
 	         } else {
@@ -137,14 +151,14 @@ class FanliLogic extends Model
 		 //扫码登陆
 
 		 $order = M('order')->where(['order_id'=>$this->orderId])->find();
-		 $user_info = M('users')->where('user_id',$user_id)->field('first_leader,level,is_code')->find();
+		 $user_info = M('users')->where('user_id',$user_id)->field('first_leader,level,is_code,user_id')->find();
 		if($user_info['is_code']==1 && $order['pay_status']==1 && $user_info['level']==1)//自动升级vip
 		{
               $res = M('users')->where(['user_id'=>$user_id])->update(['level'=>2]);
               	$desc = "购买产品成为vip";
 	        	$log = $this->writeLog($user_info['user_id'],'',$desc,2); //写入日志
 		}
-		else if($this->goodId==$this->tgoodsid  && $order['pay_status']==1)//自动升级店主
+		else if($this->goodId==$this->tgoodsid  && $order['pay_status']==1 && $user_info['level']!=3)//自动升级店主
 		{
 
 			$res_s = M('users')->where(['user_id'=>$user_id])->update(['level'=>3]);
@@ -202,13 +216,22 @@ class FanliLogic extends Model
 
 	}
 	//获得管理津贴
-	public  function jintie()
+	public  function jintie($user_leader,$fanli_money)
 	{
-		$goods = M('goods')->field("shop_price,cat_id")->where(['goods_id'=>$this->goodId])->find();
-		return $goods;$goods = M('goods')->field("shop_price,cat_id")->where(['goods_id'=>$this->goodId])->find();
-		return $goods;$goods = M('goods')->field("shop_price,cat_id")->where(['goods_id'=>$this->goodId])->find();
-		return $goods;$goods = M('goods')->field("shop_price,cat_id")->where(['goods_id'=>$this->goodId])->find();
-		return $goods;
+      //只有总监和大区获得管理津贴
+		//查询上一级信息
+		$parent_info = M('users')->where('user_id',$user_leader)->field('level')->find();
+		if($parent_info['level']==4 || $parent_info['level']==5)
+		{
+			$fanli = M('user_level')->where('level',$parent_info['level'])->field('jietie')->find();
+			 $commission = $fanli_money * ($fanli['jietie'] / 100);
+
+	          //按上一级等级各自比例分享返利
+	       $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
+	       	$desc = "获得管理津贴";
+	        $log = $this->writeLog($user_info['first_leader'],$commission,$desc,5); //写入日志
+		}
+
 	}
 	 //总监，大区董事产生一个店主的金额和管理津贴
 	public function addhostmoney2($user_id)
@@ -229,10 +252,68 @@ class FanliLogic extends Model
 		}
 
 	}
-	//总监大区间接邀请店主获得金额
-	public function ppInvitation()
+	//总监直属店主邀店主获得金额
+	public function ppInvitation($user_leader)
+	{
+		//判断上上级是否是总监，是总监就获得对应金额
+		//查询上级信息
+		$parent_info = M('users')->where('user_id',$user_leader)->field('level,user_id')->find();
+		//查询上上级信息
+		$p_parent_info = M('users')->where('first_leader',$user_leader)->field('level,user_id')->find();
+		if($p_parent_info['level']==4 && $parent_info['level']==3)
+		{
+			 $fanli = M('user_level')->where('level',$p_parent_info['level'])->field('y_reward')->find();
+			 $commission = $fanli['y_reward']; //计算金额
+	          //按上一级等级各自比例分享返利
+	        $bool = M('users')->where('user_id',$p_parent_info['user_id'])->setInc('user_money',$commission);
+	       	$desc = "总监直属店主邀店主获得金额";
+	        $log = $this->writeLog($p_parent_info['user_id'],$commission,$desc,6); //写入日志
+		}
+
+
+	}
+	//大区直属店主邀店主,直属总监邀店主,直属店主邀店主,获得金额
+	public function ccInvitation($user_leader)
 	{
 		
+		//查询上级信息
+		$parent_info = M('users')->where('user_id',$user_leader)->field('level,user_id')->find();
+		//查询上上级信息
+		$p_parent_info = M('users')->where('first_leader',$user_leader)->field('level,user_id')->find();
+		//查询上上上级信息
+		$p_p_parent_info = M('users')->where('first_leader',$p_parent_info['user_id'])->field('level,user_id')->find();
+		//直属店主邀店主
+		if($p_parent_info['level']==5 && $parent_info['level']==3)
+		{
+			 $fanli = M('user_level')->where('level',$p_parent_info['level'])->field('k_reward')->find();
+			 $commission = $fanli['k_reward']; //计算金额
+	          //按上一级等级各自比例分享返利
+	        $bool = M('users')->where('user_id',$p_parent_info['user_id'])->setInc('user_money',$commission);
+	       	$desc = "大区直属店主邀店主获得金额";
+	        $log = $this->writeLog($p_parent_info['user_id'],$commission,$desc,6); //写入日志
+		}
+		//直属总监邀店主
+		elseif($p_parent_info['level']==5 && $parent_info['level']==4)
+		{
+		    $fanli = M('user_level')->where('level',$p_parent_info['level'])->field('s_reward')->find();
+			 $commission = $fanli['s_reward']; //计算金额
+	          //按上一级等级各自比例分享返利
+	        $bool = M('users')->where('user_id',$p_parent_info['user_id'])->setInc('user_money',$commission);
+	       	$desc = "大区直属总监邀店主获得金额";
+	        $log = $this->writeLog($p_parent_info['user_id'],$commission,$desc,6); //写入日志
+		}
+	    //直属总监的店主邀店主
+		elseif($p_p_parent_info['level']==5 && $p_parent_info['level']==4 && $parent_info['level']==3)
+		{
+			  $fanli = M('user_level')->where('level',$p_p_parent_info['level'])->field('y_reward')->find();
+			 $commission = $fanli['y_reward']; //计算金额
+	          //按上一级等级各自比例分享返利
+	        $bool = M('users')->where('user_id',$p_p_parent_info['user_id'])->setInc('user_money',$commission);
+	       	$desc = "大区直属总监的店主邀店主获得金额";
+	        $log = $this->writeLog($p_p_parent_info['user_id'],$commission,$desc,6); //写入日志
+		}
+
+
 	}
 	//记录日志
 	public function writeLog($userId,$money,$desc,$states)

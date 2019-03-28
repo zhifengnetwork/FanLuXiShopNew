@@ -525,12 +525,15 @@ class User extends Base
 			$level_name = I('level_name');
 			$type = I('type');
 			$con_name = I('con_name');
-			$rebate_id = I('rebate_id');
+			$rebate_id = I('rebate');
 			$rebate = I('rebate');
 			$reward_id = I('reward_id');
 			$reward = I('reward');
 			$get = I('get');
-			$describe = I('describe');
+            $get = I('get');
+			$y_reward = I('y_reward');
+            $s_reward = I('s_reward');
+            $jintie = I('jintie');
 			if($level==""){
 				$this->ajaxReturn(['status' => 0, 'msg' => '等级不可为空']);
 			}
@@ -549,12 +552,16 @@ class User extends Base
 				'level_name'=>$level_name,
 				'type'=>$type,
 				'con_name'=>$con_name,
-				'rebate_id'=>$rebate_id,
-				'rebate'=>$rebate,
+				'rebate'=>$rebate_id,
+				//'rebate'=>$rebate,
 				'reward_id'=>$reward_id,
 				'reward'=>$reward,
 				'get'=>$get,
 				'describe'=>$describe,
+                'y_reward'=>$y_reward,
+                's_reward'=>$s_reward,
+                'k_reward'=>$k_reward,
+                'jintie'=>$jintie,
 			);
 			if($id>0){
 				$res = M('user_level')->where('id',$id)->data($data)->save();
@@ -562,6 +569,7 @@ class User extends Base
 				$data['create_time'] = time();
 				$res = M('user_level')->insert($data);
 			}
+          //echo Db::table('user_level')->getLastSql();
 			if($res){
 				$this->ajaxReturn(['status' => 1, 'msg' => '操作成功']);
 			}else{
