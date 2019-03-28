@@ -472,7 +472,15 @@ a{
 	padding-left:.56rem;
 	border:0;
 }
-
+.zjy_lu a{
+	display: inline-block;
+	width: 48%;	
+	height: 1.5rem;
+	line-height: 1.5rem;	
+	border: 1px solid #666;
+	border-radius: 9px;
+	text-align: center;
+}
 .loaction-tacitly{
 	height:2.12rem;
 	width:100%;
