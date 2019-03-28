@@ -27,8 +27,13 @@
 }
 .zjy_head h3 a{
 	position: relative;
-	left: -80px;
+	left: -1rem;
 	top: -.1rem;
+}
+.zjy_head h3 a img{
+	width: .6rem;
+	height: .6rem;
+	
 }
 .loginsingup-input .lsu {
 	width: 100%;
@@ -472,14 +477,20 @@ a{
 	padding-left:.56rem;
 	border:0;
 }
+.zjy_lu{
+	overflow: hidden;
+	
+}
 .zjy_lu a{
 	display: inline-block;
-	width: 48%;	
+	width: 40%;	
 	height: 1.5rem;
 	line-height: 1.5rem;	
 	border: 1px solid #666;
 	border-radius: 9px;
 	text-align: center;
+	margin-left:1rem ;
+	margin-bottom:2px;
 }
 .loaction-tacitly{
 	height:2.12rem;
