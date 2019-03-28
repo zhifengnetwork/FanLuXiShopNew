@@ -1,23 +1,33 @@
 <include file="public/header" title="找回密码" body=""/>
-<link rel="stylesheet" type="text/css" href="__STATIC__/css/login_zjy/login_zjy.css"/>
+<link rel="stylesheet" type="text/css" href="__STATIC__/css/login_zjy/login_zjy.css?v=1.1"/>
 <style>
     .newclass{
         width: 45%;
         line-height: 1.5rem;
         margin: .8rem 0;
-        border: 1px solid #666;
+        border: 1px solid #666 !important;
         border-radius: 9px;
         font-size: .5rem;
         padding-left: .3rem;
     }
     .newYZm{
-        width: 35%;
-        display: inline-block;
+        width: 38%;
+        display: inline-block;;
         line-height: 1.6rem;
         border: 1px solid #666;
         border-radius: 9px;
         margin-left: 1.8rem;
         background: #f3fbfe;
+    }
+    .loginsingup-input .v-code-pic{
+    	float: none !important;
+    	
+    }
+    #verify_code_img{
+    	position: relative;
+    	top: 0 !important;
+    	width: 100%;
+    	height: 100%;
     }
 </style>
 
@@ -48,7 +58,7 @@
         <div class="">
             <span class="ico ico-v-code"></span>
             <input class="newclass" type="text" name="verify_code" id="verify_code" value="" placeholder="请输入验证码"/>
-            <div class="newYZm"><img class="v-code-pic" src="/index.php?m=Shop&c=User&a=verify&type=forget" id="verify_code_img" onclick="verify()"></div>
+            <div class="newYZm"><img class="v-code-pic newYZmzjy" src="/index.php?m=Shop&c=User&a=verify&type=forget" id="verify_code_img" onclick="verify()"></div>
         </div>
     </form>
     <div class="lsu-submit">
