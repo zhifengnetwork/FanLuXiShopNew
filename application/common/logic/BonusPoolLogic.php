@@ -11,35 +11,35 @@ use think\Db;
  */
 class BonusPoolLogic extends Model
 {
-	//判断商品是否为领取类目的产品
-	public function is_receive($order_id)
-	{
-		//订单中的所有产品ID
-		$good_ids = M('order_goods')->where('order_id', $order_id)->column('goods_id');
-		//获取领取类目的产品
-		$goods = M('goods')->where('goods_id',['in', $good_ids])//->where('cat_id', 1)
-				->column('goods_id');
 
-		$nums = 0;
-		foreach ($good_ids as $key => $value) {
-			if(in_array($value, $goods)){
-				//计算产品数量
-				$nums = $nums + 1;
-			}
-		}
+	//判断商品是否为领取类目的产品
+	public function is_receive($order)
+	{
+		//订单中的所有产品
+		$orderGoods = M('order_goods')->where('order_id', $order['order_id'])->field('goods_num,is_bonus')->select();
+        
+        //计算产品数量
+        $nums = 0;
+        foreach ($orderGoods as $key => $value) {
+            //参加活动的产品
+            if($value['is_bonus'] == 1){
+                $nums = $nums + $value['goods_num'];
+            }
+        }
 		if($nums <= 0) return false;
 
 		//领取产品的用户
-		$user_id = M('order')->where('order_id', $order_id)->value('user_id');
-		$user = M('users')->where('user_id', $user_id)->field('user_id, nickname, first_leader')
+		$user = M('users')->where('user_id', $order['user_id'])->field('user_id, nickname, first_leader')
 			  ->find();
 		if(!$user) return false;
 
+        $money = $this->put_in($order['shipping_price']);
+        dump($money);exit;
 		//开启事务
 		Db::startTrans();
 		try{
 			//将邮费放进奖金池
-			$money = $this->put_in($nums);
+			$money = $this->put_in($order['shipping_price']);
 
 			//记录下级领取的日志
 			$this->write_log($nums, $money, $user, $order_id);
@@ -63,18 +63,21 @@ class BonusPoolLogic extends Model
 		}
 	}
 
-	//将邮费放进奖金池
-	public function put_in($nums)
+	/*
+     * 将邮费放进奖金池
+     * shipping 运费
+     */
+	public function put_in($shipping)
 	{
 		//获每个产品抽取的邮费
 		$bonus_pool = $this->getDate('bonus_pool');
-		if(!$bonus_pool['bonus_pool']) return false;
 
-		//抽取的邮费
-		$money = $nums * $bonus_pool['bonus_pool'];
+		//抽取邮费的百分比
+		$money = round($shipping * ($bonus_pool/100), 2);
 		$bonus_total = $this->getDate('bonus_total');
 		$bonus_total = round(($bonus_total['bonus_total'] + $money), 2);
 
+        Db::name('users')->where('user_id', $user['user_id'])->setInc('distribut_free_num', $catId['goods_num']);// 分销领取次数减一
 		$result = Db::name('config')->where('name', 'bonus_total')
 				->update(['value' => $bonus_total]);
 		if($result){
@@ -233,17 +236,16 @@ class BonusPoolLogic extends Model
 	//获取奖励设置信息
 	public function getDate($data = '')
 	{
+
+        $config = tpCache('bonus'); //配置信息
 		if(is_array($data)){
-			$condition['name'] = ['in', $data];
+			$result = $config;
 		}else if($data != ''){
-			$condition['name'] = $data;
+			$result = $config[$data];
 		}else{
-			$condition = array();
+			$result = array();
 		}
 
-		$result = M('config')->where($condition)
-				->where('inc_type', 'bonus')
-				->column('name, value');
 		return $result;
 	}
 

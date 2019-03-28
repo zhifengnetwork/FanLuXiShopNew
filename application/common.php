@@ -1047,6 +1047,7 @@ function update_pay_status($order_sn,$ext=array())
         // 找出对应的订单
         $Order = new \app\common\model\Order();
         $order = $Order->master()->where("order_sn",$order_sn)->find();
+
         if ($order['prom_type'] == 6 && $order['order_amount'] != 0) {
             $team = new \app\common\logic\team\Team();
             $team->setTeamActivityById($order['prom_id']);

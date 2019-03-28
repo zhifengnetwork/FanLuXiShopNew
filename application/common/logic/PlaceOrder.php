@@ -360,6 +360,7 @@ class PlaceOrder
                 $orderGoodsData['item_id'] = 0; // 商品规格id
             }
             $orderGoodsData['sku'] = $payItem['sku']; // sku
+            $orderGoodsData['is_bonus'] = $payItem['is_bonus']; // 是否参加奖金池商品
             $orderGoodsData['member_goods_price'] = $payItem['member_goods_price']; // 会员折扣价
             $orderGoodsData['give_integral'] = $goodsArr[$payItem['goods_id']]['give_integral']; // 购买商品赠送积分
             if ($payItem['prom_type']) {
