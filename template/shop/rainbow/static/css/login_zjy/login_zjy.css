@@ -503,7 +503,39 @@ a{
   border: 1px solid #000;
   border-radius: 50%;
 }
-
+.zjy_lu{
+	width: 100%;
+	height: 1.5rem;
+	margin-bottom: 1rem;
+}
+.zjy_lu input{
+	width: 50%;
+	border: 1px solid #666;
+	height: 1.5rem;
+	border-radius: 9px;
+	text-indent: 10px;
+	
+}
+.zjy_lut_foot{
+	width: 100%;
+	height: 1.5rem;
+}
+.zjy_lut_foot input{
+	width: 50%;
+	height: 1.5rem;
+	border: 1px solid #666;
+	border-radius: 9px;
+	text-indent: 10px;
+}
+.zjy_lut_foot button{
+	width: 40%;
+	height: 1.5rem;
+	border: 1px solid #666;
+	border-radius: 9px;
+	outline: none;
+	background: none;
+	margin-left: 1rem;
+}
 .loaction-tacitly .tacitly-opt .active{
 	background: url("../../images/check.png") no-repeat 102%;
     width: .76rem;
