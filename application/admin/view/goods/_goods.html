@@ -491,6 +491,34 @@
                     <p class="notic">购买后得10天签到权限</p>
                 </dd>
             </dl>
+
+            <dl class="row">
+                <dt class="tit">
+                    <label>是否参加奖金池</label>
+                </dt>
+                <dd class="opt">
+                    <if condition="$goods['goods_id'] gt 0">
+                        <if condition="$goods['is_bonus'] eq 1">
+                            <span>是</span>
+                            <input name="is_bonus" value="1" type="hidden" disabled="disabled">
+                        <else/>
+                            <span>否</span>
+                            <input name="is_bonus" value="0" type="hidden" disabled="disabled">
+                        </if>
+                    <else/>
+                    <div class="onoff">
+                        <label for="is_bonus1" class="cb-enable <if condition='$goods.is_bonus eq 1'>selected</if>">是</label>
+                        <label for="is_bonus0" class="cb-disable <if condition='$goods.is_bonus eq 0'>selected</if>">否</label>
+                        <input class="is_bonus" id="is_bonus1" name="is_bonus" value="1" type="radio" <if condition="$goods[is_bonus] eq 1"> checked="checked"</if>>
+                        <input class="is_bonus" id="is_bonus0" name="is_bonus" value="0" type="radio" <if condition="$goods[is_bonus] eq 0"> checked="checked"</if>>
+                    </div>
+                    </if>
+                    <span class="err" id="err_is_virtual"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+
+            
             
             <dl class="row virtual" style="display: none;">
                 <dt class="tit">
