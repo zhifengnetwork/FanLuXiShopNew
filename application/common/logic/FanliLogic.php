@@ -158,7 +158,7 @@ class FanliLogic extends Model
               	$desc = "购买产品成为vip";
 	        	$log = $this->writeLog($user_info['user_id'],'',$desc,2); //写入日志
 		}
-		else if($this->goodId==$this->tgoodsid  && $order['pay_status']==1 && $user_info['level']!=3)//自动升级店主
+		else if($this->goodId==$this->tgoodsid  && $order['pay_status']==1 && $user_info['level']<3)//自动升级店主
 		{
 
 			$res_s = M('users')->where(['user_id'=>$user_id])->update(['level'=>3]);
