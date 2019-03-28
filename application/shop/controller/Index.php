@@ -15,7 +15,6 @@ class Index extends MobileBase {
             $user = session('user');
             $user = M('users')->where("user_id", $user['user_id'])->find();
             $shareid =  $user['user_id'];
-
         }
         $diy_index = M('mobile_template')->where('is_index=1')->field('template_html,block_info')->find();
         if($diy_index){
