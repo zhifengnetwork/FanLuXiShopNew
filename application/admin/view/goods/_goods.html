@@ -463,7 +463,7 @@
                 </dd>
             </dl>
 
-            <dl class="row">
+            <!-- <dl class="row">
                 <dt class="tit">
                     <label>签到免费领取</label>
                 </dt>
@@ -474,9 +474,25 @@
                     <span class="err" id="err_is_virtual"></span>
                     <p class="notic"></p>
                 </dd>
-            </dl>
+            </dl> -->
 
             <dl class="row">
+                    <dt class="tit">
+                        <label>是否签到免费领取</label>
+                    </dt>
+                    <dd class="opt">
+                        <div class="onoff">
+                                <label for="sign_free_receive" class="cb-enable <if condition='$goods.sign_free_receive eq 1'>selected</if>">是</label>
+                                <label for="sign_free_receive" class="cb-disable <if condition='$goods.sign_free_receive eq 0'>selected</if>">否</label>
+                                <input class="sign_free_receive" id="sign_free_receive" name="sign_free_receive" value="1" type="radio" <if condition="$goods[sign_free_receive] eq 1"> checked="checked"</if>>
+                                <input class="sign_free_receive" id="sign_free_receive" name="sign_free_receive" value="0" type="radio" <if condition="$goods[sign_free_receive] eq 0"> checked="checked"</if>>
+                        </div>
+                        <span class="err" id="err_is_bonus"></span>
+                        <p class="notic"></p>
+                    </dd>
+                </dl>
+
+            <!-- <dl class="row">
                 <dt class="tit">
                     <label>购买后得10天签到权限</label>
                 </dt>
@@ -490,7 +506,7 @@
                     <span class="err" id="err_buy_super_nsign"></span>
                     <p class="notic">购买后得10天签到权限</p>
                 </dd>
-            </dl>
+            </dl> -->
 
             <dl class="row">
                     <dt class="tit">
