@@ -83,6 +83,16 @@ class User extends MobileBase
         $level = Db::query('select level_name from tp_users as a,tp_user_level as b where a.level = b.level and a.user_id = '.$this->user_id);
         $this->assign('level',$level);
 
+        //当前登录用户信息
+        $logic = new UsersLogic();
+        $user_info = $logic->get_info($this->user_id); 
+        $order_info['waitPay'] = $user_info['result']['waitPay'];
+        $order_info['waitSend'] = $user_info['result']['waitSend'];
+        $order_info['waitReceive'] = $user_info['result']['waitReceive'];
+        $order_info['uncomment_count'] = $user_info['result']['uncomment_count'];
+        // dump($order_info);exit;
+        $this->assign('order_info', $order_info);
+
         return $this->fetch();
     }
 
