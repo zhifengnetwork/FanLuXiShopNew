@@ -17,7 +17,6 @@ class BonusPoolLogic extends Model
 	{
 		//订单中的所有产品
 		$orderGoods = M('order_goods')->where('order_id', $order['order_id'])->field('goods_num,is_bonus')->select();
-        
         //计算产品数量
         $nums = 0;
         foreach ($orderGoods as $key => $value) {
@@ -33,8 +32,6 @@ class BonusPoolLogic extends Model
 			  ->find();
 		if(!$user) return false;
 
-        $money = $this->put_in($order['shipping_price']);
-        dump($money);exit;
 		//开启事务
 		Db::startTrans();
 		try{
@@ -42,7 +39,7 @@ class BonusPoolLogic extends Model
 			$money = $this->put_in($order['shipping_price']);
 
 			//记录下级领取的日志
-			$this->write_log($nums, $money, $user, $order_id);
+			$this->write_log($nums, $money, $user, $order['order_id']);
 
 			//没有上级则不记录上级排名
 			if($user['first_leader']){
@@ -70,16 +67,14 @@ class BonusPoolLogic extends Model
 	public function put_in($shipping)
 	{
 		//获每个产品抽取的邮费
-		$bonus_pool = $this->getDate('bonus_pool');
-
-		//抽取邮费的百分比
-		$money = round($shipping * ($bonus_pool/100), 2);
+        $bonus_pool = $this->getDate('bonus_pool');
 		$bonus_total = $this->getDate('bonus_total');
-		$bonus_total = round(($bonus_total['bonus_total'] + $money), 2);
+        
+		//抽取邮费的百分比
+		$money = round($shipping * ((int)$bonus_pool['bonus_pool']/100), 2);
 
-        Db::name('users')->where('user_id', $user['user_id'])->setInc('distribut_free_num', $catId['goods_num']);// 分销领取次数减一
-		$result = Db::name('config')->where('name', 'bonus_total')
-				->update(['value' => $bonus_total]);
+        // 增加奖金池
+        $result = Db::name('config')->where('name', 'bonus_total')->update(['value' => $money + (real)$bonus_total['bonus_total']]);
 		if($result){
 			return $money;
 		}else{
@@ -233,22 +228,22 @@ class BonusPoolLogic extends Model
 	    M('bonus_log')->insert($data);
 	}
 
-	//获取奖励设置信息
-	public function getDate($data = '')
-	{
+    //获取奖励设置信息
+    public function getDate($data = '')
+    {
+        if(is_array($data)){
+            $condition['name'] = ['in', $data];
+        }else if($data != ''){
+            $condition['name'] = $data;
+        }else{
+            $condition = array();
+        }
 
-        $config = tpCache('bonus'); //配置信息
-		if(is_array($data)){
-			$result = $config;
-		}else if($data != ''){
-			$result = $config[$data];
-		}else{
-			$result = array();
-		}
-
-		return $result;
-	}
-
+        $result = M('config')->where($condition)
+                ->where('inc_type', 'bonus')
+                ->column('name, value');
+        return $result;
+    }
 
 	//判断是否满足条件
 	public function is_satisfy()

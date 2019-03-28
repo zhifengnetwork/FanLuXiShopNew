@@ -579,8 +579,6 @@ class Goods extends MobileBase
      */
     public function collect_goods()
     {
-        $a = update_pay_status('201903281513025377');
-        dump($a);exit;
         $goods_id = I('goods_id/d');
         $goodsLogic = new GoodsLogic();
         $result = $goodsLogic->collect_goods(cookie('user_id'), $goods_id);
