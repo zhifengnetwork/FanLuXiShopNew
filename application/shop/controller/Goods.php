@@ -232,7 +232,6 @@ class Goods extends MobileBase
           Session::set('shareid',$shareid);
         }else
         {
-            Session::delete('shareid');
         }
 
         C('TOKEN_ON', true);
