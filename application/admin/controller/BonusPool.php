@@ -37,11 +37,11 @@ class BonusPool extends Base {
     public function receive_log()
     {
         $map = $this->search();
-        $count = M('receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id', 'LEFT')
+        $count = M('bonus_receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id', 'LEFT')
                ->where($map)->count(); 
                
         $page = new Page($count, 2);
-        $receive_list = M('receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id', 'LEFT')
+        $receive_list = M('bonus_receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id', 'LEFT')
                 ->where($map)->field('users.nickname as leader, receive.*')->order('id DESC')
                 ->limit($page->firstRow, $page->listRows)->select();
 
