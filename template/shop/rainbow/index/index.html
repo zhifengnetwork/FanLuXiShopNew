@@ -171,20 +171,25 @@
 				<foreach name="favourite_goods" id="v">
 					<div class="recommend-info">
 						<div class="recommend-img">
-							<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id]))}"><img
+							<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id],'shareid'=>$shareid))}"><img
 									src="{$v[goods_id]|goods_thum_images=400,400}" alt=""></a>
 						</div>
 						<div class="recommend-text">
 							<div class="recommend-name">
-								<a href="{:U('Shop/goods/goods_info',array('id'=>$v['goods_id']))}">
+								<a href="{:U('Shop/goods/goods_info',array('id'=>$v['goods_id'],'shareids'=>1))}">
 									{$v.goods_name|getSubstr=0,33}
 								</a>
 							</div>
 							<div class="recommend-pic">
+<<<<<<< HEAD
 								<span class="pic-red">￥{$v.shop_price}</span>
                                 <a href="{:U('Goods/goodsList',['id'=>$v['cat_id']])}" title="{$v.goods_name}">
                                     <span class="guess-button J_ping">看相似</span>
                                 </a>
+=======
+								<span class="pic-red">￥&nbsp4540.00</span>
+								<span class="evaluation">评价:1019</span>
+>>>>>>> ceshi
 							</div>
 						</div>
 					</div>
