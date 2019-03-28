@@ -496,7 +496,7 @@
     <input type="hidden" name="prom_id" value="{$goods.prom_id}"/><!-- 活动ID -->
     <input type="hidden" name="exchange_integral" value="{$goods.exchange_integral}"/><!-- 积分 -->
     <input type="hidden" name="point_rate" value="{$tpshop_config['integral_point_rate']}"/><!-- 积分兑换比 -->
-    <input type="hidden" name="is_sign" value="{$goods.cat_id}"/><!-- 签到免费领取 -->
+    <input type="hidden" name="is_sign" value="{$goods.sign_free_receive}"/><!-- 签到免费领取 -->
     <input type="hidden" name="is_virtual" value="{$goods.is_virtual}"/><!-- 是否是虚拟商品 -->
     <input type="hidden" name="virtual_limit" id="virtual_limit" value="{$goods.virtual_limit|default=0}"/>
     <input type="hidden" name="deposit_price" value=""/><!-- 订金 -->
@@ -706,9 +706,9 @@
             }
 
             // 免费领取
-            if(is_sign == 584 || is_sign == 585){
+            if(is_sign != 0 ){
                 if (goods_num <= store_count) {
-                    sign_receive(is_sign, goods_num);
+                    sign_receive(is_sign,goods_num);
                     return;
                 }
             }
@@ -726,6 +726,14 @@
             if ($(this).hasClass('buy_bt_disable')) {
                 return;
             }
+                        // 免费领取
+            if(is_sign != 0 ){
+                if (goods_num <= store_count) {
+                    cart_sign_receive(is_sign,goods_num);
+                    return;
+                }
+            }
+
             var goods_id = $("input[name='goods_id']").val();
             AjaxAddCart(goods_id, 1);
 
@@ -828,23 +836,42 @@
     }
     
     //验证是否可以免费领取
-    function sign_receive(cat_id,num){
+    function sign_receive(type,num){
         $.ajax({
             type : "GET",
             dataType: "json",
-            url:"/index.php?m=shop&c=goods&a=sign_receive",//+tab,
-            data: {cat_id:cat_id,num:num},
+            url:"/index.php?m=Shop&c=goods&a=sign_receive",//+tab,
+            data: {type:type,num:num},
             success: function(data){
                 if(data.status == 0){
                     layer.open({content:data.msg, time:3});
                     return false;
                 }else{
-                    $('#buy_goods_form').attr('action', "{:U('Shop/Cart/cart2',['action'=>'buy_now'])}").submit();
+                    $('#buy_goods_form').attr('action', "{:U('shop/Cart/cart2',['action'=>'buy_now'])}").submit();
                 }
             }
         });
     }
 
+    //加入购物车验证是否可以免费领取
+    function cart_sign_receive(type,num){
+        $.ajax({
+            type : "GET",
+            dataType: "json",
+            url:"/index.php?m=mobile&c=goods&a=sign_receive",//+tab,
+            data: {type:type,num:num},
+            success: function(data){
+                if(data.status == 0){
+                    layer.open({content:data.msg, time:3});
+                    return false;
+                }else{
+                    var goods_id = $("input[name='goods_id']").val();
+                    AjaxAddCart(goods_id, 1);
+                }
+            }
+        });
+    }
+    
     //点击收藏商品
     function collect_goods(goods_id){
         $.ajax({

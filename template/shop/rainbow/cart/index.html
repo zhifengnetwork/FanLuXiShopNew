@@ -1,83 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8" />
-    <title>购物车--{$tpshop_config['shop_info_store_title']}</title>
-    <link rel="stylesheet" href="__STATIC__/css/style_yuanlai.css">
-    <link rel="stylesheet" type="text/css" href="__STATIC__/css/iconfont.css"/>
-    <script src="__STATIC__/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
-    <!--<script src="__STATIC__/js/zepto-1.2.0-min.js" type="text/javascript" charset="utf-8"></script>-->
-    <script src="__STATIC__/js/style.js" type="text/javascript" charset="utf-8"></script>
-    <script src="__STATIC__/js/mobile-util.js" type="text/javascript" charset="utf-8"></script>
-    <script src="__PUBLIC__/js/global.js"></script>
-    <script src="__STATIC__/js/layer.js"  type="text/javascript" ></script>
-    <script src="__STATIC__/js/swipeSlide.min.js" type="text/javascript" charset="utf-8"></script>
-    <link rel="shortcut icon" type="image/x-icon" href="{$tpshop_config.shop_info_store_ico|default='/public/static/images/logo/storeico_default.png'}" media="screen"/>
-</head>
-<body>
-        <div class="classreturn loginsignup ">
-                <div class="content">
-                    <div class="ds-in-bl return">
-                        <a href="javascript:history.back(-1)"> <img src="__STATIC__/images/return.png" alt="返回"></a>
-                    </div>
-                    <div class="ds-in-bl search center">
-                        <span>购物车</span>
-                    </div>
-                    <div class="ds-in-bl menu">
-                        <a href="javascript:void(0);"><img src="__STATIC__/images/class1.png" alt="菜单"></a>
-                    </div>
-                </div>
-            </div>
-            <div class="flool up-tpnavf-wrap tpnavf [top-header]">
-                <div class="footer up-tpnavf-head">
-                    <div class="up-tpnavf-i"> </div>
-                    <ul>
-                        <li>
-                            <a class="yello" href="{:U('Index/index')}">
-                                <div class="icon">
-                                    <i class="icon-shouye iconfont"></i>
-                                    <p>首页</p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{:U('Goods/categoryList')}">
-                                <div class="icon">
-                                    <i class="icon-fenlei iconfont"></i>
-                                    <p>分类</p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{:U('Cart/index')}">
-                                <div class="icon">
-                                    <i class="icon-gouwuche iconfont"></i>
-                                    <p>购物车</p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{:U('User/index')}">
-                                <div class="icon">
-                                    <i class="icon-wode iconfont"></i>
-                                    <p>我的</p>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        <script type="text/javascript">
-            
-        $(function(){	
-            $(window).scroll(function() {		
-                if($(window).scrollTop() >= 1){ 
-                    $('.tpnavf').hide()
-                }
-            })
-        })
-        </script>
-
+<include file="public/header" title="购物车" body=""/>
+<include file="public/header_nav" title="购物车" href="javascript:history.back(-1);"/>
 <style>
     .get_mp span.disable {
         cursor: default;
@@ -89,7 +11,7 @@
     <div class="loginlater">
         <img src="__STATIC__/images/small_car.png"/>
         <span>登录后可同步电脑和手机购物车</span>
-        <a href="{:U('Shop/User/loagin')}">登录</a>
+        <a href="{:U('Mobile/User/loagin')}">登录</a>
     </div>
 </if>
     <div class="cart_list">
@@ -97,7 +19,7 @@
         <div class="nonenothing" <notempty name="cartList">style="display: none"</notempty>>
             <img src="__STATIC__/images/nothing.png"/>
             <p>购物车暂无商品</p>
-            <a href="{:U('Shop/Index/index')}">去逛逛</a>
+            <a href="{:U('Mobile/Index/index')}">去逛逛</a>
         </div>
         <!--购物车没有商品-e-->
 
@@ -118,7 +40,7 @@
                                      </span>
                                 </div>
                                 <div class="shopimg fl">
-                                    <a href="{:U('Shop/Goods/goodsInfo',array('id'=>$cart[goods_id]))}">
+                                    <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$cart[goods_id]))}">
                                         <!--商品图片-->
                                         <img src="{$cart.goods_id|goods_thum_images=400,400,$cart[item_id]}">
                                     </a>
@@ -127,7 +49,7 @@
                                     <div class="deletes">
                                         <!--商品名-->
                                         <span class="similar-product-text fl">
-                                            <a href="{:U('Shop/Goods/goodsInfo',array('id'=>$cart[goods_id]))}">{$cart[goods_name]}</a>
+                                            <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$cart[goods_id]))}">{$cart[goods_name]}</a>
                                         </span>
                                         <!--删除按钮-->
                                         <a href="javascript:void(0);" class="delescj deleteGoods" data-cart-id="{$cart['id']}"><img src="__STATIC__/images/dele.png"/></a>
@@ -198,7 +120,7 @@
                              <!--</span>-->
                                     </div>
                                     <div class="shopimg fl">
-                                        <a href="{:U('Shop/Goods/goodsInfo',array('id'=>$cart[goods_id]))}">
+                                        <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$cart[goods_id]))}">
                                             <!--商品图片-->
                                             <img src="{$cart.goods_id|goods_thum_images=400,400,$cart[item_id]}">
                                         </a>
@@ -207,7 +129,7 @@
                                         <div class="deletes">
                                             <!--商品名-->
                                             <span class="similar-product-text fl">
-                                    <a href="{:U('Shop/Goods/goodsInfo',array('id'=>$cart[goods_id]))}">{$cart[goods_name]}</a>
+                                    <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$cart[goods_id]))}">{$cart[goods_name]}</a>
                                 </span>
                                             <!--删除按钮-->
                                             <a href="javascript:void(0);" class="delescj deleteGoods" data-cart-id="{$cart['id']}"><img src="__STATIC__/images/dele.png"/></a>
@@ -252,12 +174,12 @@
                                         <div class="radio fl  dpg-radios-class">
                                             <!--商品勾选按钮-->
                                             <span class="<if condition="$cart[selected] eq 1">check_t</if>">
-					                             <i class="dapei_icon_b">
-					                             </i>
-					                        </span>
+                                                 <i class="dapei_icon_b">
+                                                 </i>
+                                            </span>
                                         </div>
                                         <div class="shopimg fl">
-                                            <a href="{:U('Shop/Goods/goodsInfo',array('id'=>$cart_r[goods_id]))}">
+                                            <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$cart_r[goods_id]))}">
                                                 <!--商品图片-->
                                                 <img src="{$cart_r.goods_id|goods_thum_images=400,400,$cart_r[item_id]}">
                                             </a>
@@ -266,7 +188,7 @@
                                             <div class="deletes">
                                                 <!--商品名-->
                                                 <span class="similar-product-text fl">
-                                    <a href="{:U('Shop/Goods/goodsInfo',array('id'=>$cart_r[goods_id]))}">{$cart_r[goods_name]}</a>
+                                    <a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$cart_r[goods_id]))}">{$cart_r[goods_name]}</a>
                                 </span>
                                                 <!--删除按钮-->
                                                 <a href="javascript:void(0);" class="delescj deleteGoods" data-cart-id="{$cart_r['id']}"><img src="__STATIC__/images/dele.png"/></a>
@@ -351,7 +273,7 @@
         <ul>
             <foreach name="hot_goods" item="good">
                 <li>
-                    <a href="{:U('Shop/goods/goodsInfo',array('id'=>$good[goods_id]))}">
+                    <a href="{:U('Mobile/goods/goodsInfo',array('id'=>$good[goods_id]))}">
                         <div class="similer-product">
                             <img src="{$good[goods_id]|goods_thum_images=400,400}"/>
                             <span class="similar-product-text">{$good[goods_name]|getsubstr=0,20}</span>
@@ -397,7 +319,7 @@
         //选择数大于0
         if (j > 0) {
             //跳转订单页面
-            window.location.href = "{:U('Shop/Cart/cart2')}"
+            window.location.href = "{:U('Mobile/Cart/cart2')}"
         } else {
             layer.open({content: '请选择要结算的商品！', time: 2});
             return false;
@@ -426,7 +348,7 @@
         })
         $.ajax({
             type : "POST",
-            url:"{:U('Shop/Cart/AsyncUpdateCart')}",//,
+            url:"{:U('Mobile/Cart/AsyncUpdateCart')}",//,
             dataType:'json',
             data: {cart: cart},
             success: function(data){
@@ -529,7 +451,7 @@
     
     //勾选商品
     function checkGoods(obj){
-    	
+        
         if($(obj).hasClass('check_t')){
             //改变颜色
             $(obj).removeClass('check_t');
@@ -544,8 +466,8 @@
             //勾选选中
              $(obj).find('input').attr('checked',true);
            //          搭配购改变颜色
-     		 $(obj).parents(".Set-meal-wrap").find(".dpg-radios-class").children("span").addClass("check_t");
-       		  $(obj).parents(".Set-meal-wrap").find(".sc_list_icn").removeClass("sc_list-none");
+             $(obj).parents(".Set-meal-wrap").find(".dpg-radios-class").children("span").addClass("check_t");
+              $(obj).parents(".Set-meal-wrap").find(".sc_list_icn").removeClass("sc_list-none");
 
         }
 
@@ -555,14 +477,14 @@
                 $(".che").each(function(i,o){
                     $(this).addClass('check_t');
                      $(this).parents(".Set-meal-wrap").find(".dpg-radios-class").children("span").addClass("check_t");
-       		 		  $(this).parents(".Set-meal-wrap").find(".sc_list_icn").removeClass("sc_list-none");
+                      $(this).parents(".Set-meal-wrap").find(".sc_list_icn").removeClass("sc_list-none");
                     $(this).find('input').attr('checked',true);
                 })
             }else{
                 $(".che").each(function(i,o){
                     $(this).removeClass('check_t');
                      $(this).parents(".Set-meal-wrap").find(".dpg-radios-class").children("span").removeClass("check_t");
-                		  $(this).parents(".Set-meal-wrap").find(".sc_list_icn").addClass("sc_list-none");
+                          $(this).parents(".Set-meal-wrap").find(".sc_list_icn").addClass("sc_list-none");
                     $(this).find('input').attr('checked',false);
                 })
             }
@@ -609,7 +531,7 @@
         }
         $.ajax({
             type: "POST",
-            url: "{:U('Shop/Cart/changeNum')}",//+tab,
+            url: "{:U('Mobile/Cart/changeNum')}",//+tab,
             dataType: 'json',
             data: {cart: cart},
             success: function (data) {
@@ -640,7 +562,7 @@
                     layer.close(index);
                     $.ajax({
                         type : "POST",
-                        url:"{:U('Shop/Cart/delete')}",
+                        url:"{:U('Mobile/Cart/delete')}",
                         dataType:'json',
                         data: {cart_ids: cart_ids},
                         success: function(data){
@@ -747,6 +669,3 @@
 </script>
 </body>
 </html>
-
-
-

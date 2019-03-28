@@ -590,7 +590,7 @@ class Goods extends MobileBase
      */
     public function sign_receive()
     {
-        $cat_id = I('cat_id/d');
+        $type = I('type/d');
         $goods_num = I('num', 0);
 
         $user = Db::name('users')->where(['user_id' => cookie('user_id')])->find();
@@ -599,7 +599,7 @@ class Goods extends MobileBase
             $result = ['status' => -9, 'msg' => '未找到用户', 'result' => ''];
         }
 
-        $result = provingReceive($user, $cat_id, $goods_num);
+        $result = provingReceive($user, $type, $goods_num);
 
         $this->ajaxReturn($result);
     }

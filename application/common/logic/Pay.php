@@ -389,14 +389,36 @@ class Pay
     public function getUserSign()
     {
 
+//        $goodsModel = new Goods();
+//        $this->goods = $goodsModel::get($goods_id);
+
        if ($this->payList[0]['goods']->sign_free_receive != 0 ) {
             if ( $this->user['super_nsign'] != 0 || $this->user['is_distribut'] != 0 || $this->user['is_agent'] != 0 ) {
-                // 能否领取商品
-                $isReceive = provingReceive($this->user, $this->goods['sign_free_receive'], $this->totalNum);
+                $isReceive = provingReceive($this->user, $this->payList[0]['goods']->sign_free_receive, $this->totalNum);
+                //是代理又是分销的情况
+                if ( $this->user['is_agent'] == 1 && $this->payList[0]['goods']->sign_free_receive == 2) {
 
-                if($isReceive['status'] == 1){
-                    $this->orderAmount = $this->orderAmount - $this->goodsPrice;
-                    $this->signPrice = $this->goodsPrice;
+                    $data = M('order_sign_receive')->where('uid',$this->user['user_id'])->order('addend_time desc')->select();
+                    $newTimeM = date('m', time());//当前月份
+                    $addTimeM = date('m', $data[0]['addend_time']); //最近下单月份
+                    //代理每月可领取1次
+                    if ($newTimeM == $addTimeM ) {
+                        // 能否领取商品
+                        $isReceive = ['status' => 0] ;
+                    }
+                }
+                if($isReceive['status'] == 2){
+                    if ($this->payList[0]['goods']->sign_free_receive == 1) {
+                        // 免费领取的不限制数量
+                        $this->orderAmount = $this->orderAmount - $this->payList[0]['goods']->shop_price * $this->totalNum; // 应付金额
+                        $this->totalAmount = $this->totalAmount - $this->payList[0]['goods']->shop_price * $this->totalNum;
+                        $this->signPrice = $this->payList[0]['goods']->shop_price * $this->totalNum; //签到抵扣
+                    }else{
+                        // 代理商品只扣取一份价钱
+                        $this->orderAmount = $this->orderAmount - $this->payList[0]['goods']->shop_price; // 应付金额
+                        $this->totalAmount = $this->totalAmount - $this->payList[0]['goods']->shop_price;;
+                        $this->signPrice = $this->payList[0]['goods']->shop_price; //签到抵扣
+                    }
                 }
             }
         }

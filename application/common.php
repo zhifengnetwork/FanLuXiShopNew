@@ -1880,66 +1880,67 @@ function continue_sign($user_id){
     return $countSign;
 }
 
-    /*
-    * 判断是否可领取免费商品
-    * $user_id 用户id
-    * $cat_id 分类id
-    * $num 领取数量
-    */
-    function provingReceive($user, $cat_id, $num = 1){
-
-        if ($user['is_distribut'] == 0 && $cat_id == 584) {
-            $result = array('status'=>0,'msg'=>'成为分销商才可领取','result'=>array());
-            return $result;
-        }
-
-        if ($user['is_agent'] == 0 && $cat_id == 585) {
-            $result = array('status'=>0,'msg'=>'成为代理商才可领取','result'=>array());
-            return $result;
-        }
-
-        $data = M('order_sign_receive')->where('uid',$user['user_id'])->order('addend_time desc')->select();
-
-        $user = M('Users')->where('user_id',$user['user_id'])->find();
-
-        // 是分销并且有领取次数
-        if ($user['is_distribut'] == 1 && $cat_id == 584 &&  $user['distribut_free_num'] < $num ) {
-            $result = array('status'=>0,'msg'=>'没有领取资格，坚持签到可获得资格！','result'=>array());
-            return $result;
-        }
-        // 是代理并且有领取次数
-        if ($user['is_agent'] == 1 && $cat_id == 585 &&  $user['agent_free_num'] < $num ) {
-            $result = array('status'=>0,'msg'=>'没有领取资格，坚持签到可获得资格！','result'=>array());
-            return $result;
-        }
-
-        if(!empty($data)){
-
-            $newTimeM = date('m', time());//当前月份
-            $addTimeM = date('m', $data[0]['addend_time']); //最近下单月份
-
-            //代理超出领取次数
-            if ($user['is_agent'] == 1 && count($data)  == 12 ) {
-                $result = array('status'=>0,'msg'=>'已超出领取次数','result'=>array());
-                return $result;
-            }
-
-            //是代理又是分销的情况
-            if ( $user['is_agent'] == 1 && $user['is_distribut'] == 0) {
-                //代理每月可领取1次
-                if ($newTimeM == $addTimeM ) {
-                    $result = array('status'=>0,'msg'=>'本月已领取过了','result'=>array());
-                    return $result;
-                }
-            }
-
-            // $addTimeD = strtotime(date('Y-m-d', $data[0]['addend_time'])); //最近下单天份
-            // if ($addTimeD+259200 < time() && $this->user['is_agent'] == 1 ) {
-            //     $result = array('status'=>0,'msg'=>'3天内只能领取一次哦','result'=>array());
-            //     return $this->ajaxReturn($result);
-            // }
-
-        }
-
-        return array('status'=>1,'msg'=>'可领取','result'=>array());
+/*
+* 判断是否可领取免费商品
+* $user_id 用户id
+* $cat_id 分类id
+* $num 领取数量
+*/
+function provingReceive($user, $type, $num = 1)
+{
+    $data = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2])->order('addend_time desc')->select();
+    $user = M('Users')->where('user_id', $user['user_id'])->find();
+    //9.9产品(type=1)不是分销商不可领取
+    if ($user['is_distribut'] == 0 && $type == 1) {
+        $result = array('status' => 0, 'msg' => '成为分销商才可领取', 'result' => array());
+        return $result;
     }
+
+    // 是分销并且有领取次数
+    if ($user['is_distribut'] == 1 && $type == 1 && $user['distribut_free_num'] < $num) {
+        $result = array('status' => 0, 'msg' => '没有领取资格，坚持签到可获得资格！', 'result' => array());
+        return $result;
+    }
+
+    // if ($user['super_nsign'] == 0 && $type == 2) {
+    //     $result = array('status'=>0,'msg'=>'购买指定产品才可领取','result'=>array());
+    //     return $result;
+    // }
+    //没有领取资格走正常购物流程
+    if ($user['super_nsign'] == 0 && $type == 2) {
+        return array('status' => 1, 'msg' => '正常购物流程', 'result' => array());
+    }
+    // 是分销并且没有购买399 不可领取
+    if ($user['is_distribut'] == 1 && $type == 2 && $user['super_nsign'] == 0) {
+        $result = array('status' => 0, 'msg' => '没有领取资格，坚持签到可获得资格1！', 'result' => array());
+        return $result;
+    }
+    // 是代理或购买过指定产品并且有领取次数
+    if ($user['super_nsign'] == 1) {
+        if ($user['is_agent'] == 1 && $type == 2) {
+            if ($num > 1) {
+                return array('status' => 0, 'msg' => '超过领取数量，每月只能领取一件！', 'result' => array());
+            }
+
+            if ($user['agent_free_num'] < $num) {
+                return array('status' => 1, 'msg' => '正常购物流程', 'result' => array());
+            }
+        }
+    }
+    if (!empty($data)) {
+        $newTimeM = date('m', time());//当前月份
+        $addTimeM = date('m', $data[0]['addend_time']); //最近下单月份
+        //代理超出领取次数
+        if ($user['is_agent'] == 1 && count($data) == 12) {
+            $result = array('status' => 0, 'msg' => '已超出领取次数', 'result' => array());
+            return $result;
+        }
+        // $addTimeD = strtotime(date('Y-m-d', $data[0]['addend_time'])); //最近下单天份
+        // if ($addTimeD+259200 < time() && $this->user['is_agent'] == 1 ) {
+        //     $result = array('status'=>0,'msg'=>'3天内只能领取一次哦','result'=>array());
+        //     return $this->ajaxReturn($result);
+        // }
+    }
+    
+    return array('status' => 2, 'msg' => '可领取', 'result' => array());
+}
