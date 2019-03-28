@@ -7,32 +7,36 @@ class Reward extends Base {
 
     
 
-    public function list(){
+    public function lists(){
     	$Ad =  M('reward_config');
     	$res = $Ad->select();
-    	$this->assign('list',$list);// 赋值数据集
+    	$this->assign('list',$res);// 赋值数据集
     	return $this->fetch();
+    }
+     public function info(){
+        $act = I('get.act','add');
+        $this->assign('act',$act);
+        $id = I('get.id');
+        if($id){
+            $reward_info = D('reward_config')->where('reward_id='.$id)->find();
+            $this->assign('info',$reward_info);
+        }
+        return $this->fetch();
     }
     
     public function rewardaction(){
     	$data = I('post.');
        // $data['topic_content'] = $_POST['topic_content']; // 这个内容不做转义
     	if($data['act'] == 'add'){
-    		$data['ctime'] = time();
-    		$find = db('topic')->where(['topic_title'=>$data['topic_title']])->find();
-    		if($find){$this->ajaxReturn(['status'=>0,'msg'=>'已存在改标题','result'=>'']);}
-    		$r = D('topic')->add($data);
+    		$r = D('reward_config')->add($data);
     	}
     	if($data['act'] == 'edit'){
-    	    $where['topic_title'] = $data['topic_title'];
-    	    $where['topic_id'] = array('neq',$data['topic_id']);
-            $find = db('topic')->where($where)->find();
-            if($find){$this->ajaxReturn(['status'=>0,'msg'=>'已存在改标题','result'=>'']);}
-    		$r = D('topic')->where('topic_id='.$data['topic_id'])->save($data);
+
+    		$r = D('topic')->where('reward_id='.$data['reward_id'])->save($data);
     	}
     	 
     	if($data['act'] == 'del'){
-    		$r = D('topic')->where('topic_id='.$data['topic_id'])->delete();
+    		$r = D('reward_config')->where('reward_id='.$data['reward_id'])->delete();
     		if($r) exit(json_encode(1));
     	}
     	 
