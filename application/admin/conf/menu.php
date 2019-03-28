@@ -214,7 +214,7 @@ return array(
                 array('name' => '奖励日志列表', 'act' => 'bonus_log', 'op' => 'BonusPool'),
 			)),
                  array('name' => '统计记录', 'child' => array(
-                 array('name' => '业绩奖励设置', 'act' => 'list', 'op' => 'Reward'),
+                 array('name' => '业绩奖励设置', 'act' => 'lists', 'op' => 'Reward'),
                  array('name' => '业绩统计列表', 'act' => 'preform', 'op' => 'PreForm'),
                  array('name' => '会员返利/升级', 'act' => 'checklog', 'op' => 'PreForm'),
             )),

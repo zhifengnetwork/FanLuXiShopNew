@@ -189,7 +189,7 @@ class FanliLogic extends Model
 	{
 		$user_info = M('users')->where('user_id',$user_id)->field('first_leader,level')->find();
        //只有店主，总监，大区董事推荐店主才能的到店主推荐金额
-		 if( $parent_info['level']==4 || $parent_info['level']==5)//
+		 if($parent_info['level']==3 $parent_info['level']==4 || $parent_info['level']==5)//
 		 {
 		//计算返利金额
 		  $fanli = M('user_level')->where('level',$parent_info['level'])->field('rate','reward')->find();
