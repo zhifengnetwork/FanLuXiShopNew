@@ -80,21 +80,25 @@ class FanliLogic extends Model
 		          {
 		          	$fanli['rate'] = $rebase[$parent_info['level']];
 		          }
+		          //echo Session::get('shareid');exit;
 		      //判断是否分享返利
-		    	if(!empty(Session::get('shareid')) && Session::get('shareid')!=$user_info['user_id'])
+		          $user_id_new =Session::get('shareid');
+		    	if(!empty($user_id_new) && $user_id_new!=$user_info['user_id'])
 		    	{
-		    		$user_id_new =Session::get('shareid');
-		    		$user_info_new = M('users')->where('user_id',$user_id_new)->field('level')->find();
+
+		    		
+		    	  $user_info_new = M('users')->where('user_id',$user_id_new)->field('level')->find();
 		           //计算返利金额
 		          $goods = $this->goods();
+		          $fanli = M('user_level')->where('level',$user_info_new['level'])->field('rate')->find();
 		          $commission = $goods['shop_price'] * ($fanli['rate'] / 100) * $this->goodNum; //计算佣金
 		         // print_R($goods['shop_price'].'-'.$this->goodNum.'-'.$fanli['rate']);exit;
 		          //按上一级等级各自比例分享返利
-		          $bool = M('users')->where('user_id',$user_info_new)->setInc('user_money',$commission);
+		          $bool = M('users')->where('user_id',$user_id_new)->setInc('user_money',$commission);
 
 			      if ($bool !== false) {
 			        	$desc = "分享返利";
-			        	$log = $this->writeLog($user_info_new['first_leader'],$commission,$desc,1); //写入日志
+			        	$log = $this->writeLog($user_id_new,$commission,$desc,1); //写入日志
 			        	Session::delete('shareid');
 			            //检查返利管理津贴
 			           // $this->jintie($user_info['first_leader'],$commission);
