@@ -137,12 +137,27 @@
 }
 .user-nav-zp li{
 	margin: 0 0.48rem;
+	position: relative;
 }
 .user-nav-zp li img{
 	width: 0.4rem;
 	height: 0.33rem;
 	display: block;
 	margin: 0.1rem auto;
+}
+.user-nav-zp li span{
+	width: .26rem;
+	height: .26rem;
+	text-align: center;
+	line-height: 0.26rem;
+    background: red;
+    border-radius: 50%;
+    color: #fff;
+	display: inline-block;
+	font-size: 0.22rem;
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 .user-nav-zp li p{
 	color: #151515;
@@ -160,6 +175,9 @@
 .wallet-zp ul li img{
 	width: 0.4rem;
 	height: 0.4rem;
+}
+.wallet-zp ul li a{
+	color: #151515;
 }
 .wallet-zp ul li p{
 	font-size: 0.24rem;
