@@ -62,7 +62,7 @@ class FanliLogic extends Model
 		//echo $this->goodId.'-'.$this->tgoodsid.'-'.$user_info['level'];exit;
         if($this->goodId==$this->tgoodsid )
         {
-        	if($user_info['level']<2)
+        	if($user_info['level']<=2)
         	{
         		$this->addhostmoney($user_id,$parent_info);
         	}
@@ -187,6 +187,7 @@ class FanliLogic extends Model
     //推荐店主获得金额
 	public function addhostmoney($user_id,$parent_info)
 	{
+		echo 2222;exit;
 		$user_info = M('users')->where('user_id',$user_id)->field('first_leader,level')->find();
        //只有店主，总监，大区董事推荐店主才能的到店主推荐金额
 		 if($parent_info['level']==3 || $parent_info['level']==4 || $parent_info['level']==5)//
