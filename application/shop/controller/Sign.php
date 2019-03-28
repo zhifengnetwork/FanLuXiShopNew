@@ -89,7 +89,6 @@ class Sign extends MobileBase {
         if($cunzai){
             return $this->ajaxReturn(['status'=>1,'msg'=>'今日已签到','date'=>$date]);
         }else{
-
             /*// 连续签到
             $days = continue_sign($user_id);
             return $this->ajaxReturn(['status'=>0,'msg'=>$days]);*/
@@ -141,6 +140,12 @@ class Sign extends MobileBase {
                             //变更这几次的签到记录中的标志值
                             M('sign_log')->where(['user_id'=>$user_id])->order('sign_day desc')->limit($sign_distribut_days)->save(['sign_distribut'=>1]);
                         }
+                    }
+                    $config = Db::query("select value from tp_config where name='sign_require_level' and inc_type='sign' ");
+                    $day_num = continue_sign($user_id);
+                    $every_nums = is_int($day_num/$config[0]['value']);
+                    if($every_nums==1){
+                        $user = Db::query("UPDATE tp_users SET sign_free_num=sign_free_num+1 where user_id=$user_id ");
                     }
                     return $this->ajaxReturn(['status'=>1,'msg'=>'签到成功','date'=>$date]);
                 }else{
