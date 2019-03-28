@@ -97,7 +97,7 @@ class BonusPoolLogic extends Model
 			'create_time' => time(),
 			'desc' => '领取'.$nums.'个商品',
 		);
-		$result = Db::name('receive_log')->insert($data);
+		$result = Db::name('bonus_receive_log')->insert($data);
 		return $result;	
 	}
 
