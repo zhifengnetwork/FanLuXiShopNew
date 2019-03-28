@@ -12,7 +12,7 @@ use app\common\model\GoodsCategory;
 use think\AjaxPage;
 use think\Page;
 use think\Db;
-
+use think\Session;
 class Goods extends MobileBase
 {
     public function index()
@@ -224,6 +224,17 @@ class Goods extends MobileBase
      */
     public function goodsInfo()
     {
+        $shareid = I('shareid');
+        if(!empty($shareid) && !session('?user'))
+        {
+          $user = M('users')->where("user_id", $shareid)->find();
+          $shareid =  $user['user_id'];
+          Session::set('shareid',$shareid);
+        }else
+        {
+            Session::delete('shareid');
+        }
+
         C('TOKEN_ON', true);
         $goodsLogic = new GoodsLogic();
         $goods_id = I("get.id/d");

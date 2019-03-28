@@ -5,10 +5,18 @@ namespace app\shop\controller;
 
 use Think\Db;
 use app\common\logic\wechat\WechatUtil;
-
+use app\common\util\Session;
 class Index extends MobileBase {
 
     public function index(){
+        $shareid = I('shareid');
+
+        if (session('?user') && empty($shareid)) {
+            $user = session('user');
+            $user = M('users')->where("user_id", $user['user_id'])->find();
+            $shareid =  $user['user_id'];
+
+        }
         $diy_index = M('mobile_template')->where('is_index=1')->field('template_html,block_info')->find();
         if($diy_index){
             $html = htmlspecialchars_decode($diy_index['template_html']);
@@ -16,10 +24,12 @@ class Index extends MobileBase {
             $this->assign('wap_logo',$logo);
             $this->assign('html',$html);
             $this->assign('is_index',"1");
+
             $this->assign('info',$diy_index['block_info']);
             return $this->fetch('index2');
             exit();
         }
+         $this->assign('shareid',$shareid);
         /*
             //获取微信配置
             $wechat_list = M('wx_user')->select();
