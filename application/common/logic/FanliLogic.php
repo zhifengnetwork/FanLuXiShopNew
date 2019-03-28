@@ -166,7 +166,7 @@ class FanliLogic extends Model
 	        $log = $this->writeLog($user_info['user_id'],'398',$desc,2); //写入日志
 	        if($res_s)
 	        {
-	        	$this->addhostmoney2();//产生店主获得金额和津贴
+	        	$this->addhostmoney2($user_info['user_id']);//产生店主获得金额和津贴
 	        }
 		}
 		else if($user_info['level']==3)//自动升级总监
@@ -249,6 +249,7 @@ class FanliLogic extends Model
 	       $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
 	       	$desc = "推荐店主获得金额";
 	        $log = $this->writeLog($user_info['first_leader'],$commission,$desc,4); //写入日志
+	        return true;
 		}
 
 	}
