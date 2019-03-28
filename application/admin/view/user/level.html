@@ -72,10 +72,10 @@
                     <label for="discount">直推分享购物返利</label>
                 </dt>
                 <dd class="opt">
-					<select name="rebate_id">
+					<select name="rebate">
 						<option value="0">选择返利等级</option>
 						<volist name="level" id="vo">
-						<option value="{$vo.level}" <if condition="$info['rebate_id'] eq $vo['rebate_id']"> selected</if>>{$vo.level_name}</option>
+						<option value="{$vo.level}" <if condition="$info['rebate'] eq $vo['rebate']"> selected</if>>{$vo.level_name}</option>
 						</volist>
 					</select>
                     <input type="text" name="rate" value="{$info.rate}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
@@ -108,6 +108,62 @@
 			        <p class="notic">设置免费领取产品数量(付邮费)。</p>
 			    </dd>
 			</dl>
+			<if condition="$info['level'] eq 4">
+			<dl class="row">
+                <dt class="tit">
+                    直属店主邀店主
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="y_reward" value="{$info.y_reward}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">直属店主邀店主得到奖励</p>
+                </dd>
+            </dl>
+            </if>
+            <if condition="$info['level'] eq 5">
+			<dl class="row">
+                <dt class="tit">
+                   直属店主邀店主
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="y_reward" value="{$info.y_reward}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">直属店主邀店主得到奖励</p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                   总监的店主邀店主
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="s_reward" value="{$info.s_reward}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">总监的店主邀店主得到奖励</p>
+                </dd>
+            </dl>
+                <dl class="row">
+                <dt class="tit">
+                   直属总监的店主邀店主
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="k_reward" value="{$info.k_reward}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">直属总监的店主邀店主得到奖励</p>
+                </dd>
+            </dl>
+            </if>
+            <if condition="$info['level'] gt 3">
+            <dl class="row">
+                <dt class="tit">
+                   管理津贴
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="jintie" value="{$info.jintie}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">单位%</p>
+                </dd>
+            </dl>
+            </if>
             <dl class="row">
                 <dt class="tit">
                     等级描述
