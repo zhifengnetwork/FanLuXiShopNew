@@ -82,33 +82,7 @@ class FanliLogic extends Model
 		          }
 		          //echo Session::get('shareid');exit;
 		      //判断是否分享返利
-		          $user_id_new =Session::get('shareid');
-		    	if(!empty($user_id_new) && $user_id_new!=$user_info['user_id'])
-		    	{
-
-		    		
-		    	  $user_info_new = M('users')->where('user_id',$user_id_new)->field('level')->find();
-		           //计算返利金额
-		          $goods = $this->goods();
-		          $fanli = M('user_level')->where('level',$user_info_new['level'])->field('rate')->find();
-		          $commission = $goods['shop_price'] * ($fanli['rate'] / 100) * $this->goodNum; //计算佣金
-		         // print_R($goods['shop_price'].'-'.$this->goodNum.'-'.$fanli['rate']);exit;
-		          //按上一级等级各自比例分享返利
-		          $bool = M('users')->where('user_id',$user_id_new)->setInc('user_money',$commission);
-
-			      if ($bool !== false) {
-			        	$desc = "分享返利";
-			        	$log = $this->writeLog($user_id_new,$commission,$desc,1); //写入日志
-			        	Session::delete('shareid');
-			            //检查返利管理津贴
-			           // $this->jintie($user_info['first_leader'],$commission);
-			        	//return true;
-			         } else {
-			        	return false;
-			         }
-                }else
-                {
-               	 // if(empty($user_info['first_leader'])) return false;//如果没有上一级则返回
+               	// if(empty($user_info['first_leader'])) return false;//如果没有上一级则返回
 
 	          //查询会员等级返利数据
 		        if($parent_info['level']!=1 && !empty($parent_info)){ //上一级是普通会员则不反钱
@@ -131,7 +105,6 @@ class FanliLogic extends Model
 			     }else{
 			     	return false;
 			     }
-               }
 
 		    }elseif($user_info['level']>=2) //是复购
 		    {
@@ -167,8 +140,6 @@ class FanliLogic extends Model
 	
 		
 	    }
-	
-		
 
 	}
 	//会员升级
