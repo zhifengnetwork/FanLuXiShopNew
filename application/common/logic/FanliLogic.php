@@ -64,7 +64,7 @@ class FanliLogic extends Model
         {
         	if($user_info['level']<=2)
         	{
-        		$this->addhostmoney($user_id,$parent_info);
+        		$this->addhostmoney($user_info['user_id'],$parent_info);
         	}
              $this->ppInvitation($user_info['first_leader']);//总监下线推荐店主金额
              $this->ccInvitation($user_info['first_leader']);//大区下线推荐店主金额
@@ -165,7 +165,7 @@ class FanliLogic extends Model
 	        $log = $this->writeLog($user_info['user_id'],'398',$desc,2); //写入日志
 	        if($res_s)
 	        {
-	        	$this->addhostmoney2($$user_info['user_id']);//产生店主获得金额和津贴
+	        	$this->addhostmoney2($user_info['user_id']);//产生店主获得金额和津贴
 	        }
 		}
 		else if($user_info['level']==3)//自动升级总监
@@ -195,7 +195,7 @@ class FanliLogic extends Model
 		  $fanli = M('user_level')->where('level',$parent_info['level'])->field('rate','reward')->find();
           $goods = $this->goods();
           $commission = $fanli['reward']; //计算金额
-
+          
          // print_R($goods['shop_price'].'-'.$this->goodNum.'-'.$fanli['rate']);exit;
           //按上一级等级各自比例分享返利
           $bool = M('users')->where('user_id',$user_info['first_leader'])->setInc('user_money',$commission);
