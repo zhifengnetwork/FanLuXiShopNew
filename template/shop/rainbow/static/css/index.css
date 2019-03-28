@@ -135,10 +135,12 @@ img{
     width: .86rem;
     height: .92rem;
 }
-
-.searchMsg>img{
-    width: .66rem;
-    height: .55rem;
+.searchMsg a{
+    color:#fff;
+}
+.searchMsg>a>img{
+    width: .62rem;
+    height: .56rem;
     padding:.2rem .2rem .2rem .0rem;
 }
 

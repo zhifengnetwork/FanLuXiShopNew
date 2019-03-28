@@ -30,32 +30,25 @@
 				<div class="searchInput">搜索</div>
 			</div>
 			<div class="searchMsg">
-				<img src="__STATIC__/images/xinxi.png" alt="">
+                <if condition="$user_id gt 0">
+                    <a href="{:U('Shop/User/index')}"> <img class="after_login" src="__STATIC__/images/my.png"></a>
+                <else/>
+                    <a href="{:U('Shop/User/login')}"> 登录</a>
+                </if>
 			</div>
 		</header>
 		<!-- 轮播图 -->
 		<div class="swiper-container">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide">
-					<a href="javascript:;">
-						<img src="__STATIC__/images/t_1.jpg" alt="">
-					</a>
-				</div>
-				<div class="swiper-slide">
-					<a href="javascript:;">
-						<img src="__STATIC__/images/t_2.jpg" alt="">
-					</a>
-				</div>
-				<div class="swiper-slide">
-					<a href="javascript:;">
-						<img src="__STATIC__/images/t_3.jpg" alt="">
-					</a>
-				</div>
-				<div class="swiper-slide">
-						<a href="javascript:;">
-							<img src="__STATIC__/images/t_4.jpg" alt="">
-						</a>
-					</div>
+
+                <adv pid="9" limit="5" item="v">
+    				<div class="swiper-slide">
+                        <a href="{$v.ad_link}">
+                            <img src="{$v[ad_code]}" title="{$v[title]}" style="{$v[style]}" alt="">
+                        </a>
+    				</div>
+                </adv>
+
 			</div>
 			<div class="swiper-pagination"></div>
 			<!-- 如果需要滚动条 -->
@@ -188,8 +181,10 @@
 								</a>
 							</div>
 							<div class="recommend-pic">
-								<span class="pic-red">￥&nbsp4540.00</span>
-								<span class="evaluation">评价:109</span>
+								<span class="pic-red">￥{$v.shop_price}</span>
+                                <a href="{:U('Goods/goodsList',['id'=>$v['cat_id']])}" title="{$v.goods_name}">
+                                    <span class="guess-button J_ping">看相似</span>
+                                </a>
 							</div>
 						</div>
 					</div>
