@@ -1206,42 +1206,22 @@ footer .flool3 p {
     margin:auto;
     overflow:hidden;
 }
-.loginsingup-input {
-    background-color:#fff;
-    padding:0 1.92rem;
-    color:#333;
-    font-size:.64rem;
-}
-.loginsingup-input .lsu {
-    border-bottom:1px solid #dbdbdb;
-    height:2.133333rem;
-    padding:.853333rem .64rem .426667rem;
-}
-.loginsingup-input input {
-    border:0;
-    outline:none;
-}
-.loginsingup-input .lsu  input {
-    float:left;
-    width:8.96rem;
-    height:.853333rem;
-    padding:0 .426667rem;
-    line-height:.853333rem;
-    font-size:.554667rem;
-    color:#333;
-}
+
 .z-submits {
     width:10.96rem !important;
     background:#EC6909 !important;
     color:#fff !important;
 }
 .loginsingup-input .lsu .ico {
-    float:left;
     width:.853333rem;
     height:.853333rem;
     background-image:url(../images/ico-login-m.png);
     background-repeat:no-repeat;
     background-size:.853333rem 5.973331rem;
+    position: absolute;
+    top: .36rem;
+    z-index: 1;
+    left: .17rem;
 }
 .loginsingup-input .ico-username {
     background-position:0 0;
@@ -1264,12 +1244,7 @@ footer .flool3 p {
 .loginsingup-input .ico-email {
     background-position:0 -5.11999rem;
 }
-.loginsingup-input .lsu .v-code-input {
-    width:5.12rem;
-}
-.loginsingup-input .lsu .v-code-input {
-    width:5.12rem;
-}
+
 .loginsingup-input .lsu-recharge>span,.loginsingup-input .lsu-v-code>span {
     float:left;
     width:3.2rem;
@@ -1382,7 +1357,7 @@ input:-ms-input-placeholder {
     width:4.266667rem;
     height:.853333rem;
 }
-.loginsingup-input .btn-text-message {
+/*.loginsingup-input .btn-text-message {
     float:right;
     height:.853333rem;
     line-height:.853333rem;
@@ -1391,7 +1366,7 @@ input:-ms-input-placeholder {
     color:#e02015;
     border:1px solid #e02015;
     border-radius:.426667rem;
-}
+}*/
 .loginsingup-input .lsu-submit {
     padding:.853333rem 0;
 }
