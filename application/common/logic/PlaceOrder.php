@@ -330,7 +330,7 @@ class PlaceOrder
         }
         $payList = $this->pay->getPayList();
         $goods_ids = get_arr_column($payList,'goods_id');
-        $goodsArr = Db::name('goods')->where('goods_id', 'IN', $goods_ids)->getField('goods_id,cat_id,cost_price,give_integral');
+        $goodsArr = Db::name('goods')->where('goods_id', 'IN', $goods_ids)->getField('goods_id,cat_id,is_bonus,cost_price,give_integral');
         $orderGoodsAllData = [];
         foreach ($payList as $payKey => $payItem) {
             if($this->pay->getGoodsPrice() ==0){  //清华要求加上
@@ -360,7 +360,7 @@ class PlaceOrder
                 $orderGoodsData['item_id'] = 0; // 商品规格id
             }
             $orderGoodsData['sku'] = $payItem['sku']; // sku
-            $orderGoodsData['is_bonus'] = $payItem['is_bonus']; // 是否参加奖金池商品
+            $orderGoodsData['is_bonus'] = $goodsArr[$payItem['goods_id']]['is_bonus']; // 是否参加奖金池商品
             $orderGoodsData['member_goods_price'] = $payItem['member_goods_price']; // 会员折扣价
             $orderGoodsData['give_integral'] = $goodsArr[$payItem['goods_id']]['give_integral']; // 购买商品赠送积分
             if ($payItem['prom_type']) {

@@ -1889,7 +1889,6 @@ function continue_sign($user_id){
 */
 function provingReceive($user, $type, $num = 1)
 {
-    $data = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2])->order('addend_time desc')->select();
     $user = M('Users')->where('user_id', $user['user_id'])->find();
     //店主以上可领取
     if ($user['level'] < 3) {
@@ -1903,41 +1902,5 @@ function provingReceive($user, $type, $num = 1)
         return $result;
     }
 
-    //没有领取资格走正常购物流程
-    if ($user['super_nsign'] == 0 && $type == 2) {
-        return array('status' => 1, 'msg' => '正常购物流程', 'result' => array());
-    }
-    // 是分销并且没有购买399 不可领取
-    if ($user['is_distribut'] == 1 && $type == 2 && $user['super_nsign'] == 0) {
-        $result = array('status' => 0, 'msg' => '没有领取资格，坚持签到可获得资格1！', 'result' => array());
-        return $result;
-    }
-    // 是代理或购买过指定产品并且有领取次数
-    if ($user['super_nsign'] == 1) {
-        if ($user['is_agent'] == 1 && $type == 2) {
-            if ($num > 1) {
-                return array('status' => 0, 'msg' => '超过领取数量，每月只能领取一件！', 'result' => array());
-            }
-
-            if ($user['agent_free_num'] < $num) {
-                return array('status' => 1, 'msg' => '正常购物流程', 'result' => array());
-            }
-        }
-    }
-    if (!empty($data)) {
-        $newTimeM = date('m', time());//当前月份
-        $addTimeM = date('m', $data[0]['addend_time']); //最近下单月份
-        //代理超出领取次数
-        if ($user['is_agent'] == 1 && count($data) == 12) {
-            $result = array('status' => 0, 'msg' => '已超出领取次数', 'result' => array());
-            return $result;
-        }
-        // $addTimeD = strtotime(date('Y-m-d', $data[0]['addend_time'])); //最近下单天份
-        // if ($addTimeD+259200 < time() && $this->user['is_agent'] == 1 ) {
-        //     $result = array('status'=>0,'msg'=>'3天内只能领取一次哦','result'=>array());
-        //     return $this->ajaxReturn($result);
-        // }
-    }
-    
     return array('status' => 2, 'msg' => '可领取', 'result' => array());
 }
