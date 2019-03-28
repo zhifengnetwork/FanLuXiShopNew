@@ -879,7 +879,7 @@ class User extends MobileBase
                 if($res!==false){
                     $source = I('source');
                     !empty($source) && $this->success('绑定成功', U("User/$source"));
-                    $this->success('修改成功',U('User/userinfo'));
+                    $this->success('修改成功',U('User/personal'));
                 }
                 $this->error('修改失败');
             }

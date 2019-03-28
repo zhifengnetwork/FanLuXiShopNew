@@ -1890,22 +1890,18 @@ function provingReceive($user, $type, $num = 1)
 {
     $data = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2])->order('addend_time desc')->select();
     $user = M('Users')->where('user_id', $user['user_id'])->find();
-    //9.9产品(type=1)不是分销商不可领取
-    if ($user['is_distribut'] == 0 && $type == 1) {
-        $result = array('status' => 0, 'msg' => '成为分销商才可领取', 'result' => array());
+    //店主以上可领取
+    if ($user['level'] < 3) {
+        $result = array('status' => 0, 'msg' => '店主以上级别才可领取', 'result' => array());
         return $result;
     }
 
     // 是分销并且有领取次数
-    if ($user['is_distribut'] == 1 && $type == 1 && $user['distribut_free_num'] < $num) {
+    if ($user['level'] >= 3 && $type == 1 && $user['distribut_free_num'] < $num) {
         $result = array('status' => 0, 'msg' => '没有领取资格，坚持签到可获得资格！', 'result' => array());
         return $result;
     }
 
-    // if ($user['super_nsign'] == 0 && $type == 2) {
-    //     $result = array('status'=>0,'msg'=>'购买指定产品才可领取','result'=>array());
-    //     return $result;
-    // }
     //没有领取资格走正常购物流程
     if ($user['super_nsign'] == 0 && $type == 2) {
         return array('status' => 1, 'msg' => '正常购物流程', 'result' => array());
