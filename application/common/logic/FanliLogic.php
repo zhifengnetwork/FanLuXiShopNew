@@ -150,8 +150,9 @@ class FanliLogic extends Model
 
 		 $order = M('order')->where(['order_id'=>$this->orderId])->find();
 		 $user_info = M('users')->where('user_id',$user_id)->field('first_leader,level,is_code,user_id')->find();
-
-		if( $order['pay_status']==1 && $user_info['level']==1)//自动升级vip
+        $goodid = $this->goodId;
+        $tgoodsid =$this->tgoodsid;
+		if( $order['pay_status']==1 && $user_info['level']==1 && $goodid!=$tgoodsid)//自动升级vip
 		{
               $res = M('users')->where(['user_id'=>$user_id])->update(['level'=>2]);
               	$desc = "购买产品成为vip";
