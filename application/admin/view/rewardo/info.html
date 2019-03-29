@@ -50,8 +50,9 @@
            
         </div>
         <input type="hidden" name="act" value="{$act}">
-        <input type="hidden" name="topic_id" value="{$info.reward}">
+        <input type="hidden" name="reward_id" value="{$info.reward_id}">
         <input type="hidden" id="topic_state" name="topic_state" value="2">
+        
     </form>
 </div>
 <script type="text/javascript">
@@ -88,7 +89,7 @@
         $('#topic_state').val(state);
         $.ajax({
             type: "POST",
-            url: "{:U('Admin/Reward/rewardaction')}",
+            url: "{:U('Admin/Rewardo/rewardaction')}",
             data: $('#handleposition').serialize(),
             dataType: "json",
             error: function () {
@@ -97,7 +98,7 @@
             success: function (data) {
                 if (data.status === 1) {
                     layer.msg(data.msg, {icon: 1,time: 1000}, function() {
-                        location.href = "{:U('Admin/Reward/lists')}";
+                        location.href = "{:U('Admin/Rewardo/lists')}";
                     });
                 } else if(data.status === 0) {
                     submitStatus = true;
