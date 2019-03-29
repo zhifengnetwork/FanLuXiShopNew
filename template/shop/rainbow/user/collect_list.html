@@ -4,7 +4,8 @@
 <if condition="empty($goods_list)" >
     <!--没有收藏-s-->
     <div class="comment_con p">
-        <div class="none"><img src="__STATIC__/images/none.png"><br><br>亲，此处还没有收藏哦~</div>
+        <div class="none"><img src="__STATIC__/images/none.png"><br><br>亲，此处还没有收藏哦~<br><br>
+        <a href="/Shop/Goods/goodsList">去逛逛</a></div>
     </div>
     <!--没有收藏-e-->
 <else/>
@@ -30,10 +31,10 @@
             </ul>
         </div>
     </div>
+    <div class="comment_con p">
+        <div class="none">到底啦~</div>
+    </div>
 </if>
-<!--底部导航-start-->
-<include file="public/footer_nav"/>
-<!--底部导航-end-->
 <script type="text/javascript" src="__STATIC__/js/sourch_submit.js"></script>
 <script  type="text/javascript" charset="utf-8">
     /**
