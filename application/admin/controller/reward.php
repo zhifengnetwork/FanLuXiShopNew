@@ -5,7 +5,6 @@ use think\Page;
 
 class Reward extends Base {
 
-    
 
     public function lists(){
     	$Ad =  M('reward_config');
