@@ -3,7 +3,7 @@
 namespace app\admin\controller;
 use think\Page;
 
-class Reward extends Base {
+class Rewardnew extends Base {
 
     public function lists(){
     	$Ad =  M('reward_config');
@@ -30,7 +30,7 @@ class Reward extends Base {
     	}
     	if($data['act'] == 'edit'){
 
-    		$r = D('topic')->where('reward_id='.$data['reward_id'])->save($data);
+    		$r = D('reward_config')->where('reward_id='.$data['reward_id'])->save($data);
     	}
     	 
     	if($data['act'] == 'del'){
