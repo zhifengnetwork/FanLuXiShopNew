@@ -3,7 +3,11 @@
 namespace app\admin\controller;
 use think\Page;
 
+<<<<<<< HEAD:application/admin/controller/reward.php
 class Reward extends Base {
+=======
+class Rewardo extends Base {
+>>>>>>> ceshi:application/admin/controller/Rewardo.php
 
     public function lists(){
     	$Ad =  M('reward_config');
@@ -28,7 +32,7 @@ class Reward extends Base {
     	if($data['act'] == 'add'){
     		$r = D('reward_config')->add($data);
     	}
-    	if($data['act'] == 'edit'){
+    	if($data['reward_config'] == 'edit'){
 
     		$r = D('topic')->where('reward_id='.$data['reward_id'])->save($data);
     	}
