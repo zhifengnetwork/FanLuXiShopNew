@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Shop\controller;
+namespace app\shop\controller;
 
 use think\Db;
 use think\Page;
