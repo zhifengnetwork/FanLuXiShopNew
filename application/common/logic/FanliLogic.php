@@ -160,33 +160,26 @@ class FanliLogic extends Model
 		}
 		else if($this->goodId==$this->tgoodsid  && $order['pay_status']==1 && $user_info['level']<3)//自动升级店主
 		{
-
 			$res_s = M('users')->where(['user_id'=>$user_id])->update(['level'=>3]);
 			$desc = "购买指定产品获得店主";
 	        $log = $this->writeLog($user_info['user_id'],'398',$desc,2); //写入日志
+
 	        if($res_s)
 	        {
 	        	$this->addhostmoney2($user_info['user_id']);//产生店主获得金额和津贴
+	          //自动升级总监
+			    $parent_info = M('users')->where('user_id',$user_info['first_leader'])->field('first_leader,level,is_code,user_id')->find();
+
+				$num=M('users')->where(['first_leader'=>$user_info['first_leader'],'level'=>3])->count();
+				$fanli = M('user_level')->where('level',4)->field('tui_num')->find();
+	             if($num>=$fanli['tui_num'] && !empty($fanli['tui_num']) && $parent_info['level']==3)
+	             {
+	                  $res = M('users')->where(['user_id'=>$user_info['first_leader']])->update(['level'=>4]);
+	                  $desc = "直推店主".$fanli['tui_num']."个成为总监";
+		        	  $log = $this->writeLog($user_info['first_leader'],'',$desc,2); //写入日志
+	             }
 	        }
 		}
-		else if($user_info['level']==3 && $this->goodId==$this->tgoodsid && $order['pay_status']==1)//自动升级总监
-		{
-
-		    $paret_info = M('users')->where('user_id',$user_info['first_leader'])->field('first_leader,level,is_code,user_id')->find();
-
-			$num=M('users')->where(['first_leader'=>$user_info['first_leader'],'level'=>3])->count();
-			$fanli = M('user_level')->where('level',4)->field('tui_num')->find();
-             if($num>=$fanli['tui_num'] && !empty($fanli['tui_num']) && $parent_info['level']==3)
-             {
-             
-                  $res = M('users')->where(['user_id'=>$user_id])->update(['level'=>4]);
-                  $desc = "直推店主".$fanli['tui_num']."个成为总监";
-	        	  $log = $this->writeLog($user_info['first_leader'],'',$desc,2); //写入日志
-             }
-
-		}
-
-
 
 	}
     //推荐店主获得金额
