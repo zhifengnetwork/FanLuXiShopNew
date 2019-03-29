@@ -17,7 +17,7 @@
             	    )
                ),             		
               'admin/index'=>array(
-                'name' =>'DC环球直供网络',
+                'name' =>'凡露希',
                 'action'=>array(
                      'index'=>'欢迎页面',                     
          	       )
