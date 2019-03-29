@@ -3,7 +3,7 @@
 namespace app\admin\controller;
 use think\Page;
 
-class Reward extends Base {
+class Rewardo extends Base {
 
     public function lists(){
     	$Ad =  M('reward_config');
