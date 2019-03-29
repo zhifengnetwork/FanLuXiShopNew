@@ -1889,17 +1889,54 @@ function continue_sign($user_id){
 */
 function provingReceive($user, $type, $num = 1)
 {
+
     $user = M('Users')->where('user_id', $user['user_id'])->find();
-    //店主以上可领取
-    if ($user['level'] < 3) {
-        $result = array('status' => 0, 'msg' => '店主以上级别才可领取', 'result' => array());
-        return $result;
+    if ($type == 1) {
+
+        //店主以上可领取
+        if ($user['level'] < 3) {
+            $result = array('status' => 0, 'msg' => '店主以上级别才可领取', 'result' => array());
+            return $result;
+        }
+
+        // 是分销并且有领取次数
+        if ($user['distribut_free_num'] < $num) {
+            $result = array('status' => 0, 'msg' => '没有领取资格，坚持签到可获得资格！', 'result' => array());
+            return $result;
+        }
+
+        return array('status' => 2, 'msg' => '可领取', 'result' => array());
     }
 
-    // 是分销并且有领取次数
-    if ($user['level'] >= 3 && $type == 1 && $user['distribut_free_num'] < $num) {
-        $result = array('status' => 0, 'msg' => '没有领取资格，坚持签到可获得资格！', 'result' => array());
-        return $result;
+    if ($user['is_code'] != 1 && $type == 2) {
+        return array('status' => 1, 'msg' => '正常购物流程', 'result' => array());
+    }
+
+    // 是代理或购买过指定产品并且有领取次数
+    if ($user['is_code'] == 1 && $type == 2) {
+        if ($num > 1) {
+            return array('status' => 0, 'msg' => '超过领取数量，只能领取一件！', 'result' => array());
+        }
+
+        if ($user['agent_free_num'] < $num) {
+            return array('status' => 1, 'msg' => '正常购物流程', 'result' => array());
+        }
+    }
+
+    // 扫码进来
+    if ( $user['is_code'] == 1 && $type == 2) {
+
+        $data = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2])->order('addend_time desc')->select();
+        
+        //扫码只可领取1次
+        if (!empty($data)) {
+            // 能否领取商品
+            return array('status' => 1, 'msg' => '已超出领取次数', 'result' => array());
+        }
+
+        if ($num > 1) {
+            return array('status' => 1, 'msg' => '超过领取数量，只能领取一件！', 'result' => array());
+        }
     }
 
     return array('status' => 2, 'msg' => '可领取', 'result' => array());

@@ -180,7 +180,7 @@ class PlaceOrder
         if($payList[0]['goods']->sign_free_receive == 1 && $user['distribut_free_num'] == 0 && $this->pay->getSignPrice() != 0){
                 throw new TpshopException('提交订单', 0, ['status' => -7, 'msg' => "免费领取次数不够", 'result' => '']);
         }
-        if($payList[0]['goods']->sign_free_receive == 2 && $user['agent_free_num'] == 0 && $this->pay->getSignPrice() != 0){
+        if($payList[0]['goods']->sign_free_receive == 2 && $user['is_code'] != 1 && $this->pay->getSignPrice() != 0){
                 throw new TpshopException('提交订单', 0, ['status' => -7, 'msg' => "免费领取次数不够", 'result' => '']);
         }
         if ($pay_points || $user_money) {
@@ -445,9 +445,9 @@ class PlaceOrder
 
             $catId = Db::name('order_goods')->where('order_id', $this->order['order_id'])->find();
             if ($payList[0]['goods']->sign_free_receive == 1) {
-                Db::name('users')->where('user_id', $user['user_id'])->setDec('distribut_free_num', $catId['goods_num']);// 分销领取次数减一
+                Db::name('users')->where('user_id', $user['user_id'])->setDec('distribut_free_num', $catId['goods_num']);// 减分销领取次数
             } elseif ($payList[0]['goods']->sign_free_receive == 2) {
-                Db::name('users')->where('user_id', $user['user_id'])->setDec('agent_free_num', $catId['goods_num']);// 代理领取次数减一
+                Db::name('users')->where('user_id', $user['user_id'])->update(['is_code'=>2]);// 扫码用户修改成2（已领取面膜）
             }
         }
     }
