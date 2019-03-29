@@ -1,5 +1,16 @@
 <?php
-
+/**
+ * 智丰网络
+ * ============================================================================
+ * * 版权所有 2015-2027 深圳搜豹网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.tp-shop.cn
+ * ----------------------------------------------------------------------------
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和使用 .
+ * 不允许对程序代码以任何形式任何目的的再发布。
+ * 采用最新Thinkphp5助手函数特性实现单字母函数M D U等简写方式
+ * ============================================================================
+ * $Author: IT宇宙人 2016-08-10 $
+ */
 namespace app\shop\controller;
 
 use think\Controller;
@@ -28,30 +39,6 @@ class MobileBase extends Controller {
         else 
             cookie('is_mobile','0',3600);
         
-
-        /**
-         * 模拟登录
-         */
-        if(I('debug') == 1 && I('user_id') > 0){
-
-            $user_id =  I('user_id');
-            if(!$user_id){
-                exit("user_id不能为空");
-            }
-    
-            $user = M('users')->where(['user_id'=>$user_id])->find();
-            if(!$user){
-                exit("user为空");
-            }
-    
-            session('user',$user);
-            setcookie('user_id',$user['user_id'],null,'/');
-            setcookie('is_distribut',$user['is_distribut'],null,'/');
-            setcookie('uname',$user['nickname'],null,'/');
-            session('openid',$user['openid']);
-        }
-
-
         //微信浏览器
         if(strstr($_SERVER['HTTP_USER_AGENT'],'MicroMessenger')){
             $this->weixin_config = M('wx_user')->find(); //取微获信配置
@@ -60,16 +47,14 @@ class MobileBase extends Controller {
             if (isset($user_temp['user_id']) && $user_temp['user_id']) {
                 $user = M('users')->where("user_id", $user_temp['user_id'])->find();
                 if (!$user) {
-                    session('openid',null);
+                    $_SESSION['openid'] = 0;
                     session('user', null);
                 }
             } 
-            if (empty(session('openid'))){
-              
-                // && $this->weixin_config['wait_access'] == 1
-                if(is_array($this->weixin_config) ){
+            if (empty($_SESSION['openid'])){
+                if(is_array($this->weixin_config) && $this->weixin_config['wait_access'] == 1){
                     $wxuser = $this->GetOpenid(); //授权获取openid以及微信用户信息
-                
+                     
                     //过滤特殊字符串
                     $wxuser['nickname'] && $wxuser['nickname'] = replaceSpecialStr($wxuser['nickname']);
                     
@@ -88,14 +73,12 @@ class MobileBase extends Controller {
                          }
                     } else { 
                         $data = $logic->thirdLogin($wxuser);
-                        
                     }
                     if($data['status'] == 1){
                         session('user',$data['result']);
                         setcookie('user_id',$data['result']['user_id'],null,'/');
                         setcookie('is_distribut',$data['result']['is_distribut'],null,'/');
                         setcookie('uname',$data['result']['nickname'],null,'/');
-                        session('openid',$data['result']['openid']);//增加openid
                         // 登录后将购物车的商品的 user_id 改为当前登录的id
                         M('cart')->where("session_id" ,$this->session_id)->save(array('user_id'=>$data['result']['user_id']));
                         $cartLogic = new CartLogic();
@@ -110,30 +93,8 @@ class MobileBase extends Controller {
         }
         
         $this->public_assign();
-        $this->update_userinfo();
-
     }
     
-    /**
-     * 处理用户数据
-     */
-    public function update_userinfo(){
-
-        $openid = session('user.openid');
-        if(!$openid){
-            return false;
-        }
-
-        $OauthUsers_is_cunzai = Db::name('OauthUsers')->where(array('openid'=>$openid))->find();
-        if(!$OauthUsers_is_cunzai){
-            $map['openid'] = $openid;
-            $map['user_id'] = session('user.user_id');
-            Db::name('OauthUsers')->add($map);
-        }
-
-    }
-
-
     /**
      * 保存公告变量到 smarty中 比如 导航 
      */   
@@ -147,9 +108,9 @@ class MobileBase extends Controller {
        $tp_config = Db::name('config')->cache(true, TPSHOP_CACHE_TIME, 'config')->select();
        foreach($tp_config as $k => $v)
        {
-       	  if($v['name'] == 'hot_keywords'){
-       	  	 $this->tpshop_config['hot_keywords'] = explode('|', $v['value']);
-       	  }
+          if($v['name'] == 'hot_keywords'){
+             $this->tpshop_config['hot_keywords'] = explode('|', $v['value']);
+          }
            $this->tpshop_config[$v['inc_type'].'_'.$v['name']] = $v['value'];
        }
        $goods_category_tree = get_goods_category_tree();
@@ -173,8 +134,8 @@ class MobileBase extends Controller {
     // 网页授权登录获取 OpendId
     public function GetOpenid()
     {
-        // if($_SESSION['openid'])
-        //     return $_SESSION['data'];
+        if($_SESSION['openid'])
+            return $_SESSION['data'];
         //通过code获得openid
         if (!isset($_GET['code'])){
             //触发微信返回code码
@@ -187,47 +148,22 @@ class MobileBase extends Controller {
             //上面获取到code后这里跳转回来
             $code = $_GET['code'];
             $data = $this->getOpenidFromMp($code);//获取网页授权access_token和用户openid
-            $first_leader = $this->user_openid($data['openid']);
-            $this->write_log('first_leader:'.$first_leader);
-            $this->write_log("openid:".$data['openid']);
             $data2 = $this->GetUserInfo($data['access_token'],$data['openid']);//获取微信用户信息
             $data['nickname'] = empty($data2['nickname']) ? '微信用户' : trim($data2['nickname']);
             $data['sex'] = $data2['sex'];
-            $data['first_leader'] = $first_leader;
             $data['head_pic'] = $data2['headimgurl']; 
             $data['subscribe'] = $data2['subscribe'];      
             $data['oauth_child'] = 'mp';
             $_SESSION['openid'] = $data['openid'];
             $data['oauth'] = 'weixin';
             if(isset($data2['unionid'])){
-            	$data['unionid'] = $data2['unionid'];
+                $data['unionid'] = $data2['unionid'];
             }
             $_SESSION['data'] =$data;
             return $data;
         }
     }
-    public function write_log($content)
-    {
-        $content = "[".date('Y-m-d H:i:s')."]".$content."\r\n";
-        $dir = rtrim(str_replace('\\','/',$_SERVER['DOCUMENT_ROOT']),'/').'/logs';
-        if(!is_dir($dir)){
-            mkdir($dir,0777,true);
-        }
-        if(!is_dir($dir)){
-            mkdir($dir,0777,true);
-        }
-        $path = $dir.'/'.date('Ymd').'.txt';
-        file_put_contents($path,$content,FILE_APPEND);
-    }
-    public function user_openid($openid){
-        $user = M('users')->where(['openid'=>$openid])->find();
-        if($user){
-            return $user['first_leader'];
-        }else{
-            $user['first_leader']=0;
-            return $user['first_leader'];
-        }
-    }
+
     /**
      * 获取当前的url 地址
      * @return type
@@ -250,8 +186,8 @@ class MobileBase extends Controller {
     public function GetOpenidFromMp($code)
     {
         //通过code获取网页授权access_token 和 openid 。网页授权access_token是一次性的，而基础支持的access_token的是有时间限制的：7200s。
-    	//1、微信网页授权是通过OAuth2.0机制实现的，在用户授权给公众号后，公众号可以获取到一个网页授权特有的接口调用凭证（网页授权access_token），通过网页授权access_token可以进行授权后接口调用，如获取用户基本信息；
-    	//2、其他微信接口，需要通过基础支持中的“获取access_token”接口来获取到的普通access_token调用。
+        //1、微信网页授权是通过OAuth2.0机制实现的，在用户授权给公众号后，公众号可以获取到一个网页授权特有的接口调用凭证（网页授权access_token），通过网页授权access_token可以进行授权后接口调用，如获取用户基本信息；
+        //2、其他微信接口，需要通过基础支持中的“获取access_token”接口来获取到的普通access_token调用。
         $url = $this->__CreateOauthUrlForOpenid($code);       
         $ch = curl_init();//初始化curl        
         curl_setopt($ch, CURLOPT_TIMEOUT, 300);//设置超时
@@ -370,6 +306,6 @@ class MobileBase extends Controller {
     public function ajaxReturn($data){
         header('Content-Type:application/json; charset=utf-8');
         exit(json_encode($data,JSON_UNESCAPED_UNICODE));
-    } 
+    }
 
 }
