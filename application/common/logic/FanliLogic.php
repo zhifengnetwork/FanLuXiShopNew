@@ -43,7 +43,6 @@ class FanliLogic extends Model
 	public function fanliModel()
 	{
 
-
 		$price = M('goods')->where(['goods_id'=>$this->goodId])->value('shop_price');
 		//判断商品是否是活动商品
 		$good = M('goods')
@@ -151,6 +150,7 @@ class FanliLogic extends Model
 
 		 $order = M('order')->where(['order_id'=>$this->orderId])->find();
 		 $user_info = M('users')->where('user_id',$user_id)->field('first_leader,level,is_code,user_id')->find();
+
 		if( $order['pay_status']==1 && $user_info['level']==1)//自动升级vip
 		{
               $res = M('users')->where(['user_id'=>$user_id])->update(['level'=>2]);
@@ -168,14 +168,18 @@ class FanliLogic extends Model
 	        	$this->addhostmoney2($user_info['user_id']);//产生店主获得金额和津贴
 	        }
 		}
-		else if($user_info['level']==3)//自动升级总监
+		else if($user_info['level']==3 && $this->goodId==$this->tgoodsid && $order['pay_status']==1)//自动升级总监
 		{
 
-			$num=M('users')->where(['first_leader'=>$user_id,'level'=>3])->count();
-             if($num>=30)
+		    $paret_info = M('users')->where('user_id',$user_info['first_leader'])->field('first_leader,level,is_code,user_id')->find();
+
+			$num=M('users')->where(['first_leader'=>$user_info['first_leader'],'level'=>3])->count();
+			$fanli = M('user_level')->where('level',4)->field('tui_num')->find();
+             if($num>=$fanli['tui_num'] && !empty($fanli['tui_num']) && $parent_info['level']==3)
              {
+             
                   $res = M('users')->where(['user_id'=>$user_id])->update(['level'=>4]);
-                  $desc = "直推店主30个成为总监";
+                  $desc = "直推店主".$fanli['tui_num']."个成为总监";
 	        	  $log = $this->writeLog($user_info['first_leader'],'',$desc,2); //写入日志
              }
 
@@ -218,17 +222,17 @@ class FanliLogic extends Model
 	public  function jintie($user_leader,$fanli_money)
 	{
       //只有总监和大区获得管理津贴
-		//查询上一级信息
-		$parent_info = M('users')->where('user_id',$user_leader)->field('level')->find();
+		//查询上上级信息
+		$parent_info = M('users')->where('user_id',$user_leader)->field('level,user_id')->find();
 		if($parent_info['level']==4 || $parent_info['level']==5)
 		{
 			$fanli = M('user_level')->where('level',$parent_info['level'])->field('jietie')->find();
 			 $commission = $fanli_money * ($fanli['jietie'] / 100);
 
 	          //按上一级等级各自比例分享返利
-	       $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
+	       $bool = M('users')->where('user_id',$parent_info['user_id'])->setInc('user_money',$commission);
 	       	$desc = "获得管理津贴";
-	        $log = $this->writeLog($user_info['first_leader'],$commission,$desc,5); //写入日志
+	        $log = $this->writeLog($parent_info['user_id'],$commission,$desc,5); //写入日志
 		}
 
 	}
