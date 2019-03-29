@@ -3,11 +3,7 @@
 namespace app\admin\controller;
 use think\Page;
 
-<<<<<<< HEAD:application/admin/controller/reward.php
 class Reward extends Base {
-=======
-class Rewardo extends Base {
->>>>>>> ceshi:application/admin/controller/Rewardo.php
 
     public function lists(){
     	$Ad =  M('reward_config');
