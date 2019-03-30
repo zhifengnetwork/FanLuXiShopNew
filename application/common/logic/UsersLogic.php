@@ -146,7 +146,8 @@ class UsersLogic extends Model
     public function oauth_bind_new($user = array())
     {
         $thirdOauth = session('third_oauth');
-        
+        dump($thirdOauth);exit;
+        dump($thirdOauth['nickname']);exit;
         $thirdName = ['weixin'=>'微信' , 'qq'=>'QQ' , 'alipay'=>'支付宝', 'miniapp' => '微信小程序'];
         
         //1.检查账号密码是否正确
@@ -206,7 +207,7 @@ class UsersLogic extends Model
             $thirdOauth['oauth_child'] = '';
         }
         //4.账号绑定
-        M('OauthUsers')->save(array('oauth'=>$oauth , 'openid'=>$openid ,'user_id'=>$ruser['user_id'] , 'unionid'=>$unionid, 'oauth_child'=>$thirdOauth['oauth_child']));
+        M('OauthUsers')->save(array('oauth'=>$oauth , 'openid'=>$openid ,'user_id'=>$ruser['user_id'] , 'unionid'=>$unionid, 'oauth_child'=>$thirdOauth['oauth_child'], 'nick_name'=>'昵称'));
         $ruser['token'] = md5(time().mt_rand(1,999999999));
         $ruser['last_login'] = time();
         
