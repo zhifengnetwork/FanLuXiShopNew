@@ -146,15 +146,15 @@
 	margin: 0.1rem auto;
 }
 .user-nav-zp li span{
-	width: .26rem;
-	height: .26rem;
+	width: .32rem;
+	height: .32rem;
 	text-align: center;
-	line-height: 0.26rem;
+	line-height: 0.32rem;
     background: red;
     border-radius: 50%;
     color: #fff;
 	display: inline-block;
-	font-size: 0.22rem;
+	font-size: 0.12rem;
 	position: absolute;
 	top: 0;
 	right: 0;
