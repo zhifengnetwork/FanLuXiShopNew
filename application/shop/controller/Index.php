@@ -44,6 +44,8 @@ class Index extends MobileBase {
         $this->assign('thems',$thems);
         $this->assign('hot_goods',$hot_goods);
         $favourite_goods = M('goods')->where("is_recommend=1 and is_on_sale=1")->order('sort DESC')->limit(20)->cache(true,TPSHOP_CACHE_TIME)->select();//首页推荐商品
+        $is_new = M('goods')->where("is_new=1 and is_on_sale=1")->order('sort DESC')->limit(2)->select();
+        // var_dump($is_new);exit;
 
         //秒杀商品
         $now_time = time();  //当前时间
@@ -63,6 +65,7 @@ class Index extends MobileBase {
         $this->assign('start_time',$start_time);
         $this->assign('end_time',$end_time);
         $this->assign('favourite_goods',$favourite_goods);
+        $this->assign('is_new',$is_new);
        
         return $this->fetch();
     }

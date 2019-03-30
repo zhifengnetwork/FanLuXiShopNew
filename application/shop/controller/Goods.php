@@ -50,6 +50,7 @@ class Goods extends MobileBase
 //        $this->assign('threadCategoryList',$threadCategoryList);
 //        $this->assign('goods',$goods);
 //        print_r($secondCategoryList);die;
+        
         return $this->fetch();
     }
 

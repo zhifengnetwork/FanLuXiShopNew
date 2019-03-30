@@ -19,26 +19,36 @@
 	<div class="wrapper">
 		<!-- 头部 -->
 		<div class="header">
-			<div class="scan"><img src="__STATIC__/images/home_zp/scan@2x.png" /></div>
+			<div class="scan">
+				
+				<a href="/shop/Goods/categoryList.html">
+					<img src="__STATIC__/images/home_zp/scan@2x.png" />
+				</a>
+			</div>
 			<div class="search">
 				<span class="search-btn"><img src="__STATIC__/images/home_zp/search-icon-index@2x.png" /></span>
 				<span class="search-input">连衣裙</span>
 			</div>
-			<div class="login-btn"><img src="__STATIC__/images/home_zp/login-btn-index@2x.png" /></div>
+			<div class="login-btn">
+				<a href="{:U('Shop/User/index')}">
+					<img src="__STATIC__/images/home_zp/login-btn-index@2x.png" />
+				</a>
+			
+			</div>
 		</div>
 
 		<!-- 轮播图 -->
 		<div class="swiper-container banner-wrap-zp">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide">
-					<a href="{$v.ad_link}"><img src="__STATIC__/images/home_zp/banner-01.png" /></a>
-				</div>
-				<div class="swiper-slide">
-					<a href="{$v.ad_link}"><img src="__STATIC__/images/home_zp/banner-01.png" /></a>
-				</div>
-				<div class="swiper-slide">
-					<a href="{$v.ad_link}"><img src="__STATIC__/images/home_zp/banner-01.png" /></a>
-				</div>
+				<adv pid="9" limit="5" item="v">
+					<div class="swiper-slide">
+						
+						<a href="{$v.ad_link}">
+                            <img src="{$v[ad_code]}" title="{$v[title]}" style="{$v[style]}" alt="">
+                    	</a>
+                    	
+					</div>
+				</adv>
 			</div>
 			<div class="swiper-pagination"></div>
 		</div>
@@ -108,18 +118,15 @@
 					</div>
 				</div>
 				<div class="down">
+						<foreach name="flash_sale_list" item="v">
 					<div class="item">
 						<div class="picture">
-							<img src="__STATIC__/images/home_zp/seckill-img01@2x.png" >
+							<img src="{$v[goods_id]|goods_thum_images=200,200}" >
 						</div>
-						<p class="price">¥360.00</p>
+						<p class="price">￥<span>{$v[price]}</span>元</p>
 					</div>
-					<div class="item">
-						<div class="picture">
-							<img src="__STATIC__/images/home_zp/seckill-img01@2x.png" >
-						</div>
-						<p class="price">¥360.00</p>
-					</div>
+					</foreach>
+					
 				</div>
 			</div>
 
@@ -130,18 +137,20 @@
 					<h3>发现好货</h3>
 				</div>
 				<div class="down">
+					<volist name="is_new" id="vo">
 					<div class="item">
 						<div class="picture">
 							<img src="__STATIC__/images/home_zp/tupian2@2x.png" >
 						</div>
-						<p class="price">¥3360.00</p>
+						<p class="price">￥<span>{$vo[price]}</span>元</p>
 					</div>
-					<div class="item">
+					</volist>
+					<!-- <div class="item">
 						<div class="picture">
 							<img src="__STATIC__/images/home_zp/tuanpian3@2x.png" >
 						</div>
 						<p class="price">¥3360.00</p>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -151,46 +160,26 @@
 			<div class="title">
 				<h3>为你推荐</h3>
 			</div>
+			
 			<div class="recommend-list">
 				<ul>
-					<li>
-						<div class="img-wrap">
-							<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id],'shareid'=>$shareid))}"><img src="__STATIC__/images/home_zp/recommend-img01@2x.png" /></a>
-						</div>
-						<div class="text">
-							<p class="tit"><a href="{:U('Shop/goods/goodsInfo',array('id'=>$v['goods_id'],'shareids'=>1))}">Vero Moda2018冬季新款纱网拼接荷叶...</a></p>
-							<p class="line2">
-								<span class="price">¥368.00</span>
-								<a href="{:U('Goods/goodsList',['id'=>$v['cat_id']])}" class="guess-btn">看同款</a>
-							</p>
-						</div>
-					</li>
-					<li>
-						<div class="img-wrap">
-							<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id],'shareid'=>$shareid))}"><img src="__STATIC__/images/home_zp/recommend-img01@2x.png" /></a>
-						</div>
-						<div class="text">
-							<p class="tit"><a href="{:U('Shop/goods/goodsInfo',array('id'=>$v['goods_id'],'shareids'=>1))}">Vero Moda2018冬季新款纱网拼接荷叶...</a></p>
-							<p class="line2">
-								<span class="price">¥368.00</span>
-								<a href="{:U('Goods/goodsList',['id'=>$v['cat_id']])}" class="guess-btn">看同款</a>
-							</p>
-						</div>
-					</li>
-					<li>
-						<div class="img-wrap">
-							<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id],'shareid'=>$shareid))}"><img src="__STATIC__/images/home_zp/recommend-img01@2x.png" /></a>
-						</div>
-						<div class="text">
-							<p class="tit"><a href="{:U('Shop/goods/goodsInfo',array('id'=>$v['goods_id'],'shareids'=>1))}">Vero Moda2018冬季新款纱网拼接荷叶...</a></p>
-							<p class="line2">
-								<span class="price">¥368.00</span>
-								<a href="{:U('Goods/goodsList',['id'=>$v['cat_id']])}" class="guess-btn">看同款</a>
-							</p>
-						</div>
-					</li>
+					<foreach name="favourite_goods" id="v">
+						<li>
+							<div class="img-wrap">
+								<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id],'shareid'=>$shareid))}"><img src="{$v[goods_id]|goods_thum_images=400,400}" /></a>
+							</div>
+							<div class="text">
+								<p class="tit"><a href="{:U('Shop/goods/goodsInfo',array('id'=>$v['goods_id'],'shareids'=>1))}">{$v.goods_name|getSubstr=0,33}</a></p>
+								<p class="line2">
+									<span class="price">￥{$v.shop_price}</span>
+									<a href="{:U('Goods/goodsList',['id'=>$v['cat_id']])}" class="guess-btn">看同款</a>
+								</p>
+							</div>
+						</li>
+					</foreach>	
 				</ul>
 			</div>
+		
 		</div>
 
 		<!--底部导航-start-->
@@ -214,6 +203,34 @@
 			});
 
 		})
+
+		/**
+			* 继续加载猜您喜欢
+			* */
+			var before_request = 1; // 上一次请求是否已经有返回来, 有才可以进行下一次请求
+			var page = 0;
+			function ajax_sourch_submit(){
+				// $('.loading-box').show();
+				if(before_request == 0)// 上一次请求没回来 不进行下一次请求
+					return false;
+				before_request = 0;
+				page++;
+				$.ajax({
+					type : "get",
+					url:"/index.php?m=Shop&c=Index&a=ajaxGetMore&p="+page,
+					success: function(data)
+					{
+						if(data){
+							$("#J_ItemList").append(data);
+							before_request = 1;
+							$('.loading-box').show();
+						}else{
+							$('.loading-box').hide();
+						}
+					}
+				});
+			}
+
 	</script>
 </body>
 
