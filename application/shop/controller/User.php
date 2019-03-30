@@ -487,8 +487,6 @@ class User extends MobileBase
                 $data = $logic->reg($username, $password, $password2, 0, $invite ,$nickname , $head_pic,$new_u);
                 //用户注册成功后, 绑定第三方账号
                 $userLogic = new UsersLogic();
-                
-                dump($thirdUser);exit;
                 $data = $userLogic->oauth_bind_new($data['result']);
             }else{
                 $data = $logic->reg($username, $password, $password2,0,$invite);
