@@ -166,7 +166,7 @@ class FanliLogic extends Model
 
 	        if($res_s)
 	        {
-	        	$this->addhostmoney2($user_info['user_id']);//产生店主获得金额和津贴
+	        	//$this->addhostmoney2($user_info['user_id']);//产生店主获得金额和津贴
 	          //自动升级总监
 			    $parent_info = M('users')->where('user_id',$user_info['first_leader'])->field('first_leader,level,is_code,user_id')->find();
 
@@ -244,7 +244,7 @@ class FanliLogic extends Model
 	       $commission = $fanli['chan']; //计算佣金
 	          //按上一级等级各自比例分享返利
 	       $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
-	       	$desc = "推荐店主获得金额";
+	       	$desc = "团队产生店主获得金额";
 	        $log = $this->writeLog($user_info['first_leader'],$commission,$desc,4); //写入日志
 	        return true;
 		}
