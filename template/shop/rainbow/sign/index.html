@@ -8,12 +8,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<title>签到</title>
 		<script src="__STATIC__/js/public/rem.js"></script>
-		<link rel="stylesheet" href="__STATIC__/css/sign/index.css?v=1552363434"/>
-		<link rel="stylesheet" href="__STATIC__/css/public_lb/public.css?v=1552363439" />
+		<link rel="stylesheet" href="__STATIC__/css/sign/index.css?v=1553228580"/>
+		<link rel="stylesheet" href="__STATIC__/css/public_lb/public.css?v=1553228580" />
 		<!--日历 css-->
     	<link rel="stylesheet" href="__STATIC__/css/sign/date.css" media="screen" title="no title" charset="utf-8">
 		<!--弹框-->
-		<link rel="stylesheet" href="__STATIC__/css/public_lb/alertWrap.css?v=1552363434" />
+		<link rel="stylesheet" href="__STATIC__/css/public_lb/alertWrap.css?v=1553228580" />
 		
 	</head>
 	<body>
@@ -25,8 +25,8 @@
 					<img class="lb_headWrap_return_img" src="__STATIC__/image/lj_sign_tl.png"/>
 				</p>
 				<span>签到</span>
-				<!--<p class="lb_headWrap_text" onclick="window.location.href='/shop/Goods/categoryList.html'">领取产品</p>-->
-				<p class="lb_headWrap_text" onclick="receiveFun()">领取产品</p>
+				<!--<p class="lb_headWrap_text" onclick="window.location.href='/mobile/Goods/categoryList.html'">领取产品</p>-->
+				<p class="lb_headWrap_text receive_button">领取产品</p>
 			</div>
 			<!--内容-->
 			<div class="content_si">
@@ -64,25 +64,29 @@
 						<p class="rule_box_title">签到奖励</p>
 						<span><!--签到规则--></span>
 					</div>
-					
 				</div>
-				
 			</div>
-			
-			
 			
 			
 		</div>
 					
-		<script src="__STATIC__/js/public/jquery-1.8.3.min.js"></script>
-		<script src="__STATIC__/js/public/public_lb.js"></script>
+		<script src="__STATIC__/js/public/jquery-1.8.3.min.js?v=1553228580"></script>
+		<script src="__STATIC__/js/public/public_lb.js?v=1553228580"></script>
 		<!--以下两个，日历js-->
-		<script src="__STATIC__/js/sign/sign.js"></script>
-		<script src="__STATIC__/js/sign/DateMarker.js"></script>
-		<!--弹窗 函数的js => sAFail($(最外的边框),icon路径,title,text,是否返回上一页(true)),sASuccess(),warningAlert()-->
-		<script src="__STATIC__/js/public/publicAlert.js"></script>
+		<script src="__STATIC__/js/sign/sign.js?v=1553228580"></script>
+		<script src="__STATIC__/js/sign/DateMarker.js?v=1553228580"></script>
+		<!--弹窗 函数的js -->
+		<script src="__STATIC__/js/public/publicAlert.js?v=1553228580"></script>
 		
 		<script>
+			/*领取产品*/
+			$('.receive_button').on('click',function(){
+				window.location.href="/shop/Goods/goodsList/id/DISTRIBUT.html";
+			})
+			/*关闭-按钮*/
+			function closeButton() {
+				$('.productWrap').hide();
+			}
 			/*微信h5页面禁止下拉露出网页来源*/
 			var overscroll = function(el) {
 				/*触摸*/
@@ -132,7 +136,7 @@
 				/*签到记录、积分、连续天数、对应的规则等请求*/
 				$.ajax({
 					type: "GET",
-					url: "/shop/sign/get_sign_day?user_id=" + {$user_id},
+					url: "/api/sign/get_sign_day?user_id=" + {$user_id},
 					async: true,
 					success: function(data){
 						if(data['status'] == 1){
@@ -165,7 +169,7 @@
 										/**传过来的数据-不要在月份和日期前加0 =>'2019/3/6' **/
 										if($('.date-marker-body li').eq(i).attr('data-markdate') == signData[j]) {
 											$('.date-marker-body li').eq(i).append(`
-												<img class="signInIconL" src="/template/shop/rainbow/static/images/sign/signInIconS.png" />
+												<img class="signInIconL" src="/template/mobile/rainbow/static/images/sign/signInIconS.png" />
 											`);
 										}
 									}
@@ -207,14 +211,14 @@
 					/*后台传数据=> auth==1;可以签到 , auth==0;不可以签到*/
 					if(signObj['admin'] == 0){
 						/*对话框*/
-						suredAlert($('.wrap_signin'),'等级为{$level.level_name}以上才可签到！');
+						suredAlert($('.wrap_signin'),'权限不足，无法签到！');
 						return false;
 					}
 					/*判断用户签到状态=>ajax*/
 					if(!signObj['stateD']){
 						$.ajax({
 							type: "GET",
-							url: "/shop/sign/sign?user_id=" + {$user_id},
+							url: "/api/sign/sign?user_id=" + {$user_id},
 							async: true,
 							success: function(_re){
 								console.log('点击签到:',_re);
@@ -240,7 +244,7 @@
 									/**传过来的数据-不要在月份和日期前加0 =>'2019/3/6' **/
 									if($('.date-marker-body li').eq(i).attr('data-markdate') == todayState) {
 										$('.date-marker-body li').eq(i).append(`
-											<img class="signInIconL" src="/template/shop/rainbow/static/images/sign/signInIconS.png" />
+											<img class="signInIconL" src="/template/mobile/rainbow/static/images/sign/signInIconS.png" />
 										`);
 									}
 								}
@@ -265,12 +269,7 @@
 				})
 				
 			})
-			/*领取产品*/
-			function receiveFun(){
-				/*领取对话框*/
-				// receiveAlert($('.wrap_signin'),'领取产品','分销免费领',"'/Shop/Goods/goodsList/id/584.html'",'代理免费领',"'/Shop/Goods/goodsList/id/585.html'");
-				window.location.href="/shop/Goods/goodsList/id/1.html";
-			}
+			
 		</script>
 	</body>
 </html>
