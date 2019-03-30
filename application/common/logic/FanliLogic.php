@@ -255,9 +255,9 @@ class FanliLogic extends Model
 	{
 		//判断上上级是否是总监，是总监就获得对应金额
 		//查询上级信息
-		$parent_info = M('users')->where('user_id',$user_leader)->field('level,user_id')->find();
+		$parent_info = M('users')->where('user_id',$user_leader)->field('level,user_id,first_leader')->find();
 		//查询上上级信息
-		$p_parent_info = M('users')->where('first_leader',$user_leader)->field('level,user_id')->find();
+		$p_parent_info = M('users')->where('user_id',$parent_info['first_leader'])->field('level,user_id')->find();
 		if($p_parent_info['level']==4 && $parent_info['level']==3)
 		{
 			 $fanli = M('user_level')->where('level',$p_parent_info['level'])->field('y_reward')->find();
@@ -275,11 +275,11 @@ class FanliLogic extends Model
 	{
 		
 		//查询上级信息
-		$parent_info = M('users')->where('user_id',$user_leader)->field('level,user_id')->find();
+		$parent_info = M('users')->where('user_id',$user_leader)->field('level,user_id,first_leader')->find();
 		//查询上上级信息
-		$p_parent_info = M('users')->where('first_leader',$user_leader)->field('level,user_id')->find();
+		$p_parent_info = M('users')->where('user_id',$parent_info['first_leader'])->field('level,user_id,first_leader')->find();
 		//查询上上上级信息
-		$p_p_parent_info = M('users')->where('first_leader',$p_parent_info['user_id'])->field('level,user_id')->find();
+		$p_p_parent_info = M('users')->where('user_id',$p_parent_info['first_leader'])->field('level,user_id,first_leader')->find();
 		//直属店主邀店主
 		if($p_parent_info['level']==5 && $parent_info['level']==3)
 		{
