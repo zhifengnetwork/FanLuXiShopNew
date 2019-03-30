@@ -13,6 +13,10 @@ body{
     align-items: center;
     padding: 0 0.2rem;
     box-sizing: border-box;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 99;
 }
 .header .scan img{
     width: 0.48rem;
@@ -23,7 +27,7 @@ body{
     flex: 1;
     margin: 0 0.2rem;
     background-color: #fff;
-    border-radius: 0.2rem;
+    border-radius: 0.28rem;
     display: flex;
     align-items: center;
 }
@@ -45,6 +49,9 @@ body{
 }
 
 /* 轮播图 */
+.banner-wrap-zp{
+    padding-top: 0.88rem;
+}
 .banner-wrap-zp img{
     width: 100%;
 }
