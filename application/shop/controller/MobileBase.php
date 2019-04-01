@@ -211,7 +211,7 @@ class MobileBase extends Controller {
      *
      * @return openid
      */
-    public function GetOpenidFromMp($code, $type)
+    public function GetOpenidFromMp($code, $type = 1)
     {
         //通过code获取网页授权access_token 和 openid 。网页授权access_token是一次性的，而基础支持的access_token的是有时间限制的：7200s。
         //1、微信网页授权是通过OAuth2.0机制实现的，在用户授权给公众号后，公众号可以获取到一个网页授权特有的接口调用凭证（网页授权access_token），通过网页授权access_token可以进行授权后接口调用，如获取用户基本信息；
