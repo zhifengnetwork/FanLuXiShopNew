@@ -56,6 +56,7 @@ class MobileBase extends Controller {
                     $wxuser = $this->GetOpenid(); //授权获取openid以及微信用户信息
                     $old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
                     $wxuser['old_openid'] = $old_openid['old_openid'];
+                     dump($old_openid);
                      dump($wxuser);exit;
                     //过滤特殊字符串
                     $wxuser['nickname'] && $wxuser['nickname'] = replaceSpecialStr($wxuser['nickname']);
