@@ -47,7 +47,7 @@ class MobileBase extends Controller {
             if (isset($user_temp['user_id']) && $user_temp['user_id']) {
                 $user = M('users')->where("user_id", $user_temp['user_id'])->find();
                 if (!$user) {
-                    $_SESSION['openid'] = 0;
+                    session('openid', 0);
                     session('user', null);
                 }
             } 
