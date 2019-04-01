@@ -101,7 +101,7 @@ class User extends MobileBase
         return $this->fetch();
     }
 
- public function wtf_Goodson(){
+    public function wtf_Goodson(){
         return $this->fetch();
     }
 
@@ -382,7 +382,7 @@ class User extends MobileBase
                 exit(json_encode($res));
             }
         }
-        dump(8888);exit;
+
         $logic = new UsersLogic();
         $res = $logic->login($username, $password);
         if ($res['status'] == 1) {
@@ -518,6 +518,7 @@ class User extends MobileBase
 
     public function bind_guide(){
         $data = session('third_oauth');
+
         //没有第三方登录的话就跳到登录页
         if(empty($data)){
             $this->redirect('User/login');
@@ -673,9 +674,10 @@ class User extends MobileBase
             $this->ajaxReturn(['status' => 0, 'msg' => '操作失败']);
         }
     }
+    
     /*
-         * 添加地址
-         */
+     * 添加地址
+     */
     public function add_address()
     {
         $source = input('source');
