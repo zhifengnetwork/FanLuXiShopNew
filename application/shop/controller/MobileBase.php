@@ -139,11 +139,11 @@ class MobileBase extends Controller {
     {
        
         //通过code获得openid
-        if (!isset($_SESSION['old_openid'])){
+        if ($_SESSION['old_openid'] == 1){
             //触发微信返回code码
             //$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
             $baseUrl = urlencode($this->get_url());
-            $url = $this->__CreateOauthUrlForCode($baseUrl); // 获取 code地址
+            $url = $this->__CreateOauthUrlForCode2($baseUrl); // 获取 code地址
             Header("Location: $url"); // 跳转到微信授权页面 需要用户确认登录的页面
             exit();
         } else {
@@ -180,6 +180,7 @@ class MobileBase extends Controller {
             $data['subscribe'] = $data2['subscribe'];      
             $data['oauth_child'] = 'mp';
             $_SESSION['openid'] = $data['openid'];
+            $_SESSION['old_openid'] = 1;
             $data['oauth'] = 'weixin';
             if(isset($data2['unionid'])){
                 $data['unionid'] = $data2['unionid'];
@@ -297,6 +298,7 @@ class MobileBase extends Controller {
         //$urlObj["scope"] = "snsapi_userinfo";
         $urlObj["state"] = "STATE"."#wechat_redirect";
         $bizString = $this->ToUrlParams($urlObj);
+        $_SESSION['old_openid'] = 2;
         return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
     }
 
