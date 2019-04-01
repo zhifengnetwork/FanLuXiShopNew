@@ -382,6 +382,7 @@ class User extends MobileBase
                 exit(json_encode($res));
             }
         }
+        dump(8888);exit;
         $logic = new UsersLogic();
         $res = $logic->login($username, $password);
         if ($res['status'] == 1) {
