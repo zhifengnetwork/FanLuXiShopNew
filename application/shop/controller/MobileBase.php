@@ -149,12 +149,14 @@ class MobileBase extends Controller {
             $code = $_GET['code'];
             $datas = $this->getOpenidFromMp($code,2);//获取网页授权access_token和用户openid
             $oid = M('Users')->where('openid',$datas['openid'])->find();
+            if($oid){
                 $data['uid'] = $oid['user_id'];
                 $data['old_openid'] = $data['openid'];
+            }
             $data = $this->getOpenidFromMp($code);//获取网页授权access_token和用户openid
 
             $data2 = $this->GetUserInfo($data['access_token'],$data['openid']);//获取微信用户信息
-            $data['nickname'] = empty($data2['nickname']) ? '微信用户' : trim($data2['nickname']);
+            $data['nickname'] = empty($data2['nickname']) ? '微信用户1' : trim($data2['nickname']);
             $data['sex'] = $data2['sex'];
             $data['head_pic'] = $data2['headimgurl']; 
             $data['subscribe'] = $data2['subscribe'];      
