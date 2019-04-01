@@ -74,7 +74,7 @@ class MobileBase extends Controller {
                     } else {
                         $old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
                         $wxuser['old_openid'] = $old_openid['old_openid'];
-                        dump($wxuser);exit;
+                        dump($old_openid);exit;
                         $data = $logic->thirdLogin($wxuser);
                     }
                     if($data['status'] == 1){
