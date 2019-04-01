@@ -140,7 +140,7 @@ class MobileBase extends Controller {
     {
         //通过code获得openid
         if (session('old_openid') == 1){
-            dump(9999);exit;
+            dump(9);
             //触发微信返回code码
             //$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
             $baseUrl = urlencode($this->get_url());
@@ -148,6 +148,7 @@ class MobileBase extends Controller {
             Header("Location: $url"); // 跳转到微信授权页面 需要用户确认登录的页面
             exit();
         } else {
+            dump(3);exit;
             //上面获取到code后这里跳转回来
             $code = $_GET['code'];
             $data = $this->getOpenidFromMp($code,2);//获取网页授权access_token和用户openid
