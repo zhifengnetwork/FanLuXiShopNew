@@ -10,3 +10,6 @@
 cron.txt
 cron_team.sh
 /sql
+*.txt
+/public/share/*
+/logs
