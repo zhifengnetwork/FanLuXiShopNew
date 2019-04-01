@@ -114,11 +114,12 @@
 		<div class="floors">
 			<!-- 秒杀 -->
 			<div class="seckill-wrap">
+				<a href="{:U('Shop/Activity/flash_sale_list')}">
 				<div class="up">
-					<i><img src="__STATIC__/images/home_zp/Second kill@2x.png" /></i>
-					<div class="downTime">
-						<span id="downTime-h"></span> : <span id="downTime-m"></span> : <span id="downTime-s"></span>
-					</div>
+						<i><img src="__STATIC__/images/home_zp/Second kill@2x.png" /></i>
+						<div class="downTime">
+							<span id="downTime-h"></span> : <span id="downTime-m"></span> : <span id="downTime-s"></span>
+						</div>
 				</div>
 				<div class="down">
 						<foreach name="flash_sale_list" item="v">
@@ -129,8 +130,8 @@
 						<p class="price">￥<span>{$v[price]}</span>元</p>
 					</div>
 					</foreach>
-					
 				</div>
+				</a>
 			</div>
 
 			<!-- 发现好货 -->
