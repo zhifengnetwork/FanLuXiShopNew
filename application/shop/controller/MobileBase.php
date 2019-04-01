@@ -144,7 +144,6 @@ class MobileBase extends Controller {
             //$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
             $baseUrl = urlencode($this->get_url());
             $url = $this->__CreateOauthUrlForCode($baseUrl); // 获取 code地址
-            dump($url);exit;
             Header("Location: $url"); // 跳转到微信授权页面 需要用户确认登录的页面
             exit();
         } else {
