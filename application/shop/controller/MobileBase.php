@@ -139,8 +139,8 @@ class MobileBase extends Controller {
     public function GetOldOpenid()
     {
         //通过code获得openid
-        if (session('old_openid') == 1){
-            dump(9);
+        if (session('old_user') == 1){
+            dump(session('old_user'));exit;
             //触发微信返回code码
             //$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
             $baseUrl = urlencode($this->get_url());
@@ -182,7 +182,7 @@ class MobileBase extends Controller {
             $data['subscribe'] = $data2['subscribe'];      
             $data['oauth_child'] = 'mp';
             session('openid',$data['openid']);
-            session('old_openid',1);
+            session('old_user',1);
             $data['oauth'] = 'weixin';
             if(isset($data2['unionid'])){
                 $data['unionid'] = $data2['unionid'];
@@ -300,7 +300,7 @@ class MobileBase extends Controller {
         $urlObj["scope"] = "snsapi_userinfo";
         $urlObj["state"] = "STATE"."#wechat_redirect";
         $bizString = $this->ToUrlParams($urlObj);
-        session('old_openid',2);
+        session('old_user',2);
         return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
     }
 
