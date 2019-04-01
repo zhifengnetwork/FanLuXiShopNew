@@ -13,7 +13,7 @@
 /*我的顶部*/
 .user-head-zp{
 	height: 2.4rem;
-	background: linear-gradient(#ff8954,#fe5203);
+	background: linear-gradient(to bottom, #fe44a0,#660a90);
 	padding: 0 0.2rem;
 	margin-bottom: 0.2rem;
 }
