@@ -52,13 +52,34 @@ class MobileBase extends Controller {
                     session('user', null);
                 }
             } 
-            if (empty(session('openid'))){
+            // || empty(session('old_openid'))
+    
+            if (empty(session('user')) ){
+
                 if(is_array($this->weixin_config) && $this->weixin_config['wait_access'] == 1){
-                    $wxuser = $this->GetOpenid(); //授权获取openid以及微信用户信息
-                 
-                    $old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
-                    dump($old_openid);exit;
-                    $wxuser['old_openid'] = $old_openid['old_openid'];
+                  
+
+                    if(!session("third_oauth")){
+
+                        $wxuser = $this->GetOpenid(); //授权获取openid以及微信用户信息
+                        if(!$wxuser['openid']){
+                            $this->error('获取新openid失败');
+                        }
+                        session("third_oauth" , $wxuser);
+                    }else{
+                        $wxuser = session("third_oauth");
+                    }
+
+
+                    if(I('old_openid') == ''){
+                        header('Location:/shop/code/index');
+                        exit;
+                    }else{
+                        $old_openid = I('old_openid');
+                      
+                        //$old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
+                        $wxuser['old_openid'] = $old_openid;
+                    }
 
                     //过滤特殊字符串
                     $wxuser['nickname'] && $wxuser['nickname'] = replaceSpecialStr($wxuser['nickname']);
@@ -66,19 +87,23 @@ class MobileBase extends Controller {
                     session('subscribe', $wxuser['subscribe']);// 当前这个用户是否关注了微信公众号
                     setcookie('subscribe',$wxuser['subscribe']);
                     $logic = new UsersLogic(); 
-                    $is_bind_account = tpCache('basic.is_bind_account');
-                    if ($is_bind_account) {
-                         if (CONTROLLER_NAME != 'User' || ACTION_NAME != 'bind_guide') {
-                            $data = $logic->thirdLogin_new($wxuser);//微信自动登录
-                            if ($data['status'] != 1 && $data['result'] === '100') {
-                                 session("third_oauth" , $wxuser);
-                                 $first_leader = I('first_leader');
-                                 $this->redirect(U('Mobile/User/bind_guide',['first_leader'=>$first_leader]));
-                           }
-                         }
-                    } else {
+                    //$is_bind_account = tpCache('basic.is_bind_account');
+                    //if ($is_bind_account) {
+                        //  if (CONTROLLER_NAME != 'User' || ACTION_NAME != 'bind_guide') {
+
+                        //     $data = $logic->thirdLogin_new($wxuser);//微信自动登录
+                        //     if ($data['status'] != 1 && $data['result'] === '100') {
+                                
+                        //          $first_leader = I('first_leader');
+                        //          $this->redirect(U('Mobile/User/bind_guide',['first_leader'=>$first_leader]));
+                        //    }
+                        //  }
+                    //} else {
+                      
+                        //新的，老的
                         $data = $logic->thirdLogin($wxuser);
-                    }
+                     
+                    //}
                     if($data['status'] == 1){
                         session('user',$data['result']);
                         setcookie('user_id',$data['result']['user_id'],null,'/');
@@ -161,8 +186,8 @@ class MobileBase extends Controller {
     // 网页授权登录获取 OpendId
     public function GetOpenid()
     {
-        if(session('openid'))
-            return session('data');
+        // if(session('openid'))
+        //     return session('data');
         //通过code获得openid
         if (!isset($_GET['code'])){
             //触发微信返回code码
