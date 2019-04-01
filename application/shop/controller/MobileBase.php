@@ -62,7 +62,7 @@ class MobileBase extends Controller {
                     setcookie('subscribe',$wxuser['subscribe']);
                     $logic = new UsersLogic(); 
                     $is_bind_account = tpCache('basic.is_bind_account');
-                     if ($is_bind_account) {
+                    if ($is_bind_account) {
                          if (CONTROLLER_NAME != 'User' || ACTION_NAME != 'bind_guide') {
                             $data = $logic->thirdLogin_new($wxuser);//微信自动登录
                             if ($data['status'] != 1 && $data['result'] === '100') {
@@ -72,6 +72,7 @@ class MobileBase extends Controller {
                            }
                          }
                     } else {
+                        dump(999);exit;
                         $old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
                         $wxuser['old_openid'] = $old_openid['old_openid'];
                         dump($old_openid);exit;
