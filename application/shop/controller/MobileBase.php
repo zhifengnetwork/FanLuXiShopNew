@@ -20,6 +20,7 @@ use app\common\logic\UsersLogic;
 use app\common\logic\wechat\WechatUtil;
 
 class MobileBase extends Controller {
+    public $old_user = 0;
     public $session_id;
     public $weixin_config;
     public $cateTrre = array();
@@ -139,7 +140,7 @@ class MobileBase extends Controller {
     public function GetOldOpenid()
     {
         //通过code获得openid
-        if (session('old_user') == 1){
+        if ($this->old_user == 1){
             //触发微信返回code码
             //$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
             $baseUrl = urlencode($this->get_url());
@@ -181,6 +182,7 @@ class MobileBase extends Controller {
             $data['subscribe'] = $data2['subscribe'];      
             $data['oauth_child'] = 'mp';
             session('openid',$data['openid']);
+            $this->old_user = 1;
             session('old_user',1);
             $data['oauth'] = 'weixin';
             if(isset($data2['unionid'])){
@@ -299,6 +301,7 @@ class MobileBase extends Controller {
         $urlObj["scope"] = "snsapi_userinfo";
         $urlObj["state"] = "STATE"."#wechat_redirect";
         $bizString = $this->ToUrlParams($urlObj);
+        $this->old_user = 2;
         session('old_user',2);
         return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
     }
