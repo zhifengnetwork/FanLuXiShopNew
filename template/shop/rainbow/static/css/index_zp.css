@@ -59,6 +59,17 @@ body{
 .banner-wrap-zp img{
     width: 100%;
 }
+.swiper-bg{
+    width: 100%;
+    height: 0.13rem;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 99;
+}
+.swiper-bg img{
+    width: 100%;
+}
 
 /* 菜单导航 */
 .nav-wrap-zp ul{
