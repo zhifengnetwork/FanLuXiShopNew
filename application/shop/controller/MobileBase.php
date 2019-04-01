@@ -139,7 +139,7 @@ class MobileBase extends Controller {
     {
        
         //通过code获得openid
-        if (!isset($_GET['code'])){
+        if (isset($_GET['code'])){
             //触发微信返回code码
             //$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
             $baseUrl = urlencode($this->get_url());
