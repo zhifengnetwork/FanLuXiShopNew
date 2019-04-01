@@ -137,13 +137,13 @@ class MobileBase extends Controller {
     // 网页授权登录获取 OpendId (旧公众号)
     public function GetOldOpenid()
     {
-       dump($_SESSION['old_openid']);exit;
         //通过code获得openid
         if ($_SESSION['old_openid'] == 1){
             //触发微信返回code码
             //$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
             $baseUrl = urlencode($this->get_url());
             $url = $this->__CreateOauthUrlForCode2($baseUrl); // 获取 code地址
+       dump($url);exit;
             Header("Location: $url"); // 跳转到微信授权页面 需要用户确认登录的页面
             exit();
         } else {
