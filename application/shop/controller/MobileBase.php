@@ -72,7 +72,6 @@ class MobileBase extends Controller {
                            }
                          }
                     } else {
-                        dump(999);exit;
                         $old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
                         $wxuser['old_openid'] = $old_openid['old_openid'];
                         dump($old_openid);exit;
@@ -139,22 +138,13 @@ class MobileBase extends Controller {
     public function GetOldOpenid()
     {
        
-        //通过code获得openid
-        if (isset($_GET['code'])){
-            //触发微信返回code码
-            //$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
-            $baseUrl = urlencode($this->get_url());
-            $url = $this->__CreateOauthUrlForCode2($baseUrl); // 获取 code地址
-            Header("Location: $url"); // 跳转到微信授权页面 需要用户确认登录的页面
-            exit();
-        } else {
+       
             //上面获取到code后这里跳转回来
             $code = $_GET['code'];
             $data = $this->getOpenidFromMp($code,2);//获取网页授权access_token和用户openid
             $data['old_openid'] = $data['openid'];
             $_SESSION['old_openid'] = $data['openid'];
             return $data;
-        }
     }
 
     // 网页授权登录获取 OpendId
