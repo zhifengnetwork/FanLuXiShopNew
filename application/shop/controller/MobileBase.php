@@ -137,7 +137,7 @@ class MobileBase extends Controller {
     // 网页授权登录获取 OpendId (旧公众号)
     public function GetOldOpenid()
     {
-       
+       dump($_SESSION['old_openid']);exit;
         //通过code获得openid
         if ($_SESSION['old_openid'] == 1){
             //触发微信返回code码
