@@ -122,7 +122,10 @@ body{
     margin-left: 0.1rem;
     font-size: 0.24rem;
     color: #ff0054;
-}  
+} 
+.seckill-wrap a{
+    width: 100%
+}
 .seckill-wrap .downTime span{
     background-color: #ff0054;
     color: #fff;
@@ -137,6 +140,9 @@ body{
 .floors .down{
     display: flex;
     padding-bottom: 0.15rem;
+}
+.floors .down a{
+    width: 100%
 }
 .floors .down .item{
     width: 50%;

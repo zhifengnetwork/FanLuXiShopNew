@@ -110,24 +110,27 @@
 			<!-- 秒杀 -->
 			<div class="seckill-wrap">
 				<a href="{:U('Shop/Activity/flash_sale_list')}">
-				<div class="up">
-						<i><img src="__STATIC__/images/home_zp/Second kill@2x.png" /></i>
-						<div class="downTime">
-							<span id="downTime-h"></span> : <span id="downTime-m"></span> : <span id="downTime-s"></span>
-						</div>
-						<!-- <span class="hms"></span> -->
-				</div>
-				<div class="down">
-						<foreach name="flash_sale_list" item="v">
-					<div class="item">
-						<div class="picture">
-							<img src="{$v[goods_id]|goods_thum_images=200,200}" >
-						</div>
-						<p class="price">￥<span>{$v[price]}</span>元</p>
+					<div class="up">
+								<i><img src="__STATIC__/images/home_zp/Second kill@2x.png" /></i>
+							<div class="downTime">
+								<span id="downTime-h"></span> : <span id="downTime-m"></span> : <span id="downTime-s"></span>
+							</div>
 					</div>
+				</a>
+				<div class="down">
+					<foreach name="flash_sale_list" item="v" length='2'>
+						
+							<div class="item">
+									<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id],'item_id'=>$v[item_id]))}">
+								<div class="picture">
+									<img src="{$v[goods_id]|goods_thum_images=200,200}" >
+								</div>
+							</a>
+								<p class="price">￥<span>{$v[price]}</span>元</p>
+							</div>
+						
 					</foreach>
 				</div>
-				</a>
 			</div>
 
 			<!-- 发现好货 -->
@@ -163,7 +166,7 @@
 			
 			<div class="recommend-list">
 				<ul>
-					<foreach name="favourite_goods" id="v">
+					<foreach name="favourite_goods" id="v" >
 						<li>
 							<div class="img-wrap">
 								<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id],'shareid'=>$shareid))}"><img src="{$v[goods_id]|goods_thum_images=400,400}" /></a>

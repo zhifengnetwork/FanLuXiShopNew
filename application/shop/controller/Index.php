@@ -39,11 +39,11 @@ class Index extends MobileBase {
             $signPackage = $jssdk->GetSignPackage();              
             print_r($signPackage);
         */
-        $hot_goods = M('goods')->where("is_hot=1 and is_on_sale=1")->order('goods_id DESC')->limit(20)->cache(true,TPSHOP_CACHE_TIME)->select();//首页热卖商品
+        $hot_goods = M('goods')->where("is_hot=1 and is_on_sale=1")->order('goods_id DESC')->limit(2)->cache(true,TPSHOP_CACHE_TIME)->select();//首页热卖商品
         $thems = M('goods_category')->order('sort_order')->limit(9)->cache(true,TPSHOP_CACHE_TIME)->select();
         $this->assign('thems',$thems);
         $this->assign('hot_goods',$hot_goods);
-        $favourite_goods = M('goods')->where("is_recommend=1 and is_on_sale=1")->order('sort DESC')->limit(20)->cache(true,TPSHOP_CACHE_TIME)->select();//首页推荐商品
+        $favourite_goods = M('goods')->where("is_recommend=1 and is_on_sale=1")->order('sort DESC')->limit(2)->cache(true,TPSHOP_CACHE_TIME)->select();//首页推荐商品
         $is_new = M('goods')->where("is_new=1 and is_on_sale=1")->order('sort DESC')->limit(2)->select();
         // var_dump($is_new);exit;
 
