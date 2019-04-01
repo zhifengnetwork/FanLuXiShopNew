@@ -253,28 +253,34 @@ class UsersLogic extends Model
      */
     public function thirdLogin($data = array())
     {
+      
         if (!$data['openid'] || !$data['oauth']) {
             return array('status' => -1, 'msg' => '参数有误openid或oauth丢失', 'result' => 'aaa');
         }
-        $user2 = session('user');
-        if (!empty($user2)) {
-            $r = $this->oauth_bind($data);//绑定账号
-            if ($r) {
-                return array('status' => 1, 'msg' => '绑定成功', 'result' => $user2);
-            } else {
-                return array('status' => 1, 'msg' => '您的' . $data['oauth'] . '账号已经绑定过账号', 'bind_status' => 0,'result' => $user2);
-            }
-        }
+
+        // $user2 = session('user');
+        // if (!empty($user2)) {
+        //     $r = $this->oauth_bind($data);//绑定账号
+        //     if ($r) {
+        //         return array('status' => 1, 'msg' => '绑定成功', 'result' => $user2);
+        //     } else {
+        //         return array('status' => 1, 'msg' => '您的' . $data['oauth'] . '账号已经绑定过账号', 'bind_status' => 0,'result' => $user2);
+        //     }
+        // }
 
         $data['push_id'] && $map['push_id'] = $data['push_id'];
         $map['token'] = md5(time() . mt_rand(1, 999999999));
         $map['last_login'] = time();
         
+   
+
         $user = $this->getThirdUser($data);
- 
+      
+
         if(!$user){
             //账户不存在 注册一个
             $map['password'] = '';
+            $map['old_openid'] = $data['old_openid'];
             $map['openid'] = $data['openid'];
             $map['nickname'] = $data['nickname'];
             $map['reg_time'] = time();
@@ -304,6 +310,8 @@ class UsersLogic extends Model
             //     $map['is_distribut']  = 1;
             // } 
 
+        
+
             $is_cunzai = Db::name('users')->where(array('openid'=>$map['openid']))->find();
             if(!$is_cunzai){
 
@@ -319,6 +327,7 @@ class UsersLogic extends Model
                 $row_id = $is_cunzai['user_id'];
 
             }
+
 
             $user = Db::name('users')->where(array('user_id'=>$row_id))->find();
             
