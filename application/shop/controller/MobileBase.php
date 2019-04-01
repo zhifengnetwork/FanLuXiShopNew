@@ -53,9 +53,10 @@ class MobileBase extends Controller {
             } 
             if (empty($_SESSION['openid'])){
                 if(is_array($this->weixin_config) && $this->weixin_config['wait_access'] == 1){
-                    //$wxuser = $this->GetOpenid(); //授权获取openid以及微信用户信息
                     $old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
-                     dump($old_openid);exit;
+                    $wxuser = $this->GetOpenid(); //授权获取openid以及微信用户信息
+                    $wxuser['old_openid'] = $old_openid['old_openid'];
+                     dump($wxuser);exit;
                     //过滤特殊字符串
                     $wxuser['nickname'] && $wxuser['nickname'] = replaceSpecialStr($wxuser['nickname']);
                     
@@ -150,11 +151,7 @@ class MobileBase extends Controller {
             $code = $_GET['code'];
             $data = $this->getOpenidFromMp($code,2);//获取网页授权access_token和用户openid
             $data['old_openid'] = $data['openid'];
-            $data['oauth'] = 'weixin';
-            if(isset($data2['unionid'])){
-                $data['unionid'] = $data2['unionid'];
-            }
-            $_SESSION['data'] =$data;
+            $_SESSION['old_openid'] = $data['openid'];
             return $data;
         }
     }

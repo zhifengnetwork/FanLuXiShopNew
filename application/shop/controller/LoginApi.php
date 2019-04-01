@@ -43,7 +43,7 @@ class LoginApi extends MobileBase{
         $data['nickname'] && $data['nickname'] = replaceSpecialStr($data['nickname']);
         
         $is_bind_account = tpCache('basic.is_bind_account');
-        dump($is_bind_account);exit;
+        
         if($is_bind_account){
             
             if($data['unionid']){
