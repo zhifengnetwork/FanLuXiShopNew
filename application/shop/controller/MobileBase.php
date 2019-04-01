@@ -56,6 +56,7 @@ class MobileBase extends Controller {
                     $wxuser = $this->GetOpenid(); //授权获取openid以及微信用户信息
                  
                     $old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
+                    dump($old_openid);exit;
                     $wxuser['old_openid'] = $old_openid['old_openid'];
 
                     //过滤特殊字符串
@@ -158,7 +159,7 @@ class MobileBase extends Controller {
     public function GetOpenid()
     {
         if(session('openid'))
-            return $_SESSION['data'];
+            return session('data');
         //通过code获得openid
         if (!isset($_GET['code'])){
             //触发微信返回code码
@@ -177,13 +178,13 @@ class MobileBase extends Controller {
             $data['head_pic'] = $data2['headimgurl']; 
             $data['subscribe'] = $data2['subscribe'];      
             $data['oauth_child'] = 'mp';
-            $_SESSION['openid'] = $data['openid'];
+            session('openid',$data['openid']);
             session('old_openid',1);
             $data['oauth'] = 'weixin';
             if(isset($data2['unionid'])){
                 $data['unionid'] = $data2['unionid'];
             }
-            $_SESSION['data'] =$data;
+            session('data', $data);
             return $data;
         }
     }
