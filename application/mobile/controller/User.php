@@ -50,6 +50,7 @@ class User extends MobileBase
             'forget_pwd', 'check_captcha', 'check_username', 'send_validate_code', 'express' , 'bind_guide', 'bind_account','bind_reg'
         );
         $is_bind_account = tpCache('basic.is_bind_account');
+        dump($is_bind_account);exit;
         if (!$this->user_id && !in_array(ACTION_NAME, $nologin)) {
             if(strstr($_SERVER['HTTP_USER_AGENT'],'MicroMessenger') && $is_bind_account){
 
