@@ -45,6 +45,12 @@
     margin: 1rem 0;
     overflow: hidden;
 }
+.loginsingup-input .lsu span{
+	position: absolute;
+	left: 0.1rem;
+	top: 0.4rem;
+	z-index: 99;
+}
 .loginsingup-input .code_zjy {
     width: 100%;
     position: relative;

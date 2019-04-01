@@ -30,7 +30,7 @@ $(function(){
 
     function setendTime(){
         //自定义结束时间戳
-        var endTime = new Date('2019/03/31 18:51:00').getTime();
+        var endTime = new Date('2019/04/01 23:59:00').getTime();
         var text = downTime(endTime);
     }
      // 倒计时补零操作
