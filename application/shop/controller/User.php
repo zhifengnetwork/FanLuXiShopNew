@@ -674,7 +674,7 @@ class User extends MobileBase
             $this->ajaxReturn(['status' => 0, 'msg' => '操作失败']);
         }
     }
-    
+
     /*
      * 添加地址
      */
