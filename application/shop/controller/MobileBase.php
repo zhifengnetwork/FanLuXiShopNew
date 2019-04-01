@@ -154,7 +154,7 @@ class MobileBase extends Controller {
             //    $data['old_openid'] = $data['openid'];
             //}
             $data = $this->getOpenidFromMp($code);//获取网页授权access_token和用户openid
-
+            return $data;
             $data2 = $this->GetUserInfo($data['access_token'],$data['openid']);//获取微信用户信息
             $data['nickname'] = empty($data2['nickname']) ? '微信用户1' : trim($data2['nickname']);
             $data['sex'] = $data2['sex'];
