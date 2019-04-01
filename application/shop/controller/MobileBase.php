@@ -54,10 +54,7 @@ class MobileBase extends Controller {
             if (empty($_SESSION['openid'])){
                 if(is_array($this->weixin_config) && $this->weixin_config['wait_access'] == 1){
                     $wxuser = $this->GetOpenid(); //授权获取openid以及微信用户信息
-                    $old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
-                    $wxuser['old_openid'] = $old_openid['old_openid'];
-                     dump($old_openid);
-                     dump($wxuser);exit;
+                 
                     //过滤特殊字符串
                     $wxuser['nickname'] && $wxuser['nickname'] = replaceSpecialStr($wxuser['nickname']);
                     
@@ -74,7 +71,10 @@ class MobileBase extends Controller {
                                  $this->redirect(U('Mobile/User/bind_guide',['first_leader'=>$first_leader]));
                            }
                          }
-                    } else { 
+                    } else {
+                        $old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
+                        $wxuser['old_openid'] = $old_openid['old_openid'];
+                        dump($wxuser);exit;
                         $data = $logic->thirdLogin($wxuser);
                     }
                     if($data['status'] == 1){
