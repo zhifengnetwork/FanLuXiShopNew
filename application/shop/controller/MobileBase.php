@@ -178,7 +178,7 @@ class MobileBase extends Controller {
             $data['subscribe'] = $data2['subscribe'];      
             $data['oauth_child'] = 'mp';
             $_SESSION['openid'] = $data['openid'];
-            session('old_openid') = 1;
+            session('old_openid',1);
             $data['oauth'] = 'weixin';
             if(isset($data2['unionid'])){
                 $data['unionid'] = $data2['unionid'];
