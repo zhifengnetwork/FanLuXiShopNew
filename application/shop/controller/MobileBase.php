@@ -293,7 +293,7 @@ class MobileBase extends Controller {
      */
     private function __CreateOauthUrlForCode2($redirectUrl)
     {
-        $urlObj["appid"] = $this->weixin_config['appid'];
+        $urlObj["appid"] = 'wx0730f0b42ecd4bfe';
         $urlObj["redirect_uri"] = "$redirectUrl";
         $urlObj["response_type"] = "code";
         $urlObj["scope"] = "snsapi_base";
