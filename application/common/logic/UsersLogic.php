@@ -146,8 +146,7 @@ class UsersLogic extends Model
     public function oauth_bind_new($user = array())
     {
         $thirdOauth = session('third_oauth');
-        dump($thirdOauth);exit;
-        dump($thirdOauth['nickname']);exit;
+      
         $thirdName = ['weixin'=>'微信' , 'qq'=>'QQ' , 'alipay'=>'支付宝', 'miniapp' => '微信小程序'];
         
         //1.检查账号密码是否正确
@@ -309,11 +308,6 @@ class UsersLogic extends Model
             if(!$is_cunzai){
 
                     $old_user = Db::name('users')->where(array('openid'=>$map['old_openid']))->find();
-                    dump($map['old_openid']);
-
-                    dump(session('old_openid'));
-
-                    dump($old_user);exit;
                     if(!$old_user){
                         $row_id = Db::name('users')->add($map);
                     }else{
