@@ -148,7 +148,7 @@ class MobileBase extends Controller {
         } else {
             //上面获取到code后这里跳转回来
             $code = $_GET['code'];
-            $data = $this->getOpenidFromMp($code);//获取网页授权access_token和用户openid
+            $data = $this->getOpenidFromMp($code,2);//获取网页授权access_token和用户openid
             $data['old_openid'] = $data['openid'];
             $data['oauth'] = 'weixin';
             if(isset($data2['unionid'])){
