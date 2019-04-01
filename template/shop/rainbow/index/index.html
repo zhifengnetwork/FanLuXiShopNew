@@ -24,10 +24,13 @@
 					<img src="__STATIC__/images/home_zp/scan@2x.png" />
 				</a>
 			</div>
+			
+			<!-- <div class="searchInput">搜索</div> -->
 			<div class="search">
 				<span class="search-btn"><img src="__STATIC__/images/home_zp/search-icon-index@2x.png" /></span>
 				<span class="search-input">连衣裙</span>
 			</div>
+			
 			<div class="login-btn">
 				<a href="{:U('Shop/User/index')}">
 					<img src="__STATIC__/images/home_zp/login-btn-index@2x.png" />
@@ -277,6 +280,19 @@
 					}
 				});
 			}
+			/**
+			* 搜索
+			* */
+			$(function(){
+				 $(".search").click(function(){
+								$(window).attr('location',` /shop/Goods/ajaxSearch`);
+				 })
+				 $(document).keydown(function (event) {
+				if (event.keyCode == 13) {
+				$('.search').triggerHandler('click');
+				}
+			});
+			})
 
 	</script>
 </body>
