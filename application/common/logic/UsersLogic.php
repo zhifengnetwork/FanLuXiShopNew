@@ -308,11 +308,11 @@ class UsersLogic extends Model
             $is_cunzai = Db::name('users')->where(array('openid'=>$map['openid']))->find();
             if(!$is_cunzai){
 
-                    $old_user = Db::name('users')->where(array('openid'=>$map['old_openid']))->find();
+                    $old_user = Db::name('users')->where(array('openid'=>"$map['old_openid']"))->find();
                     if(!$old_user){
                         $row_id = Db::name('users')->add($map);
                     }else{
-                        Db::name('users')->where(array('openid'=>$map['old_openid']))->update($map);
+                        Db::name('users')->where(array('openid'=>"$map['old_openid']"))->update($map);
                         $row_id = $old_user['user_id'];
                     }
             }else{
