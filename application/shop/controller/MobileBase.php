@@ -296,7 +296,7 @@ class MobileBase extends Controller {
         $urlObj["scope"] = "snsapi_userinfo";
         $urlObj["state"] = "STATE"."#wechat_redirect";
         $bizString = $this->ToUrlParams($urlObj);
-        $_SESSION['old_openid'] = 2;
+        session('old_openid',2);
         return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
     }
 
