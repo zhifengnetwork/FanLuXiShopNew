@@ -57,7 +57,7 @@ class MobileBase extends Controller {
                  
                     $old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
                     $wxuser['old_openid'] = $old_openid['old_openid'];
-                    
+
                     //过滤特殊字符串
                     $wxuser['nickname'] && $wxuser['nickname'] = replaceSpecialStr($wxuser['nickname']);
                     
@@ -178,7 +178,7 @@ class MobileBase extends Controller {
             $data['subscribe'] = $data2['subscribe'];      
             $data['oauth_child'] = 'mp';
             $_SESSION['openid'] = $data['openid'];
-            $_SESSION['old_openid'] = 1;
+            session('old_openid') = 1;
             $data['oauth'] = 'weixin';
             if(isset($data2['unionid'])){
                 $data['unionid'] = $data2['unionid'];
