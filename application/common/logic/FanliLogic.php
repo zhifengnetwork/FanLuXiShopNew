@@ -156,13 +156,13 @@ class FanliLogic extends Model
 		{
               $res = M('users')->where(['user_id'=>$user_id])->update(['level'=>2]);
               	$desc = "购买产品成为vip";
-	        	$log = $this->writeLog($user_info['user_id'],'',$desc,2); //写入日志
+	        	$log = $this->writeLog_ug($user_info['user_id'],'',$desc,2); //写入日志
 		}
 		else if($this->goodId==$this->tgoodsid  && $order['pay_status']==1 && $user_info['level']<3)//自动升级店主
 		{
 			$res_s = M('users')->where(['user_id'=>$user_id])->update(['level'=>3]);
 			$desc = "购买指定产品获得店主";
-	        $log = $this->writeLog($user_info['user_id'],'398',$desc,2); //写入日志
+	        $log = $this->writeLog_ug($user_info['user_id'],'398',$desc,2); //写入日志
 
 	        if($res_s)
 	        {
@@ -176,7 +176,7 @@ class FanliLogic extends Model
 	             {
 	                  $res = M('users')->where(['user_id'=>$user_info['first_leader']])->update(['level'=>4]);
 	                  $desc = "直推店主".$fanli['tui_num']."个成为总监";
-		        	  $log = $this->writeLog($user_info['first_leader'],'',$desc,2); //写入日志
+		        	  $log = $this->writeLog_ug($user_info['first_leader'],'',$desc,2); //写入日志
 	             }
 	        }
 		}
@@ -217,11 +217,11 @@ class FanliLogic extends Model
 	{
       //只有总监和大区获得管理津贴
 		//查询上上级信息
-		$parent_info = M('users')->where('user_id',$user_leader)->field('level,user_id')->find();
+		$parent_info = M('users')->where('first_leader',$user_leader)->field('level,user_id')->find();
 		if($parent_info['level']==4 || $parent_info['level']==5)
 		{
-			$fanli = M('user_level')->where('level',$parent_info['level'])->field('jietie')->find();
-			 $commission = $fanli_money * ($fanli['jietie'] / 100);
+			$fanli = M('user_level')->where('level',$parent_info['level'])->field('jintie')->find();
+			 $commission = $fanli_money * ($fanli['jintie'] / 100);
 
 	          //按上一级等级各自比例分享返利
 	       $bool = M('users')->where('user_id',$parent_info['user_id'])->setInc('user_money',$commission);
@@ -342,6 +342,23 @@ class FanliLogic extends Model
 			M('order_divide')->add($data);
 		
 		}
+		
+		return $bool;
+	}
+		//升级记录
+	public function writeLog_ug($userId,$money,$desc,$states)
+	{
+		$data = array(
+			'user_id'=>$userId,
+			'user_money'=>$money,
+			'change_time'=>time(),
+			'desc'=>$desc,
+			'order_sn'=>$this->orderSn,
+			'order_id'=>$this->orderId,
+			'log_type'=>$states
+		);
+
+		$bool = M('upgrade_log')->insert($data);
 		
 		return $bool;
 	}
