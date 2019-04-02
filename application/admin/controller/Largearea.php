@@ -29,10 +29,11 @@ class Largearea extends Base {
     
     public function lists(){
       $where='u.level=4';
-      $count = Db::name('users')->alias('u')->field('u.user_id')
-             //->join('order od','u.first_leader=od.user_id','LEFT')
+
+      $count = Db::name('users')->alias('u')->field('u.user_id,l')
+              //->join('user_level l','l.level=u.level','LEFT')
              ->where($where)->count();
-             
+       $user_level=   Db::name('user_level')->field('achievement,tui_num')->where('level=5')->find();
        $Page = new Page($count,10);
         $users = Db::name('users')->alias('u')
              ->where($where)
@@ -57,11 +58,13 @@ class Largearea extends Base {
             $return['first'] = !empty($total)?$total[0]['sale_amount']:0; 
             $return['realname'] =$v['realname'];
             $return['mobile'] =$v['mobile'];
-             $znum['znum'] =$return['znum'];
+            $return['id'] =$v['user_id'];
+            $znum['znum'] =$return['znum'];
             $new_list[]=$return;
            
          }
         $this->assign('new_list',$new_list);
+        $this->assign('user_level',$user_level);
         $this->assign('pager',$Page);
         $this->assign('p',I('p/d',1));
         $this->assign('page_size',$this->page_size);
@@ -96,6 +99,37 @@ class Largearea extends Base {
 
           }
     }
+    //确认升级大区
+    public function levelupdate(){
+    if($_POST){
+      $id = I('id');
+      $res = M('users')->where('user_id',$id)->update(['level'=>5]);
+      if($res){
+        $desc = "升级为大区董事";
+        $log = $this->writeLog_ug($id,'',$desc,2); //写入日志
+        $this->ajaxReturn(['status' => 1, 'msg' => '升级成功']);
+      }else{
+        $this->ajaxReturn(['status' => 0, 'msg' => '参数错误']);
+      }
+    }
+  }
+
+    //记录日志
+  public function writeLog_ug($userId,$money,$desc,$states)
+  {
+    $data = array(
+      'user_id'=>$userId,
+      //'user_money'=>$money,
+      'change_time'=>time(),
+      'desc'=>$desc,
+     // 'order_sn'=>$this->orderSn,
+      //'order_id'=>$this->orderId,
+      'log_type'=>$states
+    );
+
+    $bool = M('upgrade_log')->insert($data);
+    return $bool;
+  }
 
     
 }

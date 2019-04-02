@@ -7,8 +7,8 @@
 	<div class="fixed-bar">
 		<div class="item-title">
 			<div class="subject">
-				<h3>申请大区董事列表</h3>
-				<h5>申请大区董事列表</h5>
+				<h3>会员升级信息</h3>
+				<h5>会员升级信息</h5>
 			</div>
 		</div>
 	</div>
@@ -20,19 +20,19 @@
 		  <span title="收起提示" id="explanationZoom" style="display: block;"></span>
 		</div>
 		 <ul>
-			<li>显示总监推荐总监及其业绩</li>
+			<li>会员升级信息</li>
 		</ul>
 	</div>
 	
 	<div class="flexigrid">
 		<div class="mDiv">
 			<div class="ftitle">
-				<h3>申请大区董事列表记录</h3>
+				<h3>日志记录</h3>
 				<h5>(共{$pager->totalRows}条记录)</h5>
 			</div>
 			<div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
 
-			<form class="navbar-form form-inline" id="search-form" method="POST" action="{:U('Distribut/rebate_log')}" onSubmit="return check_form();">
+			<form class="navbar-form form-inline" id="search-form" method="POST" action="{:U('Upgrade/lists')}" onSubmit="return check_form();">
 				<div class="sDiv">
 					<div class="sDiv2" style="margin-right: 10px;">
 						<input type="text" size="30" name="start_time" id="start_time" value="{$start_time|date='Y-m-d H:i:s', ###}" placeholder="起始时间" class="qsbox">
@@ -61,21 +61,18 @@
 							<div style="text-align: center; width: 50px;" class="">ID</div>
 						</th>
 						<th align="center" abbr="ac_id" axis="col4" class="">
-							<div style="text-align: center; width: 50px;" class="">用户</div>
+							<div style="text-align: center; width: 100px;" class="">用户</div>
 						</th>
-							<th align="center" abbr="ac_id" axis="col4" class="">
-							<div style="text-align: center; width: 100px;" class="">手机</div>
+						<th align="center" abbr="article_time" axis="col6" class="">
+							<div style="text-align: center; width: 200px;" class="">描述</div>
 						</th>
-						<th align="center" abbr="article_show" axis="col5" class="">
-							<div style="text-align: center; width: 150px;" class="">推荐总监人数</div>
+						<th align="center" abbr="article_time" axis="col6" class="">
+							<div style="text-align: center; width: 150px;" class="">时间</div>
 						</th>
-						<th align="center" abbr="article_show" axis="col5" class="">
-							<div style="text-align: center; width: 150px;" class="">业绩</div>
-						</th>
-
+						<!--
 						<th align="center" axis="col1" class="handle">
 							<div style="text-align: center; width: 200px;">操作</div>
-						</th>
+						</th>-->
 						<th style="width:100%" axis="col7">
 							<div></div>
 						</th>
@@ -88,37 +85,29 @@
 			<div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
 				<table>
 					<tbody>
-					<foreach name="new_list" item="vo" key="k" >
+					<foreach name="log" item="vo" key="k" >
 						<tr>
 							<td class="sign">
 								<div style="width: 24px;"><i class="ico-check"></i></div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 50px;">{$k}</div>
+								<div style="text-align: center; width: 50px;">{$vo.log_id}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 50px;">{$vo.realname}</div>
+								<div style="text-align: center; width: 100px;">{$vo.nickname}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 100px;">{$vo.mobile}</div>
+								<div style="text-align: center; width: 200px;">{$vo.desc}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 150px;">{$vo.znum}</div>
+								<div style="text-align: center; width: 150px;">{$vo.change_time|date="Y-m-d H:i:s", ###}</div>
 							</td>
-								<td align="center" class="">
-								<div style="text-align: center; width: 150px;">{$vo.first}</div>
-							</td>
+							<!--
 							<td align="center" class="handle">
-								<if condition="($vo['first'] egt $user_level['achievement']) and ($vo['znum'] egt $user_level['tui_num']) ">
 								<div style="text-align: center; width: 200px; max-width:200px;">
-									<a class="btn blue" href="javascript:void(0)" data-url="{:U('Largearea/levelupdate')}" data-id="{$vo.id}" onClick="delfun(this)"><i class="fa fa-pencil-square-o"></i>升级为大区</a>
+									<a class="btn blue" href="{:U('Distribut/log_detail',array('id'=>$vo['log_id']))}"><i class="fa fa-search"></i>查看</a>
 								</div>
-								  <else />
-								  	<div style="text-align: center; width: 200px; max-width:200px;">
-									<a class="btn blue" href="javascript:void(0)" >条件不符合</a>
-								</div>
-							</if>
-							</td>
+							</td>-->
 							<td align="" class="" style="width: 100%;">
 								<div>&nbsp;</div>
 							</td>
@@ -164,31 +153,6 @@
 			return false;
 		}		 
 		return true;
-	}
-
-	function delfun(obj) {
-		// 升级大区
-		layer.confirm('确实升级？', {
-			btn: ['确定', '取消'] //按钮
-		}, function () {
-			$.ajax({
-				type: 'post',
-				url: $(obj).attr('data-url'),
-				data : {act:'del',id:$(obj).attr('data-id')},
-				dataType: 'json',
-				success: function (data) {
-					layer.closeAll();
-					if (data.status == 1) {
-						layer.msg(data.msg, {icon: 1});
-						$(obj).parent().parent().parent().remove();
-					} else {
-						layer.alert(data.msg, {icon: 2});
-					}
-				}
-			})
-		}, function () {
-			layer.closeAll();
-		});
 	}
 </script>
 </body>
