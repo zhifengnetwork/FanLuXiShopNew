@@ -143,12 +143,14 @@
 					<h3>发现好货</h3>
 				</div>
 				<div class="down">
-					<volist name="is_new" id="vo">
+					<volist name="is_new" id="vo" length='2'>
 					<div class="item">
-						<div class="picture">
-							<img src="__STATIC__/images/home_zp/tupian2@2x.png" >
-						</div>
-						<p class="price">￥<span>{$vo[price]}</span>元</p>
+						<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$vo[goods_id],'item_id'=>$vo[item_id]))}">
+							<div class="picture">
+								<img src="{$vo[goods_id]|goods_thum_images=200,200}" >
+							</div>
+							<p class="price">￥<span>{$vo[shop_price]}</span>元</p>
+						</a>
 					</div>
 					</volist>
 					<!-- <div class="item">
