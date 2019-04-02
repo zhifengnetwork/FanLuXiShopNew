@@ -1918,10 +1918,6 @@ function provingReceive($user, $type, $num = 1)
         if ($num > 1) {
             return array('status' => 0, 'msg' => '超过领取数量，只能领取一件！', 'result' => array());
         }
-
-        if ($user['agent_free_num'] < $num) {
-            return array('status' => 1, 'msg' => '正常购物流程', 'result' => array());
-        }
     }
 
     // 扫码进来

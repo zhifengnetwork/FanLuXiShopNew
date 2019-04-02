@@ -409,7 +409,7 @@ class Pay
                 
                 $isReceive = provingReceive($this->user, $this->payList[0]['goods']->sign_free_receive, $this->totalNum);
             }
-            
+
             if($isReceive['status'] == 2){
                 if ($this->payList[0]['goods']->sign_free_receive == 1) {
                     // 免费领取的不限制数量
