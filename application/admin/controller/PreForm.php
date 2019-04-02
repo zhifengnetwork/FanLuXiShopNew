@@ -46,6 +46,9 @@ class Preform extends Base {
           //  $v['team_par'] = $return;
             if(!empty($userdata)) {
                 $user_ids = implode(',',$userdata);
+            }else
+            {
+              $user_ids='';
             }
             $total = $this->jisuanyeji($user_ids,1,2); //查统计团队业绩
             /*
