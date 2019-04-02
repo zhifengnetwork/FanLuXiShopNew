@@ -265,11 +265,9 @@ class Order extends MobileBase
     {
         $id = I('id/d', 0);
         $data = M('Order')->where(['order_id'=>$id, 'user_id'=>$this->user_id])->update(['deleted'=>1]);
-        if(request()->isAjax()){
-            $this->ajaxReturn($data);
-        }
-        if ($data['status'] != 1) {
-            $this->error($data['msg'],U('Shop/Order/order_list'));
+
+        if ($data) {
+            $this->success('操作成功',U('Shop/Order/order_list'));
         }
     }
 
