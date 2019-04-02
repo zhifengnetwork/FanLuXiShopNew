@@ -54,7 +54,7 @@
                         </div>
                         <div class="fr">
                             <span>{$order['order_status_detail']}</span>
-                            <img onclick="deleteElement(this)" src="__STATIC__/images/delete.png">
+                            <img onclick="deleteElement({$order.order_id})" src="__STATIC__/images/delete.png">
                         </div>
                     </div>
                 </div>
@@ -190,10 +190,11 @@
     /*
     **删除列表
     */
-    function deleteElement(Obj){
+    function deleteElement(id){
         if(confirm("确定删除该商品?")){
             //点击确定后操作　　
-            Obj.parentNode.parentNode.parentNode.parentNode.remove();
+            //Obj.parentNode.parentNode.parentNode.parentNode.remove();
+            location.href = "/index.php?m=Shop&c=Order&a=order_delect&id="+id;
         }
     }
     /*

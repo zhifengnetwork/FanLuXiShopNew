@@ -258,7 +258,20 @@ class Order extends MobileBase
         return $this->fetch();
     }
 
-
+    /**
+     * 删除订单
+     */
+    public function order_delect()
+    {
+        $id = I('id/d', 0);
+        $data = M('Order')->where(['order_id'=>$id, 'user_id'=>$this->user_id])->update(['deleted'=>1]);
+        if(request()->isAjax()){
+            $this->ajaxReturn($data);
+        }
+        if ($data['status'] != 1) {
+            $this->error($data['msg'],U('Shop/Order/order_list'));
+        }
+    }
 
 
     /**
@@ -272,7 +285,7 @@ class Order extends MobileBase
             $this->ajaxReturn($data);
         }
         if ($data['status'] != 1) {
-            $this->error($data['msg'],U('Mobile/Order/order_list'));
+            $this->error($data['msg'],U('Shop/Order/order_list'));
         } else {
             $model = new UsersLogic();
             $order_goods = $model->get_order_goods($id);
