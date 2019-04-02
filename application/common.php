@@ -21,7 +21,7 @@ function access_token(){
 	
     $appid = $token['appid'];
     $appsecret = $token['appsecret'];
-     
+
     //判断是否过了缓存期
     $expire_time = $token['web_expires'];
     if($expire_time > time()){
@@ -29,11 +29,12 @@ function access_token(){
          
     }
     $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$appid}&secret={$appsecret}";
+
     $return = httpRequest($url,'GET');
     $return = json_decode($return,1);
     $web_expires = time() + 7140; // 提前60秒过期
     if($return['access_token']){
-        M('wx_user')->where(array('id'=>25))->save(array('web_access_token'=>$return['access_token'],'web_expires'=>$web_expires));
+        M('wx_user')->where(array('id'=>31))->save(array('web_access_token'=>$return['access_token'],'web_expires'=>$web_expires));
     }
     return $return['access_token'];
 }
