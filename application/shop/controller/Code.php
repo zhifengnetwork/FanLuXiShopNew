@@ -3,14 +3,14 @@ namespace app\shop\controller;
 use think\Db;
 use think\Controller;
  
-
+/*
+ * 获取旧公众号的openid
+ */
 class Code extends Controller
 {
  
     public function index()
     {
-
-        // dump(session('openid'));
 
         $old_openid = session('old_openid');
         if($old_openid){
@@ -18,14 +18,12 @@ class Code extends Controller
             exit;
         }
 
-        //去取old——openid
-
+        //去取old_openid
         $old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
-
-        // dump($old_openid);
 
         session('old_openid',$old_openid);
         if($old_openid){
+            // 旧openid存在则调回去
             header('Location:/shop/index/index?old_openid='.$old_openid);
             exit;
         }
@@ -48,13 +46,12 @@ class Code extends Controller
             
             //上面获取到code后这里跳转回来
             $code = $_GET['code'];
-            $data = $this->getOpenidFromMp($code,2);//获取网页授权access_token和用户openid
+            $data = $this->getOpenidFromMp($code);//获取网页授权access_token和用户openid
           
             if(!$data['openid']){
                 $this->error('获取old_openid错误');
             }
 
-            //$data['old_openid'] = $data['openid'];
             return $data['openid'];
         }
     }
@@ -87,8 +84,6 @@ class Code extends Controller
         //$urlObj["scope"] = "snsapi_userinfo";
         $urlObj["state"] = "STATE"."#wechat_redirect";
         $bizString = $this->ToUrlParams($urlObj);
-        // $this->old_user = 2;
-        // session('old_user',2);
         return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
     }
 
@@ -122,13 +117,13 @@ class Code extends Controller
      *
      * @return openid
      */
-    public function GetOpenidFromMp($code, $type = 1)
+    public function GetOpenidFromMp($code)
     {
         //通过code获取网页授权access_token 和 openid 。网页授权access_token是一次性的，而基础支持的access_token的是有时间限制的：7200s。
         //1、微信网页授权是通过OAuth2.0机制实现的，在用户授权给公众号后，公众号可以获取到一个网页授权特有的接口调用凭证（网页授权access_token），通过网页授权access_token可以进行授权后接口调用，如获取用户基本信息；
         //2、其他微信接口，需要通过基础支持中的“获取access_token”接口来获取到的普通access_token调用。
         
-        $url = $this->__CreateOauthUrlForOpenid2($code); 
+        $url = $this->__CreateOauthUrlForOpenid($code); 
         $ch = curl_init();//初始化curl        
         curl_setopt($ch, CURLOPT_TIMEOUT, 300);//设置超时
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -149,7 +144,7 @@ class Code extends Controller
      *
      * @return 请求的url
      */
-    private function __CreateOauthUrlForOpenid2($code)
+    private function __CreateOauthUrlForOpenid($code)
     {
         $urlObj["appid"] = 'wx0730f0b42ecd4bfe';
         $urlObj["secret"] = 'f9eab4a9e74778a2d504066ed9f89689';

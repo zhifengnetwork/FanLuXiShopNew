@@ -20,7 +20,6 @@ use app\common\logic\UsersLogic;
 use app\common\logic\wechat\WechatUtil;
 
 class MobileBase extends Controller {
-    public $old_user = 0;
     public $session_id;
     public $weixin_config;
     public $cateTrre = array();
@@ -72,12 +71,12 @@ class MobileBase extends Controller {
 
 
                     if(I('old_openid') == ''){
+                        //跳去获取旧openid
                         header('Location:/shop/code/index');
                         exit;
                     }else{
                         $old_openid = I('old_openid');
                       
-                        //$old_openid = $this->GetOldOpenid(); //授权获取openid以及微信用户信息
                         $wxuser['old_openid'] = $old_openid;
                     }
 
@@ -161,27 +160,6 @@ class MobileBase extends Controller {
       
     }      
 
-    // 网页授权登录获取 OpendId (旧公众号)
-    public function GetOldOpenid()
-    {
-        //通过code获得openid
-        if ($this->old_user == 1){
-            //触发微信返回code码
-            //$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
-            $baseUrl = urlencode($this->get_url());
-            $url = $this->__CreateOauthUrlForCode2($baseUrl); // 获取 code地址
-            Header("Location: $url"); // 跳转到微信授权页面 需要用户确认登录的页面
-            exit();
-        } else {
-            dump(3);exit;
-            //上面获取到code后这里跳转回来
-            $code = $_GET['code'];
-            $data = $this->getOpenidFromMp($code,2);//获取网页授权access_token和用户openid
-            dump($data);exit;
-            $data['old_openid'] = $data['openid'];
-            return $data;
-        }
-    }
 
     // 网页授权登录获取 OpendId
     public function GetOpenid()
@@ -207,8 +185,6 @@ class MobileBase extends Controller {
             $data['subscribe'] = $data2['subscribe'];      
             $data['oauth_child'] = 'mp';
             session('openid',$data['openid']);
-            $this->old_user = 1;
-            session('old_user',1);
             $data['oauth'] = 'weixin';
             if(isset($data2['unionid'])){
                 $data['unionid'] = $data2['unionid'];
@@ -237,16 +213,14 @@ class MobileBase extends Controller {
      *
      * @return openid
      */
-    public function GetOpenidFromMp($code, $type = 1)
+    public function GetOpenidFromMp($code)
     {
         //通过code获取网页授权access_token 和 openid 。网页授权access_token是一次性的，而基础支持的access_token的是有时间限制的：7200s。
         //1、微信网页授权是通过OAuth2.0机制实现的，在用户授权给公众号后，公众号可以获取到一个网页授权特有的接口调用凭证（网页授权access_token），通过网页授权access_token可以进行授权后接口调用，如获取用户基本信息；
         //2、其他微信接口，需要通过基础支持中的“获取access_token”接口来获取到的普通access_token调用。
-        if($type == 1){
-            $url = $this->__CreateOauthUrlForOpenid($code);    
-        }else{
-            $url = $this->__CreateOauthUrlForOpenid2($code); 
-        }
+
+        $url = $this->__CreateOauthUrlForOpenid($code);    
+
         $ch = curl_init();//初始化curl        
         curl_setopt($ch, CURLOPT_TIMEOUT, 300);//设置超时
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -312,27 +286,6 @@ class MobileBase extends Controller {
 
     /**
      *
-     * 构造获取code的url连接
-     * @param string $redirectUrl 微信服务器回跳的url，需要url编码
-     *
-     * @return 返回构造好的url
-     */
-    private function __CreateOauthUrlForCode2($redirectUrl)
-    {
-        $urlObj["appid"] = 'wx0730f0b42ecd4bfe';
-        $urlObj["redirect_uri"] = "$redirectUrl";
-        $urlObj["response_type"] = "code";
-        //$urlObj["scope"] = "snsapi_base";
-        $urlObj["scope"] = "snsapi_userinfo";
-        $urlObj["state"] = "STATE"."#wechat_redirect";
-        $bizString = $this->ToUrlParams($urlObj);
-        $this->old_user = 2;
-        session('old_user',2);
-        return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
-    }
-
-    /**
-     *
      * 构造获取open和access_toke的url地址
      * @param string $code，微信跳转带回的code
      *
@@ -348,22 +301,6 @@ class MobileBase extends Controller {
         return "https://api.weixin.qq.com/sns/oauth2/access_token?".$bizString;
     }
 
-    /**
-     * 旧公众号
-     * 构造获取open和access_toke的url地址
-     * @param string $code，微信跳转带回的code
-     *
-     * @return 请求的url
-     */
-    private function __CreateOauthUrlForOpenid2($code)
-    {
-        $urlObj["appid"] = 'wx0730f0b42ecd4bfe';
-        $urlObj["secret"] = 'f9eab4a9e74778a2d504066ed9f89689';
-        $urlObj["code"] = $code;
-        $urlObj["grant_type"] = "authorization_code";
-        $bizString = $this->ToUrlParams($urlObj);
-        return "https://api.weixin.qq.com/sns/oauth2/access_token?".$bizString;
-    }
 
     /**
      *
