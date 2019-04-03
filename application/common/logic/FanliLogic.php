@@ -73,8 +73,7 @@ class FanliLogic extends Model
 	       
 		    if($user_info['level']==1 || $user_info['level']==2 || $user_info['level']==3) //不是复购
 		    {
-		    	 $if_rebase = $rebase[$parent_info['level']];
-		         if(empty($rebase)||$if_rebase<=0) //
+		         if(empty($rebase)||$rebase[$parent_info['level']]<=0) //
 		          {
                     $fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
 		          }else
@@ -112,14 +111,15 @@ class FanliLogic extends Model
 
 		    }elseif($user_info['level']>=4) //是复购
 		    {
-	            if(empty($rebase)||$if_rebase<=0) //
+	            if(empty($rebase)||$rebase[$user_info['level']]<=0) //
 		         {
-                    $fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
+                    $fanli = M('user_level')->where('level',$user_info['level'])->field('rate')->find();
+                    
 		         }else
 		         {
-		          	 $fanli['rate'] = $rebase[$parent_info['level']];
+		          	 $fanli['rate'] = $rebase[$user_info['level']];
+		          	 
 		         }
-
 	          if(!empty($fanli['rate']))
 	          {
 
