@@ -204,7 +204,7 @@ class BonusLogic extends Model
 			//$data = array(
 				//'user_money'=>$users['user_money']+$money
 			//);
-			$res = M('users')->where(['user_id'=>$users['user_id']])->update($data);
+			//$res = M('users')->where(['user_id'=>$users['user_id']])->update($data);
 			if($res)
 			{
 				$this->writeLog($users['user_id'],$money,$logName,101);
