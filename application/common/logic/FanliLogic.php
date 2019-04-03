@@ -67,8 +67,9 @@ class FanliLogic extends Model
         	}
              $this->ppInvitation($user_info['first_leader']);//总监下线推荐店主金额
              $this->ccInvitation($user_info['first_leader']);//大区下线推荐店主金额
-        }else
-        {
+        }
+        //else
+        //{
 	       
 		    if( $user_info['level']==1 || $user_info['level']==2) //不是复购
 		    {
@@ -105,7 +106,7 @@ class FanliLogic extends Model
 			     	return false;
 			     }
 
-		    }elseif($user_info['level']>=2) //是复购
+		    }elseif($user_info['level']>=3) //是复购
 		    {
 	           if(empty($rebase)) //如果产品没返利信息就读取总平台的
 	          {
@@ -138,7 +139,7 @@ class FanliLogic extends Model
 	        }
 	
 		
-	    }
+	    //}
 
 	}
 	//会员升级
@@ -328,7 +329,10 @@ class FanliLogic extends Model
 
 		$bool = M('fan_log')->insert($data);
 
-
+         if(empty($money))
+         {
+         	$money =0;
+         }
 		if($bool){
 
 			//分钱记录

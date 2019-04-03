@@ -96,11 +96,13 @@ class Preform extends Base {
             //'u.first_leader'=>$v['user_id'],
             //"og.goods_num" =>'>1',
             'od.user_id'=> ['IN',$user_s],
+            'od.pay_status'=>1,
             
           ];
          $order_goods = Db::name('order_goods')->alias('og')
              ->field('u.first_leader,sum(og.goods_num*og.goods_price) as sale_amount')
-             ->where($where_goods)->order('goods_id DESC')
+             ->where($where_goods)
+              ->order('goods_id DESC')
               ->join('order od','od.order_id=og.order_id','LEFT')
               ->join('users u','u.user_id=od.user_id','LEFT')
             // ->limit($Page->firstRow,$Page->listRows)
@@ -136,5 +138,66 @@ class Preform extends Base {
         $this->assign('log',$log);
         return $this->fetch();
     }
+    //触发发送奖金
+    public function send_reward()
+    {
+     // $year = date('Y');
+      //$season = $this->getQuarterDate($year,1);//第一季度
+      //print_r($season);exit;
+       $where_goods = [
+            'od.order_status'=> ['notIN','3,5'],
+           // 'og.is_send'    => 1,
+            'og.prom_type' =>0,//只有普通订单才算业绩
+            //'u.first_leader'=>$v['user_id'],
+            //"og.goods_num" =>'>1',
+           // 'od.user_id'=> ['IN',$user_s],
+             'od.pay_status'=>1,
+            
+          ];
+         $order_goods = Db::name('order_goods')->alias('og')
+             ->field('u.first_leader,u.user_id,og.order_id,og.goods_num*og.goods_price as sale_amount')
+             ->where($where_goods)->order('goods_id DESC')
+              ->join('order od','od.order_id=og.order_id','LEFT')
+              ->join('users u','u.user_id=od.user_id','LEFT')
+            // ->limit($Page->firstRow,$Page->listRows)
+             ->select();
+            // print_r(Db::name('order_goods')->getlastsql());exit;
+              print_r($order_goods);exit;
+
+          foreach($order_goods as $k=>$v)
+          {
+            if(!empty($v['first_leader']))  //统计订单用户上级业绩
+            {
+             
+              $p_y[$v['first_leader']]['team_par'][]= $v['sale_amount'];
+              //统计订单用户下级级业绩
+              $userdata = Db::name('users')->alias('u')
+              ->where('first_leader='.$v['user_id'])
+              ->field('u.user_id,u.first_leader')
+              ->find();
+              if(!empty($userdata))
+              {
+                 $s_y[$v['first_leader']][$userdata['first_leader']][$userdata['user_id']]['team_par'][]= $v['sale_amount'];
+              }
+            }
+      
+          }
+         // print_r($p_y);exit;
+          print_r($s_y);exit;
+
+         return $order_goods;
+    }
+
+    /*
+ * 取某个季度的开始和结束时间
+ *   $year 年份，如2014
+ *   $season 季度，1、2、3、4
+ */
+  public function getQuarterDate($year,$season){
+    $times = array();
+    $times['st'] = date('Y-m-d H:i:s', mktime(0, 0, 0,$season*3-3+1,1,$year));
+    $times['et'] = date('Y-m-d H:i:s', mktime(23,59,59,$season*3,date('t',mktime(0, 0 , 0,$season*3,1,$year)),$year));
+    return $times;
+  }
     
 }
