@@ -81,7 +81,8 @@ class BonusLogic extends Model
 
         $distribut = M('distribut')->find();
         $commission = $goods['shop_price'] * ($distribut['rate'] / 100) * $this->goodNum; //计算佣金
-
+		//echo $goods['shop_price'] * ($distribut['rate'] / 100);exit;
+		/*
         $bool = M('users')->where('user_id',$distributor['first_leader'])->setInc('user_money',$commission);
 
         if ($bool !== false) {
@@ -91,7 +92,7 @@ class BonusLogic extends Model
         	return true;
         } else {
         	return false;
-        }
+        }*/
 
 	}
 

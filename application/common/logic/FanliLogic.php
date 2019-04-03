@@ -96,6 +96,7 @@ class FanliLogic extends Model
 		          //按上一级等级各自比例分享返利
 		          $bool = M('users')->where('user_id',$user_info['first_leader'])->setInc('user_money',$commission);
 
+
 			         if ($bool !== false) {
 			        	$desc = "分享返利";
 			        	$log = $this->writeLog($user_info['first_leader'],$commission,$desc,1); //写入日志
