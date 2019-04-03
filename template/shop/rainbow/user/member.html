@@ -22,23 +22,26 @@
 		  <div class="wtf_banner">
 		  	  <img src="__STATIC__/images/Distributionmember/wtf_banner-2.png" />
 		  </div>
-		  <div class="wtf_main">
-		  	<div class="wtf_wrap clear">
-		  		<p class="wtf_p1">
-		  			总业绩<span>￥{$money_total.money_total}</span><i class="wtf_main_i"></i>
-		  			<p class="wtf_p2">最大用户业绩￥{$money_total.max_moneys}</p>
-		  		</p>
-		  		
-		  	</div>
-		  </div>
-		  <div class="wtf_main1">
-		  	<div class="wtf_wrap clear">
-		  		<p class="wtf_p3">
-		  			剩余业绩之和￥{$money_total.moneys}<i class="wtf_main_i"></i>
-		  			<p class="wtf_p2">团队总人数<span>{$underling_number}</span></p>
-		  		</p> 			
-		  	</div>
-		 </div>
+
+            <div class="wtf_main">
+            	<div class="wtf_wrap clear">
+            		<p class="wtf_p1">
+            			总业绩<span>￥{$money_total.money_total|default=0}</span><i class="wtf_main_i"></i>
+                        <p class="wtf_p2">团队总人数:<span>{$underling_number|default=0}</span></p>
+            		</p>
+            	</div>
+            </div>
+        <if condition="($user.is_distribut == 1)">
+            <div class="wtf_main1">
+              	<div class="wtf_wrap clear">
+              		<p class="wtf_p3">
+              			剩余业绩之和￥{$money_total.moneys|default=0}<i class="wtf_main_i"></i>
+                        <p class="wtf_p2">最大用户业绩￥{$money_total.max_moneys|default=0}</p>
+              		</p> 			
+              	</div>
+            </div>
+        </if>
+
 		     <div class="wtf_nav">
 		     	<div class="wtf_wrap">
 		     	<ul>
