@@ -111,13 +111,13 @@ class FanliLogic extends Model
 
 		    }elseif($user_info['level']>=3) //是复购
 		    {
-	           if(empty($rebase)) //如果产品没返利信息就读取总平台的
-	          {
-	          	$fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
-	          }else
-	          {
-	          	$fanli['rate'] = $rebase[$parent_info['level']];
-	          }
+	            if(empty($rebase)||$if_rebase<=0) //
+		         {
+                    $fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
+		         }else
+		         {
+		          	 $fanli['rate'] = $rebase[$parent_info['level']];
+		         }
 
 	          if(!empty($fanli['rate']))
 	          {
