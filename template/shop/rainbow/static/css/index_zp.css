@@ -241,3 +241,40 @@ body{
     color: #585858;
     float: right;
 }
+
+/* 蒙层 */
+.model{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.8);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F000000,endColorstr=#7F000000);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    display: none;
+}
+/* 免费领取面膜弹框 */
+.free-receive{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 100;
+    display: none;
+}
+.free-receive .dialog-content img{
+    width: 5.86rem;
+}
+.free-receive .dialog-btn{
+    width: 0.57rem;
+    margin: 0 auto;
+}
+.free-receive .dialog-btn img{
+    width: 100%;
+    
+    display: block;
+}
+.free-receive p a{
+    color: #fff;
+}
