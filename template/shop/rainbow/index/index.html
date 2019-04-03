@@ -198,18 +198,18 @@
 		<include file="public/footer_nav" />
 
 		<!-- 免费领取面膜弹框 -->
-		<div class="model">
-			<div class="free-receive">
+		<div class="model"></div>
+		<div class="free-receive">
+			<a href="#">
 				<div class="dialog-content">
-					<a href="#">
-						<img src="__STATIC__/images/home_zp/free-receive-bg.png" />
-					</a>
+					<img src="__STATIC__/images/home_zp/free-receive-bg.png" />
 				</div>
 				<div class="dialog-btn">
-					<img src="__STATIC__/images/home_zp/close-btn-index@2x.png" />
+					<img src="__STATIC__/images/home_zp/ReceiveBtn.png" />
 				</div>
-			</div>
+			</a>
 		</div>
+		
 
 	</div>
 
@@ -329,7 +329,7 @@
 		showDialog();
 
 		// 弹框关闭
-		$(".dialog-btn").click(function(){
+		$(".model").click(function(){
 			$(".model").hide();
 			$(".free-receive").hide();
 		})

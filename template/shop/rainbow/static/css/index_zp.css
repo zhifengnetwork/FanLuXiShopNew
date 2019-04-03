@@ -263,18 +263,15 @@ body{
     z-index: 100;
     display: none;
 }
+
 .free-receive .dialog-content img{
-    width: 5.86rem;
+    width: 3.86rem;
 }
 .free-receive .dialog-btn{
-    width: 0.57rem;
-    margin: 0 auto;
+    width: 2.5rem;
+    margin: 0.4rem auto;
 }
 .free-receive .dialog-btn img{
     width: 100%;
-    
     display: block;
-}
-.free-receive p a{
-    color: #fff;
 }
