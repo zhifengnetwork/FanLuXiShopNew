@@ -71,14 +71,15 @@ class FanliLogic extends Model
         //else
         //{
 	       
-		    if( $user_info['level']==1 || $user_info['level']==2) //不是复购
+		    if($user_info['level']==1 || $user_info['level']==2) //不是复购
 		    {
-		         if(empty($rebase)) //如果产品没返利信息就读取总平台的
+		    	 $if_rebase = $rebase[$parent_info['level']];
+		         if(empty($rebase)||$if_rebase<=0) //
 		          {
-		          	$fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
+                    $fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
 		          }else
 		          {
-		          	$fanli['rate'] = $rebase[$parent_info['level']];
+		          	 $fanli['rate'] = $rebase[$parent_info['level']];
 		          }
 		          //echo Session::get('shareid');exit;
 		      //判断是否分享返利
@@ -88,7 +89,9 @@ class FanliLogic extends Model
 		        if($parent_info['level']!=1 && !empty($parent_info)){ //上一级是普通会员则不反钱
 		         //计算返利金额
 		           $goods = $this->goods();
-		          $commission = $goods['shop_price'] * ($fanli['rate'] / 100) * $this->goodNum; //计算佣金
+		          $commission = $goods['shop_price'] * ($fanli['rate'] / 100) * $this->goodNum;
+                 
+		           //计算佣金
 		         // print_R($goods['shop_price'].'-'.$this->goodNum.'-'.$fanli['rate']);exit;
 		          //按上一级等级各自比例分享返利
 		          $bool = M('users')->where('user_id',$user_info['first_leader'])->setInc('user_money',$commission);
@@ -328,6 +331,7 @@ class FanliLogic extends Model
 		);
 
 		$bool = M('fan_log')->insert($data);
+
 
          if(empty($money))
          {
