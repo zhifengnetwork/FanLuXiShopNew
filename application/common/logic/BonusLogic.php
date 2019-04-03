@@ -201,9 +201,9 @@ class BonusLogic extends Model
 			$userLevel = $grade;
 			$pj_money = $money;
 			$users = $this->first_leader($user['user_id']);
-			$data = array(
-				'user_money'=>$users['user_money']+$money
-			);
+			//$data = array(
+				//'user_money'=>$users['user_money']+$money
+			//);
 			$res = M('users')->where(['user_id'=>$users['user_id']])->update($data);
 			if($res)
 			{
