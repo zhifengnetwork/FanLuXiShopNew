@@ -71,7 +71,7 @@ class FanliLogic extends Model
         //else
         //{
 	       
-		    if($user_info['level']==1 || $user_info['level']==2) //不是复购
+		    if($user_info['level']==1 || $user_info['level']==2 || $user_info['level']==3) //不是复购
 		    {
 		    	 $if_rebase = $rebase[$parent_info['level']];
 		         if(empty($rebase)||$if_rebase<=0) //
@@ -110,7 +110,7 @@ class FanliLogic extends Model
 			     	return false;
 			     }
 
-		    }elseif($user_info['level']>=3) //是复购
+		    }elseif($user_info['level']>=4) //是复购
 		    {
 	            if(empty($rebase)||$if_rebase<=0) //
 		         {
