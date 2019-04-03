@@ -331,7 +331,7 @@ class FanliLogic extends Model
 
          if(empty($money))
          {
-         	$money =0;
+         	$money =0; 
          }
 		if($bool){
 
