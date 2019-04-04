@@ -105,6 +105,19 @@ class User extends MobileBase
         return $this->fetch();
     }
 
+    /*升级为大区董事
+    */
+    public function member_upgrade()
+    {
+
+      $log = M('upgrade_log')->alias('up')->join('users u', 'users.user_id = up.user_id')
+                               ->field('users.nickname, up.*')->order('log_id DESC')
+                               ->where("acount.states = 101 or acount.states = 102")
+                               ->find();
+       $this->ajaxReturn(['status' => 1, 'msg' => '申请成功']);
+       // $this->ajaxReturn(['status' => 0, 'msg' => '操作成功', 'result'=>[]);
+
+    }
 
     
     public function wallet(){
