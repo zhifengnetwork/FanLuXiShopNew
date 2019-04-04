@@ -22,7 +22,6 @@ class Auction extends MobileBase
         if (session('?user')) {
             $user = session('user');
             $user = M('users')->where("user_id", $user['user_id'])->find();
-            dump($user);exit;
             session('user', $user);  //覆盖session 中的 user
             $this->user = $user;
             $this->user_id = $user['user_id'];
@@ -203,9 +202,9 @@ class Auction extends MobileBase
         return $this->fetch();
     }
 
-    /**
+    /*
      *临时方法-交定金扣余额
-     */
+     
     public function addBond()
     {
 
@@ -231,7 +230,7 @@ class Auction extends MobileBase
             $this->ajaxReturn(['status'=>0]);
         }
     }
-
+*/
     /**
      * 用户是否有交保证金
      * @param type $sort_type

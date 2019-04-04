@@ -1041,7 +1041,13 @@ function update_pay_status($order_sn,$ext=array())
             $msg = '会员充值购买VIP';
         }
         accountLog($order['user_id'],$order['account'],0, $msg, 0, 0, $order_sn);
-    }else{
+    } elseif (stripos($order_sn, 'Bond') !== false) {
+        
+        M('Auction')->where('id',2)->setInc('buy_num');
+        dump(8888);exit;
+    }
+    else{
+
         // 如果这笔订单已经处理过了
         $count = M('order')->master()->where("order_sn = :order_sn and (pay_status = 0 OR pay_status = 2)")->bind(['order_sn'=>$order_sn])->count();   // 看看有没已经处理过这笔订单  支付宝返回不重复处理操作
         if($count == 0) return false;

@@ -60,7 +60,7 @@ class Payment extends MobileBase
     }
 
     /**
-     * DC环球直供网络 提交支付方式
+     * 提交支付方式
      */
     public function getCode()
     {
@@ -183,7 +183,10 @@ class Payment extends MobileBase
     public function payBond(){
 
         header("Content-type:text/html;charset=utf-8");
-        $goods_id = I("get.goods_id/d");
+        if (!session('user')) {
+            $this->error('请先登录', U('User/login'));
+        }
+        $goods_id = I("get.gid/d");
 
         $money = Db::name('Auction')->where('id',$goods_id)->value('deposit');
 
