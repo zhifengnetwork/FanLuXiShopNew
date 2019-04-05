@@ -1961,7 +1961,6 @@ class User extends MobileBase
     public function usercode()
     {
         vendor('phpqrcode.phpqrcode');
-
         $qr_code_path = UPLOAD_PATH.'usercode/';
         if (!file_exists($qr_code_path)) {
             mkdir($qr_code_path,777,true);
@@ -1993,6 +1992,8 @@ class User extends MobileBase
     {
         $user_id = session('user.user_id');
 
+        $this->assign('tou',$this->user['head_pic']);
+        $this->assign('nickname',$this->user['nickname']);
         $logic = new ShareLogic();
         $ticket = $logic->get_ticket($user_id);
 
@@ -2031,7 +2032,7 @@ class User extends MobileBase
         }
         $pic = $pic.'?v='.time();
         $this->assign('pic',$pic);
-
+     
         return $this->fetch();
     }
 

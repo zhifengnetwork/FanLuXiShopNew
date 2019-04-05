@@ -1231,7 +1231,7 @@ class User extends MobileBase
         $user_id = I('user_id');
 
         // $states['log.states'] = array('in', '101, 102');
-        $order = M('order')->field('order_sn, consignee, add_time')->where('user_id', $user_id)
+        $order = M('order')->field('order_sn, consignee, add_time,goods_price')->where('user_id', $user_id)
                             ->limit(20)->order('order_id desc')->select();
         // //序列化去重
         // foreach($order as $key => $value){
