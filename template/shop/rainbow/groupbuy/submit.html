@@ -661,7 +661,10 @@
             //user_note:  user_note
         };
         $.post('falceOrder',{data:data},function(res){
-            console.log(res);
+           // console.log(res);
+           var ress =JSON.parse(res);
+            layer.open({icon: 1, content: ress.msg, time: 2});
+            window.location.href='/Shop/Order/order_detail/id/'+ress.id+'.html';
         });
         
         //console.log(user_money);
