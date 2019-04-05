@@ -1330,10 +1330,18 @@ class User extends MobileBase
     }
 
     public function commision(){
-        $DistributLogic = new DistributLogic;
-        $result= $DistributLogic->get_commision_log($this->user_id);  //佣金明细
-        $this->assign('page', $result['show']);
-        $this->assign('lists', $result['result']);
+        //$DistributLogic = new DistributLogic;
+        //$result= $DistributLogic->get_commision_log($this->user_id);  //佣金明细
+        $recharge_log_where = ['user_id'=>$this->user_id];
+
+            $count = M('fan_log')->where($recharge_log_where)->count();
+            $Page = new Page($count, 15);
+            $lists = M('fan_log')->where($recharge_log_where)
+                ->limit($Page->firstRow . ',' . $Page->listRows)
+                ->select(); 
+        
+        $this->assign('page', $Page);
+        $this->assign('lists',$lists);
         if (I('is_ajax')) {
             return $this->fetch('ajax_commision_list');
         }

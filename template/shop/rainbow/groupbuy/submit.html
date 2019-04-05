@@ -648,8 +648,23 @@
         var address_id = $('.input_default_address_id').val();
         var user_money = $('#user_money').prop('checked') ? 1 : 0;
 
-
-        console.log(user_money);
+        var data = {
+            buy_type:   buy_type,
+            buy_num:    buy_num,
+            team_id:    team_id,
+            invoice_type:   invoice_type,
+            invoice_identity:   invoice_identity,
+            invoice_title:  invoice_title,
+            invoice_code:   invoice_code,
+            address_id: address_id,
+            user_money: user_money,
+            //user_note:  user_note
+        };
+        $.post('falceOrder',{data:data},function(res){
+            console.log(res);
+        });
+        
+        //console.log(user_money);
     }
 
 
