@@ -141,6 +141,8 @@ class Preform extends Base {
     //触发发送奖金
     public function send_reward()
     {
+       $list = Db::name('share')->order('grade','desc')->select(); //分红列表
+    
      // $year = date('Y');
       //$season = $this->getQuarterDate($year,1);//第一季度
       //print_r($season);exit;
@@ -164,6 +166,8 @@ class Preform extends Base {
             //print_r($order_goods);exit;
             //print_r(Db::name('order_goods')->getlastsql());exit;
           $parent =array();
+          $p_y  =array();
+          $s_y  =array();
           foreach($order_goods as $k=>$v)
           {
             if(!empty($v['first_leader']))  //统计订单用户上级业绩
@@ -193,10 +197,33 @@ class Preform extends Base {
             }
       
           }
-          print_r($s_y);exit;
-          print_r($p_y);exit;
+
 
          return $order_goods;
+    }
+    /*计算每个用户应该发的奖金*/
+
+    public function count_userreward($user_id,$p_y,$s_y){
+      if(!empty($p_y))
+      {
+        $commission = $goods['shop_price'] * ($fanli['rate'] / 100) * $this->goodNum;
+
+        $bool = M('users')->where('user_id',$user_id)->setInc('user_money',$commission);
+        if ($bool !== false) {
+                $desc = "分享返利";
+                $log = $this->writeLog($user_info['first_leader'],$commission,$desc,1); //写入日志
+                  //检查返利管理津贴
+                  $this->jintie($user_info['first_leader'],$commission);
+                return true;
+               } else {
+                return false;
+               }
+      }else
+      {
+        return false;
+      }
+
+
     }
 
     /*
