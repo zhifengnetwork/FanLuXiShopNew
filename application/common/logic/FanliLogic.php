@@ -43,7 +43,7 @@ class FanliLogic extends Model
 	{
         $num=M('order_goods')->alias('og')
         ->join('order o', 'og.order_id=o.order_id')
-        ->where(['o.user_id'=>$this->userId,'og.goods_id'=>$this->tgoodsid])
+        ->where(['o.user_id'=>$this->userId,'og.goods_id'=>$this->tgoodsid,'o.pay_status'=>1])
         ->count();
         return $num;
 	}
