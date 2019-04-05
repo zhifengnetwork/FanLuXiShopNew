@@ -156,34 +156,45 @@ class Preform extends Base {
           ];
          $order_goods = Db::name('order_goods')->alias('og')
              ->field('u.first_leader,u.user_id,og.order_id,og.goods_num*og.goods_price as sale_amount')
-             ->where($where_goods)->order('goods_id DESC')
+             ->where($where_goods)->order('user_id DESC')
               ->join('order od','od.order_id=og.order_id','LEFT')
               ->join('users u','u.user_id=od.user_id','LEFT')
             // ->limit($Page->firstRow,$Page->listRows)
              ->select();
-            // print_r(Db::name('order_goods')->getlastsql());exit;
-              print_r($order_goods);exit;
-
+            //print_r($order_goods);exit;
+            //print_r(Db::name('order_goods')->getlastsql());exit;
+          $parent =array();
           foreach($order_goods as $k=>$v)
           {
             if(!empty($v['first_leader']))  //统计订单用户上级业绩
             {
-             
-              $p_y[$v['first_leader']]['team_par'][]= $v['sale_amount'];
-              //统计订单用户下级级业绩
-              $userdata = Db::name('users')->alias('u')
-              ->where('first_leader='.$v['user_id'])
+            // echo $v['sale_amount'];
+              $p_y[$v['first_leader']]['team_par']+= $v['sale_amount'];
+              //查询该用户是否有上上级
+              $p_parent = Db::name('users')->alias('u')
+              ->where('user_id='.$v['first_leader'])
               ->field('u.user_id,u.first_leader')
               ->find();
-              if(!empty($userdata))
+              if(!empty($p_parent['first_leader']))
               {
-                 $s_y[$v['first_leader']][$userdata['first_leader']][$userdata['user_id']]['team_par'][]= $v['sale_amount'];
+                  //统计订单用户下级级业绩
+                 $parent = Db::name('users')->alias('u')
+                ->where('first_leader='.$v['first_leader'])
+                ->field('u.user_id,u.first_leader')
+                ->find();
+
+              if(!empty($parent))
+              {
+                 // $s_y[$p_parent['first_leader']][$v['first_leader']]['team_par'][]= $v['sale_amount'];
+                $s_y[$p_parent['first_leader']]['team_par']+= $v['sale_amount'];
+                
+              }
               }
             }
       
           }
-         // print_r($p_y);exit;
           print_r($s_y);exit;
+          print_r($p_y);exit;
 
          return $order_goods;
     }
