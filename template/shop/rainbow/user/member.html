@@ -22,7 +22,13 @@
 		  <div class="wtf_banner">
 		  	  <img src="__STATIC__/images/Distributionmember/wtf_banner-2.png" />
 		  </div>
-
+		     <div class="wtf_main">
+            	<div class="wtf_wrap clear">
+                        <p class="wtf_p1">团队总人数:<span>{$underling_number|default=0}</span></p>
+            		</p>
+            	</div>
+            </div>
+            <!--
             <div class="wtf_main">
             	<div class="wtf_wrap clear">
             		<p class="wtf_p1">
@@ -30,8 +36,9 @@
                         <p class="wtf_p2">团队总人数:<span>{$underling_number|default=0}</span></p>
             		</p>
             	</div>
-            </div>
+            </div>-->
         <if condition="($user.is_distribut == 1)">
+        	<!--
             <div class="wtf_main1">
               	<div class="wtf_wrap clear">
               		<p class="wtf_p3">
@@ -39,7 +46,7 @@
                         <p class="wtf_p2">最大用户业绩￥{$money_total.max_moneys|default=0}</p>
               		</p> 			
               	</div>
-            </div>
+            </div>-->
         </if>
 
 		     <div class="wtf_nav">
