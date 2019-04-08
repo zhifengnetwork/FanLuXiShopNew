@@ -61,7 +61,10 @@ class Auction extends MobileBase
      * 竞拍详情
      */
     public function auction_detail()
-    {
+    {   
+        if (!session('user')) {
+            $this->error('请先登录', U('User/login'));
+        }
         $auction_id = I("get.id/d");
         $goodsModel = new \app\common\model\Auction();
         $auction = $goodsModel::get($auction_id);
