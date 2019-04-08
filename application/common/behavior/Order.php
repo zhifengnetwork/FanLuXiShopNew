@@ -54,7 +54,7 @@ class Order
                 }
             }
         }
-
+dump(888)exit;
         //用户下单, 发送短信给商家
         $res = checkEnableSendSms("3");
         if($res && $res['status'] ==1){
