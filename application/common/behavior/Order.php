@@ -28,8 +28,8 @@ class Order
 
         // 如果有微信公众号 则推送一条消息到微信.微信浏览器才发消息，否则下单超时。by清华
         if(is_weixin()){
-            $user = Db::name('OauthUsers')->where(['user_id'=>$order['user_id'] , 'oauth'=>'weixin' , 'oauth_child'=>'mp'])->find();
-            if ($user) {
+            $user = Db::name('users')->where(['user_id'=>$order['user_id']])->field('openid,first_leader')->find();
+            if($user['openid']){
                 $goods = Db::name('OrderGoods')->where(['order_id'=>$order['order_id']])->select();
                 $text = '';
                 foreach ($goods as $key => $value) {
