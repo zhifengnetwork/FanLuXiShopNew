@@ -107,6 +107,7 @@ class User extends MobileBase
 
     /*升级为大区董事
     */
+    /*
     public function member_upgrade()
     {
       $level= $this->user['level'];
@@ -138,7 +139,7 @@ class User extends MobileBase
       }
        // $this->ajaxReturn(['status' => 0, 'msg' => '操作成功', 'result'=>[]);
 
-    }
+    }*/
         //计算团队业绩--订单计算
     public function jisuanyeji($user_id,$start_time,$end_time)
     {
