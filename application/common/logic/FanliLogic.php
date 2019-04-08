@@ -305,8 +305,8 @@ class FanliLogic extends Model
 		//直属店主邀店主
 		if($p_parent_info['level']==5 && $parent_info['level']==3)
 		{
-			 $fanli = M('user_level')->where('level',$p_parent_info['level'])->field('k_reward')->find();
-			 $commission = $fanli['k_reward']; //计算金额
+			 $fanli = M('user_level')->where('level',$p_parent_info['level'])->field('y_reward')->find();
+			 $commission = $fanli['y_reward']; //计算金额
 	          //按上一级等级各自比例分享返利
 	        $bool = M('users')->where('user_id',$p_parent_info['user_id'])->setInc('user_money',$commission);
 	       	$desc = "大区直属店主邀店主获得金额";
@@ -325,8 +325,8 @@ class FanliLogic extends Model
 	    //直属总监的店主邀店主
 		elseif($p_p_parent_info['level']==5 && $p_parent_info['level']==4 && $parent_info['level']==3)
 		{
-			  $fanli = M('user_level')->where('level',$p_p_parent_info['level'])->field('y_reward')->find();
-			 $commission = $fanli['y_reward']; //计算金额
+			  $fanli = M('user_level')->where('level',$p_p_parent_info['level'])->field('k_reward')->find();
+			 $commission = $fanli['k_reward']; //计算金额
 	          //按上一级等级各自比例分享返利
 	        $bool = M('users')->where('user_id',$p_p_parent_info['user_id'])->setInc('user_money',$commission);
 	       	$desc = "大区直属总监的店主邀店主获得金额";
