@@ -70,10 +70,48 @@ class FanliLogic extends Model
 		//echo $this->goodId.'-'.$this->tgoodsid.'-'.$user_info['level'];exit;
         if($this->goodId==$this->tgoodsid )//是否特殊产品
         {
-        	 
-          $this->addhostmoney($user_info['user_id'],$parent_info);//店主推荐店主
-          $this->ppInvitation($user_info['first_leader']);//总监下线推荐店主金额
-          $this->ccInvitation($user_info['first_leader']);//大区下线推荐店主金额
+        	 //if($pro_num<=1) //是否有买过特殊产品
+        	 //{
+		      if(empty($rebase)||$rebase[$parent_info['level']]<=0) //计算返利比列
+		       {
+                   $fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
+		       }else
+		       {
+		           $fanli['rate'] = $rebase[$parent_info['level']];
+		       }
+
+	          //查询会员等级返利数据
+		       if($parent_info['level']!=1 && !empty($parent_info)){ //上一级是普通会员则不反钱
+		         //计算返利金额
+		          $goods = $this->goods();
+		          $commission = $goods['shop_price'] * ($fanli['rate'] / 100) * $this->goodNum;
+		           //计算佣金
+		          //按上一级等级各自比例分享返利
+		          $bool = M('users')->where('user_id',$user_info['first_leader'])->setInc('user_money',$commission);
+
+
+			         if ($bool !== false) {
+			        	$desc = "分享返利";
+			        	$log = $this->writeLog($user_info['first_leader'],$commission,$desc,1); //写入日志
+			            //检查返利管理津贴
+			            $this->jintie($user_info['first_leader'],$commission);
+			        	//return true;
+			         } else {
+			        	return false;
+			         }
+			     }else{
+			     	return false;
+			     }
+
+        	 //}
+        	
+        	if($user_info['level']<=2)
+        	{
+        		$this->addhostmoney($user_info['user_id'],$parent_info);
+        		$this->ppInvitation($user_info['first_leader']);//总监下线推荐店主金额
+                $this->ccInvitation($user_info['first_leader']);//大区下线推荐店主金额
+        	}
+          
         }
         else
         {
