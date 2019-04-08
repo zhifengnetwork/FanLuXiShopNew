@@ -1043,6 +1043,9 @@ function update_pay_status($order_sn,$ext=array())
         accountLog($order['user_id'],$order['account'],0, $msg, 0, 0, $order_sn);
     } elseif (stripos($order_sn, 'Bond') !== false) {
         
+        $order = M('AuctionDeposit')->where(['order_sn' => $order_sn, 'status' => 0])->find();
+        if (!$order) return false;// 看看有没已经处理过这笔订单  支付宝返回不重复处理操作
+        M('AuctionDeposit')->where("order_sn", $order_sn)->save(array('status' => 1, 'pay_time' => $time));
         M('Auction')->where('id',2)->setInc('buy_num');
         dump(8888);exit;
     }else{
@@ -1115,6 +1118,24 @@ function update_pay_status($order_sn,$ext=array())
             $OrderLogic->make_virtual_code($order);
         }
         $order['pay_time']=$time;
+
+        // 发送公众号消息给用户
+        $userinfo = Db::name('users')->where(['user_id' => $order['user_id']])->field('openid,first_leader')->find();
+        if ($userinfo['openid']) {
+            $wx_content = "订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n商户：凡露希环球直供\n金额：{$order['total_amount']}\n\n【凡露希环球直供】欢迎您的再次购物！";
+            $wechat = new \app\common\logic\wechat\WechatUtil();
+            $wechat->sendMsg($userinfo['openid'], 'text', $wx_content);
+
+            //发给上级
+            $first_leader_openid = Db::name('users')->where(['user_id' => $userinfo['first_leader']])->value('openid');
+            if($first_leader_openid){
+                $wx_first_leader_content = "你的下级订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n金额：{$order['total_amount']}\n\n支付成功可获得返利";
+                $wechat = new \app\common\logic\wechat\WechatUtil();
+                $wechat->sendMsg($first_leader_openid, 'text', $wx_first_leader_content);
+            }
+
+        }
+
         //用户支付, 发送短信给商家
         $res = checkEnableSendSms("4");
         if ($res && $res['status'] ==1) {
