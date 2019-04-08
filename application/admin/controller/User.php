@@ -533,6 +533,7 @@ class User extends Base
             $get = I('get');
 			$y_reward = I('y_reward');
             $s_reward = I('s_reward');
+             $k_reward = I('k_reward');
             $jintie = I('jintie');
 			if($level==""){
 				$this->ajaxReturn(['status' => 0, 'msg' => '等级不可为空']);
