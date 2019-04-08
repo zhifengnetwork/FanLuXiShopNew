@@ -29,7 +29,8 @@ class Distribut extends Base {
         $leader = M('users')->where(['user_id'=>$first_leader])->find();
         $this->assign('leader', $leader);
 
-        $log = M('account_log')->where(['order_sn'=>$order['order_sn']])->select();
+        //$log = M('account_log')->where(['order_sn'=>$order['order_sn']])->select();
+        $log = M('fan_log')->where(['order_sn'=>$order['order_sn']])->select();
         $this->assign('log', $log);
 
        $order_id = input('order_id', 0);
@@ -44,7 +45,7 @@ class Distribut extends Base {
             $order['pay_status_des'] = '未支付';
         }
 
-        if($order['order_amount'] <= 9.9 ){
+        if($order['total_amount'] <= 9.9 ){
             $this->error('该订单小于9.9元，没有返利');
         } 
 

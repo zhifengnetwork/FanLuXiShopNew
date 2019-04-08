@@ -96,6 +96,7 @@ class Order extends Base {
         $Page  = new AjaxPage($count,20);
         $show = $Page->show();
         $orderList = Db::name('order')->where($condition)->limit($Page->firstRow,$Page->listRows)->order($sort_order)->select();
+       // print_R($orderList);exit;
         $this->assign('orderList',$orderList);
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('pager',$Page);

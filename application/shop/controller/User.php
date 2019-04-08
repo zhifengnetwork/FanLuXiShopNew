@@ -109,14 +109,61 @@ class User extends MobileBase
     */
     public function member_upgrade()
     {
+      $level= $this->user['level'];
+      $user_level=   Db::name('user_level')->field('achievement,tui_num')->where('level=5')->find(); //查看业绩设置
 
-      $log = M('upgrade_log')->alias('up')->join('users u', 'users.user_id = up.user_id')
-                               ->field('users.nickname, up.*')->order('log_id DESC')
-                               ->where("acount.states = 101 or acount.states = 102")
-                               ->find();
-       $this->ajaxReturn(['status' => 1, 'msg' => '申请成功']);
+      if($level==4)
+      {
+        $znum['znum'] =  Db::name('users')->alias('u')->field('u.user_id')->where('first_leader='.$this->user['user_id'].' and u.level=4')->count(); //推荐总监数量
+        $yeji = $this->jisuanyeji($this->user['user_id']); //业绩
+        $total = !empty($yeji)?$yeji[0]['sale_amount']:0; 
+        if($total>=$user_level['achievement'] && )
+        {
+            $res = M('users')->where('user_id',$id)->update(['is_apply'=>1]);
+            if($res)
+            {
+                $this->ajaxReturn(['status' => 1, 'msg' => '申请成功']);
+            }else
+            {
+                 $this->ajaxReturn(['status' => 0, 'msg' => '申请失败，网络延迟']);
+            }
+        }else
+        {
+              $this->ajaxReturn(['status' => 0, 'msg' => '推荐总监人数或业绩没达到']);
+        }
+      }else
+      {
+
+       $this->ajaxReturn(['status' => 0, 'msg' => '没达到升级大区条件']);
+      }
        // $this->ajaxReturn(['status' => 0, 'msg' => '操作成功', 'result'=>[]);
 
+    }
+        //计算团队业绩--订单计算
+    public function jisuanyeji($user_id,$start_time,$end_time)
+    {
+         
+         $where_goods = [
+              'od.order_status'=> ['notIN','3,5'],
+             // 'og.is_send'    => 1,
+              'og.prom_type' =>0,//只有普通订单才算业绩
+              //'u.first_leader'=>$v['user_id'],
+              //"og.goods_num" =>'>1',
+              //'od.user_id'=> ['IN',$user_s],
+              'u.first_leader'=> $user_id,
+              
+            ];
+            $order_goods = Db::name('order_goods')->alias('og')
+               ->field('u.user_id,sum(og.goods_num*og.goods_price) as sale_amount')
+               ->where($where_goods)->order('goods_id DESC')
+                ->join('order od','od.order_id=og.order_id','LEFT')
+                ->join('users u','u.user_id=od.user_id','LEFT')
+              // ->limit($Page->firstRow,$Page->listRows)
+               ->select();
+              // print_r(Db::name('order_goods')->getlastsql());exit;
+            return $order_goods;
+
+          
     }
 
     
