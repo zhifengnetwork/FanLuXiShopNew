@@ -1122,7 +1122,7 @@ function update_pay_status($order_sn,$ext=array())
         // 发送公众号消息给用户
         $userinfo = Db::name('users')->where(['user_id' => $order['user_id']])->field('openid,first_leader')->find();
         if ($userinfo['openid']) {
-            $wx_content = "订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n商户：DC环球直供\n金额：{$order['total_amount']}\n\n【凡露希环球直供】欢迎您的再次购物！";
+            $wx_content = "订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n商户：凡露希环球直供\n金额：{$order['total_amount']}\n\n【凡露希环球直供】欢迎您的再次购物！";
             $wechat = new \app\common\logic\wechat\WechatUtil();
             $wechat->sendMsg($userinfo['openid'], 'text', $wx_content);
 
