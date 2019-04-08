@@ -1383,9 +1383,10 @@ class User extends MobileBase
         $recharge_log_where = ['user_id'=>$this->user_id];
 
             $count = M('fan_log')->where($recharge_log_where)->count();
-            $Page = new Page($count, 15);
+            $Page = new Page($count, 30);
             $lists = M('fan_log')->where($recharge_log_where)
                 ->limit($Page->firstRow . ',' . $Page->listRows)
+                ->order('log_id desc')
                 ->select(); 
         
         $this->assign('page', $Page);
