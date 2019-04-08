@@ -70,8 +70,8 @@ class FanliLogic extends Model
 		//echo $this->goodId.'-'.$this->tgoodsid.'-'.$user_info['level'];exit;
         if($this->goodId==$this->tgoodsid )//是否特殊产品
         {
-        	 if($pro_num<=1) //是否有买过特殊产品
-        	 {
+        	 //if($pro_num<=1) //是否有买过特殊产品
+        	 //{
 		      if(empty($rebase)||$rebase[$parent_info['level']]<=0) //计算返利比列
 		       {
                    $fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
@@ -103,7 +103,7 @@ class FanliLogic extends Model
 			     	return false;
 			     }
 
-        	 }
+        	 //}
         	
         	if($user_info['level']<=2)
         	{
