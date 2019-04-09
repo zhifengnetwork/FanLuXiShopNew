@@ -29,7 +29,7 @@ class Distribut extends Base {
         $leader = M('users')->where(['user_id'=>$first_leader])->find();
         $this->assign('leader', $leader);
 
-        $log = M('account_log')->where(['order_sn'=>$order['order_sn']])->select();
+        $log = M('account_log')->where('log_type>1')->where(['order_sn'=>$order['order_sn']])->select();
         //$log = M('fan_log')->where(['order_sn'=>$order['order_sn']])->select();
         $this->assign('log', $log);
 
