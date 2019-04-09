@@ -185,7 +185,7 @@ class Payment extends MobileBase
         header("Content-type:text/html;charset=utf-8");
 
         $goods_id = I("get.gid/d");
-dump($_SESSION['openid']);exit;
+dump(session('openid'));exit;
         $money = Db::name('Auction')->where('id',$goods_id)->value('deposit');
 
         $user = session('user');
