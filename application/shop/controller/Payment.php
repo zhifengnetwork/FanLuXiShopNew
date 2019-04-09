@@ -88,7 +88,7 @@ class Payment extends MobileBase
         // 订单支付提交
         $config = parse_url_param($this->pay_code); // 类似于 pay_code=alipay&bank_code=CCB-DEBIT 参数
         $config['body'] = getPayBody($order_id);
-
+dump($this->pay_code);exit;
         if ($this->pay_code == 'weixin' && $_SESSION['openid'] && strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {
             //微信JS支付
             $code_str = $this->payment->getJSAPI($order);
