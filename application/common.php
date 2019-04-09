@@ -1129,7 +1129,7 @@ function update_pay_status($order_sn,$ext=array())
             //发给上级
             $first_leader_openid = Db::name('users')->where(['user_id' => $userinfo['first_leader']])->value('openid');
             if($first_leader_openid){
-                $wx_first_leader_content = "你的下级订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n金额：{$order['total_amount']}\n\n支付成功可获得返利";
+                $wx_first_leader_content = "你的下级订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n金额：{$order['total_amount']}";
                 $wechat = new \app\common\logic\wechat\WechatUtil();
                 $wechat->sendMsg($first_leader_openid, 'text', $wx_first_leader_content);
             }
@@ -1916,8 +1916,11 @@ function continue_sign($user_id){
 */
 function provingReceive($user, $type, $num = 1)
 {
+    //获得当日凌晨的时间戳
+    $today = strtotime(date("Y-m-d"),time());
 
-    $user = M('Users')->where('user_id', $user['user_id'])->find();
+    $levelGetNum = M('UserLevel')->where('level', $user['level'])->value('get');
+
     if ($type == 1) {
 
         //店主以上可领取
@@ -1935,30 +1938,34 @@ function provingReceive($user, $type, $num = 1)
         return array('status' => 2, 'msg' => '可领取', 'result' => array());
     }
 
-    if ($user['is_code'] != 1 && $type == 2) {
-        return array('status' => 1, 'msg' => '正常购物流程', 'result' => array());
-    }
+    if ($type == 2) {
 
-    // 是代理或购买过指定产品并且有领取次数
-    if ($user['is_code'] == 1 && $type == 2) {
-        if ($num > 1) {
-            return array('status' => 0, 'msg' => '超过领取数量，只能领取一件！', 'result' => array());
+        // 扫码进入会员可领取1次
+        if ($user['is_code'] == 1 ) {
+            if ($num > 1) {
+                return array('status' => 0, 'msg' => '超过领取数量，只能领取一件！', 'result' => array());
+            }
+
+            $data = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2])->order('addend_time desc')->select();
+            
+            //扫码只可领取1次
+            if (!empty($data)) {
+                return array('status' => 1, 'msg' => '已超出领取次数', 'result' => array());
+            }
         }
-    }
 
-    // 扫码进来
-    if ( $user['is_code'] == 1 && $type == 2) {
+        //当天订单
+        $order = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2, 'addend_time' => ['>',$today]])->count();
 
-        $data = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2])->order('addend_time desc')->select();
+        if ($num > $levelGetNum) {
+            $getNum = $levelGetNum - $order ;
+            return array('status' => 0, 'msg' => '超过领取数量，今天还可领取'.$getNum.'件！', 'result' => array());
+        }
         
-        //扫码只可领取1次
-        if (!empty($data)) {
-            // 能否领取商品
-            return array('status' => 1, 'msg' => '已超出领取次数', 'result' => array());
-        }
-
-        if ($num > 1) {
-            return array('status' => 1, 'msg' => '超过领取数量，只能领取一件！', 'result' => array());
+        //领取次数
+        if ( $order >= $levelGetNum) {
+            $result = array('status' => 1, 'msg' => '您当前等级可领'.$levelGetNum.'盒，已超过领取次数', 'result' => array());
+            return $result;
         }
     }
 

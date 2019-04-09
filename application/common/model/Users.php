@@ -20,7 +20,7 @@ class Users extends Model
 
     public function userLevel()
     {
-        return $this->hasOne('UserLevel', 'level_id', 'level');
+        return $this->hasOne('UserLevel', 'level', 'level');
     }
 
     /**

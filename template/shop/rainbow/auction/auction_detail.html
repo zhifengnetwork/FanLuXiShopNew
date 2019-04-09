@@ -144,7 +144,7 @@
 		<div id="myprice">
 
 			<if condition="time() lt $auction.delay_end_time AND $auction['isBond'] eq 0">
-            <form action="{:U('Shop/Payment/payBond')}" method="post" name="cart5_form" id="cart5_form">
+                <form action="{:U('Shop/Payment/payBond')}" method="post" name="cart5_form" id="cart5_form">
                     <div class="ccc" onclick="deposit()">
                         <p>立即参拍</p>
                         <p>保证金(￥{$auction.deposit})</p>
@@ -286,6 +286,7 @@
     // 交定金
     function deposit() {
         $('#cart5_form').submit();
+        return;
     }
 
 	//出价
