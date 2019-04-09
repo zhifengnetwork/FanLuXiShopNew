@@ -28,7 +28,8 @@ class Preform extends Base {
 
     
     public function preform(){
-
+      //$return = $this->upzdmoney(17725621);
+     // print_R($return);exit;
       $count = Db::name('users')->alias('u')->field('u.user_id')
              //->join('order od','u.first_leader=od.user_id','LEFT')
              ->where($where)->count();
@@ -83,6 +84,53 @@ class Preform extends Base {
    
         return $this->fetch();
     }
+      //总监，大区无限代返利
+  public function upzdmoney($user_id)
+  {
+
+    //查询会员当前等级
+   // $user_info = M('users')->where('user_id',$this->userId)->field('first_leader,level')->find();
+    if(!empty($user_id))
+    {
+      $first_leader =$this->newgetAllUp($user_id);//查找全部上级
+      
+      foreach($first_leader as $ke=>$ye)
+      {
+           
+        if($ye['level']==3)
+        {
+
+        }
+        if($ye['level']==5)
+        {
+              break;
+        }
+        $new_list[]=$ye;
+        
+
+      }
+      return $new_list;
+    }
+    
+
+  }
+     /*
+ * 获取所有上级
+ */
+   public function newgetAllUp($invite_id,&$userList=array())
+  {           
+      $field  = "user_id,first_leader,mobile,level";
+      $UpInfo = M('users')->field($field)->where(['user_id'=>$invite_id])->find();
+      if($UpInfo)  //有上级
+      {
+          $userList[] = $UpInfo;
+          $this->newgetAllUp($UpInfo['first_leader'],$userList);
+
+      }
+      
+      return $userList;     
+      
+  }
     //计算团队业绩--订单计算
     public function jisuanyeji($user_s=array(),$start_time,$end_time)
     {
@@ -237,5 +285,7 @@ class Preform extends Base {
     $times['et'] = date('Y-m-d H:i:s', mktime(23,59,59,$season*3,date('t',mktime(0, 0 , 0,$season*3,1,$year)),$year));
     return $times;
   }
+
+
     
 }
