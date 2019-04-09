@@ -238,18 +238,18 @@ class Team extends MobileBase
         $setRedirectUrl = new UsersLogic();
         $order = $Order->where(['order_id' => $order_id, 'user_id' => $this->user_id])->find();
         if (empty($order)) {
-            $this->error('订单不存在或者已取消', U("Mobile/Order/order_list"));
+            $this->error('订单不存在或者已取消', U("shop/Order/order_list"));
         }
         $setRedirectUrl->orderPageRedirectUrl($_SERVER['REQUEST_URI'], $order_id);
 
         $order_goods = $OrderGoods->with('goods')->where(['order_id' => $order_id])->find();
         // 如果已经支付过的订单直接到订单详情页面. 不再进入支付页面
         if ($order['pay_status'] == 1) {
-            $order_detail_url = U("Mobile/Order/order_detail", array('id' => $order_id));
+            $order_detail_url = U("shop/Order/order_detail", array('id' => $order_id));
             $this->redirect($order_detail_url);
         }
         if ($order['order_status'] == 3) {   //订单已经取消
-            $this->error('订单已取消', U("Mobile/Order/order_list"));
+            $this->error('订单已取消', U("shop/Order/order_list"));
         }
         //微信浏览器
         if (strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {

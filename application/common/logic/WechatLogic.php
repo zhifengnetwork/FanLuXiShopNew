@@ -1133,7 +1133,7 @@ class WechatLogic
             'remark' => ['value' => $tpl_msg->remark ?: ''],
         ];
 
-        $url = SITE_URL.url('/mobile/order/order_detail?id='.$order['order_id']);
+        $url = SITE_URL.url('/shop/order/order_detail?id='.$order['order_id']);
         $return = self::$wechat_obj->sendTemplateMsg($user['openid'], $tpl_msg->template_id, $url, $data);
         if ($return === false) {
             return ['status' => -1, 'msg' => self::$wechat_obj->getError()];
@@ -1183,7 +1183,7 @@ class WechatLogic
             'remark' => ['value' => $tpl_msg->remark ?: ''],
         ];
 
-        $url = SITE_URL.url('/mobile/order/order_detail?id='.$deliver['order_id']);
+        $url = SITE_URL.url('/shop/order/order_detail?id='.$deliver['order_id']);
         $return = self::$wechat_obj->sendTemplateMsg($user['openid'], $tpl_msg->template_id, $url, $data);
         if ($return === false) {
             return ['status' => -1, 'msg' => self::$wechat_obj->getError()];

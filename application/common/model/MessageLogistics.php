@@ -38,16 +38,16 @@ class MessageLogistics extends Model
     public function getMobileUrlAttr($value, $data)
     {
         if ($data['mmt_code'] == 'evaluate_logistics'){
-            $uri = U("Mobile/Order/comment", ['status' => 0]);
+            $uri = U("shop/Order/comment", ['status' => 0]);
         }else{
             $prom_type = Db::name('order')->where('order_id', $data['order_id'])->value('prom_type');
             if($prom_type == 6){
                 // 0普通订单4预售订单5虚拟订单6拼团订单',
-                $uri = U("Mobile/Order/team_detail", ['order_id' => $data['order_id']]);
+                $uri = U("shop/Order/team_detail", ['order_id' => $data['order_id']]);
             }elseif($prom_type == 5){
-                $uri = U("Mobile/Virtual/virtual_order", ['order_id' => $data['order_id']]);
+                $uri = U("shop/Virtual/virtual_order", ['order_id' => $data['order_id']]);
             }else{
-                $uri = U("Mobile/Order/order_detail", ['id' => $data['order_id']]);
+                $uri = U("shop/Order/order_detail", ['id' => $data['order_id']]);
             }
         }
         return $uri;
