@@ -184,9 +184,8 @@ class Payment extends MobileBase
 
         header("Content-type:text/html;charset=utf-8");
 
-                    dump(strstr($_SERVER['HTTP_USER_AGENT'],'MicroMessenger'));exit;
         $goods_id = I("get.gid/d");
-
+dump(session('openid'));exit;
         $money = Db::name('Auction')->where('id',$goods_id)->value('deposit');
 
         $user = session('user');
@@ -202,8 +201,7 @@ class Payment extends MobileBase
             if(is_array($order) && $order['status']==0){
                 $order['order_amount'] = $order['deposit'];
                 //微信JS支付
-                if($this->pay_code == 'weixin' && $_SESSION['openid'] && strstr($_SERVER['HTTP_USER_AGENT'],'MicroMessenger')){
-                    dump(6666);exit;
+                if($this->pay_code == 'weixin' && session('openid') && strstr($_SERVER['HTTP_USER_AGENT'],'MicroMessenger')){
                     $code_str = $this->payment->getJSAPI($order);
                     exit($code_str);
                 }
