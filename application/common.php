@@ -1204,7 +1204,7 @@ function update_pay_status($order_sn,$ext=array())
     $orderSn = $order['order_sn'];
 
     $goods_list = M('order_goods')->where(['order_id'=>$order_id])->select();
-    agent_performance($order_id);
+    //agent_performance($order_id);
     foreach($goods_list as $k => $v){
 
         $goodId = $v['goods_id'];
