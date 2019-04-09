@@ -107,8 +107,8 @@ class User
             }
         } else {
             if ($this->user->first_leader != 0) {
-                $this->user->first_leader = 0;
-                $this->user->save();
+               // $this->user->first_leader = 0;
+               // $this->user->save();
             }
         }
     }
