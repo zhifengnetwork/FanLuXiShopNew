@@ -72,8 +72,10 @@ class FanliLogic extends Model
         {
         	 
           $this->addhostmoney($user_info['user_id'],$parent_info);//店主推荐店主
-          $this->ppInvitation($user_info['first_leader']);//总监下线推荐店主金额
-          $this->ccInvitation($user_info['first_leader']);//大区下线推荐店主金额
+             $this->upzdmoney($user_info['first_leader']);//大区，董事无限代
+             $this->pingji($user_info['first_leader']);//评级奖
+          //$this->ppInvitation($user_info['first_leader']);//总监下线推荐店主金额
+          //$this->ccInvitation($user_info['first_leader']);//大区下线推荐店主金额
         }
         else
         {
@@ -399,6 +401,120 @@ class FanliLogic extends Model
 		if(!$goods) return 0;
 		return $goods['goods_id'];
 	}
+		//总监，大区无限代返利
+	public function upzdmoney($user_id)
+	{
+		$three =0;
+		//查询上级信息
+		$parent_info = M('users')->where('user_id',$user_id)->field('level,user_id,first_leader')->find();
+		//查询上上级信息
+		$p_parent_info = M('users')->where('user_id',$parent_info['first_leader'])->field('level,user_id,first_leader')->find();
+		if($parent_info['level']==4 && $p_parent_info['level']==5)
+		{
+			 $fanli = M('user_level')->where('level',$p_parent_info['level'])->field('s_reward')->find();
+			 $commission = $fanli['s_reward']; //计算金额
+	          //按上一级等级各自比例分享返利
+	        $bool = M('users')->where('user_id',$p_parent_info['user_id'])->setInc('user_money',$commission);
+	       	$desc = "大区直属总监邀店主获得金额";
+	        $log = $this->writeLog($p_parent_info['user_id'],$commission,$desc,6); //写入日志
+
+		}
+		else
+		{ 
+           //循环无限代
+			if(!empty($user_id))
+			{
+				$first_leader =$this->newgetAllUps($user_id);//查找全部上级
+			  foreach($first_leader as $ke=>$ye)
+			 {
+			 	if($ke>=1) //从上上级开始
+			 	{
+			 		if($ye['level']==4 && $three!=1 && $parent_info['level']<4)  
+				{
+					$fanli = M('user_level')->where('level',$ye['level'])->field('y_reward')->find();
+				 	$commission = $fanli['y_reward']; //计算金额
+		          //按上一级等级各自比例分享返利
+		        	$bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
+		       		$desc = "总监直属店主邀店主获得金额";
+		        	$log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
+	                     $three =1;
+				}
+				if($ye['level']==5 && $parent_info['level']<5)
+				{
+					if($three==1)//证明这条线有总监和大区
+					{
+
+				 	$fanli = M('user_level')->where('level',$ye['level'])->field('k_reward')->find();
+				 	$commission = $fanli['k_reward']; //计算金额
+		          //按上一级等级各自比例分享返利
+		        	$bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
+		       		$desc = "大区直属总监的店主邀店主获得金额";
+		       		 $log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
+					}else //只有大区
+					{
+					 $fanli = M('user_level')->where('level',$ye['level'])->field('y_reward')->find();
+				 	 $commission = $fanli['y_reward']; //计算金额
+		             //按上一级等级各自比例分享返利
+		       		 $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
+		       		 $desc = "大区直属店主邀店主获得金额";
+		       		 $log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
+
+					}
+					return false;
+	                 break;//终止返利
+				}
+
+			 	}
+
+			  }
+			}
+		}
+
+	}
+
+	public function pingji($user_id)
+	{
+			//查询上级信息
+		$parent_info = M('users')->where('user_id',$user_id)->field('level,user_id,first_leader')->find();
+		//查询上上级信息
+		$p_parent_info = M('users')->where('user_id',$parent_info['first_leader'])->field('level,user_id,first_leader')->find();
+		if($parent_info['level']==4 && $p_parent_info['level']==4) //总监评级奖励
+		{
+             $fanli = M('user_level')->where('level',$p_parent_info['level'])->field('s_reward')->find();
+			 $commission = 30; //计算金额
+	          //按上一级等级各自比例分享返利
+	        $bool = M('users')->where('user_id',$p_parent_info['user_id'])->setInc('user_money',$commission);
+	       	$desc = "总监平级奖";
+	        $log = $this->writeLog($p_parent_info['user_id'],$commission,$desc,6); //写入日志
+		}
+		elseif($parent_info['level']==5 && $p_parent_info['level']==5) //总监评级奖励
+		{
+             $fanli = M('user_level')->where('level',$p_parent_info['level'])->field('s_reward')->find();
+			 $commission = 50; //计算金额
+	          //按上一级等级各自比例分享返利
+	        $bool = M('users')->where('user_id',$p_parent_info['user_id'])->setInc('user_money',$commission);
+	       	$desc = "大区平级奖";
+	        $log = $this->writeLog($p_parent_info['user_id'],$commission,$desc,6); //写入日志
+		}
+	}
+
+ /*
+ * 获取所有上级
+ */
+   public function newgetAllUps($invite_id,&$userList=array())
+  {           
+      $field  = "user_id,first_leader,mobile,level";
+      $UpInfo = M('users')->field($field)->where(['user_id'=>$invite_id])->find();
+      if($UpInfo)  //有上级
+      {
+          $userList[] = $UpInfo;
+          $this->newgetAllUps($UpInfo['first_leader'],$userList);
+
+      }
+      
+      return $userList;     
+      
+  }
 
 	
 }
