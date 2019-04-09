@@ -350,7 +350,7 @@ class FanliLogic extends Model
 			'log_type'=>$states
 		);
 
-		$bool = M('fan_log')->insert($data);
+		$bool = M('account_log')->insert($data);
 
 
          if(empty($money))
