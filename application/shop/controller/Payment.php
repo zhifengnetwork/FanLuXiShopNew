@@ -185,7 +185,7 @@ class Payment extends MobileBase
         header("Content-type:text/html;charset=utf-8");
 
         $goods_id = I("get.gid/d");
-        
+
         $money = Db::name('Auction')->where('id',$goods_id)->value('deposit');
 
         $user = session('user');
@@ -204,6 +204,9 @@ class Payment extends MobileBase
                 if($this->pay_code == 'weixin' && session('openid') && strstr($_SERVER['HTTP_USER_AGENT'],'MicroMessenger')){
                     $code_str = $this->payment->getJSAPI($order);
                     exit($code_str);
+                }else{
+
+                    $this->error('不是微信支付!');
                 }
             }else{
                 $this->error('您已交过保证金!');
