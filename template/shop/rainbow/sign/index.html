@@ -41,7 +41,7 @@
 					</div>
 					<!--连续、累积签到-->
 					<p class="recordBox">
-						累积签到:&nbsp;<span class="dayNum">0<!--天数--></span>天<br />
+						累计签到:&nbsp;<span class="dayNum">0<!--天数--></span>天<br />
 						已连续签到:&nbsp;<span class="continuityNum">0</span>天
 					</p>
 				</div>
@@ -52,7 +52,12 @@
 				</div>
 				
 			</div>
-			
+
+			<div style="width: 95%;margin: auto;margin-top: .6rem;font-size: .2rem;color: #747474;">
+				<h5>签到规则</h5>
+				<p><!--签到规则-->1.店主以上级别才可签到 </p>
+				<p><!--签到规则-->2.连续签到3天可以领取指定产品 </p>
+			</div>
 			
 			<!--遮罩层-->
 			<div class="model">
@@ -140,10 +145,8 @@
 					async: true,
 					success: function(data){
 						if(data['status'] == 1){
-							console.log('后台传的数据',data);
 							/*后台 传过来的数组（签到日期）*/
-							var signArr = data['data'];
-							console.log('编辑前:',signArr);
+							var signArr = data['data']
 							/*后台传过来的值 => '2019/03/06'*/
 							/*月、日*/
 							var monthS, dayS ;
@@ -160,7 +163,6 @@
 									signData[k] = signArr[k].split('/')[0] + '/' + monthS + '/' + dayS;
 									
 								}
-								console.log('编辑后:',signData);
 							
 	//							/*后台传过来的数组*/
 								for(var j=0;j<signData.length;j++){
@@ -179,6 +181,7 @@
 							/*判读用户是否签到*/
 							if(data['today_sign']){
 								$('.signInBut').find('span').html('已签到');
+								$('.signInBut').css('background', '#adadad');
 								signObj['stateD'] = true;
 							}
 							/*累积签到-obj*/
@@ -194,7 +197,7 @@
 							/*弹框-连续签到*/
 							$('.dialog-sign-zp .time span').html(signObj['evenNum']);
 							/*签到规则*/
-							$('.rule_box span').html(data['note']);
+							// $('.rule_box span').html(data['note']);
 							
 						}else {
 							console.log('无数据');
@@ -226,6 +229,7 @@
 								var todayState = _re['date'];
 								console.log('todayState:',todayState);
 								$('.signInBut').find('span').html('已签到');
+								$('.signInBut').css('background', '#adadad');
 								/*页面-连续签到*/
 								$('.recordBox').find('.continuityNum').html(signObj['evenNum']+1);
 								/*弹框-连续签到*/
