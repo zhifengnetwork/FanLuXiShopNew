@@ -262,26 +262,6 @@
 
 	};
 
-	// 活动结束
-	function submit_order() {
-
-		var goods_id = $('input[name="goods_id"]').val();
-		$.ajax({
-			type: "GET",
-			url: "{:U('Shop/Auction/auctionEnd')}",
-			data: {aid:goods_id},
-			dataType: "json",
-			success: function (data) {
-				layer.closeAll();
-				if (data.status != 1) {
-					layer.open({content:data.msg, time:3});  //执行有误
-					return false;
-				}
-				window.location.reload();
-			}
-		});
-	}
-
     // 交定金
     function deposit() {
         $('#cart5_form').submit();
@@ -316,6 +296,26 @@
 
 	};
 
+    // 活动结束
+    function submit_order() {
+
+        var goods_id = $('input[name="goods_id"]').val();
+        $.ajax({
+            type: "GET",
+            url: "{:U('Shop/Auction/auctionEnd')}",
+            data: {aid:goods_id},
+            dataType: "json",
+            success: function (data) {
+                layer.closeAll();
+                if (data.status != 1) {
+                    layer.open({content:data.msg, time:3});  //执行有误
+                    return false;
+                }
+                window.location.reload();
+            }
+        });
+    }
+    
 	//活动结束判断弹框
 	function activityResult(){
 		var goods_id = $('input[name="goods_id"]').val();
@@ -325,10 +325,7 @@
 			data: {aid:goods_id},
 			dataType: "json",
 			success: function (data) {
-				// 登录超时
-				if (data.status == -100){
-					location.href = "{:U('Mobile/User/login')}";
-				}
+
 				if (data.status == 1 && data.msg == 2) {
 					$("#mask").show();
 					return false;

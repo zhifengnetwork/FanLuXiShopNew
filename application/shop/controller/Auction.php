@@ -336,6 +336,11 @@ class Auction extends MobileBase
         }
 
         $price = $this->getHighPrice($this->auction['id'],1);
+
+        if ($price[0]['offer_price'] < $this->auction['reserve_price']) {
+            return $data = ['status' => 0, 'msg' => '出价没有达到保留价！', 'result' => ''];
+        }
+
         Db::name('Auction')->where('id', $this->auction['id'])->save(['is_end' => 1, 'transaction_price' => $price[0]['offer_price']]);
         Db::name('AuctionPrice')->where(['auction_id' => $this->auction['id'], 'is_out' => 1])->save(['is_out' => 2]);
 
