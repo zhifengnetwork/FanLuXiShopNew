@@ -1119,6 +1119,8 @@ function update_pay_status($order_sn,$ext=array())
         }
         $order['pay_time']=$time;
 
+        $time = date('Y-m-d H:i:s',time());
+        
         // 发送公众号消息给用户
         $userinfo = Db::name('users')->where(['user_id' => $order['user_id']])->field('openid,first_leader')->find();
         if ($userinfo['openid']) {
