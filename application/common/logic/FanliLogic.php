@@ -424,7 +424,7 @@ class FanliLogic extends Model
 	        $first_leader = $this->newgetAllUps($user_id);
 	        foreach($first_leader as $k=>$v)
 	        {
-	          if($v['level']==5)   //处理总监返利
+	          if($v['level']==5 &&  $p_parent_info['user_id']!=$v['user_id'])   //处理总监返利
 			  {
 			  	if($k>=1)
 			  	{
