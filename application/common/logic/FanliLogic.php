@@ -598,7 +598,7 @@ class FanliLogic extends Model
 				         if(!empty($commission_z))
 		             	{
 		             	   //平级领导奖
-			 			   $this->jintienew($ye['user_id'],$commission_z+100);//平级领导奖
+			 			   $this->jintienew($first_leader[$next_k]['user_id'],$commission_z);//平级领导奖
 		             	}
 				         $pingji_5 =1;
 				       				      
@@ -615,7 +615,7 @@ class FanliLogic extends Model
 				         if(!empty($commission_z))
 		             	{
 		             	  //平级领导奖
-			 			  $this->jintienew($ye['user_id'],$commission_z+10);//平级领导奖
+			 			  $this->jintienew($ye['user_id'],$commission_z);//平级领导奖
 
 		             	}
 	
