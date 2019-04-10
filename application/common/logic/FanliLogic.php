@@ -426,7 +426,9 @@ class FanliLogic extends Model
 	        {
 	          if($v['level']==5)   //处理总监返利
 			  {
-			  	 $fanli = M('user_level')->where('level',$v['level'])->field('s_reward')->find();
+			  	if($k>=1)
+			  	{
+			  		  $fanli = M('user_level')->where('level',$v['level'])->field('s_reward')->find();
 						 $commission = 50; //计算金额
 				          //按上一级等级各自比例分享返利
 				         $bool = M('users')->where('user_id',$v['user_id'])->setInc('user_money',$commission);
@@ -435,6 +437,9 @@ class FanliLogic extends Model
 
 			  	     return false;
                      break;
+
+			  	}
+			
 			  }
 
 	        }
