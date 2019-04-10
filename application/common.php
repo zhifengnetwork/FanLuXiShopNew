@@ -1110,8 +1110,8 @@ function update_pay_status($order_sn,$ext=array())
 
         //奖金池
         $BonusPoolLogic = new BonusPoolLogic();
-        $BonusPoolLogic->is_receive($order['order_id']);
-
+        $BonusPoolLogic->is_receive($order);
+        
         //虚拟服务类商品支付
         if($order['prom_type'] == 5){
             $OrderLogic = new \app\common\logic\OrderLogic();
