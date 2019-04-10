@@ -1923,6 +1923,7 @@ function provingReceive($user, $type, $num = 1)
 
     $levelGetNum = M('UserLevel')->where('level', $user['level'])->value('get');
 
+    //签到商品
     if ($type == 1) {
 
         //店主以上可领取
@@ -1940,6 +1941,7 @@ function provingReceive($user, $type, $num = 1)
         return array('status' => 2, 'msg' => '可领取', 'result' => array());
     }
 
+    //免费领取商品
     if ($type == 2) {
 
         // 扫码进入会员可领取1次

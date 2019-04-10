@@ -396,6 +396,7 @@ class Pay
 
                 // 能否领取商品
                 $data = M('order_sign_receive')->where(['uid' => $this->user['user_id'], 'type' => 2])->select();
+
                 //扫码只可领取1次
                 if (!empty($data)) {
                     $isReceive = ['status' => 0] ;
@@ -405,23 +406,22 @@ class Pay
 
             }
 
-            if ($this->user['level'] > 3 && $this->payList[0]['goods']->sign_free_receive == 1) {
+            if ($this->user['level'] > 2 && $this->payList[0]['goods']->sign_free_receive != 0) {
                 
                 $isReceive = provingReceive($this->user, $this->payList[0]['goods']->sign_free_receive, $this->totalNum);
             }
             
             if($isReceive['status'] == 2){
-                if ($this->payList[0]['goods']->sign_free_receive == 1) {
-                    // 免费领取的不限制数量
+                if ($this->payList[0]['goods']->sign_free_receive == 2) {
+                    // 免费领取
+                    $this->orderAmount = $this->orderAmount - $this->payList[0]['goods']->shop_price * $this->totalNum; // 应付金额
+                    $this->totalAmount = $this->totalAmount - $this->payList[0]['goods']->shop_price * $this->totalNum;
+                    $this->orderPromAmount = $this->payList[0]['goods']->shop_price * $this->totalNum; //优惠金额
+                }else{
+                    // 签到领取
                     $this->orderAmount = $this->orderAmount - $this->payList[0]['goods']->shop_price * $this->totalNum; // 应付金额
                     $this->totalAmount = $this->totalAmount - $this->payList[0]['goods']->shop_price * $this->totalNum;
                     $this->signPrice = $this->payList[0]['goods']->shop_price * $this->totalNum; //签到抵扣
-                }else{
-                    // 扫码领取只扣取一份价钱
-                    $this->orderAmount = $this->orderAmount - $this->payList[0]['goods']->shop_price; // 应付金额
-                    $this->totalAmount = $this->totalAmount - $this->payList[0]['goods']->shop_price;;
-                    $this->signPrice = $this->payList[0]['goods']->shop_price; //签到抵扣
-                    $this->orderPromAmount = $this->payList[0]['goods']->shop_price; //优惠金额
                 }
             }
         }
