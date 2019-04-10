@@ -1948,17 +1948,19 @@ function provingReceive($user, $type, $num = 1)
                 return array('status' => 0, 'msg' => '超过领取数量，只能领取一件！', 'result' => array());
             }
 
-            $data = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2])->order('addend_time desc')->select();
+            $data = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2])->find();
             
             //扫码只可领取1次
             if (!empty($data)) {
                 return array('status' => 1, 'msg' => '已超出领取次数', 'result' => array());
+            }else{
+                return array('status' => 2, 'msg' => '可领取', 'result' => array());
             }
         }
 
         //当天订单
         $order = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2, 'addend_time' => ['>',$today]])->count();
-
+        
         if ($num > $levelGetNum) {
             $getNum = $levelGetNum - $order ;
             return array('status' => 0, 'msg' => '超过领取数量，今天还可领取'.$getNum.'件！', 'result' => array());
