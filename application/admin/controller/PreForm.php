@@ -52,7 +52,12 @@ class Preform extends Base {
          $season_4 = $this->getQuarterDate($year,4);//第一季度
          foreach($users as $k=>$v)
          {
-            $userdata = Db::name('users')->where('first_leader='.$v['user_id'])->column('user_id');
+            $datas =$this->getAlldp_p($v['user_id']);
+            foreach($datas as $kd=>$yd)
+            {
+              $userdata[]=$yd['user_id'];
+            }
+           // $userdata = Db::name('users')->where('first_leader='.$v['user_id'])->column('user_id');
           //  $v['team_par'] = $return;
             if(!empty($userdata)) {
                 $user_ids = implode(',',$userdata);
@@ -60,6 +65,7 @@ class Preform extends Base {
             {
               $user_ids='';
             }
+            $userdata =array();
              $total_1 = $this->jisuanyeji($user_ids,$season_1['st'],$season_1['et']); //
              $total_2 = $this->jisuanyeji($user_ids,$season_2['st'],$season_2['et']); //
              $total_3 = $this->jisuanyeji($user_ids,$season_3['st'],$season_3['et']); //
@@ -181,6 +187,7 @@ class Preform extends Base {
       $reward_log = Db::name('reward_log')->where(['year'=>$year,'quarter'=>$jidu])->find(); //分红列表
     //print_r(Db::name('reward_log')->getlastsql());exit;
       $time =time();
+      
       if($time<$season['et'])
       {
          $this->ajaxReturn(['status' => 0,'msg'   => '没到时间发放']);
@@ -213,8 +220,10 @@ class Preform extends Base {
           $parent =array();
           $p_y  =array();
           $s_y  =array();
+          
           foreach($order_goods as $k=>$v)
           {
+            /*
             if(!empty($v['first_leader']))  //统计订单用户上级业绩
             {
             // echo $v['sale_amount'];
@@ -232,14 +241,22 @@ class Preform extends Base {
                 
               }
               
-            }
-          }
+            }*/
+            //无限找上上级
+            $user_data = $this->getAllUp_p($v['user_id']);
+            foreach($user_data as $kk=>$yy)
+            {
+              $p_y[$yy['user_id']] +=$v['sale_amount'];
 
+            }
+
+
+          }
         if(empty($p_y))
         {
           $this->ajaxReturn(['status' => 0,'msg'   => '第'.$jidu.'季度没有业绩分红']);exit;
         }
-        $result=$this->count_userreward($p_y,$s_y,$jidu);
+        $result=$this->count_userreward_new($p_y,$jidu);
         if($result){
             //设置成功后跳转页面的地址，默认的返回页面是$_SERVER['HTTP_REFERER']
                 $this->ajaxReturn(['status'=>1,'msg'=>'发放成功','result'=>'']);
@@ -251,6 +268,121 @@ class Preform extends Base {
 
          //return $order_goods;
     }
+        /*计算每个用户应该发的奖金*/
+   public function count_userreward_new($p_y,$jidu){
+     $list = Db::name('share')->order('grade','desc')->select(); //分红列表
+      $commission='';
+      if(!empty($p_y))
+      {
+        foreach($p_y as $k=>$v)
+        {
+         $user_data =Db::name('users')->where('first_leader='.$k)->column('user_id');//查出没下级
+         
+         if(!empty($user_data))
+         {
+                foreach($p_y as $py=>$ss)
+                {
+
+                   if(in_array($py,$user_data))// 证明有下级
+                   {
+                     
+                      $steam_p_new+=$ss;
+
+                   }
+                }
+                if($steam_p_new>0)
+                  {
+                    foreach($list as $kk=>$vv)
+                      {
+  
+                      if($p_y[$k]>=$vv['lower'] && $p_y[$k]<=$vv['upper'])
+                      {
+                        $team_p = $p_y[$k]* ($vv['rate'] / 100);//上上级业绩
+                     
+                      }
+                      if($steam_p_new>=$vv['lower'] && $steam_p_new<=$vv['upper'])
+                      {
+                         $steam_p =$steam_p_new* ($vv['rate'] / 100);
+                      }
+                       $commission = $team_p -$steam_p;
+               
+                     }
+                     //发放业绩分红，记录
+                      if(!empty($commission) && $commission>0)
+                      {
+                        $bool = M('users')->where('user_id',$k)->setInc('user_money',$commission);
+                         if ($bool !== false) {
+                         $desc = "第".$jidu."季度业绩分红1";
+                        $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year(),$team_p,$steam_p); //写入日志
+                       $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
+                       } else {
+                        return false;
+                       }
+
+                     }
+
+                  }else
+                  {
+                     foreach($list as $kk=>$vv)
+                  {
+                      if($p_y[$k]>=$vv['lower'] && $p_y[$k]<=$vv['upper'])
+                      {
+                        $team_p = $p_y[$k]* ($vv['rate'] / 100);//上上级业绩
+                     
+                      }
+                
+                  }
+                        $commission = $team_p -0;
+                       //发放业绩分红，记录
+                      if(!empty($commission) && $commission>0)
+                      {
+                        $bool = M('users')->where('user_id',$k)->setInc('user_money',$commission);
+                         if ($bool !== false) {
+                         $desc = "第".$jidu."季度业绩分红2";
+                        $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year(),$team_p,0); //写入日志
+                       $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
+                       } else {
+                        return false;
+                       }
+                     }
+
+                  }
+                  $steam_p_new =0;
+                      
+         }else
+         {
+
+              foreach($list as $kk=>$vv)
+                  {
+                      if($p_y[$k]>=$vv['lower'] && $p_y[$k]<=$vv['upper'])
+                      {
+                        $team_p = $p_y[$k]* ($vv['rate'] / 100);//上上级业绩
+                     
+                      }
+                      $commission = $team_p -0;
+            
+                  }
+                             //发放业绩分红，记录
+                      if(!empty($commission) && $commission>0)
+                      {
+
+                        $bool = M('users')->where('user_id',$k)->setInc('user_money',$commission);
+                      
+                         if ($bool !== false) {
+                         $desc = "第".$jidu."季度业绩分红3";
+                        $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year(),$team_p,0); //写入日志
+                       $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
+                       } else {
+                        return false;
+                       }
+                     }
+         }
+             
+       }
+       return true;
+      }
+
+   }
     /*计算每个用户应该发的奖金*/
     public function count_userreward($p_y,$s_y,$jidu){
 
@@ -427,6 +559,37 @@ class Preform extends Base {
     return $bool;
   }
 
-
+   /*
+   * 获取所有上级
+   */
+   public function getAllUp_p($invite_id,&$userList=array())
+  {           
+      $field  = "user_id";
+      $UpInfo = M('users')->field($field)->where(['user_id'=>$invite_id])->find();
+      if($UpInfo)  //有上级
+      {
+          $userList[] = $UpInfo;                                      
+          $this->getAllUp_p($UpInfo['first_leader'],$userList);
+      }
+      
+      return $userList;     
+      
+  }
+     /*
+   * 获取所有下级
+   */
+   public function getAlldp_p($invite_id,&$userList=array())
+  {           
+      $field  = "user_id,first_leader,mobile";
+      $UpInfo = M('users')->field($field)->where(['first_leader'=>$invite_id])->find();
+      if($UpInfo)  //有上级
+      {
+          $userList[] = $UpInfo;                                      
+          $this->getAlldp_p($UpInfo['user_id'],$userList);
+      }
+      
+      return $userList;     
+      
+  }
     
 }
