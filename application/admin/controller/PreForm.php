@@ -21,11 +21,15 @@ use think\Loader;
 
 class Preform extends Base {
 
+  //  protected $year = $this->c_year();
+
     public function index(){
         return $this->fetch();
     }
-    
-
+    public function c_year()
+    {
+      return date('Y');
+    }
     
     public function preform(){
       //$return = $this->upzdmoney(17725621);
@@ -37,10 +41,15 @@ class Preform extends Base {
        $Page = new Page($count,10);
         $users = Db::name('users')->alias('u')
              ->field('u.user_id,u.realname,u.mobile')
-             ->order('user_id asc')
+             ->order('user_id desc')
              ->limit($Page->firstRow,$Page->listRows)->select();
           $user_ids =array();
           $user_idcc =array();
+         $year = date('Y');
+         $season_1 = $this->getQuarterDate($year,1);//第一季度
+         $season_2 = $this->getQuarterDate($year,2);//第一季度
+         $season_3 = $this->getQuarterDate($year,3);//第一季度
+         $season_4 = $this->getQuarterDate($year,4);//第一季度
          foreach($users as $k=>$v)
          {
             $userdata = Db::name('users')->where('first_leader='.$v['user_id'])->column('user_id');
@@ -51,7 +60,10 @@ class Preform extends Base {
             {
               $user_ids='';
             }
-            $total = $this->jisuanyeji($user_ids,1,2); //查统计团队业绩
+             $total_1 = $this->jisuanyeji($user_ids,$season_1['st'],$season_1['et']); //
+             $total_2 = $this->jisuanyeji($user_ids,$season_2['st'],$season_2['et']); //
+             $total_3 = $this->jisuanyeji($user_ids,$season_3['st'],$season_3['et']); //
+             $total_4 = $this->jisuanyeji($user_ids,$season_4['st'],$season_4['et']); //查统计团队业绩
             /*
             foreach($userdata as $ke=>$ve)
             {
@@ -64,14 +76,15 @@ class Preform extends Base {
             
    
                // $return['first'] = !empty($total)?$total[0]['sale_amount']:0;//第一季度
-            $return['first'] = !empty($total)?$total[0]['sale_amount']:0;
+            $return['first'] = !empty($total_1)?$total_1[0]['sale_amount']:0;
 
           //  $return['total'] = $total;
-            $return['two'] = 1;//第二季度
-            $return['thiree'] = 2;//第三季度
-            $return['four'] = 3;//第四季度
+            $return['two'] = !empty($total_2)?$total_2[0]['sale_amount']:0;;//第二季度
+            $return['thiree'] = !empty($total_3)?$total_3[0]['sale_amount']:0;;//第三季度
+            $return['four'] = !empty($total_4)?$total_4[0]['sale_amount']:0;;//第四季度
             $return['k'] =$k;
             $return['realname'] =$v['realname'];
+            $return['user_id'] =$v['user_id'];
             $return['mobile'] =$v['mobile'];
             $new_list[]=$return;
 
@@ -84,36 +97,6 @@ class Preform extends Base {
    
         return $this->fetch();
     }
-      //总监，大区无限代返利
-  public function upzdmoney($user_id)
-  {
-
-    //查询会员当前等级
-   // $user_info = M('users')->where('user_id',$this->userId)->field('first_leader,level')->find();
-    if(!empty($user_id))
-    {
-      $first_leader =$this->newgetAllUp($user_id);//查找全部上级
-      
-      foreach($first_leader as $ke=>$ye)
-      {
-           
-        if($ye['level']==3)
-        {
-
-        }
-        if($ye['level']==5)
-        {
-              break;
-        }
-        $new_list[]=$ye;
-        
-
-      }
-      return $new_list;
-    }
-    
-
-  }
      /*
  * 获取所有上级
  */
@@ -138,6 +121,7 @@ class Preform extends Base {
             return '';
           }
            $where_goods = [
+
             'od.order_status'=> ['notIN','3,5'],
            // 'og.is_send'    => 1,
             'og.prom_type' =>0,//只有普通订单才算业绩
@@ -145,6 +129,7 @@ class Preform extends Base {
             //"og.goods_num" =>'>1',
             'od.user_id'=> ['IN',$user_s],
             'od.pay_status'=>1,
+            'od.pay_time'    => ['Between',$start_time.','.$end_time],
             
           ];
          $order_goods = Db::name('order_goods')->alias('og')
@@ -189,13 +174,25 @@ class Preform extends Base {
     //触发发送奖金
     public function send_reward()
     {
-       $list = Db::name('share')->order('grade','desc')->select(); //分红列表
-    
-     // $year = date('Y');
-      //$season = $this->getQuarterDate($year,1);//第一季度
-      //print_r($season);exit;
+       
+      $jidu = I('seaon');
+      $year = date('Y');
+      $season = $this->getQuarterDate($year,$jidu);//第一季度
+      $reward_log = Db::name('reward_log')->where(['year'=>$year,'quarter'=>$jidu])->find(); //分红列表
+    //print_r(Db::name('reward_log')->getlastsql());exit;
+      $time =time();
+      if($time<$season['et'])
+      {
+         $this->ajaxReturn(['status' => 0,'msg'   => '没到时间发放']);
+      }
+      if($reward_log)
+      {
+         $this->ajaxReturn(['status' => 0,'msg'   => '第'.$jidu.'季度奖金已发放']);
+      }
+
        $where_goods = [
             'od.order_status'=> ['notIN','3,5'],
+            'od.pay_time'    => ['Between',$season['st'].','.$season['et']],
            // 'og.is_send'    => 1,
             'og.prom_type' =>0,//只有普通订单才算业绩
             //'u.first_leader'=>$v['user_id'],
@@ -212,7 +209,7 @@ class Preform extends Base {
             // ->limit($Page->firstRow,$Page->listRows)
              ->select();
             //print_r($order_goods);exit;
-            //print_r(Db::name('order_goods')->getlastsql());exit;
+           // print_r(Db::name('order_goods')->getlastsql());exit;
           $parent =array();
           $p_y  =array();
           $s_y  =array();
@@ -237,35 +234,113 @@ class Preform extends Base {
 
               if(!empty($parent))
               {
-                 // $s_y[$p_parent['first_leader']][$v['first_leader']]['team_par'][]= $v['sale_amount'];
+                 // $s_y[$p_parent['first_leader']][$v['first_leader']][$v['user_id']]['team_par'][]= $v['sale_amount'];
                 $s_y[$p_parent['first_leader']]['team_par']+= $v['sale_amount'];
                 
               }
               }
             }
-      
           }
+        if(empty($p_y))
+        {
+          $this->ajaxReturn(['status' => 0,'msg'   => '第'.$jidu.'季度没有业绩分红']);exit;
+        }
+        $result=$this->count_userreward($p_y,$s_y,$jidu);
+        if($result){
+            //设置成功后跳转页面的地址，默认的返回页面是$_SERVER['HTTP_REFERER']
+                $this->ajaxReturn(['status'=>1,'msg'=>'发放成功','result'=>'']);
+        } else {
+            //错误页面的默认跳转页面是返回前一页，通常不需要设置
+            $this->ajaxReturn(['status' => 0,'msg'   => '发放失败']);
+        }
+       
 
-
-         return $order_goods;
+         //return $order_goods;
     }
     /*计算每个用户应该发的奖金*/
+    public function count_userreward($p_y,$s_y,$jidu){
 
-    public function count_userreward($user_id,$p_y,$s_y){
+      $list = Db::name('share')->order('grade','desc')->select(); //分红列表
+      $commission='';
       if(!empty($p_y))
       {
-        $commission = $goods['shop_price'] * ($fanli['rate'] / 100) * $this->goodNum;
 
-        $bool = M('users')->where('user_id',$user_id)->setInc('user_money',$commission);
-        if ($bool !== false) {
-                $desc = "分享返利";
-                $log = $this->writeLog($user_info['first_leader'],$commission,$desc,1); //写入日志
-                  //检查返利管理津贴
-                  $this->jintie($user_info['first_leader'],$commission);
-                return true;
-               } else {
-                return false;
-               }
+        foreach($p_y as $k=>$v)
+        {
+
+          //判断下下级是否有业绩，减去下下级金额
+          if($k==$s_y[$k] && !empty($s_y[$k]) && $p_y[$k]['temp_par']>$s_y['temp_par'])
+          {
+
+            foreach($list as $kk=>$vv)
+            {
+              if($v['team_par']>0)
+              {
+                if($v['team_par']>=$vv['lower'] && $v['team_par']<=$vv['upper'])
+                {
+                   $team_p = $v['team_par']* ($vv['rate'] / 100);//上上级业绩
+                   
+                }
+                if($s_y[$k]['team_par']>=$vv['lower'] && $s_y[$k]['team_par']<=$vv['upper'])
+                {
+                   $steam_p =$s_y[$k]['team_par']* ($vv['rate'] / 100);
+                }
+                $commission = $team_p -$steam_p;
+
+              }
+                //发放业绩分红，记录
+              if(!empty($commission))
+              {
+                    $bool = M('users')->where('user_id',$k)->setInc('user_money',$commission);
+                  if ($bool !== false) {
+                     $desc = "第".$jidu."季度业绩分红";
+                    $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year()); //写入日志
+                    $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
+                    return true;
+                   } else {
+                    return false;
+                   }
+
+              }
+            }
+          }else //下下没有业绩
+          {
+             foreach($p_y as $k=>$v)
+             {
+              foreach($list as $kk=>$vv)
+              {
+                if($v['team_par']>0)
+                {
+
+                 if($v['team_par']>=$vv['lower'] && $v['team_par']<=$vv['upper'])
+                  {
+                    $commission = $v['team_par']* ($vv['rate'] / 100);//上上级业绩
+                   
+                  }
+
+                }
+              }
+
+              //发放业绩分红，记录
+              if(!empty($commission))
+              {
+                    $bool = M('users')->where('user_id',$k)->setInc('user_money',$commission);
+                  if ($bool !== false) {
+                    $desc = "第".$jidu."季度业绩分红";
+                    $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year()); //写入日志
+                    $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
+                    return true;
+                   } else {
+                    return false;
+                   }
+
+              }
+
+             }
+
+          }
+        }
+
       }else
       {
         return false;
@@ -274,16 +349,84 @@ class Preform extends Base {
 
     }
 
-    /*
+   //查看发放的分红
+    public function checklog_reward()
+    {
+      $id = I('id');
+        $start_time = strtotime(0);
+        $end_time = time();
+        if(IS_POST){
+            $start_time = strtotime(I('start_time'));
+            $end_time = strtotime(I('end_time'));
+        }
+        $count = M('account_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
+                    ->where("acount.log_type=-1 and acount.user_id=".$id)
+                   // ->where("acount.states = 101 or acount.states = 102")
+                    ->count();
+        $page = new Page($count, 10);
+        $log = M('account_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
+                               ->field('users.nickname, acount.*')->order('log_id DESC')
+                               ->whereTime('acount.change_time', 'between', [$start_time, $end_time])
+                               ->where("acount.log_type=-1 and acount.user_id=".$id)
+                               ->limit($page->firstRow, $page->listRows)
+                               ->select();
+        
+        $this->assign('start_time', $start_time);
+        $this->assign('end_time', $end_time);
+        $this->assign('pager', $page);
+        $this->assign('log',$log);
+        return $this->fetch();
+    }
+
+/*
  * 取某个季度的开始和结束时间
  *   $year 年份，如2014
  *   $season 季度，1、2、3、4
  */
   public function getQuarterDate($year,$season){
     $times = array();
-    $times['st'] = date('Y-m-d H:i:s', mktime(0, 0, 0,$season*3-3+1,1,$year));
-    $times['et'] = date('Y-m-d H:i:s', mktime(23,59,59,$season*3,date('t',mktime(0, 0 , 0,$season*3,1,$year)),$year));
+    //$times['st'] = date('Y-m-d H:i:s', mktime(0, 0, 0,$season*3-3+1,1,$year));
+    //$times['et'] = date('Y-m-d H:i:s', mktime(23,59,59,$season*3,date('t',mktime(0, 0 , 0,$season*3,1,$year)),$year));
+    $times['st'] = mktime(0, 0, 0,$season*3-3+1,1,$year);
+    $times['et'] =mktime(23,59,59,$season*3,date('t',mktime(0, 0 , 0,$season*3,1,$year)),$year);
     return $times;
+  }
+
+    //记录日志
+  public function writeLog($userId,$money,$desc,$quarter,$year)
+  {
+    $data = array(
+      'user_id'=>$userId,
+      'money'=>$money,
+      'time'=>time(),
+      'desc'=>$desc,
+      'quarter'=>$quarter,
+      'year'=>$year,
+    );
+
+    $bool = M('reward_log')->insert($data);
+    
+    return $bool;
+  }
+    //记录日志
+  public function writeLog_user($userId,$money,$desc,$states)
+  {
+    $data = array(
+      'user_id'=>$userId,
+      'user_money'=>$money,
+      'change_time'=>time(),
+      'desc'=>$desc,
+      //'order_sn'=>$this->orderSn,
+      //'order_id'=>$this->orderId,
+      'log_type'=>$states
+    );
+
+    $bool = M('account_log')->insert($data);
+
+
+
+    
+    return $bool;
   }
 
 
