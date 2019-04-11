@@ -40,7 +40,7 @@ class Preform extends Base {
 
        $Page = new Page($count,10);
         $users = Db::name('users')->alias('u')
-             ->field('u.user_id,u.realname,u.mobile')
+             ->field('u.user_id,u.realname,u.mobile,u.nickname')
              ->order('user_id desc')
              ->limit($Page->firstRow,$Page->listRows)->select();
           $user_ids =array();
@@ -83,7 +83,7 @@ class Preform extends Base {
             $return['thiree'] = !empty($total_3)?$total_3[0]['sale_amount']:0;;//第三季度
             $return['four'] = !empty($total_4)?$total_4[0]['sale_amount']:0;;//第四季度
             $return['k'] =$k;
-            $return['realname'] =$v['realname'];
+            $return['nickname'] =$v['nickname'];
             $return['user_id'] =$v['user_id'];
             $return['mobile'] =$v['mobile'];
             $new_list[]=$return;
