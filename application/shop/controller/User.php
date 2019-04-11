@@ -1894,7 +1894,7 @@ class User extends MobileBase
         }
 
             //分享数据来源
-            $shareLink = urlencode("http://{$_SERVER['HTTP_HOST']}/index.php?m=Mobile&c=Index&a=index&first_leader={$user['user_id']}");
+            $shareLink = urlencode("http://{$_SERVER['HTTP_HOST']}/index.php?m=Shop&c=Index&a=index&first_leader={$user['user_id']}");
 
         $head_pic = $user['head_pic'] ?: '';
         if ($head_pic && strpos($head_pic, 'http') !== 0) {
@@ -2029,7 +2029,7 @@ class User extends MobileBase
         if(empty($qr_code_file))
         {
             $session = session('user');
-            $url = "http://".$_SERVER['HTTP_HOST']."/Shop/user/login.html?u={$session['user_id']}";
+            $url = "http://".$_SERVER['HTTP_HOST']."/Shop/user/login.html?u={$session['user_id']}&first_leader={$session['user_id']}";
             // reg/u/".$session['user_id']."/is_code/1
             /* 生成二维码 */
             $qr_code_file = $qr_code_path.time().rand(1, 10000).'.png';
