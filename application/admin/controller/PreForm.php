@@ -219,28 +219,22 @@ class Preform extends Base {
             {
             // echo $v['sale_amount'];
               $p_y[$v['first_leader']]['team_par']+= $v['sale_amount'];
-              //查询该用户是否有上上级
+             
               $p_parent = Db::name('users')->alias('u')
               ->where('user_id='.$v['first_leader'])
               ->field('u.user_id,u.first_leader')
               ->find();
-              if(!empty($p_parent['first_leader']))
-              {
-                  //统计订单用户下级级业绩
-                 $parent = Db::name('users')->alias('u')
-                ->where('first_leader='.$v['first_leader'])
-                ->field('u.user_id,u.first_leader')
-                ->find();
 
-              if(!empty($parent))
+              if(!empty($p_parent['first_leader']))
               {
                  // $s_y[$p_parent['first_leader']][$v['first_leader']][$v['user_id']]['team_par'][]= $v['sale_amount'];
                 $s_y[$p_parent['first_leader']]['team_par']+= $v['sale_amount'];
                 
               }
-              }
+              
             }
           }
+
         if(empty($p_y))
         {
           $this->ajaxReturn(['status' => 0,'msg'   => '第'.$jidu.'季度没有业绩分红']);exit;
@@ -269,11 +263,12 @@ class Preform extends Base {
         {
 
           //判断下下级是否有业绩，减去下下级金额
-          if($k==$s_y[$k] && !empty($s_y[$k]) && $p_y[$k]['temp_par']>$s_y['temp_par'])
-          {
 
+          if(!empty($s_y[$k]) && $p_y[$k]['team_par']>$s_y[$k]['team_par'])
+          {
             foreach($list as $kk=>$vv)
             {
+
               if($v['team_par']>0)
               {
                 if($v['team_par']>=$vv['lower'] && $v['team_par']<=$vv['upper'])
@@ -285,18 +280,18 @@ class Preform extends Base {
                 {
                    $steam_p =$s_y[$k]['team_par']* ($vv['rate'] / 100);
                 }
+
                 $commission = $team_p -$steam_p;
 
               }
                 //发放业绩分红，记录
-              if(!empty($commission))
+              if(!empty($commission) && $commission>0)
               {
                     $bool = M('users')->where('user_id',$k)->setInc('user_money',$commission);
                   if ($bool !== false) {
-                     $desc = "第".$jidu."季度业绩分红";
-                    $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year()); //写入日志
-                    $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
-                    return true;
+                     $desc = "第".$jidu."季度业绩分红1";
+                    $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year(),$team_p,$steam_p); //写入日志
+                   $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
                    } else {
                     return false;
                    }
@@ -305,6 +300,7 @@ class Preform extends Base {
             }
           }else //下下没有业绩
           {
+
              foreach($p_y as $k=>$v)
              {
               foreach($list as $kk=>$vv)
@@ -329,7 +325,6 @@ class Preform extends Base {
                     $desc = "第".$jidu."季度业绩分红";
                     $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year()); //写入日志
                     $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
-                    return true;
                    } else {
                     return false;
                    }
@@ -339,6 +334,7 @@ class Preform extends Base {
              }
 
           }
+          return true;
         }
 
       }else
@@ -393,7 +389,7 @@ class Preform extends Base {
   }
 
     //记录日志
-  public function writeLog($userId,$money,$desc,$quarter,$year)
+  public function writeLog($userId,$money,$desc,$quarter,$year,$team_p=0,$steam_p=0)
   {
     $data = array(
       'user_id'=>$userId,
@@ -402,6 +398,8 @@ class Preform extends Base {
       'desc'=>$desc,
       'quarter'=>$quarter,
       'year'=>$year,
+      'team_p'=>$team_p,
+      'steam_p'=>$steam_p,
     );
 
     $bool = M('reward_log')->insert($data);
