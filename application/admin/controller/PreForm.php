@@ -153,12 +153,12 @@ class Preform extends Base {
             $start_time = strtotime(I('start_time'));
             $end_time = strtotime(I('end_time'));
         }
-        $count = M('fan_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
+        $count = M('account_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
                     ->whereTime('acount.change_time', 'between', [$start_time, $end_time])
                    // ->where("acount.states = 101 or acount.states = 102")
                     ->count();
         $page = new Page($count, 10);
-        $log = M('fan_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
+        $log = M('account_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
                                ->field('users.nickname, acount.*')->order('log_id DESC')
                                ->whereTime('acount.change_time', 'between', [$start_time, $end_time])
                                //->where("acount.states = 101 or acount.states = 102")
