@@ -289,21 +289,7 @@ class UsersLogic extends Model
             $map['head_pic'] = !empty($data['head_pic']) ? $data['head_pic'] : '/public/images/icon_goods_thumb_empty_300.png';
             $map['sex'] = $data['sex'] === null ? 0 :  $data['sex'];
             // $map['first_leader'] = cookie('first_leader'); // 推荐人id
-            if(!empty(I('first_leader')) && I('first_leader') > 0)
-                $map['first_leader'] = I('first_leader'); // 微信授权登录返回时 get 带着参数的
-
-            // 如果找到他老爸还要找他爷爷他祖父等
-            if ($map['first_leader']) {
-                $first_leader = Db::name('users')->where("user_id = {$map['first_leader']}")->find();
-                $map['second_leader'] = $first_leader['first_leader']; //  第一级推荐人
-                $map['third_leader'] = $first_leader['second_leader']; // 第二级推荐人
-                //他上线分销的下线人数要加1
-                Db::name('users')->where(array('user_id' => $map['first_leader']))->setInc('underling_number');
-                Db::name('users')->where(array('user_id' => $map['second_leader']))->setInc('underling_number');
-                Db::name('users')->where(array('user_id' => $map['third_leader']))->setInc('underling_number');
-            } else {
-                $map['first_leader'] = 0;
-            }
+            
             // 成为分销商条件
             // $distribut_condition = tpCache('distribut.condition');
             // if($distribut_condition == 0){    // 直接成为分销商, 每个人都可以做分销
@@ -447,33 +433,7 @@ class UsersLogic extends Model
         $map['password'] = $password;
         $map['reg_time'] = time();
         //$map['first_leader'] = cookie('first_leader');  //推荐人id
-        // 如果找到他老爸还要找他爷爷他祖父等
-        if($map['first_leader'])
-        {
-            $first_leader = Db::name('users')->where("user_id = {$map['first_leader']}")->find();
-            $map['second_leader'] = $first_leader['first_leader'];
-            $map['third_leader'] = $first_leader['second_leader'];
-            //他上线分销的下线人数要加1
-            Db::name('users')->where(array('user_id' => $map['first_leader']))->setInc('underling_number');
-            Db::name('users')->where(array('user_id' => $map['second_leader']))->setInc('underling_number');
-            Db::name('users')->where(array('user_id' => $map['third_leader']))->setInc('underling_number');
-        }else
-		{
-			$map['first_leader'] = 0;
-		}
-		if(is_array($invite) && !empty($invite)){
-			$map['first_leader'] = $invite['user_id'];
-			$map['second_leader'] = $invite['first_leader'];
-			$map['third_leader'] = $invite['second_leader'];
-            //需要给推荐人送积分
-            $integral = tpCache('integral');
-            $invite_integral =$integral['invite_integral'];
-            if($invite_integral > 0 && $integral['invite']){
-                accountLog($invite['user_id'], 0,$invite_integral, '邀请会员注册赠送积分'); // 记录日志流水
-            }
-		}/*  else if(tpCache('basic.invite') ==1 && empty($invite)){
-		    return array('status'=>-1,'msg'=>'请填写正确的推荐人手机号');
-		} */
+
 
         // 成为分销商条件  
         // $distribut_condition = tpCache('distribut.condition'); 
