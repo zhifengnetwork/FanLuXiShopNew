@@ -449,11 +449,11 @@ class Image
                 $y = ($this->info['height'] - $info[1]) / 2;
                 break;
 
-            /* DCHQZG */
+            /* 头像 */
               case self::DCHQZG:
-              $x = 100;
+              $x = 35;
               //$y = ($this->info['height'] - $info[1]) / 2;
-              $y = 500;
+              $y = 66;
 
               break;
 
@@ -555,6 +555,12 @@ class Image
             case self::WATER_WEST:
                 $y += ($this->info['height'] - $h) / 2;
                 break;
+            /* 自定义 */
+            case self::DCHQZG:
+                  $x = 190;
+                  $y = 100;
+                break;
+
             default:
                 /* 自定义文字坐标 */
                 if (is_array($locate)) {

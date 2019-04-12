@@ -32,6 +32,7 @@ class User extends MobileBase
     */
     public function _initialize()
     {
+
         parent::_initialize();
         if (session('?user')) {
             $User = new UserModel();
@@ -1998,7 +1999,7 @@ class User extends MobileBase
         $QR = imagecreatefromstring(file_get_contents($qr_code_file));
         $background_img = imagecreatefromstring ( file_get_contents ( $news_poster ) );
 
-        imagecopyresampled ( $background_img, $QR,$poster['canvas_x'],$poster['canvas_y'],0,0,50,92,80, 78 );      //合成图片
+        imagecopyresampled ( $background_img, $QR,$poster['canvas_x'],$poster['canvas_y'],0,0,80,92,80, 78 );      //合成图片
         $result_png = '/'.createImagesName(). ".png";
         $file = $file_path . $result_png;
         imagepng ($background_img, $file);                                                          //输出合成海报图片
@@ -2051,8 +2052,6 @@ class User extends MobileBase
     {
         $user_id = session('user.user_id');
 
-        $this->assign('tou',$this->user['head_pic']);
-        $this->assign('nickname',$this->user['nickname']);
         $logic = new ShareLogic();
         $ticket = $logic->get_ticket($user_id);
 
@@ -2061,33 +2060,75 @@ class User extends MobileBase
             $this->error("ticket不能为空");
             exit;
         }
-        $url= "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=".$ticket;
 
-        $url222 = '/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/code/'.$user_id.'.jpg';
+        $url= "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=".$ticket;
+        //1.二维码
+        $url222 = ROOT_PATH.'public/share/code/'.$user_id.'.jpg';
         if( @fopen( $url222, 'r' ) )
         {
             //已经有二维码了
-        	$url_code = '/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/code/'.$user_id.'.jpg';
+        	$url_code = ROOT_PATH.'public/share/code/'.$user_id.'.jpg';
         }else{
             //还没有二维码
-            $re = $logic->getImage($url,'/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/code', $user_id.'.jpg');
+            $re = $logic->getImage($url,ROOT_PATH.'public/share/code', $user_id.'.jpg');
             $url_code = $re['save_path'];
         }
-        
-        //得到二维码的绝对路径
 
-        $pic = "/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/picture_ok44/'.$user_id.'.jpg";
+        //判断图片大小
+        $logo_url = \think\Image::open($url_code);
+        $logo_url_logo_width = $logo_url->height();
+        $logo_url_logo_height = $logo_url->width();
+
+        if($logo_url_logo_height > 420 || $logo_url_logo_width > 420){
+            //压缩二维码图片
+            $url_code = ROOT_PATH.'public/share/code/'.$user_id.'.jpg';
+            $logo_url->thumb(210, 210)->save($url_code , null, 100);
+        }
+
+        //2.头像
+        $head_url = ROOT_PATH.'public/share/head/'.$user_id.'.jpg';
+        if( @fopen( $head_url, 'r' ) )
+        {
+            //已经有头像了
+            $url_head_pp = ROOT_PATH.'public/share/head/'.$user_id.'.jpg';
+        }else{
+            //还没有头像
+            $re = $logic->getImage($this->user['head_pic'],ROOT_PATH.'public/share/head', $user_id.'.jpg');
+            $url_head_pp = $re['save_path'];
+        }
+        
+        //判断图片大小
+        $logo = \think\Image::open($url_head_pp);
+        $logo_width = $logo->height();
+        $logo_height = $logo->width();
+
+        //头像变成90
+        if($logo_height > 100 || $logo_width > 100){
+            //压缩图片
+             $url_head_file = ROOT_PATH.'public/share/head/'.$user_id.'.jpg';
+             $logo->thumb(100, 100)->save($url_head_file , null, 100);
+        }
+
+        //3.得到二维码的绝对路径
+        $pic = ROOT_PATH."public/share/picture_ok44/'.$user_id.'.jpg";
         if( @fopen( $pic, 'r' ) )
         {
         	$pic = "/share/picture_ok44/".$uid.".jpg";
         }
         else
         {
-        	$image = \think\Image::open('/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/bg1.jpg');
-        	// 给原图左上角添加水印并保存water_image.png
-        	$image->water($url_code,\think\Image::DCHQZG)->save('/www/wwwroot/fanluxi.zhifengwangluo.c3w.cc/public/share/picture_ok44/'.$user_id.'.jpg');
-        	
-        	$pic = "/public/share/picture_ok44/".$user_id.".jpg";
+        	$image = \think\Image::open(ROOT_PATH.'public/share/bg1.jpg');
+        	// 给原图中间添加水印
+            $image->water($url_code,\think\Image::WATER_CENTER)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.jpg');
+
+            // 给图片添加头像
+            $images = \think\Image::open(ROOT_PATH."/public/share/picture_ok44/".$user_id.".jpg");
+            $images->water($url_head_pp,\think\Image::DCHQZG)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.jpg');
+
+            // 添加名称
+            $images->text($this->user['nickname'],'./hgzb.ttf',15,'#636363',10)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.jpg');
+            $pic = "/public/share/picture_ok44/".$user_id.".jpg";
+            //$images->text($this->user['nickname'],\think\Image::WATER_NORTHEAST)->save(ROOT_PATH.'public/share/picture_ok888/'.$user_id.'.jpg');
         }
         $pic = $pic.'?v='.time();
         $this->assign('pic',$pic);
