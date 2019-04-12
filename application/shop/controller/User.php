@@ -1998,7 +1998,7 @@ class User extends MobileBase
         $QR = imagecreatefromstring(file_get_contents($qr_code_file));
         $background_img = imagecreatefromstring ( file_get_contents ( $news_poster ) );
 
-        imagecopyresampled ( $background_img, $QR,$poster['canvas_x'],$poster['canvas_y'],0,0,80,92,80, 78 );      //合成图片
+        imagecopyresampled ( $background_img, $QR,$poster['canvas_x'],$poster['canvas_y'],0,0,50,92,80, 78 );      //合成图片
         $result_png = '/'.createImagesName(). ".png";
         $file = $file_path . $result_png;
         imagepng ($background_img, $file);                                                          //输出合成海报图片

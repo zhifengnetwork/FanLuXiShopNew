@@ -451,9 +451,9 @@ class Image
 
             /* DCHQZG */
               case self::DCHQZG:
-              $x = 325;
+              $x = 100;
               //$y = ($this->info['height'] - $info[1]) / 2;
-              $y = 565;
+              $y = 500;
 
               break;
 
