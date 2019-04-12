@@ -2102,11 +2102,11 @@ class User extends MobileBase
         $logo_width = $logo->height();
         $logo_height = $logo->width();
 
-        //头像变成90
+        //压缩头像
         if($logo_height > 100 || $logo_width > 100){
             //压缩图片
              $url_head_file = ROOT_PATH.'public/share/head/'.$user_id.'.jpg';
-             $logo->thumb(100, 100)->save($url_head_file , null, 100);
+             $logo->thumb(100, 100)->save($url_head_file , null, 120);
         }
 
         //3.得到二维码的绝对路径
@@ -2128,7 +2128,6 @@ class User extends MobileBase
             // 添加名称
             $images->text($this->user['nickname'],'./hgzb.ttf',15,'#636363',10)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.jpg');
             $pic = "/public/share/picture_ok44/".$user_id.".jpg";
-            //$images->text($this->user['nickname'],\think\Image::WATER_NORTHEAST)->save(ROOT_PATH.'public/share/picture_ok888/'.$user_id.'.jpg');
         }
         $pic = $pic.'?v='.time();
         $this->assign('pic',$pic);
