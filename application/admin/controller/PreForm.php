@@ -53,6 +53,7 @@ class Preform extends Base {
          foreach($users as $k=>$v)
          {
             $datas =$this->getAlldp_p($v['user_id']);
+            //print_r($datas);exit;
             foreach($datas as $kd=>$yd)
             {
               $userdata[]=$yd['user_id'];
@@ -580,16 +581,38 @@ class Preform extends Base {
    */
    public function getAlldp_p($invite_id,&$userList=array())
   {           
-      $field  = "user_id,first_leader,mobile";
-      $UpInfo = M('users')->field($field)->where(['first_leader'=>$invite_id])->find();
-      if($UpInfo)  //有上级
+      $field  = "user_id";
+      $UpInfo = M('users')->field($field)->where(['first_leader'=>$invite_id])->select();
+     // if($UpInfo)  //有上级
+      //{
+         // $userList[] = $UpInfo;
+         // $                                      
+          //$this->getAlldp_p($UpInfo['user_id'],$userList);
+      //}
+      if($UpInfo)
       {
-          $userList[] = $UpInfo;                                      
-          $this->getAlldp_p($UpInfo['user_id'],$userList);
+        foreach ($UpInfo as $key => $value) {
+          $userList[] = $value;
+          $this->getAlldp_p($value['user_id'],$userList);
+        }
+  
       }
       
-      return $userList;     
+      return $userList;
       
   }
+
+      //获取用户的所有下级ID
+   public  function get_downline($data,$mid,$level=0){
+        $arr=array();
+        foreach ($data as $key => $v) {
+            if($v['first_leader']==$mid){  //pid为0的是顶级分类
+                $v['level'] = $level+1;
+                $arr[]=$v;
+                $arr = array_merge($arr,$this->get_downline($data,$v['user_id'],$level+1));
+            }
+        }
+        return $arr;
+    }
     
 }
