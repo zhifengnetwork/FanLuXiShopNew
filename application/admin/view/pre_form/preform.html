@@ -199,7 +199,7 @@ function opens()
 <script type="text/javascript">
 	function onsubmits(seaon)
 	{
-
+			layer.load();
 		    $.ajax({
             type: "GET",
             url: "{:U('PreForm/send_reward')}",
@@ -209,6 +209,7 @@ function opens()
                 layer.alert("服务器繁忙, 请联系管理员!");
             },
             success: function (data) {
+            	layer.closeAll();
                 if (data.status === 1) {
                     layer.msg(data.msg, {icon: 1,time: 1000}, function() {
                       //  location.href = "{:U('Admin/PreForm/send_reward')}";
