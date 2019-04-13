@@ -258,17 +258,17 @@
                     <label>返利</label>
                 </dt>
                 <dd class="opt">
-                    vip返利<input type="text" value="{$goods.cost_price}" name="rebate[2]" class="t_mane"
+                    vip返利<input type="text" value="{$goods['rebate'][2]}" name="rebate[2]" class="t_mane"
                            onKeyUp="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')"/>
                     <span class="err" id="err_cost_price"></span> 
               
-                    店主返利<input type="text" value="{$goods.cost_price}" name="rebate[3]" class="t_mane"
+                    店主返利<input type="text" value="{$goods['rebate'][3]}" name="rebate[3]" class="t_mane"
                            onKeyUp="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')"/> 
                     <span class="err" id="err_cost_price"></span>
-                    总监返利<input type="text" value="{$goods.cost_price}" name="rebate[4]" class="t_mane"
+                    总监返利<input type="text" value="{$goods['rebate'][4]}" name="rebate[4]" class="t_mane"
                            onKeyUp="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')"/> 
                     <span class="err" id="err_cost_price"></span>
-                    大区返利<input type="text" value="{$goods.cost_price}" name="rebate[5]" class="t_mane"
+                    大区返利<input type="text" value="{$goods['rebate'][5]}" name="rebate[5]" class="t_mane"
                            onKeyUp="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')"/> 
                     <span class="err" id="err_cost_price"></span>
                     <p class="notic">单位是%</p>

@@ -355,6 +355,10 @@ class Goods extends Base {
         $goods_id = input('id');
         if($goods_id){
             $goods = $Goods->where('goods_id', $goods_id)->find();
+            if($goods['rebate'])
+            {
+                $goods['rebate'] = unserialize($goods['rebate']);
+            }
 			
             //$GoodsLogic->find_parent_cat($goods['cat_id']); // 获取分类默认选中的下拉框
             //$level_cat2 = $GoodsLogic->find_parent_cat($goods['extend_cat_id']); // 获取分类默认选中的下拉框
@@ -382,7 +386,17 @@ class Goods extends Base {
         $validate = Loader::validate('Goods');// 数据验证
         if(!empty($data['rebate']))
         {
+            foreach($data['rebate'] as $k=>$v)
+            {
+                 if($v>=100)
+                 {
+                    $this->ajaxReturn(['status'=>0, 'msg' => '返利比例不能大于100','result'=>'']);
+                    exit;
+                 }
+                 
+            }
             $data['rebate'] = serialize($data['rebate']);
+            $cart_update_data['rebate'] =$data['rebate'];
         }
         if (!$validate->batch()->check($data)) {
             $error = $validate->getError();
