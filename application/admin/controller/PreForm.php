@@ -70,22 +70,9 @@ class Preform extends Base {
              $total_1 = $this->jisuanyeji($user_ids,$season_1['st'],$season_1['et']); //
              $total_2 = $this->jisuanyeji($user_ids,$season_2['st'],$season_2['et']); //
              $total_3 = $this->jisuanyeji($user_ids,$season_3['st'],$season_3['et']); //
-             $total_4 = $this->jisuanyeji($user_ids,$season_4['st'],$season_4['et']); //查统计团队业绩
-            /*
-            foreach($userdata as $ke=>$ve)
-            {
-                 $userdata_new = Db::name('users')->where('first_leader='.$v['user_id'])->column('user_id');
-                  if(!empty($userdata_new)) {
-                     $user_idcc = implode(',',$userdata_new);
-                    }
-                $return_new = $this->jisuanyeji($user_idcc,1,2); //查统计下下级团队业绩
-            }*/
-            
-   
-               // $return['first'] = !empty($total)?$total[0]['sale_amount']:0;//第一季度
+             $total_4 = $this->jisuanyeji($user_ids,$season_4['st'],$season_4['et']); //
             $return['first'] = !empty($total_1)?$total_1[0]['sale_amount']:0;
 
-          //  $return['total'] = $total;
             $return['two'] = !empty($total_2)?$total_2[0]['sale_amount']:0;;//第二季度
             $return['thiree'] = !empty($total_3)?$total_3[0]['sale_amount']:0;;//第三季度
             $return['four'] = !empty($total_4)?$total_4[0]['sale_amount']:0;;//第四季度
