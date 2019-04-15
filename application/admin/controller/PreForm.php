@@ -30,10 +30,15 @@ class Preform extends Base {
     {
       return date('Y');
     }
+
     
     public function preform(){
       //$return = $this->upzdmoney(17725621);
      // print_R($return);exit;
+      $where = [
+            'u.level'=> ['IN','4,5'],
+            
+          ];
       $count = Db::name('users')->alias('u')->field('u.user_id')
              //->join('order od','u.first_leader=od.user_id','LEFT')
              ->where($where)->count();
@@ -42,6 +47,7 @@ class Preform extends Base {
         $users = Db::name('users')->alias('u')
              ->field('u.user_id,u.realname,u.mobile,u.nickname')
              ->order('user_id desc')
+             ->where($where)
              ->limit($Page->firstRow,$Page->listRows)->select();
           $user_ids =array();
           $user_idcc =array();
