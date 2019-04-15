@@ -170,6 +170,7 @@ class User extends Base
              if(!empty($_POST['level'])){
                  $userLevel = D('user_level')->where('level=' . $_POST['level'])->value('level');
                  $_POST['agent_user'] = $userLevel;
+                 $_POST['level'] = $userLevel;
              }
              // dump($_POST);die;
              $agent = M('agent_info')->where(['uid'=>$uid])->find();
