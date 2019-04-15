@@ -475,7 +475,7 @@ class GoodsLogic extends Model
         {
             M("GoodsImages")->add(array('goods_id'=>$goods_id,'image_url'=>$original_img));
         }
-        delFile(UPLOAD_PATH."goods/thumb/$goods_id"); // 删除缩略图
+        // delFile(UPLOAD_PATH."goods/thumb/$goods_id"); // 删除缩略图
 
         // 商品规格价钱处理
         $goods_item = I('item/a'); // 这里没有传market_price
