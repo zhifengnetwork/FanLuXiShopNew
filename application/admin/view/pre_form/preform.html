@@ -35,15 +35,24 @@
 
 			<form class="navbar-form form-inline" id="search-form" method="POST" action="{:U('PreForm/preform')}" onSubmit="return check_form();">
 				<div class="sDiv">
+					<!--
 					<div class="sDiv2" style="margin-right: 10px;">
 						<input type="text" size="30" name="start_time" id="start_time" value="{$start_time|date='Y-m-d H:i:s', ###}" placeholder="起始时间" class="qsbox">
 						<input type="button" class="btn" value="起始时间">
 					</div>
+					
 					<div class="sDiv2" style="margin-right: 10px;">
 						<input type="text" size="30" name="end_time" id="end_time" value="{$end_time|date='Y-m-d H:i:s', ###}" placeholder="截止时间" class="qsbox">
 						<input type="button" class="btn" value="截止时间">
-					</div>
+					</div>-->
 					<div class="sDiv2">
+					    <select class="select" name="search_type" id="search_type">
+                            <option value="nickname">会员昵称</option>
+                            <option value="user_id">会员ID</option>
+                            <option value="search_key">会员账户</option>
+                        </select>
+                        <input type="text" id="search_key" size="30" class="qsbox" placeholder="查询"
+                               value="{$Request.param.search_key}" name="search_text">
 						<input class="btn" value="搜索" type="submit">
 					</div>
 					<br/>
@@ -64,8 +73,14 @@
 					</div>
 					<div class="sDiv2">
 						<input class="btn" value="第四季度奖金" type="button" onclick="onsubmits(4);">
+					    <select class="select" name="year_c" id="year_c">
+                            <option value="{$year}">{$year}</option>
+                            <option value="{$n_year}">{$n_year}</option>
+                        </select>
 					</div>
+				
 				</div>
+
 
 		<div class="hDiv">
 			<div class="hDivBox">
@@ -76,7 +91,7 @@
 							<div style="width: 24px;"><i class="ico-check"></i></div>
 						</th>
 						<th align="center" abbr="article_title" axis="col3" class="">
-							<div style="text-align: center; width: 50px;" class="">ID</div>
+							<div style="text-align: center; width: 60px;" class="">ID</div>
 						</th>
 						<th align="center" abbr="ac_id" axis="col4" class="">
 							<div style="text-align: center; width: 100px;" class="">用户</div>
@@ -117,7 +132,7 @@
 								<div style="width: 24px;"><i class="ico-check"></i></div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 50px;">{$k}</div>
+								<div style="text-align: center; width: 60px;">{$vo.user_id}</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 50px;">{$vo.nickname}</div>
@@ -199,11 +214,12 @@ function opens()
 <script type="text/javascript">
 	function onsubmits(seaon)
 	{
+		   var years = $('#year_c option:selected').val();
 			layer.load();
 		    $.ajax({
             type: "GET",
             url: "{:U('PreForm/send_reward')}",
-            data: {'seaon':seaon},
+            data: {'seaon':seaon,'years':years},
             dataType: "json",
             error: function () {
                 layer.alert("服务器繁忙, 请联系管理员!");

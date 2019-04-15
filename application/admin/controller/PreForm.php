@@ -39,9 +39,37 @@ class Preform extends Base {
             'u.level'=> ['IN','4,5'],
             
           ];
+      //搜索条件
+        $nickname = I('nickname');
+        $user_id = input('user_id');
+        $account = I('account');
+        $search_text =I('search_text');
+        $search_type =I('search_type');
+        // $account ? $where['u.mobile'] = ['like', "%$account%"] : false;
+        // $nickname ? $where['u.nickname'] = ['like', "%$nickname%"] : false;
+         //$user_id ? $where['u.user_id'] = ['like', "%$user_id%"] :  false;
+        // dump($user_id);exit;
+        
+        if(!empty($search_text))
+        {
+          if($search_type=='nickname')
+          {
+            $where['u.mobile'] = ['like', "%$search_text%"];
+          }elseif($search_type=='user_id')
+          {
+            $where['u.nickname'] = ['like', "%$search_text%"]; 
+          }elseif($search_type=='search_key')
+          {
+             $where['u.user_id'] = ['like', "%$search_text%"]; 
+          }
+
+
+        }
+        //print_r($where);exit;
       $count = Db::name('users')->alias('u')->field('u.user_id')
              //->join('order od','u.first_leader=od.user_id','LEFT')
              ->where($where)->count();
+           //  print_r(Db::name('users')->getlastsql());exit;
 
        $Page = new Page($count,10);
         $users = Db::name('users')->alias('u')
@@ -94,6 +122,8 @@ class Preform extends Base {
         $this->assign('pager',$Page);
         $this->assign('p',I('p/d',1));
         $this->assign('page_size',$this->page_size);
+        $this->assign('year',$this->c_year());
+        $this->assign('n_year',$this->c_year()-1);
    
         return $this->fetch();
     }
@@ -176,7 +206,10 @@ class Preform extends Base {
     {
        
       $jidu = I('seaon');
-      $year = date('Y');
+      $i_year =I('years');
+      $year = !empty($i_year)?$i_year:date('Y');
+      //$year = date('Y');
+     // echo $year;exit;
       $season = $this->getQuarterDate($year,$jidu);//第一季度
       $reward_log = Db::name('reward_log')->where(['year'=>$year,'quarter'=>$jidu])->find(); //分红列表
     //print_r(Db::name('reward_log')->getlastsql());exit;
@@ -245,13 +278,18 @@ class Preform extends Base {
               unset($user_data[0]);
               foreach($user_data as $kk=>$yy)
             {
-              $p_y[$yy['user_id']]+=$v['sale_amount'];
+              if($yy['level']==4 || $yy['level']==5)
+              {
+                  $p_y[$yy['user_id']]+=$v['sale_amount'];
+              }
+         
 
             }
             }
        
             }
           }
+         // print_r($p_y);exit;
         if(empty($p_y))
         {
           $this->ajaxReturn(['status' => 0,'msg'   => '第'.$jidu.'季度没有业绩分红']);exit;
@@ -565,7 +603,7 @@ class Preform extends Base {
    */
    public function getAllUp_p($invite_id,&$userList=array())
   {           
-      $field  = "user_id,first_leader";
+      $field  = "user_id,first_leader,level";
       $UpInfo = M('users')->field($field)->where(['user_id'=>$invite_id])->find();
       if($UpInfo)  //有上级
       {
