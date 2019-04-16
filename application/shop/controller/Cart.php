@@ -329,7 +329,7 @@ class Cart extends MobileBase {
                 unset($paymentList[$key]);
             }*/
         }
-
+        print_R($paymentList);exit;
         $bank_img = include APP_PATH.'home/bank.php'; // 银行对应图片
         $this->assign('paymentList',$paymentList);
         $this->assign('bank_img',$bank_img);
