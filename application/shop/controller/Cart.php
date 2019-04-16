@@ -291,11 +291,13 @@ class Cart extends MobileBase {
         }
         $payment_where['type'] = 'payment';
         $no_cod_order_prom_type = [4,5];//预售订单，虚拟订单不支持货到付款
+        
         if(strstr($_SERVER['HTTP_USER_AGENT'],'MicroMessenger')){
             //微信浏览器
             if(in_array($order['prom_type'],$no_cod_order_prom_type) || in_array(1,$orderGoodsPromType) || $order['shop_id'] > 0){
                 //预售订单和抢购不支持货到付款
-                $payment_where['code'] = 'weixin';
+                //$payment_where['code'] = 'weixin';
+                 $payment_where['code'] = array('in',array('weixin','alipayMobile'));
             }else{
                 $payment_where['code'] = array('in',array('weixin','cod'));
             }
@@ -315,6 +317,7 @@ class Cart extends MobileBase {
         $paymentList = M('Plugin')->where($payment_where)->select();
         $paymentList = convert_arr_key($paymentList, 'code');
 
+
         foreach($paymentList as $key => $val)
         {
             $val['config_value'] = unserialize($val['config_value']);
@@ -322,14 +325,13 @@ class Cart extends MobileBase {
             {
                 $bankCodeList[$val['code']] = unserialize($val['bank_code']);
             }
-            /*
+            
             if($key != 'cod' && (($key == 'weixin' && !is_weixin()) // 不是微信app,就不能微信付，只能weixinH5付,用于手机浏览器
                 || ($key != 'weixin' && is_weixin()) //微信app上浏览，只能微信
                 || ($key != 'alipayMobile' && is_alipay()))){ //在支付宝APP上浏览，只能用支付宝支付
                 unset($paymentList[$key]);
-            }*/
+            }
         }
-        print_R($paymentList);exit;
         $bank_img = include APP_PATH.'home/bank.php'; // 银行对应图片
         $this->assign('paymentList',$paymentList);
         $this->assign('bank_img',$bank_img);
