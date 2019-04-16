@@ -414,7 +414,7 @@ class FanliLogic extends Model
 	//特殊产品
 	public function catgoods()
 	{
-		$goods = M('goods')->field("goods_id")->where(['cat_id'=>8])->find();
+		$goods = M('goods')->field("goods_id")->where(['cat_id'=>8,'goods_id'=>$this->goodId])->find();
 		if(!$goods) return 0;
 		return $goods['goods_id'];
 	}
