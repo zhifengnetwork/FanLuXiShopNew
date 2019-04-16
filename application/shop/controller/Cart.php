@@ -328,7 +328,7 @@ class Cart extends MobileBase {
             
             if($key != 'cod' && (($key == 'weixin' && !is_weixin()) // 不是微信app,就不能微信付，只能weixinH5付,用于手机浏览器
                 || ($key != 'weixin' && is_weixin()) //微信app上浏览，只能微信
-                || ($key != 'alipayMobile' && is_alipay()))){ //在支付宝APP上浏览，只能用支付宝支付
+                /*|| ($key != 'alipayMobile' && is_alipay())*/)){ //在支付宝APP上浏览，只能用支付宝支付
                 unset($paymentList[$key]);
             }
         }
