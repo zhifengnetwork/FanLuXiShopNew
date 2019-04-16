@@ -999,7 +999,7 @@ class UsersLogic extends Model
         if(!$row){
             return array('status'=>-1,'msg'=>'修改失败','result'=>'');
         }
-        $url = session('payPriorUrl') ? session('payPriorUrl'): U('User/userinfo');
+        $url = session('payPriorUrl') ? session('payPriorUrl'): U('User/index');
         session('payPriorUrl',null);
     	return array('status'=>1,'msg'=>'修改成功','url'=>$url);
     }
