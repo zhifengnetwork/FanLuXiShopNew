@@ -299,7 +299,7 @@ class Cart extends MobileBase {
                 //$payment_where['code'] = 'weixin';
                  $payment_where['code'] = array('in',array('weixin','alipayMobile'));
             }else{
-                $payment_where['code'] = array('in',array('weixin','cod'));
+                $payment_where['code'] = array('in',array('weixin','cod','alipayMobile'));
             }
         }else{
             if(in_array($order['prom_type'],$no_cod_order_prom_type) || in_array(1,$orderGoodsPromType) || $order['shop_id'] > 0){
@@ -315,7 +315,6 @@ class Cart extends MobileBase {
             $payment_where['code'] = array('neq','cod');
         }
         $paymentList = M('Plugin')->where($payment_where)->select();
-        print_r(M('Plugin')->getlastsql());exit;
         $paymentList = convert_arr_key($paymentList, 'code');
 
 
