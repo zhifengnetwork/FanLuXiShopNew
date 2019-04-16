@@ -59,6 +59,23 @@ class Cart extends MobileBase {
         }
     }
 
+
+    public function alipay(){
+        $id = I('id');
+         $code_str = M('alipay')->where(['id'=>$id])->find();
+
+
+        if(is_weixin() == true){
+
+            $this->assign('code_str', '');
+        }else{
+
+            $this->assign('code_str', $code_str['text']);
+        }
+        return $this->fetch();
+    }
+
+
     public function index()
     {
         $cartLogic = new CartLogic();
