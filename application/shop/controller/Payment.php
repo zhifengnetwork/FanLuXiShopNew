@@ -105,11 +105,44 @@ class Payment extends MobileBase
         } else {
             //其他支付（支付宝、银联...）
             $code_str = $this->payment->get_code($order, $config);
+
+            if($code_str){
+
+                if(is_weixin() == true){
+
+                    $this->assign('code_str', '');
+                }else{
+
+                    $this->assign('code_str', $code_str);
+                }
+
+                return $this->fetch('alipay');
+                //存好
+                // $this->redirect('/shop/payment/alipay?id='.$id);
+            }else{
+                $this->error('支付错误');
+            }
+           
         }
 
         $this->assign('code_str', $code_str);
         $this->assign('order_id', $order_id);
         return $this->fetch('payment');  // 分跳转 和不 跳转
+    }
+
+    public function alipay(){
+        $id = I('id');
+
+
+
+        if(is_weixin() == true){
+
+            $this->assign('code_str', '');
+        }else{
+
+            $this->assign('code_str', $code_str);
+        }
+        return $this->fetch();
     }
 
     public function getPay()
