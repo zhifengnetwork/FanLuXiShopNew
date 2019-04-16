@@ -315,6 +315,7 @@ class Cart extends MobileBase {
             $payment_where['code'] = array('neq','cod');
         }
         $paymentList = M('Plugin')->where($payment_where)->select();
+        print_r(M('Plugin')->getlastsql());exit;
         $paymentList = convert_arr_key($paymentList, 'code');
 
 
