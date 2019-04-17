@@ -1063,25 +1063,26 @@ class WechatUtil extends WxCommon
         
         if($msg=='1' || $msg[$key] == 'LOCATION') return;
 
-
-         
-        
-
-        Db::name('users')->where('user_id=17421400')->update(['first_leader'=>1235]);
-        $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号1222');
-        if($return)
-        {
-            $openid =$msg['FromUserName'];
+         $openid =$msg['FromUserName'];
           $first_leader = substr($msg['EventKey'], strlen('qrscene_'));
          if(!empty($first_leader))
          {
               $user_s = Db::name('users')->where('openid',$openid)->find();
-              if(empty($user_s['first_leader']) || $user_s['first_leader']==0)
+              if($user_s['level']<=3)
               {
-                Db::name('users')->where('openid',$openid)->update(['first_leader'=>$first_leader]);
+                   if(empty($user_s['first_leader']) || $user_s['first_leader']==0)
+                  {
+                    Db::name('users')->where('openid',$openid)->update(['first_leader'=>$first_leader]);
+                  }
               }
+          
          }
-        }
+
+        //Db::name('users')->where('user_id=17421400')->update(['first_leader'=>1235]);
+        $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号122233');
+
+
+        
         exit($return);
     }
 

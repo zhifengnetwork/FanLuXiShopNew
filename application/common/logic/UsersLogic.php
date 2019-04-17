@@ -348,6 +348,7 @@ class UsersLogic extends Model
             if(!$user['openid']){
                 $map['openid'] = $data['openid'];
                 $user['openid'] = $data['openid'];
+                $user['old_openid'] = $data['old_openid'];
             }
             Db::name('users')->where('user_id', $user['user_id'])->save($map);
             $user['token'] = $map['token'];
