@@ -271,8 +271,7 @@ class UsersLogic extends Model
         $data['push_id'] && $map['push_id'] = $data['push_id'];
         $map['token'] = md5(time() . mt_rand(1, 999999999));
         $map['last_login'] = time();
-        
-   
+        $map['old_openid'] = $data['old_openid'];
 
         $user = $this->getThirdUser($data);
       
@@ -280,7 +279,7 @@ class UsersLogic extends Model
         if(!$user){
             //账户不存在 注册一个
             $map['password'] = '';
-            $map['old_openid'] = $data['old_openid'];
+            
             $map['openid'] = $data['openid'];
             $map['nickname'] = $data['nickname'];
             $map['reg_time'] = time();
@@ -348,7 +347,6 @@ class UsersLogic extends Model
             if(!$user['openid']){
                 $map['openid'] = $data['openid'];
                 $user['openid'] = $data['openid'];
-                $user['old_openid'] = $data['old_openid'];
             }
             Db::name('users')->where('user_id', $user['user_id'])->save($map);
             $user['token'] = $map['token'];
