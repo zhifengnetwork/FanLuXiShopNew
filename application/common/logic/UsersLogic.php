@@ -272,10 +272,7 @@ class UsersLogic extends Model
 		$map['token'] = md5(time() . mt_rand(1, 999999999));
 		$map['last_login'] = time();
 		 
-		// $old_user = Db::name('users')->where(array('old_openid'=>$map['old_openid']))->find();
 		$user = $this->getThirdUser($data);
-
-
 
 		if(!$user){
 			//账户不存在 注册一个
@@ -344,12 +341,12 @@ class UsersLogic extends Model
 			
 		} else {
 			//查找是否已有老数据
-			$old_user = Db::name('users')->where(array('old_openid'=>$map['old_openid']))->find();
+			$old_user = Db::name('users')->where(array('openid'=>'','old_openid'=>$map['old_openid']))->find();
 			if($old_user){
 				//更新老数据并删除新注册的数据
 				Db::name('users')->where('user_id', $old_user['user_id'])->save($map);
 				Db::name('oauth_users')->where('openid', $map['openid'])->save(['user_id'=>$old_user['user_id']]);
-				Db::name('users')->where(array('user_id'=>$user['user_id']))->delete();
+				//Db::name('users')->where(array('user_id'=>$user['user_id']))->delete();
 			}else{
 				Db::name('users')->where('user_id', $user['user_id'])->save($map);
 			}
