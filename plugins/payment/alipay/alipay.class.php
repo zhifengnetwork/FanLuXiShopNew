@@ -166,9 +166,9 @@ class alipay extends Model
     //支付宝批量付款到支付宝账户有密接口接口
     // 支付宝批量申请提现转款
     function transfer($data){
-    header("Content-type: text/html; charset=utf-8");
-exit("请联系DC环球直供网络客服购买高级版支持此功能");
+        echo 111;
     }
+
     // 批量申请提现转账回调
     function transfer_response(){
     	require_once("lib/alipay_notify.class.php");  // 请求返回
@@ -213,9 +213,9 @@ exit("请联系DC环球直供网络客服购买高级版支持此功能");
     //支付宝即时到账批量退款有密接口接口
     // 支付宝退款原路退回
     public function payment_refund($data){
-    header("Content-type: text/html; charset=utf-8");
-exit("请联系DC环球直供网络客服购买高级版支持此功能");
+        echo 222;
     }
+
     // 退款原路回调
     public function  refund_respose(){
     	require_once("lib/alipay_notify.class.php");  // 请求返回

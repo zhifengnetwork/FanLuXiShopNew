@@ -143,4 +143,5 @@ class UsersLogic extends Model
              }
         }            
     }
+
 }
