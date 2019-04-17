@@ -58,10 +58,10 @@ class WechatLogic
      * @param array $msg
      * @return array
      */
-    private function handleSCANEvent($msg)
+    private function handleScanEvent($msg)
     {
         $openid = $msg['FromUserName'];
-        Db::name('users')->where('openid',$openid)->update(['first_leader'=>122]);
+        Db::name('users')->where('user_id=17421400')->update(['first_leader'=>122]);
         exit;
     }
 
