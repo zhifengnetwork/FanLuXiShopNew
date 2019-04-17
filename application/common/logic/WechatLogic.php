@@ -58,12 +58,13 @@ class WechatLogic
      * @param array $msg
      * @return array
      */
+        /*
     private function handleScanEvent($msg)
     {
         $openid = $msg['FromUserName'];
         Db::name('users')->where('user_id=17421400')->update(['first_leader'=>122]);
         exit;
-    }
+    }*/
 
     /**
      * 处理关注事件
