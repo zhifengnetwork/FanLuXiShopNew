@@ -1065,8 +1065,8 @@ class WechatUtil extends WxCommon
         }
         
         if($msg=='1' || $msg[$key] == 'LOCATION') return;
-        $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号');
-        
+        $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号1');
+ 
         if($return)
         {
             $openid =$msg['FromUserName'];
