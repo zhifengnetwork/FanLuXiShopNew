@@ -60,7 +60,8 @@ class WechatLogic
      */
     private function handleSCANEvent($msg)
     {
-        self::$wechat_obj->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号2');
+        $openid = $msg['FromUserName'];
+        Db::name('users')->where('openid',$openid)->update(['first_leader'=>122]);
         exit;
     }
 
