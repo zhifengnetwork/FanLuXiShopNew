@@ -65,6 +65,19 @@ class WechatLogic
             exit("openid无效");
         }
 
+      if ($msg['MsgType'] == 'SCAN') {
+         $first_leader = substr($msg['EventKey'], strlen('qrscene_'));
+         if(!empty($first_leader))
+         {
+              $user_s = Db::name('users')->where('openid',$openid)->find();
+              if(empty($user_s['first_leader']) || $user_s['first_leader']==0)
+              {
+                Db::name('users')->where('openid',$openid)->update(['first_leader'=>$first_leader]);
+              }
+         }
+       
+        }
+
         if ($msg['MsgType'] != 'event' || $msg['Event'] != 'subscribe') {
             $this->replyError($msg , "不是关注事件");   
         }
