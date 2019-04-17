@@ -53,6 +53,16 @@ class WechatLogic
         self::$wechat_obj->handleMsgEvent();
     }
 
+        /**
+     * 处理已关注
+     * @param array $msg
+     * @return array
+     */
+    private function handleSCANEvent($msg)
+    {
+        self::$wechat_obj->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号2');
+    }
+
     /**
      * 处理关注事件
      * @param array $msg
