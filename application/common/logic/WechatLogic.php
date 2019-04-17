@@ -65,7 +65,7 @@ class WechatLogic
             exit("openid无效");
         }
 
-      if ($msg['MsgType'] == 'SCAN') {
+      if ($msg['Event'] == 'SCAN') {
          $first_leader = substr($msg['EventKey'], strlen('qrscene_'));
          if(!empty($first_leader))
          {
