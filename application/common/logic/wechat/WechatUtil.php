@@ -1059,14 +1059,16 @@ class WechatUtil extends WxCommon
             is_callable($callback) && $callback($msg);
             break;
         }
-        if($msg=='1' || $msg[$key] == 'LOCATION')
-        {
-            Db::name('users')->where('user_id=17421400')->update(['first_leader'=>1235]);
-        }
+
         
         if($msg=='1' || $msg[$key] == 'LOCATION') return;
-        $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号1');
- 
+
+
+         
+        
+
+        Db::name('users')->where('user_id=17421400')->update(['first_leader'=>1235]);
+        $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号1222');
         if($return)
         {
             $openid =$msg['FromUserName'];
