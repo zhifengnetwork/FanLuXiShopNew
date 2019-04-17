@@ -111,16 +111,25 @@ class WechatLogic
                 } else {
                     $userData['first_leader'] = 0;
                 }
+                $user_id = Db::name('users')->insertGetId($userData);
+
+                 Db::name('oauth_users')->insert([
+                'user_id' => $user_id,
+                'openid' => $openid,
+                'unionid' => isset($wxdata['unionid']) ? $wxdata['unionid'] : '',
+                'oauth' => 'weixin',
+                'oauth_child' => 'mp',
+                ]);
             }
             $is_bind_account = tpCache('basic.is_bind_account');
             if($is_bind_account && $userData['first_leader']){
                 //如果是绑定账号, 把first_leader保存到cookie
                 setcookie('user_id', $userData['first_leader'] ,null,'/');
                 //缓存关注时候传过来的上级id，User/bind_guide用到
-                Cache::set($openid,$userData['first_leader'],86400);
+                //Cache::set($openid,$userData['first_leader'],86400);
             }else if(!$is_bind_account){//非绑定账号才给注册
                 //此处注册也送积分
-                $user_id = Db::name('users')->insertGetId($userData);
+                //$user_id = Db::name('users')->insertGetId($userData);
                  
                 $isRegIntegral = tpCache('integral.is_reg_integral');
                 $pay_points = 0;
@@ -131,14 +140,14 @@ class WechatLogic
 
                     //accountLog($user_id, 0,$pay_points, '会员注册赠送积分'); // 记录日志流水
                 }
-                 
+                /*
                 Db::name('oauth_users')->insert([
                 'user_id' => $user_id,
                 'openid' => $openid,
                 'unionid' => isset($wxdata['unionid']) ? $wxdata['unionid'] : '',
                 'oauth' => 'weixin',
                 'oauth_child' => 'mp',
-                ]);
+                ]);*/
             } 
         }
 
