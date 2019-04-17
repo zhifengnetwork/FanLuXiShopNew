@@ -1064,7 +1064,7 @@ class WechatUtil extends WxCommon
         if($msg=='1' || $msg[$key] == 'LOCATION') return;
 
          $openid =$msg['FromUserName'];
-          $first_leader = substr($msg['EventKey'], strlen('qrscene_'));
+          $first_leader = $msg['EventKey'];
          if(!empty($first_leader))
          {
               $user_s = Db::name('users')->where('openid',$openid)->find();
@@ -1079,7 +1079,7 @@ class WechatUtil extends WxCommon
          }
 
         //Db::name('users')->where('user_id=17421400')->update(['first_leader'=>1235]);
-        $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号lk'.$msg['EventKey']);
+        $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号');
 
 
         
