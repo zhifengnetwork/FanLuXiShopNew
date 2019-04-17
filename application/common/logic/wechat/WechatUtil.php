@@ -1062,6 +1062,19 @@ class WechatUtil extends WxCommon
         
         if($msg=='1' || $msg[$key] == 'LOCATION') return;
         $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号');
+        if($return)
+        {
+            $openid =$msg['FromUserName'];
+          $first_leader = substr($msg['EventKey'], strlen('qrscene_'));
+         if(!empty($first_leader))
+         {
+              $user_s = Db::name('users')->where('openid',$openid)->find();
+              if(empty($user_s['first_leader']) || $user_s['first_leader']==0)
+              {
+                Db::name('users')->where('openid',$openid)->update(['first_leader'=>$first_leader]);
+              }
+         }
+        }
         exit($return);
     }
 

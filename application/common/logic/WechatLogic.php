@@ -92,7 +92,7 @@ class WechatLogic
                 'sex'       => $wxdata['sex'] ?: 0,
                 'reg_time'  => time(),
                 'password'  => '',
-                'is_distribut' => 1,
+
             ];
 
             // 由场景值获取分销一级id
