@@ -1079,7 +1079,7 @@ class WechatUtil extends WxCommon
          }
 
         //Db::name('users')->where('user_id=17421400')->update(['first_leader'=>1235]);
-        $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号'.$openid);
+        $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号'.$first_leader);
 
 
         
