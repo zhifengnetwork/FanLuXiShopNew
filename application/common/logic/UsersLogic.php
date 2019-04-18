@@ -341,7 +341,7 @@ class UsersLogic extends Model
 			
 		} else {
 			//查找是否已有老数据
-			$old_user = Db::name('users')->where(array('openid'=>'','old_openid'=>$map['old_openid']))->find();
+			$old_user = Db::name('users')->where(['openid'=>'','old_openid'=>$map['old_openid']])->find();
 			if($old_user){
 				//更新老数据并删除新注册的数据
 				Db::name('users')->where('user_id', $old_user['user_id'])->save($map);
