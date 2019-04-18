@@ -87,7 +87,7 @@ class FanliLogic extends Model
         {
         	//不是特产品按照佣金比例反给用户 ，自购返利
         	$goods_info=$this->getgoodsinfo();
-        	if($goods_info['sign_free_receive']==0)
+        	if($goods_info['sign_free_receive']==0) //免费领取，签到产品不参与返利
         	{
         		 if($user_info['level']>1)
             {
@@ -132,7 +132,7 @@ class FanliLogic extends Model
 			        	return false;
 			         }
 			     }else{
-			     	return false;
+			     	//return false;
 			     }
 
         	}
