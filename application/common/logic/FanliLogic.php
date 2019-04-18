@@ -38,6 +38,12 @@ class FanliLogic extends Model
          $goods_info = M('goods')->where(['goods_id'=>$this->goodId])->field('rebate')->find();
          return unserialize($goods_info['rebate']);
 	}
+		//获取返利数据
+	public function getgoodsinfo()
+	{
+         $goods_info = M('goods')->where(['goods_id'=>$this->goodId])->field('sign_free_receive')->find();
+         return $goods_info;
+	}
 	//获取用户购买特殊产品数量
 	public function getproductnum()
 	{
@@ -80,8 +86,10 @@ class FanliLogic extends Model
         else
         {
         	//不是特产品按照佣金比例反给用户 ，自购返利
-
-            if($user_info['level']>1)
+        	$goods_info=$this->getgoodsinfo();
+        	if($goods_info['sign_free_receive']==0)
+        	{
+        		 if($user_info['level']>1)
             {
                $distribut_level = M('distribut_level')->where('level_id',1)->field('rate1')->find();
                  //计算返利金额
@@ -126,6 +134,10 @@ class FanliLogic extends Model
 			     }else{
 			     	return false;
 			     }
+
+        	}
+
+           
         	 
 
             /*
