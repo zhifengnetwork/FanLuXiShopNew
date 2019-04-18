@@ -7,19 +7,19 @@ use think\Db;
 class Import extends Base {
 
  	public function index(){
-            header("Content-type: text/html; charset=utf-8");
-exit("请联系DC环球直供网络客服购买高级版支持此功能");
+        header("Content-type: text/html; charset=utf-8");
+        exit("暂不支持此功能");
   	}
 
   	//上传的csv文件及图片文件 返回数组结果
 	public function upload_data(){
         header("Content-type: text/html; charset=utf-8");
-exit("请联系DC环球直供网络客服购买高级版支持此功能");
+        exit("暂不支持此功能");
 	}
 
 	public function add_data(){
         header("Content-type: text/html; charset=utf-8");
-exit("请联系DC环球直供网络客服购买高级版支持此功能");
+        exit("暂不支持此功能");
 	}
 
 	/**
