@@ -2117,7 +2117,7 @@ class User extends MobileBase
         }
         else
         {
-        	$image = \think\Image::open(ROOT_PATH.'public/share/bg1.jpg');
+        	$image = \think\Image::open(ROOT_PATH.'public/share/bg1.png');
         	// 给原图中间添加水印
             $image->water($url_code,\think\Image::WATER_CENTER)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.jpg');
 
