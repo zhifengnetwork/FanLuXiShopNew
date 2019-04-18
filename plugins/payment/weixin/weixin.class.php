@@ -160,8 +160,8 @@ EOF;
     }
     // 微信提现批量转账
     function transfer($data){
-    header("Content-type: text/html; charset=utf-8");
-exit("请联系DC环球直供网络客服购买高级版支持此功能");
+        header("Content-type: text/html; charset=utf-8");
+        exit("暂不支持此功能");
     }
     
     /**
@@ -223,8 +223,8 @@ exit("请联系DC环球直供网络客服购买高级版支持此功能");
     
      // 微信订单退款原路退回
     public function payment_refund($data){
-    header("Content-type: text/html; charset=utf-8");
-exit("请联系DC环球直供网络客服购买高级版支持此功能");
+        header("Content-type: text/html; charset=utf-8");
+        exit("暂不支持此功能");
     }
 
 }
