@@ -2082,7 +2082,7 @@ class User extends MobileBase
         if($logo_url_logo_height > 420 || $logo_url_logo_width > 420){
             //压缩二维码图片
             $url_code = ROOT_PATH.'public/share/code/'.$user_id.'.jpg';
-            $logo_url->thumb(210, 210)->save($url_code , null, 100);
+            $logo_url->thumb(210, 200)->save($url_code , null, 100);
         }
 
         //2.头像
@@ -2104,9 +2104,9 @@ class User extends MobileBase
 
         //压缩头像
         if($logo_height > 100 || $logo_width > 100){
-            //压缩图片
+            // 压缩图片
              $url_head_file = ROOT_PATH.'public/share/head/'.$user_id.'.jpg';
-             $logo->thumb(100, 100)->save($url_head_file , null, 120);
+             $logo->thumb(80, 80)->save($url_head_file , null, 50);
         }
 
         //3.得到二维码的绝对路径
@@ -2126,7 +2126,7 @@ class User extends MobileBase
             $images->water($url_head_pp,\think\Image::DCHQZG)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.jpg');
 
             // 添加名称
-            $images->text($this->user['nickname'],'./hgzb.ttf',15,'#636363',10)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.jpg');
+            $images->text($this->user['nickname'],'./hgzb.ttf',12,'#e5b47f',10)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.jpg');
             $pic = "/public/share/picture_ok44/".$user_id.".jpg";
         }
         $pic = $pic.'?v='.time();
