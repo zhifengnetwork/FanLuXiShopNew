@@ -2086,14 +2086,14 @@ class User extends MobileBase
         }
 
         //2.头像
-        $head_url = ROOT_PATH.'public/share/head/'.$user_id.'.jpg';
+        $head_url = ROOT_PATH.'public/share/head/'.$user_id.'.png';
         if( @fopen( $head_url, 'r' ) )
         {
             //已经有头像了
-            $url_head_pp = ROOT_PATH.'public/share/head/'.$user_id.'.jpg';
+            $url_head_pp = ROOT_PATH.'public/share/head/'.$user_id.'.png';
         }else{
             //还没有头像
-            $re = $logic->getImage($this->user['head_pic'],ROOT_PATH.'public/share/head', $user_id.'.jpg');
+            $re = $logic->getImage($this->user['head_pic'],ROOT_PATH.'public/share/head', $user_id.'.png');
             $url_head_pp = $re['save_path'];
         }
         
@@ -2105,29 +2105,29 @@ class User extends MobileBase
         //压缩头像
         if($logo_height > 100 || $logo_width > 100){
             // 压缩图片
-             $url_head_file = ROOT_PATH.'public/share/head/'.$user_id.'.jpg';
+             $url_head_file = ROOT_PATH.'public/share/head/'.$user_id.'.png';
              $logo->thumb(90, 90)->save($url_head_file , null, 50);
         }
 
         //3.得到二维码的绝对路径
-        $pic = ROOT_PATH."public/share/picture_ok44/'.$user_id.'.jpg";
+        $pic = ROOT_PATH."public/share/picture_ok44/'.$user_id.'.png";
         if( @fopen( $pic, 'r' ) )
         {
-        	$pic = "/share/picture_ok44/".$uid.".jpg";
+        	$pic = "/share/picture_ok44/".$uid.".png";
         }
         else
         {
         	$image = \think\Image::open(ROOT_PATH.'public/share/bg1.png');
         	// 给原图中间添加水印
-            $image->water($url_code,\think\Image::WATER_CENTER)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.jpg');
+            $image->water($url_code,\think\Image::WATER_CENTER)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.png');
 
             // 给图片添加头像
             $images = \think\Image::open(ROOT_PATH."/public/share/picture_ok44/".$user_id.".jpg");
-            $images->water($url_head_pp,\think\Image::DCHQZG)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.jpg');
+            $images->water($url_head_pp,\think\Image::DCHQZG)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.png');
 
             // 添加名称
-            $images->text($this->user['nickname'],'./hgzb.ttf',12,'#e5b47f',10)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.jpg');
-            $pic = "/public/share/picture_ok44/".$user_id.".jpg";
+            $images->text($this->user['nickname'],'./hgzb.ttf',12,'#e5b47f',10)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.png');
+            $pic = "/public/share/picture_ok44/".$user_id.".png";
         }
         $pic = $pic.'?v='.time();
         $this->assign('pic',$pic);
