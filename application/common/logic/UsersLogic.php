@@ -346,7 +346,7 @@ class UsersLogic extends Model
 				//更新老数据并删除新注册的数据
 				$map['openid'] = $data['openid'];
 				Db::name('users')->where('user_id', $old_user['user_id'])->update($map);
-				Db::name('oauth_users')->where('openid', $data['openid'])->update(['user_id'=>$old_user['user_id']]);
+				// Db::name('oauth_users')->where('openid', $data['openid'])->update(['user_id'=>$old_user['user_id']]);
 				// Db::name('users')->where(array('user_id'=>$user['user_id']))->delete();
 			}else{
 				Db::name('users')->where('user_id', $user['user_id'])->update($map);
