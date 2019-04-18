@@ -2113,7 +2113,7 @@ class User extends MobileBase
         $pic = ROOT_PATH."public/share/picture_ok44/'.$user_id.'.png";
         if( @fopen( $pic, 'r' ) )
         {
-        	$pic = "/share/picture_ok44/".$uid.".png";
+        	$pic = "/share/picture_ok44/".$user_id.".png";
         }
         else
         {
@@ -2122,7 +2122,7 @@ class User extends MobileBase
             $image->water($url_code,\think\Image::WATER_CENTER)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.png');
 
             // 给图片添加头像
-            $images = \think\Image::open(ROOT_PATH."/public/share/picture_ok44/".$user_id.".jpg");
+            $images = \think\Image::open(ROOT_PATH."/public/share/picture_ok44/".$user_id.".png");
             $images->water($url_head_pp,\think\Image::DCHQZG)->save(ROOT_PATH.'public/share/picture_ok44/'.$user_id.'.png');
 
             // 添加名称
