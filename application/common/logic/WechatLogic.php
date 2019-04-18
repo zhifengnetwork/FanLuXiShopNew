@@ -73,7 +73,6 @@ class WechatLogic
      */
     private function handleSubscribeEvent($msg)
     {
-        exit('系统维护中。。。');
         $openid = $msg['FromUserName'];
         if (!$openid) {
             exit("openid无效");

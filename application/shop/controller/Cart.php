@@ -39,7 +39,6 @@ class Cart extends MobileBase {
      * 析构流函数
      */
     public function  __construct() {
-        exit('系统维护中。。。');
         parent::__construct();
         $this->cartLogic = new CartLogic();
         if (session('?user')) {

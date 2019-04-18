@@ -9,7 +9,6 @@ use app\common\util\Session;
 class Index extends MobileBase {
 
     public function index(){
-        exit('网站维护中。。。');
         $shareid = I('shareid');
 
         if (session('?user') && empty($shareid)) {

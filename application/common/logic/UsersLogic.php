@@ -293,17 +293,18 @@ class UsersLogic extends Model
 			//     $map['is_distribut']  = 1;
 			// } 
 
-		
 			$is_cunzai = Db::name('users')->where(array('openid'=>$map['openid']))->find();
+
 			 if(!$is_cunzai){
 
-					$old_user = Db::name('users')->where(array('old_openid'=>$map['old_openid']))->find();
+					$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
 					if(!$old_user){
 						$row_id = Db::name('users')->add($map);
 					}else{
 						Db::name('users')->where(array('user_id'=>$old_user['user_id']))->update($map);
 						$row_id = $old_user['user_id'];
 					}
+
 			}else{
 				Db::name('users')->where(array('openid'=>$map['openid']))->update($map);
 				$row_id = $is_cunzai['user_id'];
@@ -341,15 +342,14 @@ class UsersLogic extends Model
 			
 		} else {
 			//查找是否已有老数据
-
-			$old_user = Db::name('users')->where(['openid'=>'','old_openid'=>$map['old_openid']])->find();
+			$old_user = Db::name('users')->where(['openid'=>'','old_openid'=>$data['old_openid']])->find();
 
 			if($old_user){
 				//更新老数据并删除新注册的数据
 				$map['openid'] = $data['openid'];
 				Db::name('users')->where('user_id', $old_user['user_id'])->update($map);
-				// Db::name('oauth_users')->where('openid', $data['openid'])->update(['user_id'=>$old_user['user_id']]);
-				// Db::name('users')->where(array('user_id'=>$user['user_id']))->delete();
+				Db::name('oauth_users')->where('openid', $data['openid'])->update(['user_id'=>$old_user['user_id']]);
+				Db::name('users')->where(array('user_id'=>$user['user_id']))->delete();
 			}else{
 				Db::name('users')->where('user_id', $user['user_id'])->update($map);
 			}

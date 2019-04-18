@@ -31,7 +31,6 @@ class Order extends MobileBase
 
     public function _initialize()
     {
-        exit('系统维护中...');
         parent::_initialize();
         if (session('?user')) {
             $user = session('user');
