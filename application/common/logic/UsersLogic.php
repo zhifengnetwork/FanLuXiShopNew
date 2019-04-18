@@ -277,7 +277,7 @@ class UsersLogic extends Model
 		if(!$user){
 			//账户不存在 注册一个
 			$map['password'] = '';
-			$map['old_openid'] = $data['old_openid'];
+			// $map['old_openid'] = $data['old_openid'];
 			$map['openid'] = $data['openid'];
 			$map['nickname'] = $data['nickname'];
 			$map['reg_time'] = time();
