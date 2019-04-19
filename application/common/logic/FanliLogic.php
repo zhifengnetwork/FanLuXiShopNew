@@ -89,12 +89,12 @@ class FanliLogic extends Model
         	$goods_info=$this->getgoodsinfo();
         	if($goods_info['sign_free_receive']==0) //免费领取，签到产品不参与返利
         	{
-        		 if($user_info['level']>1)
+        		 if($user_info['level']>=3)//自购只返利给店主以上级别
             {
-               $distribut_level = M('distribut_level')->where('level_id',1)->field('rate1')->find();
+               $distribut_level = M('user_level')->where('level',$user_info['level'])->field('direct_rate')->find();
                  //计算返利金额
 		        $goods = $this->goods();
-		        $commission = $goods['shop_price'] * ($distribut_level['rate1'] / 100) * $this->goodNum;
+		        $commission = $goods['shop_price'] * ($distribut_level['direct_rate'] / 100) * $this->goodNum;
 		           //计算佣金
 		          //按上一级等级各自比例分享返利
 		        $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
