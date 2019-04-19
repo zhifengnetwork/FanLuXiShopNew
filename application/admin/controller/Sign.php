@@ -21,16 +21,35 @@ use think\Loader;
 class Sign extends Base
 {
 
-       /**
+    /**
      * 签到列表
      * @date 2017/09/28
      */
     public function signList()
     {
 
-       
+        $user_id = I('user_id/d');
+        $create_time = urldecode(I('create_time'));
+        $create_time = $create_time ? $create_time : date('Y-m-d H:i:s', strtotime('-1 year')) . ',' . date('Y-m-d H:i:s', strtotime('+1 day'));
+        $create_time3 = explode(',', $create_time);
+        $this->assign('start_time', $create_time3[0]);
+        $this->assign('end_time', $create_time3[1]);
+        $where['w.sign_day'] = array(array('gt', $create_time3[0]), array('lt', $create_time3[1]));
 
 
+        $user_id && $where['u.user_id'] = $user_id;
+
+        $count = Db::name('sign_log')->alias('w')->join('__USERS__ u', 'u.user_id = w.user_id', 'INNER')->where($where)->count();
+        $Page = new Page($count, 20);
+        $list = Db::name('sign_log')->alias('w')->field('w.*,u.nickname,u.mobile')->join('__USERS__ u', 'u.user_id = w.user_id', 'INNER')->where($where)->order("w.id desc")->limit($Page->firstRow . ',' . $Page->listRows)->select();
+        foreach ($list as $key => $value) {
+            $list[$key]['continue_sign'] = continue_sign($value['user_id']);
+        }
+        $show = $Page->show();
+        $this->assign('show', $show);
+        $this->assign('list', $list);
+        $this->assign('pager', $Page);
+        C('TOKEN_ON', false);
        return $this->fetch();
     }
 
@@ -57,8 +76,7 @@ class Sign extends Base
     public function signRule()
     {
         // 等級設置
-        $Pickup =  M('user_level'); 
-        $res = $Pickup->order('level_name desc')->select();
+        $res = M('user_level')->order('level desc')->select();
         // dump($res );exit;
         $this->assign('res',$res);
     	
