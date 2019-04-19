@@ -163,7 +163,27 @@
                     <p class="notic">单位%</p>
                 </dd>
             </dl>
+             <dt class="tit">
+                   平级奖
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="pin_reward" value="{$info.pin_reward}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">单位元</p>
+                </dd>
             </if>
+             <if condition="$info['level'] egt 3">
+                 <dt class="tit">
+                   直购返佣比例
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="direct_rate" value="{$info.direct_rate}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">单位%</p>
+                </dd>
+         
+
+             </if>
             <dl class="row">
                 <dt class="tit">
                     等级描述
