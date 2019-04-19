@@ -13,7 +13,7 @@ class Goods extends Validate
         'goods_name' => 'require|min:3|max:150|unique:goods',
         'cat_id' => 'number|gt:0',
         'goods_sn' => 'unique:goods|max:20',
-        'shop_price' => ['require', 'regex' => '([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])'],
+        'shop_price' => ['require', 'regex' => '([0-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])'],
         'market_price' => 'require|regex:\d{1,10}(\.\d{1,2})?$|checkMarketPrice',
         'weight' => 'regex:\d{1,10}(\.\d{1,2})?$',
         'give_integral' => 'regex:^\d+$',
