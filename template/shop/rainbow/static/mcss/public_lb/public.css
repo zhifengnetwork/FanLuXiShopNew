@@ -3,10 +3,10 @@
 	padding: 0;
 }
 /*字体库*/
-@font-face{
+/*@font-face{
 	font-family: 'PingFangMedium';
 	src:url("/template/mobile/rainbow/static/font/PingFangMedium.ttf");
-}
+}*/
 body {
 	font-family:"PingFangMedium";
 }
