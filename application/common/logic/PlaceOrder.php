@@ -437,13 +437,15 @@ class PlaceOrder
         if($signPrice > 0){
             $user = $this->pay->getUser();
 
+            $catId = Db::name('order_goods')->where('order_id', $this->order['order_id'])->find();
+
             $data['uid'] = $user['user_id'];
             $data['order_id'] = $this->order['order_id'];
+            $data['goods_num'] = $catId['goods_num'];
             $data['type'] = $payList[0]['goods']->sign_free_receive;
             $data['addend_time'] = time();
             Db::name('OrderSignReceive')->save($data);
 
-            $catId = Db::name('order_goods')->where('order_id', $this->order['order_id'])->find();
             if ($payList[0]['goods']->sign_free_receive == 1) {
                 Db::name('users')->where('user_id', $user['user_id'])->setDec('distribut_free_num', $catId['goods_num']);// 减分销领取次数
             } elseif ($payList[0]['goods']->sign_free_receive == 2) {

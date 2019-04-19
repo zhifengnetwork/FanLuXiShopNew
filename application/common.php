@@ -1124,14 +1124,19 @@ function update_pay_status($order_sn,$ext=array())
         // 发送公众号消息给用户
         $userinfo = Db::name('users')->where(['user_id' => $order['user_id']])->field('openid,first_leader')->find();
         if ($userinfo['openid']) {
-            $wx_content = "订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n商户：凡露希环球直供\n金额：{$order['total_amount']}\n\n【凡露希环球直供】欢迎您的再次购物！";
+            $goods = Db::name('OrderGoods')->where(['order_id'=>$order['order_id']])->select();
+                $text = '';
+                foreach ($goods as $key => $value) {
+                    $text .= $value['goods_name'].'(规格：'.$value['spec_key_name'].',数量：'.$value['goods_num'].',价格：'.$value['final_price'].');';
+                }
+            $wx_content = "订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n商户：凡露希环球直供\n商品：{$text}\n金额：{$order['total_amount']}\n\n【凡露希环球直供】欢迎您的再次购物！";
             $wechat = new \app\common\logic\wechat\WechatUtil();
             $wechat->sendMsg($userinfo['openid'], 'text', $wx_content);
 
             //发给上级
             $first_leader_openid = Db::name('users')->where(['user_id' => $userinfo['first_leader']])->value('openid');
             if($first_leader_openid){
-                $wx_first_leader_content = "你的下级订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n金额：{$order['total_amount']}";
+                $wx_first_leader_content = "你的下级订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n商品：{$text}\n金额：{$order['total_amount']}";
                 $wechat = new \app\common\logic\wechat\WechatUtil();
                 $wechat->sendMsg($first_leader_openid, 'text', $wx_first_leader_content);
             }
