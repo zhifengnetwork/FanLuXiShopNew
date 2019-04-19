@@ -93,6 +93,7 @@ class WechatLogic
                 'reg_time'  => time(),
                 'openid'  => $openid,
                 'password'  => '',
+                'is_code'=>1,
 
             ];
 
