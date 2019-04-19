@@ -30,23 +30,25 @@
             </div>
         </div>
     </div>
-    <form class="form-horizontal" id="user_form" method="post">
         <div class="ncap-form-default">
             <dl class="row">
                 <dt class="tit">
                     <label>会员ID</label>
                 </dt>
                 <dd class="opt">
-                    <input class="input-txt valid" name="user_id" id="user_id" type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <input class="input-txt valid" id="user_id" type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <a href="JavaScript:void(0);" onclick="ajaxUser();" class="ncap-btn-big ncap-btn-green">查询</a>
                     <p class="notic">请输入ID</p>
                 </dd>
             </dl>
            
+        <form class="form-horizontal" id="user_form" method="post">
             <dl class="row">
                 <dt class="tit">
                     <label>会员等级</label>
                 </dt>
                 <dd class="opt">
+                    <input name="user_id"  type="hidden" value="">
                 	<select id="level" name="level">
                         <option value="" selected>---请选择等级---</option>
                 		<tpshop sql="select * from `__PREFIX__user_level` where level != 12" key="k" item='v'>
@@ -57,17 +59,42 @@
             </dl>
           
             <div class="bot"><a href="JavaScript:void(0);" onclick="checkUserUpdate();" class="ncap-btn-big ncap-btn-green">确认提交</a></div>
+        </form>
 
         </div>
-    </form>
 </div>
+
 <script type="text/javascript">
+
+    function ajaxUser(){
+
+        var user_id = $('#user_id').val();
+
+        $.ajax({
+            type: "GET",
+            url: "/index.php?m=Admin&c=User&a=details",//+tab,
+            data: {id:user_id},
+            dataType: 'json',
+            success: function (data) {
+                if(data.status == 1){
+                    $('.notic').html('ID：'+data.result.user_id+'，昵称：'+data.result.nickname+'，等级：'+data.result.level_name);
+                    $(" input[ name='user_id' ] ").val(data.result.user_id);
+                }else{
+                    layer.alert(data.msg, {icon: 2,time: 3000});
+                }
+            },
+            error:function(){
+                layer.alert('网络异常', {icon: 2,time: 3000});
+            }
+        });
+    }
+
     function checkUserUpdate(){
       
-        var user_id = $('#user_id').val();
+        var user_id = $(" input[ name='user_id' ] ").val();
         var error = '';
         if(user_id == 0 || user_id == ''){
-            error += "用户ID不能为空\n";
+            error += "请先查询ID\n";
         }
         if(level == 0 || level == ''){
             error += "请选择级别\n";

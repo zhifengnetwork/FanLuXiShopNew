@@ -1067,8 +1067,11 @@ class WechatUtil extends WxCommon
           $first_leader = $msg['EventKey'];
          if(!empty($first_leader))
          {
+            //先判断扫码的id是否是我的下级
+              $erweima_id = Db::name('users')->where('user_id',$first_leader)->find();
               $user_s = Db::name('users')->where('openid',$openid)->find();
-              if($user_s['level']<=3)
+              
+              if($user_s['level']<=3 && $user_s['user_id']!=$first_leader && $erweima_id['first_leader']!=$user_s['user_id'])
               {
                    if(empty($user_s['first_leader']) || $user_s['first_leader']==0)
                   {

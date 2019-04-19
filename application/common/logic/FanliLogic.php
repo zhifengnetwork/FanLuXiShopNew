@@ -457,8 +457,8 @@ class FanliLogic extends Model
 			  {
 			  	if($k>=1)
 			  	{
-			  		  $fanli = M('user_level')->where('level',$v['level'])->field('s_reward')->find();
-						 $commission = 50; //计算金额
+			  		  $fanli = M('user_level')->where('level',$v['level'])->field('pin_reward')->find();
+						 $commission = $fanli['pin_reward']; //计算金额
 				          //按上一级等级各自比例分享返利
 				         $bool = M('users')->where('user_id',$v['user_id'])->setInc('user_money',$commission);
 				       	 $desc = "大区平级奖";
@@ -497,9 +497,9 @@ class FanliLogic extends Model
 				  if($first_leader[$ke]['level']==$first_leader[$next_k]['level'] && $pingji_4!=1&&$three!=1) //处理评级奖
 				     {
                      
-					     $fanli = M('user_level')->where('level',$first_leader[$next_k]['level'])->field('s_reward')->find();
+					     $fanli = M('user_level')->where('level',4)->field('pin_reward')->find();
 				     	
-				        $commission = 30; //计算金额
+				        $commission = $fanli['pin_reward']; //计算金额
 				          //按上一级等级各自比例分享返利
 				        $bool = M('users')->where('user_id',$first_leader[$next_k]['user_id'])->setInc('user_money',$commission);
 				        //$pingji_user =$first_leader[$ke+1];
@@ -526,9 +526,9 @@ class FanliLogic extends Model
 				     {
 				     	if($ke>=1)
 				     	{
-					     $fanli = M('user_level')->where('level',$ye['level'])->field('s_reward')->find();
+					     $fanli = M('user_level')->where('level',4)->field('pin_reward')->find();
 				     	
-				        $commission = 30; //计算金额
+				        $commission = $fanli['pin_reward']; //计算金额
 				          //按上一级等级各自比例分享返利
 				        $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
 				       	$desc = "总监平级奖";
@@ -575,8 +575,8 @@ class FanliLogic extends Model
 			     if($first_leader[$ke]['level']==$first_leader[$next_k]['level'] && $pingji_5!=1 &&$four!=1)
 				   {
 				   	
-					     $fanli = M('user_level')->where('level',$ye['level'])->field('s_reward')->find();
-						 $commission = 50; //计算金额
+					     $fanli = M('user_level')->where('level',5)->field('pin_reward')->find();
+						 $commission = $fanli['pin_reward']; //计算金额
 				          //按上一级等级各自比例分享返利
 				         $bool = M('users')->where('user_id',$first_leader[$next_k]['user_id'])->setInc('user_money',$commission);
 				       	 $desc = "大区平级奖";
@@ -618,8 +618,8 @@ class FanliLogic extends Model
 				   {
 				      if($ke>=1)
 				      {
-					     $fanli = M('user_level')->where('level',$ye['level'])->field('s_reward')->find();
-						 $commission = 50; //计算金额
+					     $fanli = M('user_level')->where('level',5)->field('pin_reward')->find();
+						 $commission = $fanli['pin_reward']; //计算金额
 				          //按上一级等级各自比例分享返利
 				         $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
 				       	 $desc = "大区平级奖";
