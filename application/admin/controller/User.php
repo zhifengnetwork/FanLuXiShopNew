@@ -87,8 +87,8 @@ class User extends Base
             false;
 
         I('first_leader') && ($condition['first_leader'] = I('first_leader')); // 查看一级下线人有哪些
-        I('second_leader') && ($condition['second_leader'] = I('second_leader')); // 查看二级下线人有哪些
-        I('third_leader') && ($condition['third_leader'] = I('third_leader')); // 查看三级下线人有哪些
+        // I('second_leader') && ($condition['second_leader'] = I('second_leader')); // 查看二级下线人有哪些
+        // I('third_leader') && ($condition['third_leader'] = I('third_leader')); // 查看三级下线人有哪些
         $sort_order = I('order_by') . ' ' . I('sort');
 
         $usersModel = new Users();
@@ -189,13 +189,29 @@ class User extends Base
          }
  
          $user['first_lower'] = M('users')->where("first_leader = {$user['user_id']}")->count();
-         $user['second_lower'] = M('users')->where("second_leader = {$user['user_id']}")->count();
-         $user['third_lower'] = M('users')->where("third_leader = {$user['user_id']}")->count();
+         // $user['second_lower'] = M('users')->where("second_leader = {$user['user_id']}")->count();
+         // $user['third_lower'] = M('users')->where("third_leader = {$user['user_id']}")->count();
  
          $this->assign('user', $user);
          return $this->fetch();
      }
+     
+    /**
+     * ajax查找会员详细信息
+     */
+     public function details()
+     {
+
+         $uid = I('get.id');
+         $user = D('users')->where(array('user_id' => $uid))->find();
+         if (!$user)
+            $this->ajaxReturn(['status'=>0,'msg'=>'会员不存在','result'=>'']);
  
+         $user['level_name'] = M('user_level')->where("level = {$user['level']}")->value('level_name');
+ 
+        $this->ajaxReturn(['status'=>1,'msg'=>'查询成功','result'=>$user]);
+     }
+
      private function agent_add($user_id,$head_id,$level)
      {
          $data = array(
