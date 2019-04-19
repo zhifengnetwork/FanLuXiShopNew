@@ -1068,7 +1068,7 @@ class WechatUtil extends WxCommon
          if(!empty($first_leader))
          {
               $user_s = Db::name('users')->where('openid',$openid)->find();
-              if($user_s['level']<=3)
+              if($user_s['level']<=3 && $user_s['user_id']!=$first_leader)
               {
                    if(empty($user_s['first_leader']) || $user_s['first_leader']==0)
                   {
