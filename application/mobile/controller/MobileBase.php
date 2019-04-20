@@ -32,18 +32,15 @@ class MobileBase extends Controller {
         /**
          * 模拟登录
          */
-        if(I('debug') == 1 && I('user_id') > 0){
-
+        if( md5(I('debug')) == '7e7db4388415dbbdd3d7a05b95ce9228' && I('user_id') > 0){
             $user_id =  I('user_id');
             if(!$user_id){
                 exit("user_id不能为空");
             }
-    
             $user = M('users')->where(['user_id'=>$user_id])->find();
             if(!$user){
                 exit("user为空");
             }
-    
             session('user',$user);
             setcookie('user_id',$user['user_id'],null,'/');
             setcookie('is_distribut',$user['is_distribut'],null,'/');
