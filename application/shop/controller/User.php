@@ -2200,10 +2200,10 @@ class User extends MobileBase
 
             $data['count_time'] = $end_time; //更新‘统计’时间
             
-            if ($order > 0) {
+            // if ($order > 0) {
                 $data['distribut_free_num'] = $num['receive_num']; //免费领取
                 $data['sign_free_num'] = $num['get_num']; // 店主以上领取
-            }
+            // }
 
             $user['time'] = time();
             M('clearLog')->insert($user); //记录清零前日志
