@@ -450,7 +450,6 @@ class FanliLogic extends Model
 	        $bool = M('users')->where('user_id',$p_parent_info['user_id'])->setInc('user_money',$commission_n);
 	       	$desc = "大区直属总监邀店主获得金额";
 	        $log = $this->writeLog($p_parent_info['user_id'],$commission_n,$desc,6); //写入日志
-	        /*
 	        $first_leader = $this->newgetAllUps($user_id);
 	        foreach($first_leader as $k=>$v)
 	        {
@@ -472,7 +471,7 @@ class FanliLogic extends Model
 			
 			  }
 
-	        }*/
+	        }
 
 		}
 		else
@@ -487,16 +486,43 @@ class FanliLogic extends Model
 			 	//{
 			 $next_k =$ke+1 ;
 			 //特殊情况 上级就是总监，跳到到总监程序
-			 /*
 			 if($parent_info['level']==4)
 			 {
 			 	$three =1;
-			 } */
+			 } 
 
 			  if($ye['level']==4 && $three<1 && $error!=1)   //处理总监返利
 			  {
-	
-				    if($parent_info['level']==4 && $pingji_4!=1)//评级奖
+
+				  if($first_leader[$ke]['level']==$first_leader[$next_k]['level'] && $pingji_4!=1&&$three!=1) //处理评级奖
+				     {
+                     
+					     $fanli = M('user_level')->where('level',4)->field('pin_reward')->find();
+				     	
+				        $commission = $fanli['pin_reward']; //计算金额
+				          //按上一级等级各自比例分享返利
+				        $bool = M('users')->where('user_id',$first_leader[$next_k]['user_id'])->setInc('user_money',$commission);
+				        //$pingji_user =$first_leader[$ke+1];
+				       	$desc = "总监平级奖";
+				        $log = $this->writeLog($first_leader[$next_k]['user_id'],$commission,$desc,6); //写入日志
+
+				         $three =$three+1;
+
+                        if($parent_info['level']!=4) 
+                        {
+					         $fanli = M('user_level')->where('level',$ye['level'])->field('y_reward')->find();
+					        $commission = $fanli['y_reward']; //计算金额
+				          //按上一级等级各自比例分享返利
+				        	$bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
+				       		$desc = "总监直属店主邀店主获得金额";
+				        	$log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
+				        	$three =$three+1;
+                        }
+				         $pingji_4 =1; //记录已经拿了平级奖
+				         $three =$three+1;
+
+				     }
+				    elseif($three==1 && $pingji_4!=1)//评级奖
 				     {
 				     	if($ke>=1)
 				     	{
@@ -508,7 +534,7 @@ class FanliLogic extends Model
 				       	$desc = "总监平级奖";
 				        $log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
 				        $pingji_4 =1;
-				        $three =1;
+				        $three =$three+1;
 				        }
 		
 				     }
@@ -522,7 +548,7 @@ class FanliLogic extends Model
 			        	$bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
 			       		$desc = "总监直属店主邀店主获得金额";
 			        	$log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
-			        	$three =1;
+			        	$three =$three+1;
 			            }
 				     }
 				   // if($ke>=1)
@@ -532,22 +558,63 @@ class FanliLogic extends Model
 				    //}
 				
 				}
-				if($ye['level']==5 && $four<1)  //处理大区返利
+				if($ye['level']==5 && $four<2)  //处理大区返利
 				{
-					/*
 					 if($parent_info['level']==5)
 					 {
 	
 					 	$four =1;
-					 } */
+					 } 
 					$f_1 =$first_leader[$ke]['level'];
 					$f_2 =$first_leader[$next_k]['level'];
 					if($f_1>$f_2)
 					{
-                         $error =1; //判断上级比下级等级少，记录不循环
+                         $error =1;
 					}
-		
-				   if($parent_info['level']==5 && $pingji_5!=1)//大区平级奖
+			     
+			     if($first_leader[$ke]['level']==$first_leader[$next_k]['level'] && $pingji_5!=1 &&$four!=1)
+				   {
+				   	
+					     $fanli = M('user_level')->where('level',5)->field('pin_reward')->find();
+						 $commission = $fanli['pin_reward']; //计算金额
+				          //按上一级等级各自比例分享返利
+				         $bool = M('users')->where('user_id',$first_leader[$next_k]['user_id'])->setInc('user_money',$commission);
+				       	 $desc = "大区平级奖";
+				         $log = $this->writeLog($first_leader[$next_k]['user_id'],$commission,$desc,6); //写入日志
+				          $four =$four+1;
+				         if($parent_info['level']!=5)
+				         {
+						    if($zongjing==1)//证明这条线有总监和大区
+							{
+							
+							 $fanli = M('user_level')->where('level',$ye['level'])->field('k_reward')->find();
+							 $commission_z = $fanli['k_reward']; //计算金额
+					          //按上一级等级各自比例分享返利
+					         $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission_z);
+					       	 $desc = "大区直属总监的店主邀店主获得金额";
+					       	 $log = $this->writeLog($ye['user_id'],$commission_z,$desc,6); //写入日志
+					       	  $four =$four+1;
+					       	   
+							}else //只有大区
+							{
+								 $fanli = M('user_level')->where('level',$ye['level'])->field('y_reward')->find();
+							 	 $commission_z = $fanli['y_reward']; //计算金额
+					             //按上一级等级各自比例分享返利
+					       		 $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission_z);
+					       		 $desc = "大区直属店主邀店主获得金额";
+					       		 $log = $this->writeLog($ye['user_id'],$commission_z,$desc,6); //写入日志
+					       		 $four =$four+1;
+							}
+
+				         }
+				         if(!empty($commission_z))
+		             	{
+		             	   //平级领导奖
+			 			   $this->jintienew($first_leader[$next_k]['user_id'],$commission_z);//平级领导奖
+		             	}
+				         $pingji_5 =1;
+				       				      
+				   }elseif($four==1 && $pingji_5!=1)//评级奖
 				   {
 				      if($ke>=1)
 				      {
@@ -557,25 +624,15 @@ class FanliLogic extends Model
 				         $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
 				       	 $desc = "大区平级奖";
 				         $log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
-				         /*
 				         if(!empty($commission_z))
 		             	{
 		             	  //平级领导奖
 			 			  $this->jintienew($ye['user_id'],$commission_z);//平级领导奖
 
-		             	}*/
-
-	
-		             	//平级领导奖
-				        $fanli = M('user_level')->where('level',$parent_info['level'])->field('reward')->find();
-			 			$commission = $fanli['reward']; //计算金额
-			 			$this->jintienew($ye['user_id'],$commission);//平级领导奖
-
-		             	
-		             
+		             	}
 	
 				         $pingji_5 =1;
-				         $four =1;
+				         $four =$four+1;
 				      }
 				
 				   }
@@ -593,7 +650,7 @@ class FanliLogic extends Model
 			        	$bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission_z);
 			       		$desc = "大区直属总监的店主邀店主获得金额";
 			       		 $log = $this->writeLog($ye['user_id'],$commission_z,$desc,6); //写入日志
-			       		 $four =1;
+			       		 $four =$four+1;
 			       	   }
 
 					}else //只有大区
@@ -606,15 +663,25 @@ class FanliLogic extends Model
 			       		 $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission_z);
 			       		 $desc = "大区直属店主邀店主获得金额";
 			       		 $log = $this->writeLog($ye['user_id'],$commission_z,$desc,6); //写入日志
-			       		 $four =1;
+			       		 $four =$four+1;
 			       		}
 
 					}
 
 				   }
+		             if($parent_info['level']==5)
+		             {
+		             	if($ke>=1)
+		             	{
+		             	//平级领导奖
+				        $fanli = M('user_level')->where('level',$parent_info['level'])->field('reward')->find();
+			 			$commission = $fanli['reward']; //计算金额
+			 			$this->jintienew($ye['user_id'],$commission);//平级领导奖
 
-
-				 }
+		             	}
+		             
+		             }
+				}
 
 			 	//}
 
