@@ -34,7 +34,7 @@
 							<li><i></i>{$vo.mobile_name}</li>
 						</foreach> -->
 						<foreach name="secondCategoryList" item="list">
-							<li <if condition="$list[id] eq 1"> class="active" </if> ><i></i>{$list[name]}</li>
+							<li <if condition="$list[id] eq 9"> class="active" </if> ><i></i>{$list[name]}</li>
 						</foreach>
 						<!--<li class="active"><i></i>为您推荐</li>-->
 					</ul>
@@ -42,7 +42,7 @@
 				<!--右边分类内容-->
 				<div class="main">
 					<foreach name="secondCategoryList" item="category" key="key">
-						<div class="branchList <if condition='$category[id] eq 1'> active </if>">
+						<div class="branchList <if condition='$category[id] eq 9'> active </if>">
 						<!--<div class="advert">-->
 							<!--<assign name="k" value="0"></assign>-->
 							<!--<foreach name="categoryList" item="cate">-->

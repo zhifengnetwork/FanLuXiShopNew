@@ -23,13 +23,22 @@ class Goods extends MobileBase
        //20190320 直接显示一级分类及其图片名称
     public function categoryList(){
 
+        $user = session('user');
         //获取要访问的一级分类的ID  如果没有传ID默认展示为你推荐栏目
 //        $id=I(id,31);
 
         $category=new GoodsCategory();
 
         //获取所有要展示的一级分类
-        $secondCategoryList = $category->get_level_category(1);
+        // $secondCategoryList = $category->get_level_category(1);
+        if ($user['level'] <= 2) {
+
+            $secondCategoryList = Db::name('goods_category')->where('id','>',2)->where('is_show',1)->order('sort_order','asc')->column('id,name,image');
+        }else{
+
+            $secondCategoryList = Db::name('goods_category')->where('is_show',1)->order('sort_order','asc')->column('id,name,image');
+        }
+        
 //        $ids=array_column($secondCategoryList,'id');
         //获取所有要展示的三级分类
 //        $threadCategoryList = $category->get_level_category(3);
