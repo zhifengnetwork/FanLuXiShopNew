@@ -18,7 +18,7 @@
 			<span title="收起提示" id="explanationZoom" style="display: block;"></span>
 		</div>
 		<ul>
-			<li>会员等级管理， 不同会员等级可设置不同折扣</li>
+			<li>会员等级管理，不同会员等级可设置不同折扣</li>
 		</ul>
 	</div>
 	<div class="flexigrid">
@@ -56,7 +56,10 @@
 							<div style="text-align: center; width: 150px;" class="">是否获得津贴(平级)</div>
 						</th>
 						<th align="center" abbr="article_time" axis="col6" class="">
-							<div style="text-align: center; width: 70px;" class="">领取数量</div>
+							<div style="text-align: center; width: 70px;" class="">领取鱼子数量</div>
+						</th>
+						<th align="center" abbr="article_time" axis="col6" class="">
+							<div style="text-align: center; width: 70px;" class="">领取多肽数量</div>
 						</th>
 						<th align="center" abbr="article_time" axis="col6" class="">
 							<div style="text-align: center; width: 100px;" class="">等级描述</div>
@@ -126,7 +129,10 @@
 								</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 70px;">{$vo.get}</div>
+								<div style="text-align: center; width: 70px;">{$vo.get_num}</div>
+							</td>
+							<td align="center" class="">
+								<div style="text-align: center;">{$vo.receive_num}</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 100px;">{$vo.describe}</div>

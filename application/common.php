@@ -1926,7 +1926,7 @@ function provingReceive($user, $type, $num = 1)
     //获得当日凌晨的时间戳
     $today = strtotime(date("Y-m-d"),time());
 
-    $levelGetNum = M('UserLevel')->where('level', $user['level'])->value('get');
+    $levelGetNum = M('UserLevel')->where('level', $user['level'])->value('receive_num');
 
     //签到商品
     if ($type == 1) {
@@ -1937,9 +1937,8 @@ function provingReceive($user, $type, $num = 1)
             return $result;
         }
 
-        // 是分销并且有领取次数
-        if ($user['distribut_free_num'] < $num) {
-            $result = array('status' => 0, 'msg' => '没有领取资格，坚持签到可获得资格！', 'result' => array());
+        if ($user['sign_free_num'] < $num) {
+            $result = array('status' => 0, 'msg' => '领取次数不够啦 (≧﹏≦)！', 'result' => array());
             return $result;
         }
 
@@ -1966,15 +1965,14 @@ function provingReceive($user, $type, $num = 1)
         }
 
         //当天订单
-        $order = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2, 'addend_time' => ['>',$today]])->count();
-        
+        // $order = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2, 'addend_time' => ['>',$today]])->count();
+
         if ($num > $levelGetNum) {
-            $getNum = $levelGetNum - $order ;
-            return array('status' => 0, 'msg' => '超过领取数量，今天还可领取'.$getNum.'件！', 'result' => array());
+            return array('status' => 0, 'msg' => '超过领取数量，目前只可领取'.$user['distribut_free_num'].'件！', 'result' => array());
         }
         
         //领取次数
-        if ( $order >= $levelGetNum) {
+        if ( $user['distribut_free_num'] > $levelGetNum) {
             $result = array('status' => 1, 'msg' => '您当前等级可领'.$levelGetNum.'盒，已超过领取次数', 'result' => array());
             return $result;
         }

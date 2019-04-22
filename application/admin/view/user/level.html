@@ -101,13 +101,22 @@
 			</dl>
 			<dl class="row">
 			    <dt class="tit">
-			        <label for="level_name">领取产品数量</label>
+			        <label for="level_name">领取鱼子面膜数量/盒</label>
 			    </dt>
 			    <dd class="opt">
-			        <input type="text" name="get" value="{$info.get}" id="get" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
-			        <p class="notic">设置免费领取产品数量(付邮费)。</p>
+			        <input type="text" name="get_num" value="{$info.get_num}" id="get_num" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+			        <p class="notic">设置免费领取面膜数量(月清零)。</p>
 			    </dd>
 			</dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="level_name">领取多肽面膜数量/盒</label>
+                </dt>
+                <dd class="opt">
+                    <input type="text" name="receive_num" value="{$info.receive_num}" id="receive_num" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <p class="notic">设置免费领取面膜数量(月清零)。</p>
+                </dd>
+            </dl>
 			<if condition="$info['level'] eq 4">
 			<dl class="row">
                 <dt class="tit">
