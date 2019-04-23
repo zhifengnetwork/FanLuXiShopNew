@@ -121,6 +121,7 @@ class WechatLogic
                 'unionid' => isset($wxdata['unionid']) ? $wxdata['unionid'] : '',
                 'oauth' => 'weixin',
                 'oauth_child' => 'mp',
+                'type' => '1',
                 ]);
             }
             $is_bind_account = tpCache('basic.is_bind_account');
