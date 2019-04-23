@@ -197,16 +197,16 @@
                     <input type="radio" name="im_choose" value="0" <if condition="$config[im_choose] eq 0"> checked </if> >qq客服  &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" name="im_choose"  id="tpshop-im" value="1" <if condition="$config[im_choose] eq 1"> checked </if> >TPshop im客服  &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" name="im_choose" value="2" <if condition="$config[im_choose] eq 2"> checked </if> >小能客服
-                    <p class="notic">TPshop IM客服为系统自带客服系统，小能客服为第三方客服系统</p>
+                    <p class="notic">为第三方客服系统</p>
                 </dd>
             </dl>
 			<dl class="row" id="tpshop-im-web" <if condition="$config['im_choose'] neq 1"> style="display: none" </if> >
                 <dt class="tit">
-                    <label>TPshop IM 网址</label>
+                    <label>IM 网址</label>
                 </dt>
                 <dd class="opt">
                     <input id="im_website" name="im_website" value="{$config['im_website']}" class="input-txt" type="text" placeholder="例如：im.tp-shop.cn">
-                    <p class="notic">该配置项作为店铺入驻审核通过时TPshop IM自动同步店铺及负责人数据, 域名不要带"http://"前缀</p>
+                    <p class="notic">该配置项作为店铺入驻审核通过时 IM自动同步店铺及负责人数据, 域名不要带"http://"前缀</p>
                 </dd>
             </dl>
             
