@@ -435,7 +435,7 @@ class PlaceOrder
         $OrderPromAmount = $this->pay->getOrderPromAmount();
         $payList = $this->pay->getPayList();
 
-        if($signPrice > 0 || $getOrderPromAmount > 0){
+        if($signPrice > 0 || $OrderPromAmount > 0){
             $user = $this->pay->getUser();
 
             $catId = Db::name('order_goods')->where('order_id', $this->order['order_id'])->find();
