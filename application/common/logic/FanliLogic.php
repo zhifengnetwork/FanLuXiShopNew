@@ -493,7 +493,7 @@ class FanliLogic extends Model
 			 	$three =1;
 			 } */
 
-			  if($ye['level']==4 && $three<1 && $error!=1 && $four<1)   //处理总监返利
+			  if($ye['level']==4 && $three<1 && $error!=1)   //处理总监返利
 			  {
 	
 				    if($parent_info['level']==4 && $pingji_4!=1)//评级奖
