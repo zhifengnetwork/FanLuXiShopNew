@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>tpshop管理后台</title>
+    <title>管理后台</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,7 +24,7 @@
     <!-- jQuery 2.1.4 -->
     <script src="__PUBLIC__/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 	<script src="__PUBLIC__/js/global.js"></script>
-    <script src="__PUBLIC__/js/upgrade.js"></script>
+ 
 	<script src="__PUBLIC__/js/layer/layer.js"></script><!--弹窗js 参考文档 http://layer.layui.com/--> 
     <style type="text/css">
     	#riframe{min-height:inherit !important}
@@ -38,7 +38,7 @@
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b></b></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><img src="/public/images/TP-shop_logo.png" width="40" height="30">&nbsp;&nbsp;<b>TPshop</b></span>
+        <span class="logo-lg"><img src="/public/images/TP-shop_logo.png" width="40" height="30">&nbsp;&nbsp;<b>凡露希</b></span>
       </a>
       <!-- Header Navbar: style can be found in header.less -->
       <nav class="navbar navbar-static-top" role="navigation">
@@ -47,22 +47,10 @@
           <span class="sr-only">Toggle navigation</span>
         </a>
         <!--服务器升级-->
-        <textarea id="textarea_upgrade" style="display:none;">{$upgradeMsg.1}</textarea>                              
+                               
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
-          <if condition="$upgradeMsg[0] neq null">
-               <li>
-                  <a href="javascript:void(0);" id="a_upgrade">
-                      <i class="glyphicon glyphicon-upload"></i>
-                      <span  style="color:#FF0;">{$upgradeMsg.0}&nbsp;</span>
-                  </a>
-               </li>
-           </if>
-<li>
-              <a href="javascript:void(0);">                  
-                  <span>多商家公测版</span>
-               </a>
-</li>           
+        
            <li>
               <a href="/index.php" target="_blank">
                   <i class="glyphicon glyphicon-home"></i>
