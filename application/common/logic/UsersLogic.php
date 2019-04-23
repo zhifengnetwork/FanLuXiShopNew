@@ -45,7 +45,7 @@ class UsersLogic extends Model
 			$result = array('status' => -3, 'msg' => '账号异常已被锁定！！！');
 		} else {
 			//是否清空积分           zengmm          2018/06/05
-			$this->isEmptyingIntegral($user);
+			// $this->isEmptyingIntegral($user);
 			//查询用户信息之后, 查询用户的登记昵称
 			$levelId = $user['level'];
 			$levelName = Db::name("user_level")->where("level", $levelId)->getField("level_name");
@@ -74,7 +74,7 @@ class UsersLogic extends Model
 		   $result = array('status'=>-3,'msg'=>'账号异常已被锁定！！！');
 		}else{
 			//是否清空积分           zengmm          2018/06/11
-			$this->isEmptyingIntegral($user);
+			// $this->isEmptyingIntegral($user);
 			//查询用户信息之后, 查询用户的登记昵称
 			$levelId = $user['level'];
 			$levelName = M("user_level")->where("level_id", $levelId)->getField("level_name");
@@ -320,16 +320,16 @@ class UsersLogic extends Model
 			
 			//不存在则创建个第三方账号
 			$data['user_id'] = $user['user_id'];
-			$user_level =Db::name('user_level')->where('amount = 0')->find(); //折扣
+			$user_level = Db::name('user_level')->where('amount = 0')->find(); //折扣
 			$data['discount'] = !empty($user_level) ? $user_level['discount']/100 : 1;  //新注册的会员都不打折
 
 		 
-			$OauthUsers_is_cunzai = Db::name('OauthUsers')->where(array('openid'=>$map['openid']))->find();
+			$OauthUsers_is_cunzai = Db::name('oauth_users')->where(array('openid'=>$map['openid']))->find();
 			if(!$OauthUsers_is_cunzai){
 				$map['user_id'] = $user['user_id'];
-				Db::name('OauthUsers')->add($map);
+				Db::name('oauth_users')->add($map);
 			}else{
-				Db::name('OauthUsers')->where(array('openid'=>$map['openid']))->update($data);
+				Db::name('oauth_users')->where(array('openid'=>$map['openid']))->update($data);
 			}
 			
 
@@ -347,11 +347,11 @@ class UsersLogic extends Model
 			if($old_user){
 				//更新老数据并删除新注册的数据
 				$map['openid'] = $data['openid'];
-				Db::name('users')->where('user_id', $old_user['user_id'])->update($map);
-				Db::name('oauth_users')->where('openid', $data['openid'])->update(['user_id'=>$old_user['user_id']]);
+				Db::name('users')->where('user_id', $old_user['user_id'])->save($map);
+				Db::name('oauth_users')->where('openid', $data['openid'])->save(['user_id'=>$old_user['user_id']]);
 				Db::name('users')->where(array('user_id'=>$user['user_id']))->delete();
 			}else{
-				Db::name('users')->where('user_id', $user['user_id'])->update($map);
+				Db::name('users')->where('user_id', $user['user_id'])->save($map);
 			}
 
 			$user['token'] = $map['token'];
