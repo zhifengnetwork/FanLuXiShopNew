@@ -432,9 +432,10 @@ class PlaceOrder
     public function addOrderSignReceive()
     {
         $signPrice = $this->pay->getSignPrice();
+        $OrderPromAmount = $this->pay->getOrderPromAmount();
         $payList = $this->pay->getPayList();
 
-        if($signPrice > 0){
+        if($signPrice > 0 || $getOrderPromAmount > 0){
             $user = $this->pay->getUser();
 
             $catId = Db::name('order_goods')->where('order_id', $this->order['order_id'])->find();
@@ -444,13 +445,13 @@ class PlaceOrder
             $data['goods_num'] = $catId['goods_num'];
             $data['type'] = $payList[0]['goods']->sign_free_receive;
             $data['addend_time'] = time();
-            Db::name('OrderSignReceive')->save($data);
+            Db::name('Order_sign_receive')->save($data);
 
             if ($payList[0]['goods']->sign_free_receive == 1) {
                 Db::name('users')->where('user_id', $user['user_id'])->setDec('sign_free_num', $catId['goods_num']);// 减签到领取次数
             } elseif ($payList[0]['goods']->sign_free_receive == 2) {
                 Db::name('users')->where('user_id', $user['user_id'])->setDec('distribut_free_num', $catId['goods_num']);// 减免费领取次数
-                Db::name('users')->where('user_id', $user['user_id'])->update(['is_code'=>2]);// 扫码用户修改成2（已领取面膜）
+                // Db::name('users')->where('user_id', $user['user_id'])->update(['is_code'=>2]);// 扫码用户修改成2（已领取面膜）
             }
         }
     }
