@@ -1924,7 +1924,7 @@ function continue_sign($user_id){
 function provingReceive($user, $type, $num = 1)
 {
     //获得当日凌晨的时间戳
-    $today = strtotime(date("Y-m-d"),time());
+    // $today = strtotime(date("Y-m-d"),time());
 
     $levelGetNum = M('UserLevel')->where('level', $user['level'])->value('receive_num');
 
