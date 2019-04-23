@@ -2172,24 +2172,7 @@ class User extends MobileBase
 
         return $this->fetch();
     }
-    public function userlevel2()
-    {
-     
-     $a = DB::name('Users')->where('level','=',2)->where('is_code',1)->save(['is_code'=>2,'count_time'=>'']);
-     dump($a);
-    }
-    public function userlevel3()
-    {
-     
-     $a = DB::name('Users')->where('level','=',3)->where('is_code',1)->save(['is_code'=>2,'count_time'=>'']);
-     dump($a);
-    }
-    public function userlevel4()
-    {
-     
-     $a = DB::name('Users')->where('level','=',4)->where('is_code',1)->save(['is_code'=>2,'count_time'=>'']);
-     dump($a);
-    }
+
     //累计免费领取次数
     public function get_curr_time_section()
     {
