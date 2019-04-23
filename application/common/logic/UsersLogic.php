@@ -277,7 +277,7 @@ class UsersLogic extends Model
 		if(!$user){
 			//账户不存在 注册一个
 			$map['password'] = '';
-			$map['sign_old_openid'] = 222;//$data['old_openid'];
+			$map['sign_old_openid'] = $data['old_openid'];
 			$map['openid'] = $data['openid'];
 			$map['nickname'] = $data['nickname'];
 			$map['reg_time'] = time();
@@ -299,13 +299,16 @@ class UsersLogic extends Model
 
 					$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
 					if(!$old_user){
+						$map['sign_old_openid'] = 111;
 						$row_id = Db::name('users')->add($map);
 					}else{
+						$map['sign_old_openid'] = 222;
 						Db::name('users')->where(array('user_id'=>$old_user['user_id']))->update($map);
 						$row_id = $old_user['user_id'];
 					}
 
 			}else{
+				$map['sign_old_openid'] = 555;
 				Db::name('users')->where(array('openid'=>$map['openid']))->update($map);
 				$row_id = $is_cunzai['user_id'];
 
