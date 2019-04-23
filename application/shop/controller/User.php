@@ -43,6 +43,21 @@ class User extends MobileBase
                 session('user', $session_user);  //覆盖session 中的 user
             }
             $this->user_id = $this->user['user_id'];
+
+            //判断头像是否为空，空就补头像
+            if( $this->user['head_pic'] == null){
+                $openid = $this->user['openid'];
+                $access_token = access_token();
+                $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
+                $resp = httpRequest($url, "GET");
+                $res = json_decode($resp, true);
+                $head_pic = $res['headimgurl'];
+               
+                //得到头像
+                M('users')->where(['openid'=>$this->user['openid']])->update(['head_pic'=>$head_pic]);
+                $this->user['head_pic'] = $head_pic;
+            }
+
             $this->assign('user', $this->user); //存储用户信息0
         }
         $nologin = array(
@@ -73,6 +88,7 @@ class User extends MobileBase
 
     public function index()
     {
+       
         $map['user_id'] = $this->user_id;
         if ($cat_id > 0) $map['a.cat_id'] = $cat_id;
         $this->user['visit_count'] = M('goods_visit')->where($map)->count();
@@ -87,7 +103,7 @@ class User extends MobileBase
 
         //当前登录用户信息
         $logic = new UsersLogic();
-        $user_info = $logic->get_info($this->user_id); 
+        $user_info = $logic->get_info($this->user_id);
         $order_info['waitPay'] = $user_info['result']['waitPay'];
         $order_info['waitSend'] = $user_info['result']['waitSend'];
         $order_info['waitReceive'] = $user_info['result']['waitReceive'];
@@ -2053,10 +2069,14 @@ class User extends MobileBase
     {
         $user_id = session('user.user_id');
 
+        //看看头像是否为空
+      
+
+
         $logic = new ShareLogic();
         $ticket = $logic->get_ticket($user_id);
 
-        
+
         if( strlen($ticket) < 3){
             $this->error("ticket不能为空");
             exit;
