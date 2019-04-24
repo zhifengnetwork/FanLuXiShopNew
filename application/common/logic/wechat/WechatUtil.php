@@ -1078,15 +1078,15 @@ class WechatUtil extends WxCommon
                     Db::name('users')->where('openid',$openid)->update(['first_leader'=>$first_leader]);
                   }
               }
-              if(!$user_s['old_openid'])
-              {
+              //if(!$user_s['old_openid'])
+              //{
                 if($user_s['is_code']==0)
               {
                 Db::name('users')->where('openid',$openid)->update(['is_code'=>1]);
               }
               
 
-              }
+             // }
               
           
          }
