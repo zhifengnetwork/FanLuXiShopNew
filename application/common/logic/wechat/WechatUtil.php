@@ -1020,6 +1020,7 @@ class WechatUtil extends WxCommon
     public function handleMsgEvent()
     {
         $msg = $this->getPushMessage();
+        write_log($msg.'凡露希微信公共接口');
         if (!$msg) {
             exit($this->getError());
         }
@@ -1090,7 +1091,7 @@ class WechatUtil extends WxCommon
               
           
          }*/
-
+         write_log($msg.'凡露希微信已关注接口-你已关注公众号');
         //Db::name('users')->where('user_id=17421400')->update(['first_leader'=>1235]);
         $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号');
 
