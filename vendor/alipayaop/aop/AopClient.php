@@ -449,8 +449,7 @@ class AopClient {
 			$iv = $this->apiVersion;
 		}
 
-        dump($this->postCharset);
-        dump($this->format);die;
+
 		//组装系统参数
 		$sysParams["app_id"] = $this->appId;
 		$sysParams["version"] = $iv;
@@ -512,8 +511,7 @@ class AopClient {
 		try {
 
 			$resp = $this->curl($requestUrl, $apiParams);
-			var_dump($resp);die;
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 
 			$this->logCommunicationError($sysParams["method"], $requestUrl, "HTTP_ERROR_" . $e->getCode(), $e->getMessage());
 			return false;
