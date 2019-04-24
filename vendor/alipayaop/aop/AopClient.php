@@ -504,7 +504,7 @@ class AopClient {
 			$requestUrl .= "$sysParamKey=" . urlencode($this->characet($sysParamValue, $this->postCharset)) . "&";
 		}
 		$requestUrl = substr($requestUrl, 0, -1);
-
+        dump($requestUrl);die;
 
 		//发起HTTP请求
 		try {
