@@ -406,7 +406,7 @@ class Pay
 
             }
 
-            if ($this->user['level'] > 2 && $this->payList[0]['goods']->sign_free_receive != 0) {
+            if ($this->user['level'] >= 2 && $this->payList[0]['goods']->sign_free_receive != 0) {
                 $isReceive = provingReceive($this->user, $this->payList[0]['goods']->sign_free_receive, $this->totalNum);
             }
             

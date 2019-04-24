@@ -1968,12 +1968,12 @@ function provingReceive($user, $type, $num = 1)
         // $order = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2, 'addend_time' => ['>',$today]])->count();
 
         if ($num > $levelGetNum) {
-            return array('status' => 0, 'msg' => '超过领取数量，目前只可领取'.$user['distribut_free_num'].'件！', 'result' => array());
+            $result = array('status' => 1, 'msg' => '您当前等级可领'.$levelGetNum.'盒，已超过领取次数', 'result' => array());
         }
         
         //领取次数
         if ( $user['distribut_free_num'] > $levelGetNum) {
-            $result = array('status' => 1, 'msg' => '您当前等级可领'.$levelGetNum.'盒，已超过领取次数', 'result' => array());
+            return array('status' => 0, 'msg' => '超过领取数量，目前只可领取'.$user['distribut_free_num'].'件！', 'result' => array());
             return $result;
         }
     }
