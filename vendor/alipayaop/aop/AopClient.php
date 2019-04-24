@@ -228,7 +228,6 @@ class AopClient {
 
 
 
-
 		$reponse = curl_exec($ch);
 
 		if (curl_errno($ch)) {
@@ -523,19 +522,21 @@ class AopClient {
 		// 将返回结果转换本地文件编码
 		$r = iconv($this->postCharset, $this->fileCharset . "//IGNORE", $resp);
 
-        echo 111;
-        dump($r);die;
+
 
 		$signData = null;
 
 		if ("json" == $this->format) {
 
 			$respObject = json_decode($r);
+			echo 111;
+			var_dump($respObject);die;
 			if (null !== $respObject) {
 				$respWellFormed = true;
 				$signData = $this->parserJSONSignData($request, $resp, $respObject);
 			}
 		} else if ("xml" == $this->format) {
+		    echo 222;die;
 			$disableLibxmlEntityLoader = libxml_disable_entity_loader(true);
 			$respObject = @ simplexml_load_string($resp);
 			if (false !== $respObject) {
