@@ -232,7 +232,7 @@ class AopClient {
 
 		echo 7;
 
-
+        dump($ch);
 		$reponse = curl_exec($ch);
         dump($reponse);die;
 		if (curl_errno($ch)) {
