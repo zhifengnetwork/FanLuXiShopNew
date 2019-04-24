@@ -543,7 +543,7 @@ class AopClient {
 			}
 			libxml_disable_entity_loader($disableLibxmlEntityLoader);
 		}
-
+		echo 666;
         dump('22',$respWellFormed);
 		//返回的HTTP文本不是标准JSON或者XML，记下错误日志
 		if (false === $respWellFormed) {
