@@ -18,7 +18,6 @@ class AlipayTransfer extends Base
     {
         $this->configPay();
         //引入单笔转账sdk
-        vendor('alipaysdk.AopSdk');
     }
 
     private function configPay () {
@@ -39,15 +38,15 @@ class AlipayTransfer extends Base
     }
 
     public function pay ($out_biz_no,$payee_account,$amount,$payer_show_name,$payee_real_name,$remark) {
+        vendor('alipaysdk.AopSdk');
         $aop = new \AopClient ();
-        $aop->gatewayUrl = 'https://openapi.alipay.com/gateway.do';
         $aop->appId = $this->appId;
         $aop->rsaPrivateKey = $this->rsaPrivateKey;
         $aop->alipayrsaPublicKey = $this->alipayrsaPublicKey;
-        $aop->apiVersion = '1.0';
         $aop->signType = 'RSA2';
-        $aop->postCharset='utf-8';
-        $aop->format='json';
+        dump($this->appId );
+        dump($this->rsaPrivateKey );
+        dump($this->alipayrsaPublicKey );die;
         $request = new \AlipayFundTransToaccountTransferRequest ();
 //        $request->setBizContent("{" .
 //            "\"out_biz_no\":\"$out_biz_no\"," .
