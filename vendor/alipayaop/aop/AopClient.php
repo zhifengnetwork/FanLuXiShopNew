@@ -181,71 +181,79 @@ class AopClient {
 
 
 	protected function curl($url, $postFields = null) {
-		$ch = curl_init();
-		echo 1;
-		dump($ch);
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_FAILONERROR, false);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-		$postBodyString = "";
-		$encodeArray = Array();
-		$postMultipart = false;
+//	    dump($url);
+//
+//		$ch = curl_init();
+//		echo 1;
+//		dump($ch);
+//		curl_setopt($ch, CURLOPT_URL, $url);
+//		curl_setopt($ch, CURLOPT_FAILONERROR, false);
+//		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//
+//		$postBodyString = "";
+//		$encodeArray = Array();
+//		$postMultipart = false;
+//
+//        echo 2;
+//		if (is_array($postFields) && 0 < count($postFields)) {
+//            echo 3;
+//			foreach ($postFields as $k => $v) {
+//				if ("@" != substr($v, 0, 1)) //判断是不是文件上传
+//				{
+//
+//					$postBodyString .= "$k=" . urlencode($this->characet($v, $this->postCharset)) . "&";
+//					$encodeArray[$k] = $this->characet($v, $this->postCharset);
+//				} else //文件上传用multipart/form-data，否则用www-form-urlencoded
+//				{
+//					$postMultipart = true;
+//					$encodeArray[$k] = new \CURLFile(substr($v, 1));
+//				}
+//
+//			}
+//			unset ($k, $v);
+//			curl_setopt($ch, CURLOPT_POST, true);
+//			if ($postMultipart) {
+//				curl_setopt($ch, CURLOPT_POSTFIELDS, $encodeArray);
+//			} else {
+//				curl_setopt($ch, CURLOPT_POSTFIELDS, substr($postBodyString, 0, -1));
+//			}
+//		}
+//
+//
+//
+//
+//		if ($postMultipart) {
+//		    echo 5;
+//			$headers = array('content-type: multipart/form-data;charset=' . $this->postCharset . ';boundary=' . $this->getMillisecond());
+//		} else {
+//            echo 6;
+//			$headers = array('content-type: application/x-www-form-urlencoded;charset=' . $this->postCharset);
+//		}
+//		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//
+//		echo 7;
+//
+//        dump($ch);
+//		$reponse = curl_exec($ch);
+//
+//        dump($reponse);die;
+//
+//		if (curl_errno($ch)) {
+//
+//			throw new Exception(curl_error($ch), 0);
+//		} else {
+//			$httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+//			if (200 !== $httpStatusCode) {
+//				throw new Exception($reponse, $httpStatusCode);
+//			}
+//		}
 
-        echo 2;
-		if (is_array($postFields) && 0 < count($postFields)) {
-            echo 3;
-			foreach ($postFields as $k => $v) {
-				if ("@" != substr($v, 0, 1)) //判断是不是文件上传
-				{
+//		curl_close($ch);
 
-					$postBodyString .= "$k=" . urlencode($this->characet($v, $this->postCharset)) . "&";
-					$encodeArray[$k] = $this->characet($v, $this->postCharset);
-				} else //文件上传用multipart/form-data，否则用www-form-urlencoded
-				{
-					$postMultipart = true;
-					$encodeArray[$k] = new \CURLFile(substr($v, 1));
-				}
-
-			}
-			unset ($k, $v);
-			curl_setopt($ch, CURLOPT_POST, true);
-			if ($postMultipart) {
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $encodeArray);
-			} else {
-				curl_setopt($ch, CURLOPT_POSTFIELDS, substr($postBodyString, 0, -1));
-			}
-		}
-
-
-
-
-		if ($postMultipart) {
-		    echo 5;
-			$headers = array('content-type: multipart/form-data;charset=' . $this->postCharset . ';boundary=' . $this->getMillisecond());
-		} else {
-            echo 6;
-			$headers = array('content-type: application/x-www-form-urlencoded;charset=' . $this->postCharset);
-		}
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-		echo 7;
-
-        dump($ch);
-		$reponse = curl_exec($ch);
+        $reponse = httpRequest($url, "POST", $postFields );
         dump($reponse);die;
-		if (curl_errno($ch)) {
-
-			throw new Exception(curl_error($ch), 0);
-		} else {
-			$httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			if (200 !== $httpStatusCode) {
-				throw new Exception($reponse, $httpStatusCode);
-			}
-		}
-
-		curl_close($ch);
 		return $reponse;
 	}
 
