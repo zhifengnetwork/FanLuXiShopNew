@@ -1019,6 +1019,7 @@ class WechatUtil extends WxCommon
      */
     public function handleMsgEvent()
     {
+        write_log('凡露希微信');
         $msg = $this->getPushMessage();
         write_log($msg.'凡露希微信公共接口');
         if (!$msg) {
