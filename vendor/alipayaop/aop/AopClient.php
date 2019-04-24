@@ -449,7 +449,8 @@ class AopClient {
 			$iv = $this->apiVersion;
 		}
 
-
+        dump($this->postCharset);
+        dump($this->format);die;
 		//组装系统参数
 		$sysParams["app_id"] = $this->appId;
 		$sysParams["version"] = $iv;
