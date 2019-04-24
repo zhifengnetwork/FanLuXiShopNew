@@ -182,13 +182,12 @@ class AopClient {
 
 	protected function curl($url, $postFields = null) {
 		$ch = curl_init();
-		echo 11;
-        dump($url);die;
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_FAILONERROR, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 
 		$postBodyString = "";
 		$encodeArray = Array();
