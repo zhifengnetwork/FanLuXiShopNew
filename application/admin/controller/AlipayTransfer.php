@@ -56,6 +56,7 @@ class AlipayTransfer extends Base
             "\"remark\":\"$remark\"" .
             "}");
         $result = $aop->execute($request);
+        dump($result);die;
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
         $resultCode = $result->$responseNode->code;
         if(!empty($resultCode)&&$resultCode == 10000){
