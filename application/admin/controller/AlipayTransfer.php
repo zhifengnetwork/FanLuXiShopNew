@@ -40,11 +40,14 @@ class AlipayTransfer extends Base
         vendor('alipayaop.AopSdk');
         $aop = new \AopClient ();
         $aop->gatewayUrl = 'https://openapi.alipay.com/gateway.do';
-//        $aop->method = 'alipay.fund.trans.toaccount.transfer';
+        $aop->method = 'alipay.fund.trans.toaccount.transfer';
         $aop->appId = $this->appId;
         $aop->rsaPrivateKey = $this->rsaPrivateKey;
         $aop->alipayrsaPublicKey = $this->alipayrsaPublicKey;
         $aop->signType = 'RSA2';
+        $aop->charset = 'utf-8';
+        $aop->timestamp = date("Y/m/d H:i:s",time());
+        $aop->version = 1.0;
         $request = new \AlipayFundTransToaccountTransferRequest ();
 //        $request->setBizContent("{" .
 //            "\"out_biz_no\":\"$out_biz_no\"," .
