@@ -15,7 +15,7 @@ class Weixin
     {
 
 
-
+       write_log('凡露希微信推送消息5555');
         $data = file_get_contents("php://input");
     	if ($data) {
     		$re = $this->xmlToArray($data);
