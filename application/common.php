@@ -42,7 +42,7 @@ function access_token(){
 function write_log($content)
 {
     $content = "[" . date('Y-m-d H:i:s') . "]" . $content . "\r\n";
-    $dir = rtrim(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']), '/') . '/public/logs';
+    $dir = rtrim(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']), '/') . '/logs';
     if (!is_dir($dir)) {
         mkdir($dir, 0777, true);
     }
