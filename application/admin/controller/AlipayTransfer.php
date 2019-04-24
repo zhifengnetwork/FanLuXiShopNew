@@ -41,6 +41,7 @@ class AlipayTransfer extends Base
     public function pay ($out_biz_no,$payee_account,$amount,$payer_show_name,$payee_real_name,$remark) {
         vendor('alipayaop.AopSdk');
         $aop = new \AopClient ();
+        $aop->gatewayUrl = 'https://openapi.alipay.com/gateway.do';
         $aop->appId = $this->appId;
         $aop->rsaPrivateKey = $this->rsaPrivateKey;
         $aop->alipayrsaPublicKey = $this->alipayrsaPublicKey;
