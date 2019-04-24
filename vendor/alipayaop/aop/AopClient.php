@@ -217,24 +217,24 @@ class AopClient {
 				curl_setopt($ch, CURLOPT_POSTFIELDS, substr($postBodyString, 0, -1));
 			}
 		}
-		echo 4;die;
+
 
 
 
 		if ($postMultipart) {
-
+		    echo 5;
 			$headers = array('content-type: multipart/form-data;charset=' . $this->postCharset . ';boundary=' . $this->getMillisecond());
 		} else {
-
+            echo 6;
 			$headers = array('content-type: application/x-www-form-urlencoded;charset=' . $this->postCharset);
 		}
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-
+		echo 7;
 
 
 		$reponse = curl_exec($ch);
-
+        dump($reponse);die;
 		if (curl_errno($ch)) {
 
 			throw new Exception(curl_error($ch), 0);
