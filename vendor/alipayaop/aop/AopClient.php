@@ -509,7 +509,6 @@ class AopClient {
 		try {
 
 			$resp = $this->curl($requestUrl, $apiParams);
-			var_dump($resp);die;
 		} catch (Exception $e) {
 
 			$this->logCommunicationError($sysParams["method"], $requestUrl, "HTTP_ERROR_" . $e->getCode(), $e->getMessage());
@@ -522,7 +521,7 @@ class AopClient {
 
 		// 将返回结果转换本地文件编码
 		$r = iconv($this->postCharset, $this->fileCharset . "//IGNORE", $resp);
-
+        var_dump($r);
 
 
 		$signData = null;
@@ -545,7 +544,7 @@ class AopClient {
 			libxml_disable_entity_loader($disableLibxmlEntityLoader);
 		}
 
-
+        dump($respWellFormed);
 		//返回的HTTP文本不是标准JSON或者XML，记下错误日志
 		if (false === $respWellFormed) {
 			$this->logCommunicationError($sysParams["method"], $requestUrl, "HTTP_RESPONSE_NOT_WELL_FORMED", $resp);
