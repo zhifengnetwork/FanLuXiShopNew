@@ -55,6 +55,7 @@ class AlipayTransfer extends Base
             "\"payee_real_name\":\"$payee_real_name\"," .
             "\"remark\":\"$remark\"" .
             "}");
+        dump($request);
         $result = $aop->execute($request);
         dump($result);die;
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
