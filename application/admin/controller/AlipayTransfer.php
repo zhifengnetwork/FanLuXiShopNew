@@ -18,7 +18,7 @@ class AlipayTransfer extends Base
     {
         $this->configPay();
         //引入单笔转账sdk
-        vendor('alipayaop.AopSdk');
+        vendor('alipaysdk.AopSdk');
     }
 
     private function configPay () {
