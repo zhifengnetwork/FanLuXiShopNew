@@ -40,32 +40,6 @@ function getAdminInfo($admin_id){
 	return D('admin')->where("admin_id", $admin_id)->find();
 }
 
-function tpversion()
-{   
-    //在线升级 
-	$isset_push = session('isset_push');         
-	if(!empty($isset_push))
-		return false;        
-	session('isset_push',1);
-	 
-    error_reporting(0);//关闭所有错误报告
-    $app_path = dirname($_SERVER['SCRIPT_FILENAME']).'/';
-    $version_txt_path = $app_path.'/application/seller/conf/version.php';
-    $curent_version = file_get_contents($version_txt_path);
-    
-    $vaules = array(            
-            'domain'=>$_SERVER['HTTP_HOST'], 
-            'last_domain'=>$_SERVER['HTTP_HOST'], 
-            'key_num'=>$curent_version, 
-            'install_time'=>INSTALL_DATE, 
-            'cpu'=>'0001',
-            'mac'=>'0002',
-            'serial_number'=>SERIALNUMBER,
-            );     
-     $url = "http://service.tp-shop.cn/index.php?m=Home&c=Index&a=user_push&".http_build_query($vaules);
-     stream_context_set_default(array('http' => array('timeout' => 3)));
-     file_get_contents($url);       
-}
  
 /**
  * 面包屑导航  用于后台管理

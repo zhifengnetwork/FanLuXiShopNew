@@ -12,7 +12,6 @@ use think\Db;
 class Index extends Base {
 
     public function index(){
-        $this->pushVersion();        
         $admin_info = getAdminInfo(session('admin_id'));
         $order_amount = M('order')->where("order_status=0 and (pay_status=1 or pay_code='cod')")->count();
         $this->assign('order_amount',$order_amount);
@@ -63,28 +62,7 @@ class Index extends Base {
 		return $sys_info;
     }
     
-    // 在线升级系统
-    public function pushVersion()
-    {            
-        if(!empty($_SESSION['isset_push']))
-            return false;    
-        $_SESSION['isset_push'] = 1;    
-        error_reporting(0);//关闭所有错误报告
-        $app_path = dirname($_SERVER['SCRIPT_FILENAME']).'/';
-        $version_txt_path = $app_path.'/application/admin/conf/version.php';
-        $curent_version = file_get_contents($version_txt_path);
-
-        $vaules = array(            
-                'domain'=>$_SERVER['SERVER_NAME'], 
-                'last_domain'=>$_SERVER['SERVER_NAME'], 
-                'key_num'=>$curent_version, 
-                'install_time'=>INSTALL_DATE,
-                'serial_number'=>SERIALNUMBER,
-         );     
-         $url = "http://service.tp-shop.cn/index.php?m=Home&c=Index&a=user_push&".http_build_query($vaules);
-         stream_context_set_default(array('http' => array('timeout' => 3)));
-         file_get_contents($url);         
-    }
+    
     
     /**
      * ajax 修改指定表数据字段  一般修改状态 比如 是否推荐 是否开启 等 图标切换的

@@ -26,7 +26,6 @@ class Base extends Controller {
         //用户中心面包屑导航
         $navigate_admin = navigate_admin();
         $this->assign('navigate_admin',$navigate_admin);
-        tpversion();
    }
     
     /**
