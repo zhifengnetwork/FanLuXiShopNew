@@ -108,7 +108,7 @@ class AuctionLogic extends Model
      * 竞拍商品立即购买
      * @param $buyGoods
      * @return mixed
-     * @throws TpshopException
+     * @throws 
      */
     public function buyNow($buyGoods){
 

@@ -35,20 +35,10 @@
 
             <dl class="row">
                 <dt class="tit">
-                    <label>会员ID</label>
+                    <label>会员</label>
                 </dt>
                 <dd class="opt">
-                    {$user.user_id}
-                    <p class="notic">会员ID不可修改。</p>
-                </dd>
-            </dl>
-            <dl class="row">
-                <dt class="tit">
-                    <label>会员昵称</label>
-                </dt>
-                <dd class="opt">
-                    {$user.nickname}
-                    <p class="notic">会员昵称不可修改。</p>
+                    ID：{$user.user_id}，昵称：{$user.nickname}
                 </dd>
             </dl>
             <dl class="row">
@@ -82,6 +72,25 @@
                     <input id="qq" name="first_leader" value="{$user.first_leader}" class="input-txt" type="text"  onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')">
                     <span class="err"></span> </dd>
             </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="mobile">剩余多肽面膜数</label>
+                </dt>
+                <dd class="opt">
+                    <input id="mobile"  name="mobile" value="{$user.distribut_free_num}" class="input-txt" type="text">
+                    <span class="err"></span>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="mobile">剩余鱼子面膜数</label>
+                </dt>
+                <dd class="opt">
+                    <input id="mobile"  name="mobile" value="{$user.sign_free_num}" class="input-txt" type="text">
+                    <span class="err"></span>
+                </dd>
+            </dl>
+
             <dl class="row">
                 <dt class="tit">
                     <label for="mobile"><em>*</em>手机号码</label>

@@ -17,7 +17,7 @@ class User extends ApiBase
     {
             $mobile = I('mobile');
             $password1 = I('password');
-            $password = md5('TPSHOP'.$password1);
+            $password = md5('fanluxi'.$password1);
 
             $data = Db::name("users")->where('mobile',$mobile)
             ->field('password,user_id')

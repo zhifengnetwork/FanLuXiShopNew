@@ -31,7 +31,7 @@ class Log
     const INFO   = 'info';
     const SQL    = 'sql';
     const NOTICE = 'notice';
-    const ALERT  = 'alert';
+    // const ALERT  = 'alert';
     const DEBUG  = 'debug';
 
     /**

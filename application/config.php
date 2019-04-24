@@ -373,8 +373,8 @@ return [
     'HTML_CACHE_ARR'=> [
     ['mca'=>'home_Goods_goodsInfo','p'=>['id']],  
     ['mca'=>'home_Index_index'],  // 缓存首页静态页面
-    ['mca'=>'home_Goods_ajaxComment','p'=>['goods_id','commentType','p']],  // 缓存评论静态页面 http://www.tpshop2.0.com/index.php?m=Home&c=Goods&a=ajaxComment&goods_id=142&commentType=1&p=1
-    ['mca'=>'home_Goods_ajax_consult','p'=>['goods_id','consult_type','p']],  // 缓存咨询静态页面 http://www.tpshop2.0.com/index.php?m=Home&c=Goods&a=ajax_consult&goods_id=142&consult_type=0&p=2
+    ['mca'=>'home_Goods_ajaxComment','p'=>['goods_id','commentType','p']],  // 缓存评论静态页面 index.php?m=Home&c=Goods&a=ajaxComment&goods_id=142&commentType=1&p=1
+    ['mca'=>'home_Goods_ajax_consult','p'=>['goods_id','consult_type','p']], // 缓存咨询静态页面 index.php?m=Home&c=Goods&a=ajax_consult&goods_id=142&consult_type=0&p=2
     ],
 
     /*订单操作*/

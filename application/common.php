@@ -254,7 +254,7 @@ function agent_performance_log($user_id,$order_amount,$order_id){
 }
 
 /**
- * tpshop检验登陆
+ * 检验登陆
  * @param
  * @return bool
  */
@@ -1972,7 +1972,7 @@ function provingReceive($user, $type, $num = 1)
             return array('status' => 0, 'msg' => '超过领取数量，目前只可领取'.$user['distribut_free_num'].'件！', 'result' => array());
             return $result;
         }
-        
+
         if ($num > $levelGetNum) {
             $result = array('status' => 1, 'msg' => '您当前等级可领'.$levelGetNum.'盒，已超过领取次数', 'result' => array());
         }

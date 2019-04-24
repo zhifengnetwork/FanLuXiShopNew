@@ -47,7 +47,7 @@ class Payment extends MobileBase
     }
 
     /**
-     * tpshop 提交支付方式
+     * 提交支付方式
      */
     public function getCode()
     {
