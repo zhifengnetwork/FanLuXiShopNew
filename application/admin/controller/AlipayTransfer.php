@@ -31,7 +31,7 @@ class AlipayTransfer extends Base
         $payee_account = '13226785330';
         $amount = '1.0';
         $payer_show_name = '上海交通卡退款';
-        $payee_real_name = '沙箱环境';
+        $payee_real_name = '莫敏宏';
         $remark = '沙箱环境';
         $this->pay($out_biz_no,$payee_account,$amount,$payer_show_name,$payee_real_name,$remark);
     }
