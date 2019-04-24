@@ -213,9 +213,7 @@ class AopClient {
 			curl_setopt($ch, CURLOPT_POST, true);
 			if ($postMultipart) {
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $encodeArray);
-				var_dump('1',$encodeArray);
 			} else {
-			    var_dump('2',substr($postBodyString, 0, -1));
 				curl_setopt($ch, CURLOPT_POSTFIELDS, substr($postBodyString, 0, -1));
 			}
 		}
@@ -227,7 +225,6 @@ class AopClient {
 
 			$headers = array('content-type: application/x-www-form-urlencoded;charset=' . $this->postCharset);
 		}
-		var_dump('3',$headers);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 
@@ -244,7 +241,7 @@ class AopClient {
 				throw new Exception($reponse, $httpStatusCode);
 			}
 		}
-
+        dump($reponse);die;
 		curl_close($ch);
 		return $reponse;
 	}
