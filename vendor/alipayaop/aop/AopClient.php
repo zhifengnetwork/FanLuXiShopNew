@@ -508,7 +508,11 @@ class AopClient {
 
 		//发起HTTP请求
 		try {
+            dump($requestUrl);
+            dump($apiParams);
 			$resp = $this->curl($requestUrl, $apiParams);
+			echo 333;
+            dump($resp);die;
 		} catch (Exception $e) {
 
 			$this->logCommunicationError($sysParams["method"], $requestUrl, "HTTP_ERROR_" . $e->getCode(), $e->getMessage());
