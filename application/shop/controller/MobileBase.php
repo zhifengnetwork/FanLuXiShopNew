@@ -118,7 +118,7 @@ class MobileBase extends Controller {
                         //    }
                         //  }
                     //} else {
-                      
+                    
                         //新的，老的
                         $data = $logic->thirdLogin($wxuser);
                      
@@ -133,6 +133,8 @@ class MobileBase extends Controller {
                         $cartLogic = new CartLogic();
                         $cartLogic->setUserId($data['result']['user_id']);
                         $cartLogic->doUserLoginHandle();  //用户登录后 需要对购物车 一些操作
+                    } elseif ($data['status'] == -1) {
+                        header('Location:/shop/user/logout');
                     }
                 }
             }else{ 
