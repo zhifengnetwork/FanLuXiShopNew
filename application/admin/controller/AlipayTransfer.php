@@ -40,11 +40,14 @@ class AlipayTransfer extends Base
 
     public function pay ($out_biz_no,$payee_account,$amount,$payer_show_name,$payee_real_name,$remark) {
         $aop = new \AopClient ();
+        $aop->gatewayUrl = 'https://openapi.alipay.com/gateway.do';
         $aop->appId = $this->appId;
         $aop->rsaPrivateKey = $this->rsaPrivateKey;
         $aop->alipayrsaPublicKey = $this->alipayrsaPublicKey;
         $aop->apiVersion = '1.0';
         $aop->signType = 'RSA2';
+        $aop->postCharset='utf-8';
+        $aop->format='json';
         $request = new \AlipayFundTransToaccountTransferRequest ();
         $request->setBizContent("{" .
             "\"out_biz_no\":\"$out_biz_no\"," .
@@ -55,16 +58,13 @@ class AlipayTransfer extends Base
             "\"payee_real_name\":\"$payee_real_name\"," .
             "\"remark\":\"$remark\"" .
             "}");
-        dump($request);
         $result = $aop->execute($request);
-        dump($result);die;
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
         $resultCode = $result->$responseNode->code;
         if(!empty($resultCode)&&$resultCode == 10000){
             echo "成功";
         } else {
-            dump($resultCode);die;
-//            return $this->query($order_num);
+            echo "失败";
         }
     }
 }
