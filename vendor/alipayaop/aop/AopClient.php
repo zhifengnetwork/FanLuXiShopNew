@@ -508,7 +508,8 @@ class AopClient {
 
 		//发起HTTP请求
 		try {
-            dump($requestUrl);
+		    echo 121212;
+            dump('$requestUrl',$requestUrl);
             dump($apiParams);
 			$resp = $this->curl($requestUrl, $apiParams);
 			echo 333;
