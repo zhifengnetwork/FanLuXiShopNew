@@ -1091,7 +1091,7 @@ class WechatUtil extends WxCommon
                 share_deal_after($xiaji,$first_leader);
 
                 $leader_nickname =  Db::name('users')->where('user_id', $first_leader)->value('nickname');
-                $result_str = $this->createReplyMsgOfText($msg['FromUserName'], $to, "您扫了[ $leader_nickname ]的分享，成功关注 $store_name !");
+                $result_str = $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], "您扫了[ $leader_nickname ]的分享，成功关注 $store_name !");
 
               }
               if(!$user_s['old_openid'])
