@@ -510,7 +510,7 @@ class AopClient {
 		try {
 
 			$resp = $this->curl($requestUrl, $apiParams);
-            header("Content-Type: text/html;charset=utf-8");
+            header("Content-Type: text/html;charset=gb2312");
 			var_dump($resp);die;
 		} catch (\Exception $e) {
 
