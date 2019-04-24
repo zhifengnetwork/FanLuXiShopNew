@@ -228,7 +228,7 @@ class AopClient {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 
-        var_dump(curl_error($ch));die;
+        
 
 		$reponse = curl_exec($ch);
 
