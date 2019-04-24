@@ -160,7 +160,8 @@ class AlipayTransfer extends Base
         if(!empty($resultCode)&&$resultCode == 10000){
             echo "成功";
         } else {
-            return $this->query($order_num);
+            dump($resultCode);die;
+//            return $this->query($order_num);
         }
     }
 }
