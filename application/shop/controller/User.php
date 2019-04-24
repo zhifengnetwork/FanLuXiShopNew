@@ -81,8 +81,6 @@ class User extends MobileBase
             'WAITRECEIVE' => '待收货', //订单查询状态 待收货
             'WAITCCOMMENT' => '待评价', //订单查询状态 待评价
         );
-        $this->update_receipt_num(); // 更新每月免费领取次数
-        $this->get_curr_time_section(); // VIP更新每天免费领取次数
         $this->assign('order_status_coment', $order_status_coment);
     }
 
@@ -2171,65 +2169,6 @@ class User extends MobileBase
         $this->assign('nickname',$nickname);
 
         return $this->fetch();
-    }
-
-    //累计免费领取次数
-    public function get_curr_time_section()
-    {
-        $tomorrow = strtotime(date("Y-m-d",strtotime("+1 day")));//明天
-        $yesterday = date("Y-m-d",strtotime("-1 day"));//昨天
-        $current = time();
-        
-        $timeBegin = strtotime($yesterday."00:00".":00");
-        $timeEnd = strtotime($yesterday."23:59".":59");
-
-        $user = M('Users')->where('user_id',$this->user_id)->find();
-
-        // $order = DB::name('OrderSignReceive')->where(['uid'=>$this->user_id, 'type'=>2])->where('addend_time','>=',$timeBegin)->where('addend_time','<=',$timeEnd)->find();
-        //最后更新‘统计’时间
-        if ($current > $user['count_time'] && $user['level'] == 2 /*&& $order != null*/){
-
-            $num = M('UserLevel')->where('level',$this->user['level'])->value('receive_num');
-
-            $data['count_time'] = $tomorrow; //更新‘统计’时间
-            $data['distribut_free_num'] = $num; //等级次数
-            M('Users')->where('user_id',$this->user_id)->save($data);
-        }
-
-    }
-
-    //每月更新免费领取次数
-    public function update_receipt_num()
-    {
-        $timeBegin = date('Y-m-01 00:00:00',strtotime(date('Y',time()).'-'.(date('m',time())-1).'-01')); //上月第一天
-        $timeEnd = date("Y-m-d 23:59:59",strtotime(-date('d').'day')); //上月最后一天
-        $end_time = date( "Y-m-d H:i:s", mktime ( 23, 59, 59, date ( "m" ), date ( "t" ), date ( "Y" ) ) );// 本月最后一天
-
-        $current = time();
-        $timeBegin = strtotime($timeBegin);
-        $timeEnd = strtotime($timeEnd);
-        $end_time = strtotime($end_time);
-
-        $user = M('Users')->where('user_id',$this->user_id)->find();
-
-        //最后更新‘统计’时间
-        if ($current > $user['count_time'] && $user['level'] >= 3){
-            $order = Db::name('OrderSignReceive')->where(['uid'=> $this->user_id])->where('addend_time','>=',$timeBegin)->where('addend_time','<=',$timeEnd)->sum('goods_num');
-
-            $num = M('UserLevel')->field('get_num,receive_num')->where('level',$this->user['level'])->find();
-
-            $data['count_time'] = $end_time; //更新‘统计’时间
-            
-            // if ($order > 0) {
-                $data['distribut_free_num'] = $num['receive_num']; //免费领取
-                $data['sign_free_num'] = $num['get_num']; // 店主以上领取
-            // }
-
-            $user['time'] = time();
-            M('clearLog')->insert($user); //记录清零前日志
-            M('Users')->where('user_id',$this->user_id)->save($data);
-        }
-
     }
 
 

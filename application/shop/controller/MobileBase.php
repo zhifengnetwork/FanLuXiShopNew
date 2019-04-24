@@ -132,6 +132,8 @@ class MobileBase extends Controller {
                         M('cart')->where("session_id" ,$this->session_id)->save(array('user_id'=>$data['result']['user_id']));
                         $cartLogic = new CartLogic();
                         $cartLogic->setUserId($data['result']['user_id']);
+                        $logic->update_receipt_num(); // 更新每月免费领取次数
+                        $logic->get_curr_time_section(); // VIP更新每天免费领取次数
                         $cartLogic->doUserLoginHandle();  //用户登录后 需要对购物车 一些操作
                     } elseif ($data['status'] == -1) {
                         header('Location:/shop/user/logout');
