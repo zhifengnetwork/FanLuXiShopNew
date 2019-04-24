@@ -38,7 +38,7 @@ class AlipayTransfer extends Base
     }
 
     public function pay ($out_biz_no,$payee_account,$amount,$payer_show_name,$payee_real_name,$remark) {
-        vendor('alipaysdk.AopSdk');
+        vendor('alipayaop.AopSdk');
         echo 111133;die;
         $aop = new \AopClient ();
         echo 1111;die;
