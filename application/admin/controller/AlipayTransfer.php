@@ -44,9 +44,6 @@ class AlipayTransfer extends Base
         $aop->rsaPrivateKey = $this->rsaPrivateKey;
         $aop->alipayrsaPublicKey = $this->alipayrsaPublicKey;
         $aop->signType = 'RSA2';
-        dump($this->appId );
-        dump($this->rsaPrivateKey );
-        dump($this->alipayrsaPublicKey );
         $request = new \AlipayFundTransToaccountTransferRequest ();
 //        $request->setBizContent("{" .
 //            "\"out_biz_no\":\"$out_biz_no\"," .
@@ -67,7 +64,6 @@ class AlipayTransfer extends Base
             "\"remark\":\"'".$remark."'\"" .
             "}");
         $result = $aop->execute($request);
-        phpinfo();die;
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
         $resultCode = $result->$responseNode->code;
         if(!empty($resultCode)&&$resultCode == 10000){
