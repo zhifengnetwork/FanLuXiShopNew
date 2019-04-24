@@ -49,14 +49,23 @@ class AlipayTransfer extends Base
         $aop->postCharset='utf-8';
         $aop->format='json';
         $request = new \AlipayFundTransToaccountTransferRequest ();
-        $request->setBizContent("{" .
-            "\"out_biz_no\":\"$out_biz_no\"," .
+//        $request->setBizContent("{" .
+//            "\"out_biz_no\":\"$out_biz_no\"," .
+//            "\"payee_type\":\"ALIPAY_LOGONID\"," .
+//            "\"payee_account\":\"$payee_account\"," .
+//            "\"amount\":\"$amount\"," .
+//            "\"payer_show_name\":\"$payer_show_name\"," .
+//            "\"payee_real_name\":\"$payee_real_name\"," .
+//            "\"remark\":\"$remark\"" .
+//            "}");
+        $request ->setBizContent("{" .
+            "\"out_biz_no\":\"'".$out_biz_no."'\"," .
             "\"payee_type\":\"ALIPAY_LOGONID\"," .
-            "\"payee_account\":\"$payee_account\"," .
-            "\"amount\":\"$amount\"," .
-            "\"payer_show_name\":\"$payer_show_name\"," .
-            "\"payee_real_name\":\"$payee_real_name\"," .
-            "\"remark\":\"$remark\"" .
+            "\"payee_account\":\"'".$payee_account."'\"," .
+            "\"amount\":\"'".$amount."'\"," .
+            "\"payer_show_name\":\"墨家互娱\"," .
+            "\"payee_real_name\":\"'".$payee_real_name."'\"," .
+            "\"remark\":\"'".$remark."'\"" .
             "}");
         dump($request);
         $result = $aop->execute($request);
