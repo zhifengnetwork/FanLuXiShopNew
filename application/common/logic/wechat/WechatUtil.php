@@ -1064,7 +1064,7 @@ class WechatUtil extends WxCommon
 
         
         if($msg=='1' || $msg[$key] == 'LOCATION') return;
-        /*
+        
          $openid =$msg['FromUserName'];
           $first_leader = $msg['EventKey'];
          if(!empty($first_leader))
@@ -1079,19 +1079,33 @@ class WechatUtil extends WxCommon
                   {
                     Db::name('users')->where('openid',$openid)->update(['first_leader'=>$first_leader]);
                   }
-              }
-              //if(!$user_s['old_openid'])
-              //{
-                if($user_s['is_code']==0)
-              {
-                Db::name('users')->where('openid',$openid)->update(['is_code'=>1]);
-              }
-              
+                   /*********再次关注发送信息***************/
+                //有分享
+                //有上级
+                $nickname =  Db::name('users')->where('user_id', $first_leader)->value('nickname');
+                $to1 =  Db::name('users')->where('user_id', $first_leader)->value('openid');
+                $result_str = $this->createReplyMsgOfText($msg['FromUserName'], $to1, "您的一级创客 [ $nickname ] 成功关注了本公众号 \n：");
 
-             // }
+                //有分享
+                $xiaji = Db::name('oauth_users')->where('openid', $to)->value('user_id');
+                share_deal_after($xiaji,$first_leader);
+
+                $leader_nickname =  Db::name('users')->where('user_id', $first_leader)->value('nickname');
+                $result_str = $this->createReplyMsgOfText($msg['FromUserName'], $to, "您扫了[ $leader_nickname ]的分享，成功关注 $store_name !");
+
+              }
+              if(!$user_s['old_openid'])
+              {
+                  if($user_s['is_code']==0)
+                  {
+                    Db::name('users')->where('openid',$openid)->update(['is_code'=>1]);
+                  }
+              
+              }
+
               
           
-         }*/
+         }
         //Db::name('users')->where('user_id=17421400')->update(['first_leader'=>1235]);
         $return= $this->createReplyMsgOfText($msg['ToUserName'], $msg['FromUserName'], '你已关注公众号');
 
