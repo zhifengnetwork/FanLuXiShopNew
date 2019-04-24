@@ -228,6 +228,7 @@ class AopClient {
 
 
 
+
 		$reponse = curl_exec($ch);
 
 		if (curl_errno($ch)) {
@@ -521,7 +522,7 @@ class AopClient {
 
 		// 将返回结果转换本地文件编码
 		$r = iconv($this->postCharset, $this->fileCharset . "//IGNORE", $resp);
-        var_dump('11',$r);
+
 
 
 		$signData = null;
@@ -543,8 +544,8 @@ class AopClient {
 			}
 			libxml_disable_entity_loader($disableLibxmlEntityLoader);
 		}
-		echo 666;
-        dump('22',$respWellFormed);
+
+
 		//返回的HTTP文本不是标准JSON或者XML，记下错误日志
 		if (false === $respWellFormed) {
 			$this->logCommunicationError($sysParams["method"], $requestUrl, "HTTP_RESPONSE_NOT_WELL_FORMED", $resp);

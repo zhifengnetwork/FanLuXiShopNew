@@ -27,7 +27,7 @@ class AlipayTransfer extends Base
     }
 
     public function index () {
-        $out_biz_no = time();
+        $out_biz_no = time().range(1000,9999);;
         $payee_account = '13226785330';
         $amount = '0.1';
         $payer_show_name = '上海交通卡退款';
@@ -68,7 +68,7 @@ class AlipayTransfer extends Base
             "\"remark\":\"'".$remark."'\"" .
             "}");
         $result = $aop->execute($request);
-        var_dump('123',$result);
+        var_dump('123',$result);die;
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
         dump($responseNode);
         $resultCode = $result->$responseNode->code;
