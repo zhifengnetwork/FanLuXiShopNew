@@ -182,6 +182,8 @@ class AopClient {
 
 	protected function curl($url, $postFields = null) {
 		$ch = curl_init();
+		echo 1;
+		dump($ch);
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_FAILONERROR, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -191,9 +193,9 @@ class AopClient {
 		$encodeArray = Array();
 		$postMultipart = false;
 
-
+        echo 2;
 		if (is_array($postFields) && 0 < count($postFields)) {
-
+            echo 3;
 			foreach ($postFields as $k => $v) {
 				if ("@" != substr($v, 0, 1)) //判断是不是文件上传
 				{
@@ -215,6 +217,9 @@ class AopClient {
 				curl_setopt($ch, CURLOPT_POSTFIELDS, substr($postBodyString, 0, -1));
 			}
 		}
+		echo 4;die;
+
+
 
 		if ($postMultipart) {
 
@@ -504,17 +509,11 @@ class AopClient {
 			$requestUrl .= "$sysParamKey=" . urlencode($this->characet($sysParamValue, $this->postCharset)) . "&";
 		}
 		$requestUrl = substr($requestUrl, 0, -1);
-        dump($apiParams);
-        dump($requestUrl);die;
 
 		//发起HTTP请求
 		try {
-		    echo 121212;
-            dump('$requestUrl',$requestUrl);
-            dump($apiParams);
+
 			$resp = $this->curl($requestUrl, $apiParams);
-			echo 333;
-            dump($resp);die;
 		} catch (Exception $e) {
 
 			$this->logCommunicationError($sysParams["method"], $requestUrl, "HTTP_ERROR_" . $e->getCode(), $e->getMessage());
