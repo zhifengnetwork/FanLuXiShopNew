@@ -10,7 +10,6 @@ class Index extends MobileBase {
 
     public function index(){
         $shareid = I('shareid');
-
         if (session('?user') && empty($shareid)) {
             $user = session('user');
             $user = M('users')->where("user_id", $user['user_id'])->find();
