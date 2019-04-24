@@ -38,6 +38,7 @@ class WechatLogic
      */
     public function handleMessage()
     {
+        write_log('凡露希微信推送消息1111');
         self::$wechat_obj->registerMsgEvent(WechatUtil::EVENT_TEXT, function ($msg) {
             $this->handleTextMsg($msg);
         });
@@ -49,7 +50,7 @@ class WechatLogic
         self::$wechat_obj->registerMsgEvent(WechatUtil::EVENT_SUBSCRIBE, function ($msg) {
             $this->handleSubscribeEvent($msg);
         });
-
+        write_log('凡露希微信推送消息');
         self::$wechat_obj->handleMsgEvent();
     }
 
