@@ -27,15 +27,13 @@ class AlipayTransfer extends Base
     }
 
     public function index () {
-        $str = 'https://openapi.alipayaop.com/gateway.do?app_id=2019041663926129&version=1.0&format=json&sign_type=RSA2&method=alipayaop.fund.trans.toaccount.transfer&timestamp=2019-04-25+00%3A27%3A40&auth_token=&alipay_sdk=alipayaop-sdk-php-20180705&terminal_type=&terminal_info=&prod_code=&notify_url=&charset=UTF-8&app_auth_token=&sign=xp0jud1d1S%2BZ7bOFy6d6tppQV0blbRWi9adai%2BRLArfHg04C2QAFb3xT6BNkbPjor0OP8WmyMhPFj2fd2UfCmrGcGcPinUrBBxmwmNAFdcjPeI8E261Fuk8ML7cpPkoWRmCXM95Agwt6t6vZei1djzw96C3icqynvrZCwOGIDGKOMmfJWkLQf11PzuuVKGASeflOzHJNfK3jps2Hze0AJVRxToDS4C0VBeYZyVn3sCuyb%2BwzKv4HHZNKmOOgwQEvZj4YY%2Fs0xqyBs4DfZJcGoxBiKV6dB5agCXYHR9z%2BpqiF1MsHx%2FxH7xLWjZtReF4q%2F4WGJIWdk1dFACdkWiQkzw%3D%3D';
         $out_biz_no = time();
         $payee_account = '13226785330';
-        $amount = 0.1;
+        $amount = '0.1';
         $payer_show_name = '上海交通卡退款';
         $payee_real_name = '沙箱环境';
         $remark = '沙箱环境';
-        $res = $this->pay($out_biz_no,$payee_account,$amount,$payer_show_name,$payee_real_name,$remark);
-        dump($res);die;
+        $this->pay($out_biz_no,$payee_account,$amount,$payer_show_name,$payee_real_name,$remark);
     }
 
     public function pay ($out_biz_no,$payee_account,$amount,$payer_show_name,$payee_real_name,$remark) {
@@ -66,7 +64,7 @@ class AlipayTransfer extends Base
             "\"remark\":\"'".$remark."'\"" .
             "}");
         $result = $aop->execute($request);
-        var_dump($result);
+        var_dump('123',$result);
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
         dump($responseNode);
         $resultCode = $result->$responseNode->code;
