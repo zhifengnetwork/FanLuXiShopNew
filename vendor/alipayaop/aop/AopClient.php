@@ -182,6 +182,8 @@ class AopClient {
 
 	protected function curl($url, $postFields = null) {
 		$ch = curl_init();
+		echo 11;
+        dump($url);die;
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_FAILONERROR, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -227,7 +229,7 @@ class AopClient {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 
-        var_dump(curl_error($ch));
+        var_dump(curl_error($ch));die;
 
 		$reponse = curl_exec($ch);
 
