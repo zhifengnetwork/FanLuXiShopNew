@@ -38,7 +38,7 @@ class WechatLogic
      */
     public function handleMessage()
     {
-        write_log('凡露希微信推送消息1111');
+
         self::$wechat_obj->registerMsgEvent(WechatUtil::EVENT_TEXT, function ($msg) {
             $this->handleTextMsg($msg);
         });
@@ -50,7 +50,7 @@ class WechatLogic
         self::$wechat_obj->registerMsgEvent(WechatUtil::EVENT_SUBSCRIBE, function ($msg) {
             $this->handleSubscribeEvent($msg);
         });
-        write_log('凡露希微信推送消息');
+
         self::$wechat_obj->handleMsgEvent();
     }
 
@@ -170,9 +170,9 @@ class WechatLogic
         if($first_leader > 0){
             //有分享
             //有上级
-           // $nickname =  Db::name('users')->where('user_id', $first_leader)->value('nickname');
-            //$to1 =  Db::name('users')->where('user_id', $first_leader)->value('openid');
-            //$result_str = self::$wechat_obj->createReplyMsgOfText($from, $to1, "您的一级创客 [ $nickname ] 成功关注了本公众号 \n：".$msg);
+            $nickname =  Db::name('users')->where('user_id', $first_leader)->value('nickname');
+            $to1 =  Db::name('users')->where('user_id', $first_leader)->value('openid');
+            $result_str = self::$wechat_obj->createReplyMsgOfText($from, $to1, "您的一级创客 [ $nickname ] 成功关注了本公众号 \n：".$msg);
 
             //有分享
             $xiaji = Db::name('oauth_users')->where('openid', $$to)->value('user_id');
