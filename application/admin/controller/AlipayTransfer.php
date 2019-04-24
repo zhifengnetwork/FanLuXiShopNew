@@ -29,7 +29,7 @@ class AlipayTransfer extends Base
     public function index () {
         $out_biz_no = time().range(1000,9999);;
         $payee_account = '13226785330';
-        $amount = '0.1';
+        $amount = '1.0';
         $payer_show_name = '上海交通卡退款';
         $payee_real_name = '沙箱环境';
         $remark = '沙箱环境';
