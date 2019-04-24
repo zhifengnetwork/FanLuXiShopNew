@@ -253,6 +253,8 @@ class AopClient {
 //		curl_close($ch);
 
         $reponse = httpRequest($url, "POST", $postFields );
+        dump($url);
+        dump($postFields);
         dump($reponse);die;
 		return $reponse;
 	}
