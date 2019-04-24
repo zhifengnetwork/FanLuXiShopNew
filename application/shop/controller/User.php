@@ -58,6 +58,8 @@ class User extends MobileBase
                 $this->user['head_pic'] = $head_pic;
             }
 
+            $this->update_receipt_num(); // 更新每月免费领取次数
+            $this->get_curr_time_section(); // VIP更新每天免费领取次数
             $this->assign('user', $this->user); //存储用户信息0
         }
         $nologin = array(
@@ -81,8 +83,6 @@ class User extends MobileBase
             'WAITRECEIVE' => '待收货', //订单查询状态 待收货
             'WAITCCOMMENT' => '待评价', //订单查询状态 待评价
         );
-        $this->update_receipt_num(); // 更新每月免费领取次数
-        $this->get_curr_time_section(); // VIP更新每天免费领取次数
         $this->assign('order_status_coment', $order_status_coment);
     }
 
