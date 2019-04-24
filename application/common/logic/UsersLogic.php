@@ -346,8 +346,9 @@ class UsersLogic extends Model
 			
 		} else {
 			$map['head_pic'] = !empty($data['head_pic']) ? $data['head_pic'] : '/public/images/icon_goods_thumb_empty_300.png';
+
 			//查找是否已有老数据
-			$old_user = Db::name('users')->where(['openid'=>'','old_openid'=>$data['old_openid']])->find();
+			$old_user = Db::name('users')->where(['openid'=>'','old_openid'=>$data['old_openid']])->where('old_openid','<>','')->find();
 
 			if($old_user){
 				//更新老数据并删除新注册的数据
