@@ -269,7 +269,7 @@
         if(!checkEmail(email) && email != ''){
             error += "邮箱地址有误\n";
         }
-        if(!checkMobile(mobile) && mobile != ''){
+        if(!checkMobile(mobile) && (mobile != '') && (mobile != 0)){
             error += "手机号码填写有误\n";
         }
         if(error){
