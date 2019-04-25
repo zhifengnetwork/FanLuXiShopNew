@@ -75,6 +75,7 @@ class AlipayTransfer extends Base
             echo "成功";
         } else {
             return json($responseNode);
+            
             echo "失败";
         }
     }
