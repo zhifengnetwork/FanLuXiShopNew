@@ -68,7 +68,7 @@ class AlipayTransfer extends Base
                 echo "失败";
             }
         } catch (\Exception $e) {
-            dump($e);
+            dump($e->getMessage());
             exit();
         }
 
