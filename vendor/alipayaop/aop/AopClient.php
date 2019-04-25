@@ -547,14 +547,11 @@ class AopClient {
 
 		//返回的HTTP文本不是标准JSON或者XML，记下错误日志
 		if (false === $respWellFormed) {
-		    echo 123;
 			$this->logCommunicationError($sysParams["method"], $requestUrl, "HTTP_RESPONSE_NOT_WELL_FORMED", $resp);
 			return false;
 		}
-        echo 234;
 		// 验签
 		$this->checkResponseSign($request, $signData, $resp, $respObject);
-        echo 345;
 		// 解密
 		if (method_exists($request,"getNeedEncrypt") &&$request->getNeedEncrypt()){
 
@@ -577,7 +574,6 @@ class AopClient {
 
 			}
 		}
-        echo 456;
 		return $respObject;
 	}
 
@@ -1048,11 +1044,12 @@ class AopClient {
 						$checkResult = $this->verify($signData->signSourceData, $signData->sign, $this->alipayPublicKey, $this->signType);
 
 						if (!$checkResult) {
+						    echo 11111;
 							throw new Exception("check sign Fail! [sign=" . $signData->sign . ", signSourceData=" . $signData->signSourceData . "]");
 						}
 
 					} else {
-
+                        echo 22222;
 						throw new Exception("check sign Fail! [sign=" . $signData->sign . ", signSourceData=" . $signData->signSourceData . "]");
 					}
 

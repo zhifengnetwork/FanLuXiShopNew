@@ -49,15 +49,6 @@ class AlipayTransfer extends Base
         $aop->timestamp = date("Y/m/d H:i:s",time());
         $aop->version = 1.0;
         $request = new \AlipayFundTransToaccountTransferRequest ();
-//        $request->setBizContent("{" .
-//            "\"out_biz_no\":\"$out_biz_no\"," .
-//            "\"payee_type\":\"ALIPAY_LOGONID\"," .
-//            "\"payee_account\":\"$payee_account\"," .
-//            "\"amount\":\"$amount\"," .
-//            "\"payer_show_name\":\"$payer_show_name\"," .
-//            "\"payee_real_name\":\"$payee_real_name\"," .
-//            "\"remark\":\"$remark\"" .
-//            "}");
         $request ->setBizContent("{" .
             "\"out_biz_no\":\"'".$out_biz_no."'\"," .
             "\"payee_type\":\"ALIPAY_LOGONID\"," .
@@ -70,8 +61,6 @@ class AlipayTransfer extends Base
         $result = $aop->execute($request);
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
         $resultCode = $result->$responseNode->code;
-        echo 111;
-        dump($resultCode);die;
         if(!empty($resultCode)&&$resultCode == 10000){
             echo "成功";
         } else {
