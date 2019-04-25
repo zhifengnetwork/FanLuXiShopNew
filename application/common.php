@@ -1958,7 +1958,7 @@ function provingReceive($user, $type, $num = 1)
             
             //扫码只可领取1次
             if (!empty($data)) {
-                return array('status' => 1, 'msg' => '已超出领取次数', 'result' => array());
+                return array('status' => 0, 'msg' => '已超出领取次数', 'result' => array());
             }else{
                 return array('status' => 2, 'msg' => '可领取', 'result' => array());
             }
@@ -1974,7 +1974,7 @@ function provingReceive($user, $type, $num = 1)
         }
 
         if ($num > $levelGetNum) {
-            return array('status' => 1, 'msg' => '您当前等级可领'.$levelGetNum.'盒，已超过领取次数', 'result' => array());
+            return array('status' => 0, 'msg' => '您当前等级可领'.$levelGetNum.'盒，已超过领取次数', 'result' => array());
         }
     }
 
