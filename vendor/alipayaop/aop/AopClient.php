@@ -1044,12 +1044,12 @@ class AopClient {
 						$checkResult = $this->verify($signData->signSourceData, $signData->sign, $this->alipayPublicKey, $this->signType);
 
 						if (!$checkResult) {
-							//throw new Exception("check sign Fail! [sign=" . $signData->sign . ", signSourceData=" . $signData->signSourceData . "]");
+							throw new Exception("check sign Fail! [sign1=" . $signData->sign . ", signSourceData=" . $signData->signSourceData . "]");
 						}
 
 					} else {
 
-						//throw new Exception("check sign Fail! [sign=" . $signData->sign . ", signSourceData=" . $signData->signSourceData . "]");
+						throw new Exception("check sign Fail! [sign2=" . $signData->sign . ", signSourceData=" . $signData->signSourceData . "]");
 					}
 
 				}
