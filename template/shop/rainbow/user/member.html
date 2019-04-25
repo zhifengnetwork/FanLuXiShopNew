@@ -37,16 +37,17 @@
                 </p>
             </div>
         </div>
-           <div class="wtf_main vid_cart">
-                <a href="#" class="id-cart">上级ID：{$leader.user_id}</a>
-           </div>  
-
-
                <empty name="leader">
+                    <div class="wtf_main vid_cart">
+                        <a href="#" class="id-cart">上级ID：无</a>
+                   </div>  
                     <div class="wtf_main cart-up">
-                    <span class="vid_up " style="font-size: .14rem; vertical-align: middle; font-weight: normal; margin-left: .21333rem;">上级：无上级</span>
+                        <span class="vid_up " style="font-size: .14rem; vertical-align: middle; font-weight: normal; margin-left: .21333rem;">上级名称：无上级</span>
                     </div>
                 <else/>
+                    <div class="wtf_main vid_cart">
+                        <a href="#" class="id-cart">上级ID：{$leader.user_id}</a>
+                   </div>  
                     <div class="wtf_main cart-up">
                     <span style="font-size: .14rem; vertical-align: middle; font-weight: normal; margin-left: .21333rem;">上级名称： {$leader.nickname}</span>
                     </div>
