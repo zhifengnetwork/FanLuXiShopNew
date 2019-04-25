@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 
+use app\common\logic\wechat\ErrorCode;
 use think\Db;
 class AlipayTransfer extends Base
 {
@@ -18,6 +19,16 @@ class AlipayTransfer extends Base
     {
         $this->configPay();
         //引入单笔转账sdk
+    }
+
+    public function test () {
+        $str = 'check sign Fail! [sign=kSB3Vbj58TfD+zTrZyHtmPpWlYnallMGygzFtK/IyzDBr1F9Jq/y3FEuRDcPj8l5XEuD3u8AonSGrr7BrmjtyhpAlRkbnuqwwmfSPMirgsY0zsABq1WemJFxA340FxqQRkpzf5T77Rql5sgKc+jY0hXPq5I/OyM4/V6Bphjgn215lKoR/A2CLowNBurzPYzXteRd0iqYk1sqtP1U7V2XyX6zXMwzGlRi2RNfMRMG6hoBZeRan7b9Ei7ILZfZJm5s/PSYe71A5+SFSi6PC3WjjSIAlflLjftBPVZXLtv6ccAM+6P6P4fbl7JWU09HjpWcplyFSjgGhAYKvCZNvlrdKw==, signSourceData={"code":"40006","msg":"Insufficient Permissions","sub_code":"isv.insufficient-isv-permissions","sub_msg":"ISV权限不足，建议在开发者中心检查应用是否上线"}]';
+        $arr = explode('signSourceData=',$str);
+        if (isset($arr[1])){
+            $json = explode(']',$arr[1]);
+            $res = json_decode($json[0]);
+            dump($res);
+        }
     }
 
     private function configPay () {
@@ -45,7 +56,7 @@ class AlipayTransfer extends Base
         $aop->rsaPrivateKey = $this->rsaPrivateKey;
         $aop->alipayrsaPublicKey = $this->alipayrsaPublicKey;
         $aop->signType = 'RSA2';
-        $aop->charset = 'utf-8';
+        $aop->charset = 'UTF-8';
         $aop->timestamp = date("Y/m/d H:i:s",time());
         $aop->version = 1.0;
         $request = new \AlipayFundTransToaccountTransferRequest ();
