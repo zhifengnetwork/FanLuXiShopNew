@@ -35,7 +35,7 @@ class AlipayFundTransToaccountTransferRequest
 
 	public function getApiMethodName()
 	{
-		return "alipayaop.fund.trans.toaccount.transfer";
+		return "alipay.fund.trans.toaccount.transfer";
 	}
 
 	public function setNotifyUrl($notifyUrl)

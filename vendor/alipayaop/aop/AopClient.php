@@ -510,9 +510,7 @@ class AopClient {
 		try {
 
 			$resp = $this->curl($requestUrl, $apiParams);
-            header("Content-Type: text/html;charset=gb2312");
-			var_dump($resp);die;
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 
 			$this->logCommunicationError($sysParams["method"], $requestUrl, "HTTP_ERROR_" . $e->getCode(), $e->getMessage());
 			return false;
@@ -537,7 +535,6 @@ class AopClient {
 				$signData = $this->parserJSONSignData($request, $resp, $respObject);
 			}
 		} else if ("xml" == $this->format) {
-		    echo 222;die;
 			$disableLibxmlEntityLoader = libxml_disable_entity_loader(true);
 			$respObject = @ simplexml_load_string($resp);
 			if (false !== $respObject) {
