@@ -28,6 +28,7 @@ class DistributLogic
             $count = M('agent_performance_log')->where($recharge_log_where)->count();
             $Page = new Page($count, 15);
             $recharge_log = M('agent_performance_log')->where($recharge_log_where)
+                ->order('performance_id desc')
                 ->limit($Page->firstRow . ',' . $Page->listRows)
                 ->select(); 
         }else{
