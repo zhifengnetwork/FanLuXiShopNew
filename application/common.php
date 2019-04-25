@@ -1949,7 +1949,7 @@ function provingReceive($user, $type, $num = 1)
     if ($type == 2) {
 
         // 扫码进入会员可领取1次
-        if ($user['is_code'] == 1 ) {
+        if ($user['is_code'] == 1 && $user['level'] < 2) {
             if ($num > 1) {
                 return array('status' => 0, 'msg' => '超过领取数量，只能领取一件！', 'result' => array());
             }
@@ -1969,12 +1969,12 @@ function provingReceive($user, $type, $num = 1)
 
         //领取次数
         if ( $user['distribut_free_num'] < $num) {
-            return array('status' => 0, 'msg' => '超过领取数量，目前只可领取'.$user['distribut_free_num'].'件！', 'result' => array());
-            return $result;
+            $freeNum = $user['distribut_free_num'] == '' ? 0 : $user['distribut_free_num'];
+            return array('status' => 0, 'msg' => '超过领取数量，目前只可领取'.$freeNum.'件！', 'result' => array());
         }
 
         if ($num > $levelGetNum) {
-            $result = array('status' => 1, 'msg' => '您当前等级可领'.$levelGetNum.'盒，已超过领取次数', 'result' => array());
+            return array('status' => 1, 'msg' => '您当前等级可领'.$levelGetNum.'盒，已超过领取次数', 'result' => array());
         }
     }
 

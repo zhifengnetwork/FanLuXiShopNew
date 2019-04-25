@@ -5,6 +5,7 @@ namespace app\shop\controller;
 use app\common\logic\ActivityLogic;
 use app\common\logic\GoodsLogic;
 use app\common\logic\GoodsPromFactory;
+use app\common\logic\UsersLogic;
 use app\common\model\Combination;
 use app\common\model\SpecGoodsPrice;
 use app\common\util\TpshopException;
@@ -629,6 +630,10 @@ class Goods extends MobileBase
     {
         $type = I('type/d');
         $goods_num = I('num', 0);
+
+        $logic = new UsersLogic(); 
+        $logic->update_receipt_num(); // 更新每月免费领取次数
+        $logic->get_curr_time_section(); // VIP更新每天免费领取次数
 
         $user = Db::name('users')->where(['user_id' => cookie('user_id')])->find();
 
