@@ -1571,15 +1571,16 @@ class UsersLogic extends Model
 
             $data['count_time'] = $tomorrow; //更新‘统计’时间
             $data['distribut_free_num'] = $num; //等级次数
-            M('Users')->where('user_id',$user_id)->save($data);
+			M('Users')->where('user_id',$user_id)->save($data);
+			return true;
 		}
 		
+		return false;
     }
 
     //每月更新免费领取次数
     public function update_receipt_num()
     {
-	
 
         $timeBegin = date('Y-m-01 00:00:00',strtotime(date('Y',time()).'-'.(date('m',time())-1).'-01')); //上月第一天
         $timeEnd = date("Y-m-d 23:59:59",strtotime(-date('d').'day')); //上月最后一天
@@ -1610,8 +1611,11 @@ class UsersLogic extends Model
 
             $user['time'] = time();
             M('clearLog')->insert($user); //记录清零前日志
-            M('Users')->where('user_id',$user_id)->save($data);
-        }
+			M('Users')->where('user_id',$user_id)->save($data);
+			return true;
+		}
+		
+		return false;
 
     }
 }
