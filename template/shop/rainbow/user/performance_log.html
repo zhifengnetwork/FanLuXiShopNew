@@ -11,7 +11,7 @@
             
         </ul>
         <foreach name="lists" item="v">
-            <ul>   
+            <ul onclick="get_detail('{$v[note]}');">   
                 <li class="li2"><span>{$v[create_time]}</span></li> 
                 <li class="li1" style="width:33.3%"><span>{$v[money]}</span></li>  
                 <li class="li3"><span>{$v[note]}</span></li>
@@ -39,6 +39,13 @@
                 }
             }
         });
+    }
+
+    function get_detail(data){
+        //正则取订单ID
+        var order_id = data.replace(/[^0-9]/ig,"");
+        var url = '/index.php/Shop/User/get_detail?order_id=' + order_id;
+        window.location.href = url;
     }
 </script>
 </body>

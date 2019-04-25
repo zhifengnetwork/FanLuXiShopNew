@@ -284,8 +284,9 @@ class User extends MobileBase
         }
         
         $this->assign('user_id', $user['user_id']);
-        //$underling_number = M('users')->where(['user_id'=>$user['user_id']])->value('underling_number');
+        // $underling_number_total = M('users')->where(['user_id'=>$user['user_id']])->value('underling_number');
         $underling_number = M('users')->where(['first_leader'=>$user['user_id']])->count();
+        // $this->assign('underling_number_total', $underling_number_total);
         $this->assign('underling_number', $underling_number);
 
         return $this->fetch();
@@ -1402,6 +1403,28 @@ class User extends MobileBase
         if (I('is_ajax')) {
             return $this->fetch('ajax_log_list');
         }
+        return $this->fetch();
+    }
+
+    //业绩明细订单详情
+    public function get_detail()
+    {
+        $fir = 'order_id, order_sn, nickname, consignee, order.total_amount, add_time, pay_time';
+        $order_id = I('order_id');
+        $detail = M('order')->alias('order')
+                ->join('users', 'order.user_id = users.user_id')
+                ->where('order_id', $order_id)
+                ->field($fir)
+                ->find();
+
+        //获取订单所有商品
+        $goods = M('order_goods')->where('order_id', $order_id)
+                ->field('goods_name, goods_num, goods_price')
+                ->select();
+        foreach($goods as $k => $v){
+            $detail['goods'][] = $v;
+        }
+        $this->assign('detail', $detail);
         return $this->fetch();
     }
 
