@@ -87,6 +87,8 @@ class User extends MobileBase
     public function index()
     {
        
+
+
         $map['user_id'] = $this->user_id;
         if ($cat_id > 0) $map['a.cat_id'] = $cat_id;
         $this->user['visit_count'] = M('goods_visit')->where($map)->count();
@@ -101,6 +103,10 @@ class User extends MobileBase
 
         //当前登录用户信息
         $logic = new UsersLogic();
+
+
+        $logic->update_receipt_num();
+
         $user_info = $logic->get_info($this->user_id);
         $order_info['waitPay'] = $user_info['result']['waitPay'];
         $order_info['waitSend'] = $user_info['result']['waitSend'];
