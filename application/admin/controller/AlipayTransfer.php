@@ -58,14 +58,19 @@ class AlipayTransfer extends Base
             "\"payee_real_name\":\"'".$payee_real_name."'\"," .
             "\"remark\":\"'".$remark."'\"" .
             "}");
-        $result = $aop->execute($request);
-        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
-        $resultCode = $result->$responseNode->code;
-        if(!empty($resultCode)&&$resultCode == 10000){
-            echo "成功";
-        } else {
-            return json($responseNode);
-            echo "失败";
+        try {
+            $result = $aop->execute($request);
+            $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+            $resultCode = $result->$responseNode->code;
+            if(!empty($resultCode)&&$resultCode == 10000){
+                echo "成功";
+            } else {
+                echo "失败";
+            }
+        } catch (\Exception $e) {
+            dump($e);
+            exit();
         }
+
     }
 }
