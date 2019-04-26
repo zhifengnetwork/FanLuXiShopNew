@@ -24,6 +24,7 @@ class WechatLogic
 
     public function __construct($config = null)
     {
+       
         if (!self::$wx_user) {
             if ($config === null) {
                 $config = Db::name('wx_user')->find();

@@ -29,8 +29,10 @@ class Weixin
             ob_clean();
             exit($_GET["echostr"]);
         }
-        write_log('凡露希微信-第一次公众号22');
+        
         $logic = new WechatLogic($config);
+        $str = serialize($logic);
+        write_log($str);
         $logic->handleMessage();
     }
 
