@@ -25,9 +25,11 @@ class Weixin
 
         $config = Db::name('wx_user')->find();
         if ($config['wait_access'] == 0) {
+           write_log('凡露希微信-第一次公众号11---'.$config['wait_access']);
             ob_clean();
             exit($_GET["echostr"]);
         }
+        write_log('凡露希微信-第一次公众号22');
         $logic = new WechatLogic($config);
         $logic->handleMessage();
     }
