@@ -204,7 +204,41 @@
 
   </div>
 </div>
+<script type="text/javascript">
+  function onsubmits(order_id)
+  {
+      var order_id = {$order.order_id};
+      layer.load();
+        $.ajax({
+            type: "GET",
+            url: "{:U('Distribut/bufa_sent')}",
+            data: {'order_id':order_id},
+            dataType: "json",
+            error: function () {
+                layer.alert("服务器繁忙, 请联系管理员!");
+            },
+            success: function (data) {
+              layer.closeAll();
+                if (data.status === 1) {
+                    layer.msg(data.msg, {icon: 1,time: 1000}, function() {
+                        location.href = "{:U('Admin/Distribut/detail')}";
+                    });
+                } else if(data.status === 0) {
+                    submitStatus = true;
+                    layer.msg(data.msg, {icon: 2,time: 1000});
+                    $.each(data.result, function(index, item) {
+                        $('#err_' + index).text(item).show();
+                    });
+                } else {
+                    submitStatus = true;
+                    layer.msg(data.msg, {icon: 2,time: 1000});
+                }
+            }
+        });
 
+  }
+  
+</script>
 
 </body>
 

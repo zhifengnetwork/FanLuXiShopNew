@@ -7,7 +7,7 @@ use think\Db;
 use think\Loader;
 use app\admin\logic\UsersLogic;
 use app\common\model\Order as OrderModel;
-
+use app\common\logic\FanliLogic;
 use think\Validate;
 
 class Distribut extends Base {
@@ -54,7 +54,36 @@ class Distribut extends Base {
         return $this->fetch();
     }
 
+   /****补发按钮***********/
+   public function bufa_sent()
+   {
+        $order_id = I('order_id');
+        $order = M('order')->where(['order_id'=>$order_id])->find();
 
+
+        $userId = $order['user_id'];
+        $orderSn = $order['order_sn'];
+
+        $goods_list = M('order_goods')->where(['order_id'=>$order_id])->select();
+        foreach($goods_list as $k => $v){
+
+            $goodId = $v['goods_id'];
+            $goodNum = $v['goods_num'];
+           
+            $model = new FanliLogic($userId, $goodId,$goodNum,$orderSn,$order_id);
+            $res = $model->fanliModel();
+        }
+        if ($data['act'] == 'del') {
+                $r = D('distribut_level')->where('level=' . $data['level'])->delete();
+                if ($r !== false) {
+                    $return = ['status' => 1, 'msg' => '删除成功', 'result' => ''];
+                } else {
+                    $return = ['status' => 0, 'msg' => '删除失败，数据库未响应', 'result' => ''];
+                }
+            }
+        $this->ajaxReturn($return);
+
+   }
 
 
     /**

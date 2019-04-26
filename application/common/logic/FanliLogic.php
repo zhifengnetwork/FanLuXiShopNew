@@ -71,7 +71,10 @@ class FanliLogic extends Model
 		$parent_info = M('users')->where('user_id',$user_info['first_leader'])->field('level')->find();
         //判断是否特殊产品成为店主，则不走返利流程
         //用户购买后检查升级
-		$this->checkuserlevel($this->userId,$this->orderId);
+        if($goods_info['sign_free_receive']==0) //免费领取，签到产品不参与返利
+        {
+		 $this->checkuserlevel($this->userId,$this->orderId);
+	    }
 		$pro_num = $this->getproductnum();
 		//echo $this->goodId.'-'.$this->tgoodsid.'-'.$user_info['level'];exit;
         if($this->goodId==$this->tgoodsid )//是否特殊产品
@@ -89,8 +92,8 @@ class FanliLogic extends Model
         	$goods_info=$this->getgoodsinfo();
         	if($goods_info['sign_free_receive']==0) //免费领取，签到产品不参与返利
         	{
-        		 if($user_info['level']>=3)//自购只返利给店主以上级别
-            {
+        	  if($user_info['level']>=3)//自购只返利给店主以上级别
+              {
                $distribut_level = M('user_level')->where('level',$user_info['level'])->field('direct_rate')->find();
                  //计算返利金额
 		        $goods = $this->goods();
@@ -105,7 +108,7 @@ class FanliLogic extends Model
 			         } else {
 			        	return false;
 			         }
-            }
+              }
             // 购买商品返利给上一级
             if(empty($rebase)||$rebase[$parent_info['level']]<=0) //计算返利比列
 		       {
