@@ -16,7 +16,10 @@ class Weixin
 
         $data = file_get_contents("php://input");
     	if ($data) {
-    		$re = $this->xmlToArray($data);
+            $re = $this->xmlToArray($data);
+            
+            debug_log(json_encode($re));
+
 	    	$url = SITE_URL.'/mobile/message/index?eventkey='.$re['EventKey'].'&openid='.$re['FromUserName'].'&event='.$re['Event'];
 	    	httpRequest($url);
         }
