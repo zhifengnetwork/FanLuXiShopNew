@@ -85,6 +85,7 @@ class WechatLogic
         }
         $user = Db::name('users')->where('openid', $openid)->find();
         if (! Db::name('oauth_users')->where('openid', $openid)->find() && !$user) {
+            write_log($msg.'凡露希微信第一次关注接口-第一次公众号2');
             if (false === ($wxdata = self::$wechat_obj->getFanInfo($openid))) {
                 $this->replyError($msg , self::$wechat_obj->getError());
             }
@@ -98,7 +99,7 @@ class WechatLogic
                // 'is_code'=>1,
 
             ];
-
+            write_log('获取父name_id'.$msg['EventKey'])
             // 由场景值获取分销一级id
             if (!empty($msg['EventKey'])) {
                 write_log('获取父id'.$msg['EventKey']);
