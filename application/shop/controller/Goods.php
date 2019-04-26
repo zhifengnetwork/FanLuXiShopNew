@@ -631,7 +631,7 @@ class Goods extends MobileBase
         $type = I('type/d');
         $goods_num = I('num', 0);
 
-        $logic = new UsersLogic(); 
+        $logic = new UsersLogic();
         $logic->update_receipt_num(); // 更新每月免费领取次数
         $logic->get_curr_time_section(); // VIP更新每天免费领取次数
 

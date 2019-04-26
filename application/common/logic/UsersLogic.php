@@ -1594,7 +1594,7 @@ class UsersLogic extends Model
 		$user_id = session('user.user_id');
 
         $user = M('Users')->where('user_id',$user_id)->find();
-
+        
         //最后更新‘统计’时间
         if ($current > $user['count_time'] && $user['level'] >= 3){
 
