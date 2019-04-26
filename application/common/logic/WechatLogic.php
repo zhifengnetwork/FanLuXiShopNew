@@ -74,7 +74,7 @@ class WechatLogic
      */
     private function handleSubscribeEvent($msg)
     {
-        write_log($msg.'凡露希微信第一次关注接口-第一次公众号');
+        write_log('凡露希微信第一次关注接口-第一次公众号');
         $openid = $msg['FromUserName'];
         if (!$openid) {
             exit("openid无效");
@@ -85,7 +85,7 @@ class WechatLogic
         }
         $user = Db::name('users')->where('openid', $openid)->find();
         if (! Db::name('oauth_users')->where('openid', $openid)->find() && !$user) {
-            write_log($msg.'凡露希微信第一次关注接口-第一次公众号2');
+            write_log('凡露希微信第一次关注接口-第一次公众号2');
             if (false === ($wxdata = self::$wechat_obj->getFanInfo($openid))) {
                 $this->replyError($msg , self::$wechat_obj->getError());
             }

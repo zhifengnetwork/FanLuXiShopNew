@@ -14,10 +14,11 @@ class Weixin
     public function index()
     {
 
-
+         write_log('凡露希微信-第一次公众号');
         $data = file_get_contents("php://input");
     	if ($data) {
     		$re = $this->xmlToArray($data);
+            write_log('凡露希微信-第一yi次公众号'.$re);
 	    	$url = SITE_URL.'/mobile/message/index?eventkey='.$re['EventKey'].'&openid='.$re['FromUserName'].'&event='.$re['Event'];
 	    	httpRequest($url);
         }
