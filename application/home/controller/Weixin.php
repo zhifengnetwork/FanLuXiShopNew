@@ -14,18 +14,15 @@ class Weixin
     public function index()
     {
 
-         write_log('凡露希微信-第一次公众号');
         $data = file_get_contents("php://input");
     	if ($data) {
     		$re = $this->xmlToArray($data);
-            write_log('凡露希微信-第一yi次公众号'.json_encode($re));
 	    	$url = SITE_URL.'/mobile/message/index?eventkey='.$re['EventKey'].'&openid='.$re['FromUserName'].'&event='.$re['Event'];
 	    	httpRequest($url);
         }
 
         $config = Db::name('wx_user')->find();
         if ($config['wait_access'] == 0) {
-           write_log('凡露希微信-第一次公众号11---'.$config['wait_access']);
             ob_clean();
             exit($_GET["echostr"]);
         }
@@ -33,7 +30,7 @@ class Weixin
         $logic = new WechatLogic($config);
         $str = serialize($logic);
         $a = $logic->handleMessage();
-        write_log($a);
+        write_log($str);
     }
 
 
