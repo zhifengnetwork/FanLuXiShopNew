@@ -55,7 +55,7 @@ class weixin
         $result = $notify->GetPayUrl($input); // 获取生成二维码的地址
         $url2 = $result["code_url"];
         if (empty($url2))
-            return '没有获取到支付地址, 请检查支付配置' . print_r($result, true);
+            return '没有获取到支付地址, 请检查支付配置!' . print_r($result, true);
         return '<img alt="模式二扫码支付" src="/index.php?m=Home&c=Index&a=qr_code&data='.urlencode($url2).'" style="width:110px;height:110px;"/>';
     }    
     /**
