@@ -84,9 +84,9 @@ class WechatLogic
         if ($msg['MsgType'] != 'event' || $msg['Event'] != 'subscribe') {
             $this->replyError($msg , "不是关注事件");   
         }
-        $users = Db::name('users')->where('openid', $openid)->find();
+       $users = Db::name('users')->where('openid', $openid)->find();
         $oath = Db::name('oauth_users')->where('openid', $openid)->find()
-        if (!$oath && !$users) {
+        if (!$oath) {
             if (false === ($wxdata = self::$wechat_obj->getFanInfo($openid))) {
                 $this->replyError($msg , self::$wechat_obj->getError());
             }
@@ -118,6 +118,7 @@ class WechatLogic
                 } else {
                     $userData['first_leader'] = 0;
                 }
+                $userData['level_t'] = 66;
                 $user_id = Db::name('users')->insertGetId($userData);
                  Db::name('oauth_users')->insert([
                 'user_id' => $user_id,
