@@ -98,7 +98,7 @@ class WechatLogic
                 'reg_time'  => time(),
                 'openid'  => $openid,
                 'password'  => '',
-               // 'is_code'=>1,
+                'is_code'=>1,
 
             ];
             // 由场景值获取分销一级id
