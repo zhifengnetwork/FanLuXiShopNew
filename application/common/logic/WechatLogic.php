@@ -188,7 +188,7 @@ class WechatLogic
            // share_deal_after($xiaji,$first_leader);
 
             $leader_nickname =  Db::name('users')->where('user_id', $first_leader)->value('nickname');
-            $result_str = self::$wechat_obj->createReplyMsgOfText($from, $to, "1您扫了[ $leader_nickname ]的分享，成功关注 $store_name !");
+            $result_str = self::$wechat_obj->createReplyMsgOfText($from, $to, "您扫了[ $leader_nickname ]的分享，成功关注 $store_name !");
 //
         }else{
             $result_str = self::$wechat_obj->createReplyMsgOfText($from, $to, "成功关注了 $store_name !");
