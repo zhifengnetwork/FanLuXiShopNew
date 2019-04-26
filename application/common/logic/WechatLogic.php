@@ -24,6 +24,7 @@ class WechatLogic
 
     public function __construct($config = null)
     {
+         write_log('微信公众号的业务逻辑类');
         if (!self::$wx_user) {
             if ($config === null) {
                 $config = Db::name('wx_user')->find();
@@ -38,7 +39,7 @@ class WechatLogic
      */
     public function handleMessage()
     {
-
+         write_log('凡露希微信-处理接收推送消息');
         self::$wechat_obj->registerMsgEvent(WechatUtil::EVENT_TEXT, function ($msg) {
             $this->handleTextMsg($msg);
         });
@@ -50,7 +51,7 @@ class WechatLogic
         self::$wechat_obj->registerMsgEvent(WechatUtil::EVENT_SUBSCRIBE, function ($msg) {
             $this->handleSubscribeEvent($msg);
         });
-
+        write_log('凡露希微信-处理接收推送消息222');
         self::$wechat_obj->handleMsgEvent();
     }
 
