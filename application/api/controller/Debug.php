@@ -106,4 +106,19 @@ class Debug extends Controller
     }
 
 
+    /**
+     * 给空的 openid 赋值  user_id
+     */
+    public function set(){
+
+        $limit = I('limit');
+
+        $list = Db::query("select user_id,openid,old_openid from tp_users  WHERE openid = '' limit ".$limit) ;
+        dump($list);
+        foreach($list as $k => $v){
+            if($v){
+                M('users')->where(['user_id'=>$v['user_id']])->update(['openid'=>$v['old_openid']]);
+            }
+        }
+    }
 }
