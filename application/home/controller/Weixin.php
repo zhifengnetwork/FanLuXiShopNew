@@ -18,7 +18,7 @@ class Weixin
         $data = file_get_contents("php://input");
     	if ($data) {
     		$re = $this->xmlToArray($data);
-            write_log('凡露希微信-第一yi次公众号'.$re);
+            write_log('凡露希微信-第一yi次公众号'.json_encode($re));
 	    	$url = SITE_URL.'/mobile/message/index?eventkey='.$re['EventKey'].'&openid='.$re['FromUserName'].'&event='.$re['Event'];
 	    	httpRequest($url);
         }
