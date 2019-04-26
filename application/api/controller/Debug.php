@@ -35,7 +35,7 @@ class Debug extends Controller
 
             dump($v);
             echo "<img src=".$v['head_pic'].">";
-            echo "<a href=/api/debug/del?user_id=".$user_id.">删除这个</a>";
+            echo "<a href=/api/debug/del?user_id=".$user_id."&re=aa>删除这个</a>";
         }
 
     }
@@ -64,7 +64,7 @@ class Debug extends Controller
 
             dump($v);
             echo "<img src=".$v['head_pic'].">";
-            echo "<a href=/api/debug/del?user_id=".$user_id.">删除这个</a>";
+            echo "<a href=/api/debug/del?user_id=".$user_id."&re=bb>删除这个</a>";
         }
 
     }
@@ -79,7 +79,9 @@ class Debug extends Controller
             M('oauth_users')->where(['user_id'=>$user_id])->delete();
         }
 
-        $this->redirect('aa');
+        $re = I('re');
+
+        $this->redirect($re);
     }
 
 
