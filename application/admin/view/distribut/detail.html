@@ -71,6 +71,14 @@
   .form_class i.fa {
     vertical-align: text-bottom;
   }
+  .btn{
+
+        text-align: center;
+    margin: 11px 350px;
+    float: left;
+    width: 200px;
+    height: 30px;
+  }
 </style>
 <div class="page">
   <div class="fixed-bar">
@@ -194,7 +202,12 @@
                 </tr>
               </foreach>
             </tbody>
+             
+            
           </table>
+          <div style="height: 100px">
+                <input class="btn" value="补发返利" type="button" onclick="onsubmits();">
+          </div>
         </div>
 
 
@@ -221,7 +234,9 @@
               layer.closeAll();
                 if (data.status === 1) {
                     layer.msg(data.msg, {icon: 1,time: 1000}, function() {
-                        location.href = "{:U('Admin/Distribut/detail')}";
+                      var url ="/index.php/Admin/Distribut/detail/order_id/"+data.result;
+                      //alert(url);
+                        location.href = "/index.php/Admin/Distribut/detail/order_id/"+data.result;
                     });
                 } else if(data.status === 0) {
                     submitStatus = true;

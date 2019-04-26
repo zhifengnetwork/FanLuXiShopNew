@@ -57,7 +57,12 @@ class Distribut extends Base {
    /****补发按钮***********/
    public function bufa_sent()
    {
-        $order_id = I('order_id');
+         $order_id = I('order_id');
+        $account_log = M('account_log')->where(['order_id'=>$order_id])->where('log_type>=1')->find();;
+        if(!$account_log)
+        {
+
+       
         $order = M('order')->where(['order_id'=>$order_id])->find();
 
 
@@ -73,14 +78,13 @@ class Distribut extends Base {
             $model = new FanliLogic($userId, $goodId,$goodNum,$orderSn,$order_id);
             $res = $model->fanliModel();
         }
-        if ($data['act'] == 'del') {
-                $r = D('distribut_level')->where('level=' . $data['level'])->delete();
-                if ($r !== false) {
-                    $return = ['status' => 1, 'msg' => '删除成功', 'result' => ''];
-                } else {
-                    $return = ['status' => 0, 'msg' => '删除失败，数据库未响应', 'result' => ''];
-                }
-            }
+          $return = ['status' => 1, 'msg' => '补发返利成功', 'result' => $order_id];
+
+        }else
+        {
+            $return = ['status' => 0, 'msg' => '该订单已有返利,不能重复发放', 'result' => ''];
+        }
+       
         $this->ajaxReturn($return);
 
    }
