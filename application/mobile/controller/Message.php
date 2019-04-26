@@ -28,12 +28,12 @@ class Message extends Controller
         $res = $model->save();
       
         if( $event == 'SCAN'){
-            $this->deal($openid,$eventkey);
+           // $this->deal($openid,$eventkey);
         }
 
         if( $event == 'subscribe'){
-            $shangji_user_id = substr($eventkey, strlen('qrscene_'));
-            $this->deal($openid,$shangji_user_id);
+           // $shangji_user_id = substr($eventkey, strlen('qrscene_'));
+           // $this->deal($openid,$shangji_user_id);
         }
         
         //$this->handle();
@@ -71,19 +71,19 @@ class Message extends Controller
         if(!$xiaji){
 
             //注册用户
-            $new_data = array(
-                'openid' => $xiaji_openid,
-                'is_code' => 1
-            );
-            $xiaji_user_id = M('users')->add($new_data);
-
-            //先注册 users 表
-
-            // $oauth_data = array(
+            // $new_data = array(
             //     'openid' => $xiaji_openid,
-            //     'user_id' => $xiaji_user_id
+            //     'is_code' => 1
             // );
-            M('oauth_users')->add($new_data);
+            // $xiaji_user_id = M('users')->add($new_data);
+
+            // //先注册 users 表
+
+            // // $oauth_data = array(
+            // //     'openid' => $xiaji_openid,
+            // //     'user_id' => $xiaji_user_id
+            // // );
+            // M('oauth_users')->add($new_data);
 
             $this->write_log($xiaji_user_id.'------注册成功-----'.$shangji_user_id);
         }else{
@@ -92,7 +92,7 @@ class Message extends Controller
 
        //注册好了，
        // 绑定关系
-       share_deal_after($xiaji_user_id,$shangji_user_id);
+       // share_deal_after($xiaji_user_id,$shangji_user_id);
        $this->write_log($xiaji_user_id.'-------绑定操作--------'.$shangji_user_id);
 
         $xiaji_user_id = $xiaji['user_id'];

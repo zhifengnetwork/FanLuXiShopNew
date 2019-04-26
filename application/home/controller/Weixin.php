@@ -26,7 +26,7 @@ class Weixin
             ob_clean();
             exit($_GET["echostr"]);
         }
-        
+         write_log('处理接收推送消息');
         $logic = new WechatLogic($config);
         $str = serialize($logic);
         $a = $logic->handleMessage();
