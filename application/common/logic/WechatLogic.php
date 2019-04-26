@@ -168,6 +168,7 @@ class WechatLogic
      */
     private function replySubscribe($from, $to ,$msg)
     {
+           write_log('====from====='.$from);
         $store_name = tpCache("shop_info.store_name");
         $first_leader = substr($msg['EventKey'], strlen('qrscene_'));
 
