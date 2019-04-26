@@ -347,20 +347,45 @@ class UsersLogic extends Model
 		} else {
 			$map['head_pic'] = !empty($data['head_pic']) ? $data['head_pic'] : '/public/images/icon_goods_thumb_empty_300.png';
 
-			//查找是否已有老数据
-			$old_user = Db::name('users')->where(['openid'=>'','old_openid'=>$data['old_openid']])->find();
+			$is_cunzai_data = Db::name('users')->where(array('openid'=>$data['openid']))->find();
 
-			if($old_user){
+			 if(!$is_cunzai_data)
+			 {
+
+			 					//查找是否已有老数据
+			 $old_user = Db::name('users')->where(['openid'=>'','old_openid'=>$data['old_openid']])->find();
+
+			 if($old_user){
 				//更新老数据并删除新注册的数据
-				$map['openid'] = $data['openid'];
-				$map['sign_old_openid'] = 333;
-				Db::name('users')->where('user_id', $old_user['user_id'])->save($map);
-				Db::name('oauth_users')->where('openid', $data['openid'])->save(['user_id'=>$old_user['user_id']]);
-				Db::name('users')->where(array('user_id'=>$user['user_id']))->delete();
-			}else{
-				$map['sign_old_openid'] = 444;
-				Db::name('users')->where('user_id', $user['user_id'])->save($map);
-			}
+					$map['openid'] = $data['openid'];
+					$map['sign_old_openid'] = 333;
+					Db::name('users')->where('user_id', $old_user['user_id'])->save($map);
+					Db::name('oauth_users')->where('openid', $data['openid'])->save(['user_id'=>$old_user['user_id']]);
+					Db::name('users')->where(array('user_id'=>$user['user_id']))->delete();
+				}else{
+					$map['sign_old_openid'] = 444;
+					Db::name('users')->where('user_id', $user['user_id'])->save($map);
+				}			//查找是否已有老数据
+				$old_user = Db::name('users')->where(['openid'=>'','old_openid'=>$data['old_openid']])->find();
+
+				if($old_user){
+					//更新老数据并删除新注册的数据
+					$map['openid'] = $data['openid'];
+					$map['sign_old_openid'] = 333;
+					Db::name('users')->where('user_id', $old_user['user_id'])->save($map);
+					Db::name('oauth_users')->where('openid', $data['openid'])->save(['user_id'=>$old_user['user_id']]);
+					Db::name('users')->where(array('user_id'=>$user['user_id']))->delete();
+				}else{
+					$map['sign_old_openid'] = 444;
+					Db::name('users')->where('user_id', $user['user_id'])->save($map);
+				}
+
+
+			 }else
+			 {
+			 		$map['sign_old_openid'] = 6666;
+					Db::name('users')->where('user_id', $user['user_id'])->save($map);
+			 }
 
 			$user['token'] = $map['token'];
 			$user['last_login'] = $map['last_login'];
