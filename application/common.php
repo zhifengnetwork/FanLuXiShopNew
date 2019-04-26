@@ -56,29 +56,34 @@ function write_log($content)
 
 function share_deal_after($xiaji, $shangji)
 {
-    write_log("xiaji222:" . $xiaji);
-    write_log("shangji11:" . $shangji);
     if ($xiaji == $shangji) {
+        write_log("xiaji11111:" . $xiaji);
         return false;
     }
     $is_shangji = M('users')->where(['user_id' => $xiaji])->value('first_leader');
     if ($is_shangji && (int)$is_shangji > 0) {
+           write_log("xiaji2222:" . $xiaji);
         return false;
     }
 
+    write_log("xiaji0:" . $xiaji);
+    write_log("shangji000:" . $shangji);
     $res = M('users')->where(['user_id' => $xiaji])->update(['level_t'=>88,'first_leader' => $shangji]);
     if ($res) {
         $before = '成功';
 
-
+        write_log("xiaji33333:" . $xiaji);
         //给上级发送消息
         $shangji_openid = M('users')->where(['user_id' => $shangji])->value('openid');
         if($shangji_openid){
+             write_log("xiaji444444:" . $xiaji);
             $xiaji_nickname = M('users')->where(['user_id' => $xiaji])->value('nickname');
             if($xiaji_nickname == ''){
+                  write_log("xiaji55555555:" . $xiaji);
                 $xiaji_nickname = get_nickname_new($xiaji);
             }
             $wx_content = "您的一级创客[" . $xiaji_nickname . "][ID:" . $xiaji . "]" . $before . "关注了公众号";
+             write_log("xiaji666666666:" . $xiaji);
             $wechat = new \app\common\logic\wechat\WechatUtil();
             $wechat->sendMsg($shangji_openid, 'text', $wx_content);
         }
