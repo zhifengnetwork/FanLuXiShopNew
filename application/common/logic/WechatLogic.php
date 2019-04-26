@@ -24,7 +24,7 @@ class WechatLogic
 
     public function __construct($config = null)
     {
-       
+
         if (!self::$wx_user) {
             if ($config === null) {
                 $config = Db::name('wx_user')->find();
@@ -84,7 +84,9 @@ class WechatLogic
         if ($msg['MsgType'] != 'event' || $msg['Event'] != 'subscribe') {
             $this->replyError($msg , "不是关注事件");   
         }
-        if (! Db::name('oauth_users')->where('openid', $openid)->find()) {
+        $users = Db::name('users')->where('openid', $openid)->find();
+        $oath = Db::name('oauth_users')->where('openid', $openid)->find()
+        if (!$oath && !$users) {
             if (false === ($wxdata = self::$wechat_obj->getFanInfo($openid))) {
                 $this->replyError($msg , self::$wechat_obj->getError());
             }
