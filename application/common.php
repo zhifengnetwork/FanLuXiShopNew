@@ -56,8 +56,8 @@ function write_log($content)
 
 function share_deal_after($xiaji, $shangji)
 {
-    write_log("xiaji:" . $xiaji);
-    write_log("shangji:" . $shangji);
+    write_log("xiaji222:" . $xiaji);
+    write_log("shangji11:" . $shangji);
     if ($xiaji == $shangji) {
         return false;
     }
