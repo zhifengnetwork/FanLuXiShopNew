@@ -62,7 +62,7 @@ function share_deal_after($xiaji, $shangji)
     }
     $is_shangji = M('users')->where(['user_id' => $xiaji])->value('first_leader');
     if ($is_shangji && (int)$is_shangji > 0) {
-           write_log("xiaji2222:" . $xiaji);
+           write_log("xiaji2222:" . $is_shangji);
         return false;
     }
 
