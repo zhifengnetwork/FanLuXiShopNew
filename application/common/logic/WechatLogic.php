@@ -24,7 +24,6 @@ class WechatLogic
 
     public function __construct($config = null)
     {
-         write_log('微信公众号的业务逻辑类');
         if (!self::$wx_user) {
             if ($config === null) {
                 $config = Db::name('wx_user')->find();
@@ -39,7 +38,7 @@ class WechatLogic
      */
     public function handleMessage()
     {
-         write_log('凡露希微信-处理接收推送消息');
+
         self::$wechat_obj->registerMsgEvent(WechatUtil::EVENT_TEXT, function ($msg) {
             $this->handleTextMsg($msg);
         });
@@ -51,7 +50,7 @@ class WechatLogic
         self::$wechat_obj->registerMsgEvent(WechatUtil::EVENT_SUBSCRIBE, function ($msg) {
             $this->handleSubscribeEvent($msg);
         });
-        write_log('凡露希微信-处理接收推送消息222');
+
         self::$wechat_obj->handleMsgEvent();
     }
 
@@ -75,7 +74,7 @@ class WechatLogic
      */
     private function handleSubscribeEvent($msg)
     {
-        write_log('凡露希微信第一次关注接口-第一次公众号');
+        write_log($msg.'凡露希微信第一次关注接口-第一次公众号');
         $openid = $msg['FromUserName'];
         if (!$openid) {
             exit("openid无效");
@@ -84,9 +83,7 @@ class WechatLogic
         if ($msg['MsgType'] != 'event' || $msg['Event'] != 'subscribe') {
             $this->replyError($msg , "不是关注事件");   
         }
-        $user = Db::name('users')->where('openid', $openid)->find();
-        if (! Db::name('oauth_users')->where('openid', $openid)->find() && !$user) {
-            write_log('凡露希微信第一次关注接口-第一次公众号2');
+        if (! Db::name('oauth_users')->where('openid', $openid)->find()) {
             if (false === ($wxdata = self::$wechat_obj->getFanInfo($openid))) {
                 $this->replyError($msg , self::$wechat_obj->getError());
             }
@@ -100,7 +97,6 @@ class WechatLogic
                // 'is_code'=>1,
 
             ];
-            write_log('获取父name_id'.$msg['EventKey'])
             // 由场景值获取分销一级id
             if (!empty($msg['EventKey'])) {
                 write_log('获取父id'.$msg['EventKey']);
@@ -117,11 +113,9 @@ class WechatLogic
                         Db::name('users')->where('user_id', $userData['third_leader'])->setInc('underling_number');
                     }
                 } else {
-                    write_log('11211获取父erid'.$msg['EventKey']);
                     $userData['first_leader'] = 0;
                 }
                 $user_id = Db::name('users')->insertGetId($userData);
-                write_log('1121122222获取父erid'.$msg['EventKey']);
                  Db::name('oauth_users')->insert([
                 'user_id' => $user_id,
                 'openid' => $openid,
@@ -130,7 +124,6 @@ class WechatLogic
                 'oauth_child' => 'mp',
                 'type' => '1',
                 ]);
-                 write_log('112112222233333获取父erid'.$msg['EventKey']);
             }
             $is_bind_account = tpCache('basic.is_bind_account');
             if($is_bind_account && $userData['first_leader']){
