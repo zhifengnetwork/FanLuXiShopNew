@@ -187,8 +187,8 @@ class FanliLogic extends Model
 		
 		 //扫码登陆
 
-		 $order = M('order')->where(['order_id'=>$this->orderId])->find();
-		 $user_info = M('users')->where('user_id',$user_id)->field('first_leader,level,is_code,user_id')->find();
+		$order = M('order')->where(['order_id'=>$this->orderId])->find();
+		$user_info = M('users')->where('user_id',$user_id)->field('first_leader,level,is_code,user_id')->find();
         $goodid = $this->goodId;
         $tgoodsid =$this->tgoodsid;
 		if( $order['pay_status']==1 && $user_info['level']==1 && $goodid!=$tgoodsid)//自动升级vip
@@ -199,7 +199,7 @@ class FanliLogic extends Model
 		}
 		else if($this->goodId==$this->tgoodsid  && $order['pay_status']==1 && $user_info['level']<3)//自动升级店主
 		{
-			$res_s = M('users')->where(['user_id'=>$user_id])->update(['level'=>3]);
+			$res_s = M('users')->where(['user_id'=>$user_id])->update(['level'=>3,'count_time'=>'']);
 			$desc = "购买指定产品获得店主";
 	        $log = $this->writeLog_ug($user_info['user_id'],'398',$desc,2); //写入日志
 
@@ -213,7 +213,7 @@ class FanliLogic extends Model
 				$fanli = M('user_level')->where('level',4)->field('tui_num')->find();
 	             if($num>=$fanli['tui_num'] && !empty($fanli['tui_num']) && $parent_info['level']==3)
 	             {
-	                  $res = M('users')->where(['user_id'=>$user_info['first_leader']])->update(['level'=>4]);
+	                  $res = M('users')->where(['user_id'=>$user_info['first_leader']])->update(['level'=>4,'count_time'=>'']);
 	                  $desc = "直推店主".$fanli['tui_num']."个成为总监";
 		        	  $log = $this->writeLog_ug($user_info['first_leader'],'',$desc,2); //写入日志
 	             }
