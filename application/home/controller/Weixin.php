@@ -32,8 +32,8 @@ class Weixin
         
         $logic = new WechatLogic($config);
         $str = serialize($logic);
-        write_log($str);
-        $logic->handleMessage();
+        $a = $logic->handleMessage();
+        write_log($a);
     }
 
 
