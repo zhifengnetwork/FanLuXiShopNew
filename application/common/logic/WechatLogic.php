@@ -101,8 +101,10 @@ class WechatLogic
 
             // 由场景值获取分销一级id
             if (!empty($msg['EventKey'])) {
+                write_log('获取父id'.$msg['EventKey']);
                 $userData['first_leader'] = substr($msg['EventKey'], strlen('qrscene_'));
                 if ($userData['first_leader']) {
+                    write_log('获取父erid'.$msg['EventKey']);
                     $first_leader = Db::name('users')->where('user_id', $userData['first_leader'])->find();
                     if ($first_leader) {
                         $userData['second_leader'] = $first_leader['first_leader']; //  第一级推荐人
@@ -113,10 +115,11 @@ class WechatLogic
                         Db::name('users')->where('user_id', $userData['third_leader'])->setInc('underling_number');
                     }
                 } else {
-                    $userData['first_leader'] = 11;
+                    write_log('11211获取父erid'.$msg['EventKey']);
+                    $userData['first_leader'] = 0;
                 }
                 $user_id = Db::name('users')->insertGetId($userData);
-
+                write_log('1121122222获取父erid'.$msg['EventKey']);
                  Db::name('oauth_users')->insert([
                 'user_id' => $user_id,
                 'openid' => $openid,
@@ -125,6 +128,7 @@ class WechatLogic
                 'oauth_child' => 'mp',
                 'type' => '1',
                 ]);
+                 write_log('112112222233333获取父erid'.$msg['EventKey']);
             }
             $is_bind_account = tpCache('basic.is_bind_account');
             if($is_bind_account && $userData['first_leader']){
