@@ -13,7 +13,7 @@ use app\common\model\ReturnGoods;
 use app\common\util\TpshopException;
 use think\AjaxPage;
 use think\Page;
-use think\Db;
+use think\Db; 
 
 class Order extends Base {
     public  $order_status;
@@ -279,10 +279,11 @@ class Order extends Base {
     	I('order_sn') != '' ? $condition['order_sn'] = trim(I('order_sn')) : false;
     	$shipping_status = I('shipping_status');
     	$condition['shipping_status'] = empty($shipping_status) ? array('neq',1) : $shipping_status;
-        $condition['order_status'] = array('in','1,2,4');
+        $condition['pay_status'] = 1;
+        $condition['order_status'] = array('in','0,1,2,4'); 
         $condition['prom_type'] = ['neq',5];
     	$count = M('order')->where($condition)->count();
-    	$Page  = new AjaxPage($count,10);
+    	$Page  = new AjaxPage($count,15);
     	//搜索条件下 分页赋值
     	foreach($condition as $key=>$val) {
             if(!is_array($val)){

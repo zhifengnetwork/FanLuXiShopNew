@@ -466,12 +466,12 @@ class Distribut extends Base {
         }
         $count = M('account_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
                     ->whereTime('acount.change_time', 'between', [$start_time, $end_time])
-                    ->where("acount.states = 101 or acount.states = 102")->count();
+                    ->where("acount.log_type", ">=", "1")->count();
         $page = new Page($count, 10);
         $log = M('account_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
                                ->field('users.nickname, acount.*')->order('log_id DESC')
                                ->whereTime('acount.change_time', 'between', [$start_time, $end_time])
-                               ->where("acount.states = 101 or acount.states = 102")
+                               ->where("acount.log_type", ">=", "1")
                                ->limit($page->firstRow, $page->listRows)
                                ->select();
         
