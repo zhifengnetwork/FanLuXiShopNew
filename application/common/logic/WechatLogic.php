@@ -173,18 +173,22 @@ class WechatLogic
         $first_leader = substr($msg['EventKey'], strlen('qrscene_'));
 
         if($first_leader > 0){
+             $xiaji = Db::name('oauth_users')->where('openid', $to)->value('user_id');
             //有分享
             //有上级
             $nickname =  Db::name('users')->where('openid', $to)->value('nickname');
             $to1 =  Db::name('users')->where('user_id', $first_leader)->value('openid');
-            $result_str = self::$wechat_obj->createReplyMsgOfText($from, $to1, "您的一级创客 [ $nickname ] 成功关注了本公众号1 \n：");
+           // $result_str = self::$wechat_obj->createReplyMsgOfText($from, $to1, "您的一级创客 [ $nickname ] 成功关注了本公众号1 \n：");
+            $wx_content = "您的一级创客[" . $nickname . "][ID:" . $xiaji . "]成功关注了公众号";
+            $wechat = new \app\common\logic\wechat\WechatUtil();
+            $wechat->sendMsg($to1, 'text', $wx_content);
 
             //有分享
-            $xiaji = Db::name('oauth_users')->where('openid', $to)->value('user_id');
-            // share_deal_after($xiaji,$first_leader);
+           // $xiaji = Db::name('oauth_users')->where('openid', $to)->value('user_id');
+           // share_deal_after($xiaji,$first_leader);
 
             $leader_nickname =  Db::name('users')->where('user_id', $first_leader)->value('nickname');
-            $result_str = self::$wechat_obj->createReplyMsgOfText($from, $to, "3您扫了[ $leader_nickname ]的分享，成功关注 $store_name !");
+            $result_str = self::$wechat_obj->createReplyMsgOfText($from, $to, "1您扫了[ $leader_nickname ]的分享，成功关注 $store_name !");
 //
         }else{
             $result_str = self::$wechat_obj->createReplyMsgOfText($from, $to, "成功关注了 $store_name !");
