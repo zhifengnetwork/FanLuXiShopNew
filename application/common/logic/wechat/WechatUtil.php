@@ -1088,7 +1088,7 @@ class WechatUtil extends WxCommon
 
                 //有分享
                 $xiaji = Db::name('oauth_users')->where('openid', $to)->value('user_id');
-                share_deal_after($xiaji,$first_leader);
+                //share_deal_after($xiaji,$first_leader);
 
                 $leader_nickname =  Db::name('users')->where('user_id', $first_leader)->value('nickname');
                 $result_str = $this->createReplyMsgOfText($msg['FromUserName'], $openid, "您扫了[ $leader_nickname ]的分享，成功关注 $store_name !");

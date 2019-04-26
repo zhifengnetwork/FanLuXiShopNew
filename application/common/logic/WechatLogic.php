@@ -83,8 +83,8 @@ class WechatLogic
         if ($msg['MsgType'] != 'event' || $msg['Event'] != 'subscribe') {
             $this->replyError($msg , "不是关注事件");   
         }
-
-        if (! Db::name('oauth_users')->where('openid', $openid)->find()) {
+        $user = Db::name('users')->where('openid', $openid)->find();
+        if (! Db::name('oauth_users')->where('openid', $openid)->find() && !$user) {
             if (false === ($wxdata = self::$wechat_obj->getFanInfo($openid))) {
                 $this->replyError($msg , self::$wechat_obj->getError());
             }
