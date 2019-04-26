@@ -243,6 +243,7 @@ class PlaceOrder
             'integral' => $this->pay->getPayPoints(), //'使用积分',
             'integral_money' => $this->pay->getIntegralMoney(),//'使用积分抵多少钱',
             'sign_price' => $this->pay->getSignPrice(),//'签到抵扣金额',
+            'discount' => $this->pay->getOrderPromAmount(),//'免费领取 价格调整',
             'total_amount' => $this->pay->getTotalAmount(),// 订单总额
             'order_amount' => $this->pay->getOrderAmount(),//'应付款金额',
             'add_time' => time(), // 下单时间

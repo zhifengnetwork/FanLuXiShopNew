@@ -264,20 +264,22 @@ a.green:hover { color: #FFF; background-color: #1BBC9D; border-color: #16A086; }
             <dd>{$order.goods_price}</dd>
             <dt>运费：</dt>
             <dd>+{$order.shipping_price}</dd>
-            <dt>积分 (-{$order.integral})：</dt>
-            <dd>-{$order.integral_money}</dd>
-          </dl>
-          <dl>
             <dt>余额抵扣：</dt>
             <dd>-{$order.user_money}</dd>
-            <dt>优惠券抵扣：</dt>
-            <dd>-{$order.coupon_price}</dd>
-            <dt>价格调整：</dt>
-            <dd>减：{$order.discount}</dd>
           </dl>
           <dl>
-              <dt>订单促销：</dt>
-              <dd>减：{$order.order_prom_amount}</dd>
+            <dt>积分 (-{$order.integral})：</dt>
+            <dd>-{$order.integral_money}</dd>
+            <dt>签到领取：</dt>
+            <dd>-{$order.sign_price}</dd>
+            <dt>价格调整：</dt>
+            <dd>-{$order.discount}</dd>
+          </dl>
+          <dl>
+            <dt>优惠券抵扣：</dt>
+            <dd>-{$order.coupon_price}</dd>
+            <dt>订单促销：</dt>
+            <dd>-{$order.order_prom_amount}</dd>
             <dt>应付：</dt>
             <dd><strong class="red_common">{$order.order_amount}</strong></dd>
            </dl>

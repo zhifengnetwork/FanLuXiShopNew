@@ -121,8 +121,14 @@ dd:before{
             <dd>{$vo.integral}</dd>
           </dl>
           <dl>
+            <dt>签到抵扣：</dt>
+            <dd>{$vo.sign_price}</dd>
+            <dt>价格调整：</dt>
+            <dd>{$vo.discount}</dd>
             <dt>使用余额：</dt>
             <dd>{$vo.user_money}</dd>
+          </dl>
+          <dl>
             <dt>应付金额：</dt>
             <dd><strong style="color:#777">{$vo.order_amount}</strong></dd>
             <dt>发票抬头：</dt>
