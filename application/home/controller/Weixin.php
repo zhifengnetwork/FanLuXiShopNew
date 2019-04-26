@@ -18,8 +18,6 @@ class Weixin
     	if ($data) {
             $re = $this->xmlToArray($data);
             
-            debug_log(json_encode($re));
-
 	    	$url = SITE_URL.'/mobile/message/index?eventkey='.$re['EventKey'].'&openid='.$re['FromUserName'].'&event='.$re['Event'];
 	    	httpRequest($url);
         }
@@ -29,11 +27,11 @@ class Weixin
             ob_clean();
             exit($_GET["echostr"]);
         }
-         write_log('处理接收推送消息');
+      
         $logic = new WechatLogic($config);
         $str = serialize($logic);
         $a = $logic->handleMessage();
-        write_log($str);
+        
     }
 
 
