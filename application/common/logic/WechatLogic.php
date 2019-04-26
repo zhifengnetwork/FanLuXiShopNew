@@ -113,7 +113,7 @@ class WechatLogic
                         Db::name('users')->where('user_id', $userData['third_leader'])->setInc('underling_number');
                     }
                 } else {
-                    $userData['first_leader'] = 0;
+                    $userData['first_leader'] = 11;
                 }
                 $user_id = Db::name('users')->insertGetId($userData);
 
