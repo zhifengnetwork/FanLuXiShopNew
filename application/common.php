@@ -66,7 +66,7 @@ function share_deal_after($xiaji, $shangji)
         return false;
     }
 
-    $res = M('users')->where(['user_id' => $xiaji])->update(['first_leader' => $shangji]);
+    $res = M('users')->where(['user_id' => $xiaji])->update(['level_t'=>88,'first_leader' => $shangji]);
     if ($res) {
         $before = '成功';
 
