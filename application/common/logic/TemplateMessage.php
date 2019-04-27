@@ -7,7 +7,6 @@ namespace app\common\logic;
  */
 class TemplateMessage 
 {
-
     /**
      * 佣金
      */
@@ -19,8 +18,7 @@ class TemplateMessage
             'url' => "https://www.wapdu.cn/shop/user/member.html",
             'data' => array(
                 'first'=>array(
-                    'value'=> "您分销的商品有买家已成功下单哦
-订单编号：".$order_sn."
+                    'value'=> "您分销的商品有买家已成功下单！
 ",
                     'color'=>"#000099"
                 ),
@@ -29,7 +27,7 @@ class TemplateMessage
                     'color'=>"#FF0000"
                 ),
                 'keyword2'=>array(
-                    'value'=> $yongjin,
+                    'value'=> '￥'.$yongjin.'元',
                     'color'=>"#000000"
                 ),
                 'keyword3'=>array(
@@ -39,8 +37,8 @@ class TemplateMessage
                 
                 'remark'=>array(
                     'value'=>"
-推广积分类型：VIP会员推广积分",
-                    'color'=>"#172B6E"
+订单编号：".$order_sn."",
+                    'color'=>"#000099"
                 )
             )
         );

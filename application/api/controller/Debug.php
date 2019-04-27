@@ -30,6 +30,16 @@ class Debug extends Controller
     }
 
 
+    public function msg(){
+
+        $logic = new \app\common\logic\TemplateMessage();
+        $openid = 'okGVu1dyM2IG-RU-JZDfH_RtsieY';
+        $goods_name = '两坨屎';
+        $yongjin = '2.50';
+        $order_sn = '12345678910111122';
+        $res = $logic->yongjin($openid,$goods_name,$yongjin,$order_sn);
+
+    }
 
     /**
      * 查用户信息
