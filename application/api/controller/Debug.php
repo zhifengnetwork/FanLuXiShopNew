@@ -11,6 +11,28 @@ class Debug extends Controller
 {
 
     /**
+     * 数据错误
+     */
+    public function ss(){
+
+        $list = M('oauth_users')->alias('o')->join('users u', 'o.user_id = u.user_id')
+        ->field('o.openid as oooooo_openid,u.openid as uuuuuu_openid,o.user_id,o.nickname as ooooo_nickname,u.nickname as uuuuu_nickname,u.old_openid')
+        ->where('o.openid','exp','!= u.openid')
+      
+        ->select();
+
+        dump($list);
+
+    }
+
+
+
+
+
+
+
+
+    /**
      * 查找重复值
      */
     public function aa(){
@@ -27,10 +49,10 @@ class Debug extends Controller
         }
     }
 
- /**
- * 查找重复值
- */
- public function bb(){
+    /**
+     * 查找重复值
+     */
+    public function bb(){
         $list = Db::query("select openid,user_id,count(*) as count from tp_users  WHERE openid!='' group by openid having count > 1 order by user_id DESC  limit 1 ") ;
         $openid = $list[0]['openid'];
         $users = M('users')->where(['openid'=>$openid])->field('user_id,level,openid,old_openid,user_money,first_leader,nickname,head_pic')->select();
