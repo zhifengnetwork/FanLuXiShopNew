@@ -298,7 +298,7 @@ class UsersLogic extends Model
 			 if(!$is_cunzai){
 
 					$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
-					if(!$old_user){
+					if(!$old_user && !$data['old_openid']){
 						$map['sign_old_openid'] = 111;
 						$row_id = Db::name('users')->add($map);
 					}else{
