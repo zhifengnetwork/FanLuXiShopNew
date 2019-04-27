@@ -1035,10 +1035,11 @@
             }
         });
     }
-    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-        WeixinJSBridge.call('hideToolbar');
-    });
 
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    WeixinJSBridge.call('hideToolbar');
+    WeixinJSBridge.call('hideOptionMenu');
+});
     function close_location(){
         var province_div = $('.province-list');
         var city_div = $('.city-list');
@@ -1073,7 +1074,7 @@
         if(!$('.container').is(":hidden")){
             $('body').css('overflow','hidden')
             cover();
-            $('.mask-filter-div').css('z-index','99999');
+            $('.mask-filter-div').css('z-index','9999');
         }
     }
     //自提点
