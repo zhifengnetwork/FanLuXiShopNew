@@ -41,7 +41,7 @@ class FanliLogic extends Model
 		//获取返利数据
 	public function getgoodsinfo()
 	{
-         $goods_info = M('goods')->where(['goods_id'=>$this->goodId])->field('sign_free_receive')->find();
+         $goods_info = M('goods')->where(['goods_id'=>$this->goodId])->field('sign_free_receive,goods_name')->find();
          return $goods_info;
 	}
 	//获取用户购买特殊产品数量
@@ -389,6 +389,12 @@ class FanliLogic extends Model
          {
          	$money =0; 
          }
+         //分钱后成功收到微信推送信息
+         $goods_name =$this->getgoodsinfo();
+         $user_info = M('users')->where('user_id',$userId)->field('openid')->find();
+         if($bool && !empty($user_info['openid'])){
+			$this->sent_weiassage($user_info['openid'],$goods_name['goods_name'],$money,$this->orderSn);
+		}
 		if($bool){
 
 			//分钱记录
@@ -402,6 +408,7 @@ class FanliLogic extends Model
 			M('order_divide')->add($data);
 		
 		}
+
 		
 		return $bool;
 	}
@@ -682,6 +689,15 @@ class FanliLogic extends Model
       
       return $userList;     
       
+  }
+  public function sent_weiassage($openid,$goods_name,$yongjin,$order_sn)
+  {
+  	   $logic = new \app\common\logic\TemplateMessage();
+        //$openid = 'okGVu1Z1J_m0n6YhDvqBFziqdTrQ';
+        //$goods_name = '一坨屎';
+        //$yongjin = '2.50';
+        //$order_sn = '12345678910';
+        $res = $logic->yongjin($openid,$goods_name,$yongjin,$order_sn);
   }
 
 	

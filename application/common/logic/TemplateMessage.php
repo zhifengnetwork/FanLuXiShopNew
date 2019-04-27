@@ -48,7 +48,8 @@ class TemplateMessage
         $content = json_encode($data);
         $task_id = md5($content.$openid);
         $res = $this->send_tpl($openid,$task_id,$data);
-        exit($res);
+       // exit($openid.'--'.$goods_name.'--'.$yongjin.'---'.$order_sn);
+        //exit($res);
     }
 
     /**
