@@ -112,9 +112,11 @@
 					<div class="wallet-zp">
 						<ul>
                             <li>
-                                <img src="__STATIC__/images/user_zp/jb13@2x.png" />
-                                <p>余额</p>
-                                <p class="num">{$user.user_money}</p>
+                                <a href="{:U('Shop/User/withdrawals')}">
+                                    <img src="__STATIC__/images/user_zp/jb13@2x.png" />
+                                    <p>余额</p>
+                                    <p class="num">{$user.user_money}</p>
+                                </a>
                             </li>
                             <if condition="$user.level gt 2">
                                 <li>
