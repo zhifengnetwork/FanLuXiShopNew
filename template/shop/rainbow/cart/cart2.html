@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>提交订单--{$tpshop_config['shop_info_store_title']}</title>
+    <title>1提交订单--{$tpshop_config['shop_info_store_title']}</title>
     <link rel="stylesheet" href="__STATIC__/css/style_yuanlai.css">
     <link rel="stylesheet" type="text/css" href="__STATIC__/css/iconfont.css"/>
     <link rel="stylesheet" href="__STATIC__/css/login_zjy/login_zjy.css">
@@ -72,7 +72,11 @@
     </div>
     <script type="text/javascript">
         
-    $(function(){	
+    $(function(){
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+            WeixinJSBridge.call('hideToolbar');
+            WeixinJSBridge.call('hideOptionMenu');
+        });
         $(window).scroll(function() {		
             if($(window).scrollTop() >= 1){ 
                 $('.tpnavf').hide()
@@ -1036,10 +1040,6 @@
         });
     }
 
-document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-    WeixinJSBridge.call('hideToolbar');
-    WeixinJSBridge.call('hideOptionMenu');
-});
     function close_location(){
         var province_div = $('.province-list');
         var city_div = $('.city-list');
