@@ -17,7 +17,7 @@ class Report extends Base
 	public function index(){
         ($this->begin > $this->end) && $this->error('起止时间选择错误！！！');
 		$now = strtotime(date('Y-m-d'));
-		$today['today_amount'] = M('order')->where("add_time>$now AND (pay_status=1 or pay_code='cod') and order_status in(1,2,4)")->sum('total_amount');//今日销售总额
+		$today['today_amount'] = M('order')->where("add_time>$now AND (pay_status=1 or pay_code='cod') and order_status in(0,1,2,4)")->sum('total_amount');//今日销售总额
 		$today['today_order'] = M('order')->where("add_time>$now and (pay_status=1 or pay_code='cod') and order_status!=3")->count();//今日订单数
 		$today['cancel_order'] = M('order')->where("add_time>$now AND order_status=3")->count();//今日取消订单
 		if ($today['today_order'] == 0) {
@@ -29,7 +29,7 @@ class Report extends Base
         $select_year = $this->select_year;
         $res = Db::name("order".$select_year)
             ->field(" COUNT(*) as tnum,sum(total_amount) as amount, FROM_UNIXTIME(add_time,'%Y-%m-%d') as gap ")
-            ->where(" add_time >$this->begin and add_time < $this->end AND (pay_status=1 or pay_code='cod') and order_status in(1,2,4) ")
+            ->where(" add_time >$this->begin and add_time < $this->end AND (pay_status=1 or pay_code='cod') and order_status in(0,1,2,4) ")
             ->group('gap')
             ->select();
 		foreach ($res as $val){
@@ -66,7 +66,7 @@ class Report extends Base
 		$where = [
             'od.pay_time'    => ['Between',"$this->begin,$this->end"],
             'od.order_status'=> ['notIN','3,5'],
-            'og.is_send'    => 1,
+            //'og.is_send'    => 1,   不用发货
         ];
         if(!empty($goods_name))$where['og.goods_name'] =['like', "%$goods_name%"];
          $count = Db::name('order_goods')->alias('og')
@@ -165,12 +165,12 @@ class Report extends Base
     public function saleOrder(){
         $end_time = $this->begin+24*60*60;
         $order_where = "o.add_time>$this->begin and o.add_time<$end_time";  //交易成功的有效订单
-        $order_count = Db::name('order')->alias('o')->where($order_where)->whereIn('order_status','1,2,4')->count();
+        $order_count = Db::name('order')->alias('o')->where($order_where)->whereIn('order_status','0,1,2,4')->count();
         $Page = new Page($order_count,20);
         $order_list = Db::name('order')->alias('o')
             ->field('o.order_id,o.order_sn,o.goods_price,o.shipping_price,o.total_amount,o.add_time,u.user_id,u.nickname')
             ->join('users u','u.user_id = o.user_id','left')
-            ->where($order_where)->whereIn('order_status','1,2,4')
+            ->where($order_where)->whereIn('order_status','0,1,2,4')
             ->limit($Page->firstRow,$Page->listRows)->select();
         $this->assign('order_list',$order_list);
         $this->assign('page',$Page);
@@ -184,7 +184,8 @@ class Report extends Base
         $cat_id = I('cat_id',0);
         $brand_id = I('brand_id',0);
         $goods_id = I('goods_id',0);
-        $where = "o.add_time>$this->begin and o.add_time<$this->end and o.order_status in(1,2,4) and og.is_send = 1 ";  //交易成功的有效订单
+        $where = "o.add_time>$this->begin and o.add_time<$this->end and o.order_status in(0,1,2,4) ";  //交易成功的有效订单
+        // and og.is_send = 1 
         if($cat_id>0){
             $where .= " and (g.cat_id=$cat_id or g.extend_cat_id=$cat_id)";
             $this->assign('cat_id',$cat_id);
@@ -277,7 +278,7 @@ class Report extends Base
             ->order('o.add_time asc')->getField('order_id,o.*');  //以时间升序
         $order_id_arr = get_arr_column($order,'order_id');
         $order_ids = implode(',',$order_id_arr);            //订单ID组
-        $order_goods = Db::name('order_goods')->where(['is_send'=>['in','1,2'],'order_id'=>['in',$order_ids]])->group('order_id')
+        $order_goods = Db::name('order_goods')->where(['is_send'=>['in','0,1,2'],'order_id'=>['in',$order_ids]])->group('order_id')
             ->order('order_id asc')->getField('order_id,sum(goods_num*cost_price) as cost_price,sum(goods_num*member_goods_price) as goods_amount');  //订单商品退货的不算
         $frist_key = key($order);  //第一个key
         $sratus_date = strtotime(date('Y-m-d',$order["$frist_key"]['add_time']));  //有数据那天为循环初始时间，大范围查询可以避免前面输出一堆没用的数据
@@ -312,7 +313,7 @@ class Report extends Base
 
             $list[] = [
                 'day'=>$date,
-                'goods_amount'      => $goods_amount,
+                'goods_amount'      => round($goods_amount,2),
                 'total_amount'      => $total_amount,
                 'cost_amount'       => $cost_price,
                 'shipping_amount'   => $shipping_amount,
@@ -337,8 +338,8 @@ class Report extends Base
         $end_time = $this->begin+24*60*60;
         $order_where = [
             'o.pay_status'=>1,
-            'o.shipping_status'=>1,
-            'og.is_send'=>['in','1,2']];  //交易成功的有效订单
+            'o.shipping_status'=>['in','0,1,2'],
+            'og.is_send'=>['in','0,1,2']];  //交易成功的有效订单
         $order_count = Db::name('order')->alias('o')
             ->join('order_goods og','o.order_id = og.order_id','left')->join('users u','u.user_id = o.user_id','left')
             ->whereTime('o.add_time', 'between', [$begin, $end_time])->where($order_where)

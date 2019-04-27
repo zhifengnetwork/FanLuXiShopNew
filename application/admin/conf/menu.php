@@ -233,7 +233,7 @@ return array(
             // array('name' => '销售明细', 'act' => 'saleList', 'op' => 'Report'),
             array('name' => '会员统计', 'act' => 'user', 'op' => 'Report'),
             array('name' => '运营概览', 'act' => 'finance', 'op' => 'Report'),
-            array('name' => '平台支出记录', 'act' => 'expense_log', 'op' => 'Report'),
+            // array('name' => '平台支出记录', 'act' => 'expense_log', 'op' => 'Report'),
         )),
         // array('name' => '业绩','child' => array(
         // 	array('name' => '个人业绩', 'act'=>'personal', 'op'=>'results'),
