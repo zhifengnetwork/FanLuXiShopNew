@@ -27,7 +27,24 @@ class Debug extends Controller
 
 
 
+    /**
+     * 查用户信息
+     */
+    public function info(){
+        $user_id = I('user_id');
+        if(!$user_id){
+            exit('参数user_id不存在');
+        }
 
+        $openid = M('users')->where(['user_id'=>$user_id])->value('openid');
+        $access_token = access_token();
+        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
+        $resp = httpRequest($url, "GET");
+        $res = json_decode($resp, true);
+
+        dump($res);
+
+    }
 
 
 
