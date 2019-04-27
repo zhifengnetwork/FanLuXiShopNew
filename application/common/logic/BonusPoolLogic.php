@@ -30,7 +30,7 @@ class BonusPoolLogic extends Model
 		//领取产品的用户
 		$user = M('users')->where('user_id', $order['user_id'])->field('user_id, nickname, first_leader')
 			  ->find();
-		if(!$user) return false;
+		if(!$user || $user['first_leader'] == 0) return false;
 
 		//开启事务
 		Db::startTrans();
