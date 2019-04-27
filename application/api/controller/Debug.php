@@ -20,6 +20,10 @@ class Debug extends Controller
         ->where('o.openid','exp','!= u.openid')
       
         ->select();
+        foreach($list as $k=>$v)
+        {
+            $list[$k]['orders'] = M('order')->where('user_id='.$v['user_id'])->select();
+        }
 
         dump($list);
 
