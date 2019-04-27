@@ -58,9 +58,11 @@
 }
 
 .area_roll {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     display: flex;
     width: 150%;
     height: auto;
@@ -135,9 +137,11 @@
 }
 
 .area_btn_box {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     display: flex;
     -webkit-box-pack:justify;
     -webkit-justify-content:space-between;
@@ -169,9 +173,11 @@
     height: 2em;
     line-height: 2em;
     text-align: center;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     display: flex;
     line-clamp: 1;
     -webkit-box-orient:vertical;

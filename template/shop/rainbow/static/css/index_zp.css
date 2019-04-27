@@ -14,6 +14,11 @@ body{
 	background: -o-linear-gradient(top, #fe44a0 0%, #e81295 100%);
 	background: -ms-linear-gradient(top, #fe44a0 0%, #e81295 100%);
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     align-items: center;
     padding: 0 0.2rem;
     box-sizing: border-box;
@@ -33,6 +38,11 @@ body{
     background-color: #fff;
     border-radius: 0.28rem;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     align-items: center;
 }
 .header .search .search-btn img{
@@ -74,6 +84,11 @@ body{
 /* 菜单导航 */
 .nav-wrap-zp ul{
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     flex-wrap: wrap;
     margin-bottom: 0.25rem;
 }
@@ -99,6 +114,11 @@ body{
     padding: 0 0.2rem;
     box-sizing: border-box;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
 }
 .seckill-wrap,.find-good{
     width: 50%;
@@ -114,6 +134,11 @@ body{
     height: 0.66rem;
     margin-left: 0.25rem;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     align-items: center;
 } 
 
@@ -139,6 +164,11 @@ body{
 /* 秒杀列表 */
 .floors .down{
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     padding-bottom: 0.15rem;
 }
 .floors .down a{
@@ -180,6 +210,11 @@ body{
     color: #e907b7;
     font-size: 0.24rem;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     align-items: center;
     justify-content: center;
 }
@@ -209,6 +244,11 @@ body{
 }
 .recommend-wrap .recommend-list ul{
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     justify-content: space-between;
     flex-wrap: wrap;
 }

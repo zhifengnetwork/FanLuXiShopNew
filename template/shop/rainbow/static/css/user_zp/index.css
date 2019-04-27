@@ -20,6 +20,11 @@
 
 .user-head-zp .user-top-zp{
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	align-items: center;
 	justify-content:space-between;
 	color: #fff;
@@ -30,6 +35,11 @@
 .user-info-zp{
 	/*width: 2.6rem;*/
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	align-items: center;
 	position: relative;
 }
@@ -75,6 +85,11 @@
 
 .user-down-zp .user-down-list{
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	justify-content:space-around;
 }
 
@@ -104,6 +119,11 @@
 	height: 0.7rem;
 	border-bottom: 0.01rem solid #c1c1c1;
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	align-items: center;
 	justify-content:space-between;
 	padding: 0 0.2rem;
@@ -131,6 +151,11 @@
 
 .user-nav-zp ul{
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	justify-content: center;
 	text-align: center;
 	padding: 0.25rem 0;
@@ -166,6 +191,11 @@
 
 .wallet-zp ul{
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 }
 .wallet-zp ul li{
 	width: 50%;

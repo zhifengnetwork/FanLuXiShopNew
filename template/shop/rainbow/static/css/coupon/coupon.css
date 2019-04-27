@@ -30,6 +30,11 @@ a{
 
 .copon-back{
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     flex-wrap:nowrap;
     height: .88rem;  
     background-color:#ffffff;
@@ -157,6 +162,11 @@ a{
 .info-class .info-discount,.info-class .info-time{
     height: .33rem;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     flex-wrap:nowrap;
     margin-top:.42rem;
     line-height: .33rem;

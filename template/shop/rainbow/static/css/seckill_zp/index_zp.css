@@ -22,6 +22,11 @@
 	background: #fff;
 	padding: 0 0.2rem;
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	align-items: center;
 	position: relative;
 	box-sizing: border-box;
@@ -43,6 +48,11 @@
 .seckill-wrap-zp .topbar .topNav{
 	width: 100%;
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	justify-content:space-around;
 	font-size: 0.34rem;
 }
@@ -54,6 +64,11 @@
 .rush-time-zp ul{
 	height: 1rem;
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	align-items: center;
 	background: #fff;
 }
@@ -89,6 +104,11 @@
 }
 .seckill-list-zp ul li{
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	padding: 0.25rem 0.2rem;
 	border-bottom: 0.02rem solid #f4f4f4;
 }
@@ -192,6 +212,11 @@
 
 .diamonds-wrap-zp .diamonds-list ul{
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	justify-content: space-around;
 }
 .diamonds-wrap-zp .diamonds-list ul li .pro-img{

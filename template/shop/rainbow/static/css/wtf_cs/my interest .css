@@ -56,7 +56,12 @@ body{max-width:7.5rem;min-width:3.2rem;width:7.5rem;margin:0 auto;background:#f5
 
 
 .wtf_m_r{float: left;margin-top: 0.22rem;margin-left: 0.1rem;}
-.wtf_m_r_r{float: right;display: flex;margin-top: 0.25rem;}
+.wtf_m_r_r{float: right;display: flex;margin-top: 0.25rem;  
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ }
 .wtf_m_r_r a{font-size: 0.23rem;color: #f72c0b;padding: 10px 17px 10px 17px;background: #ffe5e3;border-radius: 0.3rem;}
 
 .wtf_bom{margin-top: 0.1rem;background: #fff;padding: 0.1rem;height: 1.8rem;}

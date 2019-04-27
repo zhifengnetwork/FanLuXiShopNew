@@ -350,6 +350,11 @@ a{
 	background: #fff;
 	z-index: 100;
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	flex-direction: column;
 	border-radius: 0.427rem 0.427rem 0rem 0rem;
 }
@@ -443,6 +448,11 @@ a{
 	height:1.88rem;
 	border-bottom: .01rem solid #f4f4f4;
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
     flex-wrap:nowrap;
 	text-align: center;
 }
@@ -502,6 +512,11 @@ a{
 	height:2.12rem;
 	width:100%;
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
     flex-wrap:nowrap;
 	text-align: center;
 }
@@ -514,7 +529,12 @@ a{
     align-items: center;
     display: -webkit-box;
     display: -webkit-flex;
-    display: flex;
+	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	justify-content: center;
 }
 

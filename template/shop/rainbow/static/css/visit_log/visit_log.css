@@ -127,11 +127,21 @@ body{background: #f4f4f4;}
 }
 .record_content_r .record_content_info{
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     justify-content: space-between;
 }
 .record_content_r .record_content_info .content_info_l{
     color: #959595;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     justify-content: flex-start;
 }
 .record_content_r .record_content_info .content_info_l span{
@@ -154,6 +164,11 @@ body{background: #f4f4f4;}
     bottom: 0;
     left: 0;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     justify-content: space-between;
     padding: 0 .2rem;
     box-sizing: border-box;
@@ -161,6 +176,11 @@ body{background: #f4f4f4;}
 }
 .btn_nav_l{
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     justify-content: flex-start;
 }
 .btn_nav_l .check{

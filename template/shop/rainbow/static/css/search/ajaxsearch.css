@@ -33,6 +33,11 @@ ul{
     height: .75rem;
     width: 100%;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     justify-content:space-between;
     margin-top:.3rem;
 }
@@ -60,6 +65,11 @@ ul{
     width: 5.23rem;
     height: .75rem;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     flex-wrap:nowrap;
 }
 

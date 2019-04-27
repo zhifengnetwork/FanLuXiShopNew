@@ -53,6 +53,11 @@ img{
 .handpickBox .headerBox{
   height:.63rem;
   display: flex;
+  display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+  display: -moz-box; /* Firefox 17- */ 
+  display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+  display: -moz-flex; /* Firefox 18+ */ 
+  display: -ms-flexbox; /* IE 10 */ 
   justify-content:space-between;
 }
 
@@ -82,6 +87,11 @@ img{
 
 .headerBox .Imgbox{
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
   justify-content:space-between;
 }
 
@@ -111,6 +121,11 @@ img{
     height: 2.80rem;
     background-color: #f4f4f4;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     flex-wrap:wrap;
     align-content:flex-end;
 }
@@ -140,6 +155,11 @@ img{
     height: 1rem;
     width: 100%;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
 }
 .handpickListImg ul li{
     height: 1rem;

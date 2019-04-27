@@ -52,7 +52,11 @@ img{
 
 /* toubu */
 .headerBox{
-    display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+        display: -moz-box; /* Firefox 17- */ 
+        display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+        display: -moz-flex; /* Firefox 18+ */ 
+        display: -ms-flexbox; /* IE 10 */ 
         height:.63rem;
         display: flex;
         line-height: .63rem;
@@ -80,6 +84,11 @@ img{
   .navigation{
       margin:.1rem .17rem 0 .17rem;
       display: flex;
+      display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+      display: -moz-box; /* Firefox 17- */ 
+      display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+      display: -moz-flex; /* Firefox 18+ */ 
+      display: -ms-flexbox; /* IE 10 */ 
   }
  .navigation .nav-li{
   width: 50%;

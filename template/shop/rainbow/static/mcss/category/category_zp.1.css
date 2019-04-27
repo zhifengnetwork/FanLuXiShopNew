@@ -24,6 +24,11 @@ body{
 .top-bar{
 	height: 0.68rem;
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	align-items: center;
 	justify-content: space-around;
 	padding: 0.1rem 0.3rem;
@@ -37,6 +42,11 @@ body{
 .top-bar .search form{
 	height: 100%;
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	align-items: center;
 }
 .top-bar .search .search-btn{
@@ -73,6 +83,11 @@ body{
 /*分类主体*/
 .category-main{
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	overflow: hidden;
 }
 
@@ -87,6 +102,11 @@ body{
 .category-main .menu li{
 	height: 0.8rem;
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	align-items: center;
 	justify-content: center;
 	font-size: 0.26rem;
@@ -147,6 +167,11 @@ body{
 /*分类列表，三个模块样式一致*/
 .cate-item .cate-list{
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	flex-wrap: wrap;
 	border-radius: 0.1rem;
 }
@@ -174,6 +199,11 @@ body{
 /*精选专辑*/
 .album-list .album-item{
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	align-items: center;
 	justify-content: space-around;
 	margin-bottom: 0.2rem;
@@ -209,6 +239,11 @@ body{
 /*面部护理*/
 .nursing-list .item{
 	display: flex;
+	display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+	display: -moz-box; /* Firefox 17- */ 
+	display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+	display: -moz-flex; /* Firefox 18+ */ 
+	display: -ms-flexbox; /* IE 10 */ 
 	position: relative;
 	border-bottom: 1px solid #f9f6f6;
 	padding: 0.1rem 0;

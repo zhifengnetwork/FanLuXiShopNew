@@ -72,6 +72,11 @@ img{
     height: .92rem;
     position:fixed;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
 	top:0;
 	z-index:999;
     background-color: #f75922;
@@ -94,6 +99,11 @@ img{
 .headerInput{
     height:.55rem; 
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     flex-wrap: nowrap;
     width: 4.48rem;
     margin:.2rem .52rem .2rem .52rem;
@@ -180,6 +190,11 @@ img{
     height: .47rem;
     width: 100%;
     display: flex;
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     flex-direction: row;
     line-height: .47rem;
     position: relative;
@@ -254,6 +269,11 @@ img{
      position: absolute;
      right: .17rem;
      display: flex;
+     display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+     display: -moz-box; /* Firefox 17- */ 
+     display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+     display: -moz-flex; /* Firefox 18+ */ 
+     display: -ms-flexbox; /* IE 10 */ 
      flex-direction:row;
      height: .61rem;
  }
@@ -262,6 +282,11 @@ img{
 }
 .seckillMsg  .more>a{
     display: flex; 
+    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+    display: -moz-box; /* Firefox 17- */ 
+    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+    display: -moz-flex; /* Firefox 18+ */ 
+    display: -ms-flexbox; /* IE 10 */ 
     flex-direction: row;
 }
   
@@ -389,6 +414,11 @@ img{
  
  .recommend-pic{
      display: flex;
+     display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */ 
+     display: -moz-box; /* Firefox 17- */ 
+     display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */ 
+     display: -moz-flex; /* Firefox 18+ */ 
+     display: -ms-flexbox; /* IE 10 */ 
      justify-content:space-between;
      height: .4rem;
      line-height: .4rem;
