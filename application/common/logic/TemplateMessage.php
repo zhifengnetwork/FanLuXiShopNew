@@ -15,7 +15,7 @@ class TemplateMessage
         $data = array(
             'touser'=> $openid,
             'template_id' => "58i9tVawAXWrwGWiLS5Csh-_PRVO5W4jAXc3qnQhWec",
-            'url' => "https://www.wapdu.cn/shop/user/member.html",
+            'url' => "https://www.wapdu.cn/Shop/User/get_detail?order_sn=".$order_sn,
             'data' => array(
                 'first'=>array(
                     'value'=> "您分销的商品有买家已成功下单！
