@@ -73,6 +73,10 @@ class MobileBase extends Controller {
                         if(!$wxuser['openid']){
                             $this->error('获取新openid失败');
                         }
+
+                        //这里做 新 openid 登录成功
+
+
                         session("third_oauth" , $wxuser);
                     }else{
                         $wxuser = session("third_oauth");
