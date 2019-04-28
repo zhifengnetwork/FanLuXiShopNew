@@ -36,6 +36,21 @@ class Code extends Controller
 
     }
 
+    /**
+     * 退出
+     */
+    public function logout()
+    {
+        session_unset();
+        session_destroy();
+        setcookie('uname','',time()-3600,'/');
+        setcookie('cn','',time()-3600,'/');
+        setcookie('user_id','',time()-3600,'/');
+        setcookie('PHPSESSID','',time()-3600,'/');
+       
+        exit('退出成功');
+    }
+
   
     // 网页授权登录获取 OpendId (旧公众号)
     public function GetOldOpenid()
