@@ -235,7 +235,10 @@ class Order extends MobileBase
      */
     public function express_detail()
     {
-        $order_id = I('id');
+        $order_id = I('order_id');
+        if(!$order_id){
+            $order_id = I('id');
+        }
         if(!$order_id){
             $this->error('订单ID不存在');
         }
