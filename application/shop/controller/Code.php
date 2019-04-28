@@ -15,7 +15,7 @@ class Code extends Controller
         $old_openid = session('old_openid');
         if($old_openid){
 
-            debug_log('当前地址 18 行：'.get_url());
+            debug_log('当前地址 18 行：'.$this->get_url());
 
             header('Location:/shop/index/index?old_openid='.$old_openid);
             exit;
@@ -28,7 +28,7 @@ class Code extends Controller
         if($old_openid){
             // 旧openid存在则调回去
 
-            debug_log('当前地址 31 行：'.get_url());
+            debug_log('当前地址 31 行：'.$this->get_url());
 
             header('Location:/shop/index/index?old_openid='.$old_openid);
             exit;
