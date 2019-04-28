@@ -1409,8 +1409,13 @@ class User extends MobileBase
     //业绩明细订单详情
     public function get_detail()
     {
-        $fir = 'order_id, order_sn, nickname, consignee, order.total_amount, add_time, pay_time';
+        $user_id = session('user.user_id');
         $order_id = I('order_id');
+        $order_sn = I('order_sn');
+        if($order_sn){
+            $order_id = M('order')->where('order_sn', $order_sn)->value('order_id');
+        }
+        $fir = 'order_id, order_sn, nickname, consignee, order.total_amount, add_time, pay_time';
         $detail = M('order')->alias('order')
                 ->join('users', 'order.user_id = users.user_id')
                 ->where('order_id', $order_id)
@@ -1425,6 +1430,9 @@ class User extends MobileBase
             $detail['goods'][] = $v;
         }
         $this->assign('detail', $detail);
+
+        $account_log = M('account_log')->where(['user_id'=>$user_id, 'order_id'=>$order_id, 'log_type'=>['neq',0]])->select();
+        $this->assign('log', $account_log);
         return $this->fetch();
     }
 
@@ -1465,6 +1473,18 @@ class User extends MobileBase
         $this->assign('lists', $users);
 
         return $this->fetch();
+    }
+
+    //团队订单列表
+    public function order_list(){  
+        $user_id = I('user_id');
+        $order = M('order')->field('order_sn, consignee, add_time,goods_price')
+                ->where('user_id', $user_id)->where('pay_status', 1)
+                ->limit(20)->order('order_id desc')->select();
+        $user = M('users')->field('user_id,nickname,mobile')->where(['user_id'=>$user_id])->find();
+        $this->assign('user', $user);
+        $this->assign('order', $order);
+        return $this->fetch();   
     }
     
     //添加、编辑提现支付宝账号

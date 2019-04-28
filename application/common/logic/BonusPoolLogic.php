@@ -185,7 +185,6 @@ class BonusPoolLogic extends Model
 								  ->where('status', 0)->update(['status'=>1]);
 			//剩余金额
 			$remanent = round(($data['bonus_total'] - $count), 2);
-			dump($remanent);
 			Db::name('config')->where('name', 'bonus_total')->update(['value'=>$remanent]);
 			Db::commit();
 			return true;
@@ -210,7 +209,7 @@ class BonusPoolLogic extends Model
 
 		$result = Db::name('bonus_rank')->alias('rank')->join('users', 'rank.user_id = users.user_id')
 				->field('rank.*, users.user_money')->where($condition)
-				->order('rank.nums DESC, rank.create_time ASC')->limit(3)->select();
+				->order('rank.nums DESC, rank.money DESC, rank.create_time ASC')->limit(3)->select();
 		return $result;
 	}
 
