@@ -130,12 +130,12 @@ class Distribut extends Controller
     }
 
 
-
+    /**
+     * 获取团队总人数
+     */
     public function aaaaaaa(){
-
         dump($this->getAlldp_p(10968740));
     }
-
 
     /*
     * 获取所有下级
