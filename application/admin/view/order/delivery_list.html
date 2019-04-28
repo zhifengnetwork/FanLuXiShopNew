@@ -20,8 +20,8 @@
       <span title="收起提示" id="explanationZoom" style="display: block;"></span>
     </div>
      <ul>
-      <li>点击查看操作将显示订单（包括订单物品）的详细信息</li>
-      <li>已发货订单列表</li>
+      <li>选择要发货的订单, 点击批量发货,可以进行批量发货</li>
+      <li>未发货订单列表</li>
     </ul>
   </div>
   <div class="flexigrid">
@@ -45,13 +45,13 @@
         <div class="sDiv2">
           <input type="text" size="30" id="order_sn" name="order_sn" value="" class="qsbox"  placeholder="订单编号">
         </div>
-        <div class="sDiv2">  
+        <!-- <div class="sDiv2">  
           <select name="shipping_status" class="select" id="print_express" style="width:100px;margin-right:5px;margin-left:5px">
                     <option value="0">待发货</option>
                     <option value="1">已发货</option>
           <option value="2">部分发货</option>
             </select>
-        </div>
+        </div> -->
         <div class="sDiv2">  
           <input type="button" onclick="ajax_get_table('search-form2',1)"  class="btn" value="搜索">
         </div>
@@ -142,7 +142,7 @@
                     </a>
                 </div>
             </div>
-
+ 
 
       <div style="clear:both"></div>
     </div>
