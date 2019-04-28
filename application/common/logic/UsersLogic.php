@@ -298,7 +298,7 @@ class UsersLogic extends Model
              write_log('新注册：openid'.$data['openid'].'--name--'.$data['nickname'].'time'.$time);
 
 			 if(!empty($is_cunzai)){
-			 	 write_log('新注册数据查询1：openid='.$is_cunzai['openid'].'--name--'.$is_cunzai['nickname'].'time'.$time);
+			 	 write_log('新注册数据查询1：openid='.$is_cunzai['openid'].'--name--'.$is_cunzai['nickname'].'time'.$time.'==data_openid'.$data['openid']);
 				$map['sign_old_openid'] = 555;
 				Db::name('users')->where(array('openid'=>$map['openid']))->update($map);
 				$row_id = $is_cunzai['user_id'];
@@ -306,7 +306,7 @@ class UsersLogic extends Model
 			}else{
 				 
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
-				write_log('新注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time);
+				write_log('新注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'---data_openid='.$data['old_openid']);
 				if(!$old_user && !$data['old_openid']){
 					$map['sign_old_openid'] = 111;
 					$row_id = Db::name('users')->add($map);
@@ -365,7 +365,7 @@ class UsersLogic extends Model
               write_log('已注册：old_openid'.$data['old_openid'].'--name--'.$data['nickname'].'time'.$time);
 			 	//查找是否已有老数据
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
-				write_log('已注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time);
+				write_log('已注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'---openid---'.$data['old_openid']);
 				if($old_user){
 				//更新老数据并删除新注册的数据
 					$map['openid'] = $data['openid'];
