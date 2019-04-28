@@ -306,6 +306,7 @@ class UsersLogic extends Model
 			}else{
 
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
+				 write_log('新注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'==data_old_openid'.$data['old_openid']);
 				 
 				if($old_user == null || empty($old_user) || !$old_user || empty($data['old_openid'])){
 					//新用户
