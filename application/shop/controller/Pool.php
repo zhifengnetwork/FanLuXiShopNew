@@ -1,6 +1,7 @@
 <?php
 
 namespace app\shop\controller;
+use app\common\logic\BonusPoolLogic;
 
 use think\Db;
 use think\Page;
@@ -26,6 +27,10 @@ class Pool extends MobileBase {
     //排名
 	public function index()
 	{
+		//奖金池奖励
+        // $BonusPoolLogic = new BonusPoolLogic();
+		// $BonusPoolLogic->bonus_reward(); 
+		
 		$user_id = $this->user_id;
 		$data = array('bonus_time', 'bonus_total', 'day');
 		$data = M('config')->where('name', ['in', $data])

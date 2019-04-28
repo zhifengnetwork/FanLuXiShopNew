@@ -93,7 +93,27 @@
                     <div class="lj_main_c1">
                         <span class="lj_main_span">支付时间:</span>
                         <span>{$detail.pay_time|date="Y-m-d H:i:s", ###}</span>
-                    </div>
+                    </div><br><br>
+
+                    <!-- <notempty name="log">
+                        <div class="lj_main_c1">
+                            <span class="lj_main_span">我的返利:</span>
+                        </div>
+                        <foreach name="log" item="log">
+                            <div class="lj_main_c1">
+                                <span class="lj_main_span">返利金额:</span>
+                                <span>{$log.user_money}</span>
+                            </div>
+                            <div class="lj_main_c1">
+                                <span class="lj_main_span">备注:</span>
+                                <span>{$log.desc}</span>
+                            </div>
+                            <div class="lj_main_c1">
+                                <span class="lj_main_span">时间:</span>
+                                <span>{$log.change_time|date="Y-m-d H:i:s", ###}</span>
+                            </div>
+                        </foreach>
+                    </notempty> -->
                 </div>
                 <div class="lj_mian_p"></div>
             </div>
