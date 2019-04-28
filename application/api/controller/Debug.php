@@ -32,11 +32,13 @@ class Debug extends Controller
 
     public function msg(){
 
+        $user_id = 17951621;
+
         $logic = new \app\common\logic\TemplateMessage();
-        $openid = 'okGVu1dyM2IG-RU-JZDfH_RtsieY';
+        $openid = M('users')->where(['user_id'=>$user_id])->value('openid');
         $goods_name = '两坨屎';
         $yongjin = '2.50';
-        $order_sn = '12345678910111122';
+        $order_sn = '201904191933224360';
         $res = $logic->yongjin($openid,$goods_name,$yongjin,$order_sn);
 
     }
