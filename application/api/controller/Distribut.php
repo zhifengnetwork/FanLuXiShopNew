@@ -129,4 +129,31 @@ class Distribut extends Controller
         return $num + $mun;
     }
 
+
+
+    public function aaaaaaa(){
+
+        dump($this->getAlldp_p(10968740));
+    }
+
+
+    /*
+    * 获取所有下级
+    */
+   public function getAlldp_p($invite_id,&$userList=array())
+   {           
+       $field  = "user_id";
+       $UpInfo = M('users')->field($field)->where(['first_leader'=>$invite_id])->select();
+
+       if($UpInfo){
+            foreach ($UpInfo as $key => $value) {
+                $userList[] = $value;
+                $this->getAlldp_p($value['user_id'],$userList);
+            }
+       }
+       
+       return $userList;
+   }
+
+
 }
