@@ -1415,13 +1415,14 @@ class User extends MobileBase
         if($order_sn){
             $order_id = M('order')->where('order_sn', $order_sn)->value('order_id');
         }
-        $fir = 'order_id, order_sn, nickname, consignee, order.total_amount, add_time, pay_time';
+        $fir = 'order_id, level, order_sn, nickname, consignee, order.total_amount, add_time, pay_time';
         $detail = M('order')->alias('order')
                 ->join('users', 'order.user_id = users.user_id')
                 ->where('order_id', $order_id)
                 ->field($fir)
                 ->find();
 
+        $level_name = M('user_level')->where('level', $detail['level'])->value('level_name');
         //获取订单所有商品
         $goods = M('order_goods')->where('order_id', $order_id)
                 ->field('goods_name, goods_num, goods_price')
@@ -1430,6 +1431,7 @@ class User extends MobileBase
             $detail['goods'][] = $v;
         }
         $this->assign('detail', $detail);
+        $this->assign('level_name', $level_name);
 
         $account_log = M('account_log')->where(['user_id'=>$user_id, 'order_id'=>$order_id, 'log_type'=>['neq',0]])->select();
         $this->assign('log', $account_log);
