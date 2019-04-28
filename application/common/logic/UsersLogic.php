@@ -294,7 +294,8 @@ class UsersLogic extends Model
 			// } 
 
 			$is_cunzai = Db::name('users')->where(array('openid'=>$data['openid']))->find();
-
+			$time=date("Y-m-d H:i:s");
+             write_log('新注册：openid'.$data['openid'].'--name--'.$data['nickname'].'time'.$time);
 			 if(!$is_cunzai){
 
 					$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
@@ -346,11 +347,13 @@ class UsersLogic extends Model
 			
 		} else {
 			$map['head_pic'] = !empty($data['head_pic']) ? $data['head_pic'] : '/public/images/icon_goods_thumb_empty_300.png';
-            
+            $time=date("Y-m-d H:i:s");
+             write_log('已注册：openid'.$data['openid'].'--name--'.$data['nickname'].'time'.$time);
 			$is_cunzai_data = Db::name('users')->where(array('openid'=>$data['openid']))->find();
 
 			if(!$is_cunzai_data){
-
+				$time=date("Y-m-d H:i:s");
+             write_log('已注册：old_openid'.$data['old_openid'].'--name--'.$data['nickname'].'time'.$time);
 			 	//查找是否已有老数据
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
 

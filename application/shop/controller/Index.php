@@ -271,15 +271,4 @@ class Index extends MobileBase {
         $this->assign('wap_url' , $wap_url);
         return $this->fetch();
     }
-
-    public function ceshimessage()
-    {
-        $logic = new \app\common\logic\TemplateMessage();
-        $openid = 'okGVu1Z1J_m0n6YhDvqBFziqdTrQ';
-        $goods_name = '一坨屎';
-        $yongjin = '2.50';
-        $order_sn = '12345678910';
-        $res = $logic->yongjin($openid,$goods_name,$yongjin,$order_sn);
-
-    }
 }
