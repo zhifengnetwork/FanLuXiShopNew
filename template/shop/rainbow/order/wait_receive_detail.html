@@ -9,9 +9,9 @@
             </div>
             <if condition="$order.shipping_status gt 0">
                 <foreach name="order_info['delivery_doc']" item="v">
-                <a href="{:U('Order/express',array('order_id'=>$order['order_id']))}">
+                <!-- <a href="{:U('Order/express',array('order_id'=>$order['order_id']))}"> -->
                     <!--物流信息-s-->
-                    <div class="wuliumess">
+                    <!-- <div class="wuliumess">
                         <script>
                             queryExpress();
                             function queryExpress()
@@ -33,7 +33,7 @@
                             }
                         </script>
                     </div>
-                </a>
+                </a> -->
                 </foreach>
             </if>
         </div>

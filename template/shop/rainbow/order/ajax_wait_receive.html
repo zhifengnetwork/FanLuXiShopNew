@@ -7,7 +7,7 @@
                     <span class="red">{$order.OrderStatusDetail}</span>
                 </div>
                 <!--物流信息-s-->
-                <div class="wuliumess">
+                <!-- <div class="wuliumess">
                     <script>
                         queryExpress();
                         function queryExpress()
@@ -30,7 +30,7 @@
                             });
                         }
                     </script>
-                </div>
+                </div> -->
                 <!--物流信息-e-->
 
             </div>
@@ -57,7 +57,7 @@
                     <!--<a href="">再次购买</a>-->
                     <a href="{:U('Shop/Order/order_detail',array('id'=>$order.order_id,'waitreceive'=>1))}">查看详情</a>
                     <a class="tuid" href="javascript:void(0);" onclick="expedite('{$order.order_id}')">我要催单</a>
-                    <!--<a href="{:U('Shop/User/express',array('order_id'=>$order.order_id))}">查看物流</a>-->
+                    <a href="{:U('Shop/Order/express_detail',array('order_id'=>$order.order_id))}">查看物流</a>
                     <a class="red receipt" href="javascript:void(0);" onclick="confirmReceive('{$order.order_id}')">确认收货</a>
                 </p>
             </div>

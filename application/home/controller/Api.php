@@ -220,8 +220,8 @@ class Api extends Base
     public function queryExpress($shipping_code, $invoice_no)
     {
         //判断变量是否为空
-        if((!$shipping_code) or (!$invoice_no)){
-            return ['status' => -1, 'message' => '参数有误', 'result' => ''];
+        if(!$shipping_code || !$invoice_no){
+            return ['status' => -1, 'msg' => '参数有误', 'result' => ''];
         }
 
         //快递公司转换

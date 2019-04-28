@@ -393,15 +393,20 @@ class Order extends Base {
      */
     public function express_detail(){
         $order_id = I('order_id');
-        $Api = new Api;
         $data = M('delivery_doc')->where('order_id', $order_id)->find();
         $shipping_code = $data['shipping_code'];
         $invoice_no = $data['invoice_no'];
-        $result = $Api->queryExpress($shipping_code, $invoice_no);
-        if ($result['status'] == 0) {
-            $result['result'] = $result['result']['list'];
+        if(!$shipping_code || !$invoice_no){
+            $result = ['status' => -1, 'msg' => '暂无物流', 'result' => ''];
+        }else{
+            $Api = new Api;
+            $result = $Api->queryExpress($shipping_code, $invoice_no);
+            if ($result['status'] == 0) {
+                $result['result'] = $result['result']['list'];
+            }
+            $this->assign('invoice_no', $invoice_no);
+            $this->assign('shipping_name', $data['shipping_name']);
         }
-        $this->assign('invoice_no', $invoice_no);
         $this->assign('result', $result);
         return $this->fetch();
     }
