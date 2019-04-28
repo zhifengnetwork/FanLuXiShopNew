@@ -305,7 +305,7 @@ class UsersLogic extends Model
 					
 			}else{
 				 
-				if(!$data['old_openid']){
+				if($data['old_openid'] == null || empty($data['old_openid']) || !$data['old_openid']){
 					//新用户
 					write_log('=====新用户======:'.json_encode($map));
 
