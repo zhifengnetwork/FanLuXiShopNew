@@ -296,7 +296,7 @@ class UsersLogic extends Model
 			$is_cunzai = Db::name('users')->where(array('openid'=>$data['openid']))->find();
 			$time=date("Y-m-d H:i:s");
              write_log('新注册：openid'.$data['openid'].'--name--'.$data['nickname'].'time'.$time);
-			 if($is_cunzai){
+			 if(!empty($is_cunzai)){
 
 				$map['sign_old_openid'] = 555;
 				Db::name('users')->where(array('openid'=>$map['openid']))->update($map);
