@@ -366,13 +366,13 @@ class UsersLogic extends Model
 					Db::name('users')->where(array('user_id'=>$user['user_id']))->delete();
 				}else{
 					$map['sign_old_openid'] = 444;
-					Db::name('users')->where('user_id', $user['user_id'])->save($map);
+					Db::name('users')->where('openid', $data['openid'])->save($map);
 				}
 
 
 			}else {
 			 	$map['sign_old_openid'] = 6666;
-				Db::name('users')->where('user_id', $user['user_id'])->save($map);
+				Db::name('users')->where('openid', $data['openid'])->save($map);
 			}
 
 			$user['token'] = $map['token'];
