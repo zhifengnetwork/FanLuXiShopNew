@@ -30,6 +30,17 @@ class Code extends Controller
 
     }
 
+    /**
+     * 退出
+     */
+    public function logout()
+    {
+        session_unset();
+        session(null);
+       
+        exit('退出成功');
+    }
+
   
     // 网页授权登录获取 OpendId (旧公众号)
     public function GetOldOpenid()

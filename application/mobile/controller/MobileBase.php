@@ -17,6 +17,10 @@ class MobileBase extends Controller {
      * 初始化操作
      */
     public function _initialize() {
+
+        debug_log('来到了mobile模块的mobilebase：'.$this->get_url());
+
+        
         session('user'); //不用这个在忘记密码不能获取session('validate_code');
 //        Session::start();
         header("Cache-control: private");  // history.back返回后输入框值丢失问题 参考文章 http://www.tp-shop.cn/article_id_1465.html  http://blog.csdn.net/qinchaoguang123456/article/details/29852881
