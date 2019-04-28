@@ -153,7 +153,7 @@
             <a id="order_confirm" data-order-id="{$order[order_id]}">收货确认</a>
         </if>
         <if condition="$order[shipping_btn] eq 1">
-            <a href="{:U('Shop/Order/express',array('order_id'=>$order['order_id']))}" >查看物流</a>
+            <a href="{:U('Shop/Order/express_detail',array('order_id'=>$order['order_id']))}" >查看物流</a>
         </if>
     </div>
 </div>

@@ -11,6 +11,7 @@ use app\common\logic\OrderLogic;
 use app\common\logic\MessageFactory;
 use app\common\model\ReturnGoods;
 use app\common\util\TpshopException;
+use app\home\controller\Api;
 use think\AjaxPage;
 use think\Page;
 use think\Db; 
@@ -384,6 +385,24 @@ class Order extends Base {
             $this->error('订单不存在或已被删除');
         }
         $this->assign('order', $order);
+        return $this->fetch();
+    }
+
+    /**
+     * 物流详情
+     */
+    public function express_detail(){
+        $order_id = I('order_id');
+        $Api = new Api;
+        $data = M('delivery_doc')->where('order_id', $order_id)->find();
+        $shipping_code = $data['shipping_code'];
+        $invoice_no = $data['invoice_no'];
+        $result = $Api->queryExpress($shipping_code, $invoice_no);
+        if ($result['status'] == 0) {
+            $result['result'] = $result['result']['list'];
+        }
+        $this->assign('invoice_no', $invoice_no);
+        $this->assign('result', $result);
         return $this->fetch();
     }
 
