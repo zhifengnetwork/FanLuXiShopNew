@@ -308,8 +308,15 @@ class UsersLogic extends Model
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
 				write_log('新注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'---data_openid='.$data['old_openid']);
 				if(!$old_user && !$data['old_openid']){
+
+					write_log('=====map======':.json_encode($map));
+
+
 					$map['sign_old_openid'] = 111;
 					$row_id = Db::name('users')->add($map);
+
+					write_log('=====row_id======':.$row_id);
+
 				}else{
 					$map['sign_old_openid'] = 222;
 					Db::name('users')->where(array('user_id'=>$old_user['user_id']))->update($map);
