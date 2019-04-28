@@ -902,18 +902,28 @@ class Order extends Base {
         if(empty($_FILES['file']['tmp_name'])){
             $this->error('请选择文件');
         }
+        
         $file = request()->file('file');
+        $size = $_FILES['file']['size'];
+        $format = strrev($_FILES['file']['name']);
+        $format = explode('.',$format);
+        $format = strrev($format[0]);
+        $max_size = 500*1024;
+        if($size >= $max_size){
+            $this->error('只允许上传小于500KB的文件');
+        } 
+        if(($format != 'xls') && ($format != 'xlsx')){
+            $this->error('只允许上传xls,xlsx格式的文件');
+        }
          // 移动到框架应用根目录/uploads/ 目录下
         $paths = ROOT_PATH . 'public/upload/excel';
         if (!file_exists($paths)){
             mkdir ($paths,0777,true);
         }
-        $info  = $file->validate(['size'=>204800,'ext'=>'xls,xlsx,csv']);
-        
+        // $info  = $file->validate(['size'=>204800,'ext'=>'xls,xlsx']);
         $info  = $file->rule('md5')->move($paths);//加
         
         $datas = ROOT_PATH.DS.'public/upload/excel/'.$info->getSaveName();
-       
         $fields =  Db::query("show fields from tp_delivery_order_handle");
        
         $allfield=array();
@@ -924,7 +934,6 @@ class Order extends Base {
         $fieldnum=count($allfield);
         //设置列
         $column=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
-
 
         //导入PHPExcel类库，因为PHPExcel没有用命名空间，只能inport导入
         vendor('PHPExcel.PHPExcel');
@@ -939,7 +948,7 @@ class Order extends Base {
 
         /*判别是不是.xls和.xlsx文件，判别是不是excel文件*/
         if ($exts == '.xls') {
-
+            
             $PHPReader = \PHPExcel_IOFactory::createReader('Excel5');
            
         } else if($exts == '.xlsx') {  
@@ -948,7 +957,7 @@ class Order extends Base {
 
         } else if($exts == '.csv'){
             
-            $PHPReader = \PHPExcel_IOFactory::createReader('CSV');
+            $this->error('只允许上传xls,xlsx格式的文件');
 
         }
            
@@ -989,16 +998,18 @@ class Order extends Base {
         foreach($data as $key=>$val){
 
             for($i=0;$i<$fieldnum-1;$i++){
-                //手动修改字段与值
-                $arr[$key]['order_sn']   =  $val['A'];
-                $arr[$key]['consignee']  =  $val['B'];
-                $arr[$key]['mobile']     =  strval($val['C']);
-                $arr[$key]['address']    =  $val['D'];
-                $arr[$key]['invoice_no'] =  $val['E'];
-                $arr[$key]['goods']      =  $val['F'];
-                $arr[$key]['goods_num']  =  $val['G'];
-                $arr[$key]['add_time']   =  time();
-                $arr[$key]['shipping_name'] = $shipping_name;
+                if($val['A'] && $val['B'] && $val['C'] && $val['D'] && $val['E']){
+                    //手动修改字段与值
+                    $arr[$key]['order_sn']   =  ltrim($val['A']);
+                    $arr[$key]['mobile']     =  strval(trim($val['C']));
+                    $arr[$key]['consignee']  =  $val['B'];
+                    $arr[$key]['address']    =  $val['D'];
+                    $arr[$key]['invoice_no'] =  $val['E'];
+                    $arr[$key]['goods']      =  $val['F'];
+                    $arr[$key]['goods_num']  =  $val['G'];
+                    $arr[$key]['add_time']   =  time();
+                    $arr[$key]['shipping_name'] = $shipping_name;
+                }
            }
 
         }
@@ -1025,10 +1036,7 @@ class Order extends Base {
             }else{
                 foreach($order as $val){
                     $res = Db::name('order')->where('order_sn',$val['order_sn'])->update($update);
-                    $order_data = Db::name('order')
-                                    ->where('order_sn', $val['order_sn'])
-                                    ->field('order_id, user_id, zipcode, country, city, district, shipping_price')
-                                    ->find();
+                    
                     if($res == 1){
                         // 发货成功
                         $doc = [
@@ -1037,17 +1045,18 @@ class Order extends Base {
                             'consignee'=> $val['consignee'],
                             'address'  => $val['address'],
                             'mobile'   => $val['mobile'],
-                            'order_id' => $order_data['order_id'],
-                            'user_id'  => $order_data['user_id'],
-                            'zipcode'  => $order_data['zipcode'],
-                            'country'  => $order_data['country'],
-                            'city'     => $order_data['city'],
-                            'district' => $order_data['district'],
+                            'order_id' => $val['order_id'],
+                            'user_id'  => $val['user_id'],
+                            'zipcode'  => $val['zipcode'],
+                            'country'  => $val['country'],
+                            'province' => $val['province'],
+                            'city'     => $val['city'],
+                            'district' => $val['district'],
                             'shipping_code'  => $shipping_code,
                             'shipping_name'  => $shipping_name,
-                            'shipping_price' => $order_data['shipping_price'],
-                            'invoice_no'     => $val['invoice_no'],
-                            'create_time'    => time(),
+                            'shipping_price' => $val['shipping_price'],
+                            'invoice_no'     => $v['invoice_no'],
+                            'create_time'    => $v['add_time'],
                             'send_type'      => 0,
                         ];
                         $doc_cunzai = Db::name('delivery_doc')->where(['order_sn' => $val['order_sn']])->find();
@@ -1055,8 +1064,8 @@ class Order extends Base {
                             $rest = Db::name('delivery_doc')->add($doc);
                         }
                         $arr[$k]['status']   = 1;
-                        $arr[$k]['order_id'] = $order_data['order_id'];
-                        $arr[$k]['order_sn'] = $order_data['order_sn'];
+                        $arr[$k]['order_id'] = $val['order_id'];
+                        $arr[$k]['order_sn'] = $val['order_sn'];
                     }else{
                         $arr[$k]['status']   = 0;
                     }
