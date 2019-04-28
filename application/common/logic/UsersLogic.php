@@ -304,24 +304,20 @@ class UsersLogic extends Model
 				$row_id = $is_cunzai['user_id'];
 					
 			}else{
+
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
 				 
-				if($old_user == null || empty($old_user) || !$old_user){
+				if($old_user == null || empty($old_user) || !$old_user || empty($data['old_openid'])){
 					//新用户
-					write_log('=====新用户======:'.json_encode($map));
 
-					write_log('=====map======:'.json_encode($map));
 
 					$map['sign_old_openid'] = 111;
 					$row_id = Db::name('users')->add($map);
 
-					write_log('=====row_id======:'.$row_id);
 
 				}else{
-
-
 			
-					write_log('新注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'---data_openid='.$data['old_openid']);
+				
 					$map['sign_old_openid'] = 222;
 					Db::name('users')->where(array('user_id'=>$old_user['user_id']))->update($map);
 					$row_id = $old_user['user_id'];
@@ -329,12 +325,10 @@ class UsersLogic extends Model
 
 			}
 
-			write_log('oauth_users------row_id='.$row_id);
+
 
 			$user = Db::name('users')->where(array('user_id'=>$row_id))->find();
 			
-			write_log('oauth_users------user='.json_encode($user));
-
 
 			if (!isset($data['oauth_child'])) {
 				$data['oauth_child'] = '';
@@ -349,10 +343,7 @@ class UsersLogic extends Model
 			$OauthUsers_is_cunzai = Db::name('oauth_users')->where(array('openid'=>$map['openid']))->find();
 			if(!$OauthUsers_is_cunzai){
 
-
-
 				$map['user_id'] = $user['user_id'];
-				write_log('oauth_users------user_id='.$user['user_id']);
 				$map['type'] =2;
 				Db::name('oauth_users')->add($map);
 			}else{
