@@ -42,11 +42,7 @@ class Code extends Controller
     public function logout()
     {
         session_unset();
-        session_destroy();
-        setcookie('uname','',time()-3600,'/');
-        setcookie('cn','',time()-3600,'/');
-        setcookie('user_id','',time()-3600,'/');
-        setcookie('PHPSESSID','',time()-3600,'/');
+        session(null);
        
         exit('退出成功');
     }
