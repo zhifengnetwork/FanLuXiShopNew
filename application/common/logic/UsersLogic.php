@@ -296,14 +296,17 @@ class UsersLogic extends Model
 			$is_cunzai = Db::name('users')->where(array('openid'=>$data['openid']))->find();
 			$time=date("Y-m-d H:i:s");
              write_log('新注册：openid'.$data['openid'].'--name--'.$data['nickname'].'time'.$time);
-			 if(!empty($is_cunzai)){
 
+			 if(!empty($is_cunzai)){
+			 	 write_log('新注册数据查询1：openid='.$is_cunzai['openid'].'--name--'.$is_cunzai['nickname'].'time'.$time);
 				$map['sign_old_openid'] = 555;
 				Db::name('users')->where(array('openid'=>$map['openid']))->update($map);
 				$row_id = $is_cunzai['user_id'];
 					
 			}else{
+				 
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
+				write_log('新注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time);
 				if(!$old_user && !$data['old_openid']){
 					$map['sign_old_openid'] = 111;
 					$row_id = Db::name('users')->add($map);
@@ -351,12 +354,18 @@ class UsersLogic extends Model
              write_log('已注册：openid'.$data['openid'].'--name--'.$data['nickname'].'time'.$time);
 			$is_cunzai_data = Db::name('users')->where(array('openid'=>$data['openid']))->find();
 
-			if(!$is_cunzai_data){
-				$time=date("Y-m-d H:i:s");
-             write_log('已注册：old_openid'.$data['old_openid'].'--name--'.$data['nickname'].'time'.$time);
+			if(!empty($is_cunzai_data)){
+				write_log('已注册数据查询1：openid='.$is_cunzai_data['openid'].'--name--'.$is_cunzai_data['nickname'].'time'.$time);
+				$map['sign_old_openid'] = 6666;
+				Db::name('users')->where('openid', $data['openid'])->save($map);
+		
+			}else {
+
+			  $time=date("Y-m-d H:i:s");
+              write_log('已注册：old_openid'.$data['old_openid'].'--name--'.$data['nickname'].'time'.$time);
 			 	//查找是否已有老数据
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
-
+				write_log('已注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time);
 				if($old_user){
 				//更新老数据并删除新注册的数据
 					$map['openid'] = $data['openid'];
@@ -368,11 +377,7 @@ class UsersLogic extends Model
 					$map['sign_old_openid'] = 444;
 					Db::name('users')->where('user_id', $user['user_id'])->save($map);
 				}
-
-
-			}else {
-			 	$map['sign_old_openid'] = 6666;
-				Db::name('users')->where('openid', $data['openid'])->save($map);
+			 	
 			}
 
 			$user['token'] = $map['token'];
