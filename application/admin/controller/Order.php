@@ -739,17 +739,49 @@ class Order extends Base {
      */
     public function deliveryHandle(){
         $orderLogic = new OrderLogic();
-		$data = I('post.');
-		$res = $orderLogic->deliveryHandle($data);
-		if($res['status'] == 1){
-			if($data['send_type'] == 2 && !empty($res['printhtml'])){
-				$this->assign('printhtml',$res['printhtml']);
-				return $this->fetch('print_online');
-			}
-			$this->success('操作成功',U('Admin/Order/delivery_info',array('order_id'=>$data['order_id'])));
-		}else{
-			$this->error($res['msg'],U('Admin/Order/delivery_info',array('order_id'=>$data['order_id'])));
-		}
+        $data  = I('post.');
+        $count = 0;
+        if(isset($data['pldelivery'])){
+            foreach($data['order_id'] as $k => $v){
+                $count++;
+                $datas['shipping']      = $data['shipping'][$v];
+                $datas['shipping_code'] = $data['shipping_code'][$v];
+                $datas['send_type']     = $data['send_type'][$v];
+                $datas['invoice_no']    = $data['invoice_no'][$v];
+                $datas['order_id']      = $v;
+                $datas['note']          = $data['note'][$v];
+                $datas['goods']         = $data['goods'][$v];
+                if(!empty($data['shipping_name'][$v])){
+                    $datas['shipping_name'] = $data['shipping_name'][$v];
+                }
+                if(!empty($data['shipping_code'][$v])){
+                    $datas['shipping_code'] = $data['shipping_code'][$v];
+                }
+                if(!empty($data['invoice_no'][$v])){
+                    $datas['invoice_no'] = $data['invoice_no'][$v];
+                }
+                $res = $orderLogic->deliveryHandle($datas);
+                if($count == count($data['order_id'])){
+                    break;
+                }
+             }
+             if($res['status'] == 1 && $count == count($data['order_id'])){
+                $this->success('操作成功',U('Admin/Order/delivery_list'));
+             }else{
+                $this->error($res['msg'],U('Admin/Order/delivery_list'));
+             }
+        }else{
+             $res = $orderLogic->deliveryHandle($data);
+             if($res['status'] == 1){
+                if($data['send_type'] == 2 && !empty($res['printhtml'])){
+                    $this->assign('printhtml',$res['printhtml']);
+                    return $this->fetch('print_online');
+                }
+                $this->success('操作成功',U('Admin/Order/delivery_info',array('order_id'=>$data['order_id'])));
+            }else{
+                
+            }
+        }
     }
 
     public function delivery_info($id=''){
@@ -805,8 +837,239 @@ class Order extends Base {
     *批量发货
     */
     public function delivery_batch(){
-		header("Content-type: text/html; charset=utf-8");
-        exit("暂不支持此功能");
+		// header("Content-type: text/html; charset=utf-8");
+        // exit("暂不支持此功能dddd");
+        $order_id  = I('ids','');
+        $order_id  = trim($order_id,',');
+        
+        $orderGoodsMdel = new OrderGoods();
+        $orderModel     = new OrderModel();
+        $orderObj       = $orderModel->whereIn('order_id',$order_id)->select();//订单
+        $orderGoods     = $orderGoodsMdel::all(['order_id'=>['in',$order_id],'is_send'=>['lt',2]]);
+
+        if ($orderObj){
+            $order = collection($orderObj)->append(['orderGoods','full_address'])->toArray();
+        }
+      
+        if (!$orderGoods){
+            $this->error('此订单商品已完成退货或换货');//已经完成售后的不能再发货  
+        }
+
+        $this->assign('order',$order);
+        $this->assign('orderGoods',$orderGoods);
+        $shipping_list = Db::name('shipping')->field('shipping_name,shipping_code')->where('')->select();
+        $this->assign('shipping_list',$shipping_list);
+        $express_switch = tpCache('express.express_switch');
+        $this->assign('express_switch',$express_switch);
+        $this->assign('order_ids',$order_id);
+        return $this->fetch();
+    }
+
+    /**
+    *发货单物流处理 
+    */
+    public function delivery_order_handle(){
+        return $this->fetch();    
+    }
+
+    //导入
+    public function deliveryexceldr(){
+
+        if(empty($_FILES['file']['tmp_name'])){
+            $this->error('请选择文件');
+        }
+        $file = request()->file('file');
+         // 移动到框架应用根目录/uploads/ 目录下
+        $paths = ROOT_PATH . 'public/upload/excel';
+        if (!file_exists($paths)){
+            mkdir ($paths,0777,true);
+        }
+        $info  = $file->validate(['size'=>204800,'ext'=>'xls,xlsx,csv']);
+        
+        $info  = $file->rule('md5')->move($paths);//加
+        
+        $datas = ROOT_PATH.DS.'public/upload/excel/'.$info->getSaveName();
+       
+        $fields =  Db::query("show fields from tp_delivery_order_handle");
+       
+        $allfield=array();
+        //获取数据表的所有信息 取出字段名装在一个数组
+        foreach($fields as $key => $val){
+            $allfield[$key]=$val['Field'];
+        }
+        $fieldnum=count($allfield);
+        //设置列
+        $column=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+
+
+        //导入PHPExcel类库，因为PHPExcel没有用命名空间，只能inport导入
+        vendor('PHPExcel.PHPExcel');
+       
+        //导入Excel文件
+        $PHPExcel = new \PHPExcel();
+        $filename = $info->getSaveName();
+        //匹配‘.号’判断后缀名
+        $extend=strrchr ($filename,'.');
+        //转为小写
+        $exts = strtolower($extend);
+
+        /*判别是不是.xls和.xlsx文件，判别是不是excel文件*/
+        if ($exts == '.xls') {
+
+            $PHPReader = \PHPExcel_IOFactory::createReader('Excel5');
+           
+        } else if($exts == '.xlsx') {  
+
+            $PHPReader = \PHPExcel_IOFactory::createReader('Excel2007');
+
+        } else if($exts == '.csv'){
+            
+            $PHPReader = \PHPExcel_IOFactory::createReader('CSV');
+
+        }
+           
+        //载入文件
+        $PHPExcel = $PHPReader->load($datas);
+
+        //获取表中的第一个工作表，如果要获取第二个，把0改为1，依次类推
+        $currentSheet = $PHPExcel->getSheet(0);
+        //获取总列数
+        $allColumn = $currentSheet->getHighestColumn();
+        //获取总行数
+        $allRow = $currentSheet->getHighestRow();
+    
+        //循环获取表中的数据，$currentRow表示当前行，从哪行开始读取数据，索引值从0开始
+        for ($currentRow = 2; $currentRow <= $allRow; $currentRow++) {
+            //从哪列开始，A表示第一列
+            for ($currentColumn = 'A'; $currentColumn <= $allColumn; $currentColumn++) {
+                //数据坐标
+                $address = $currentColumn . $currentRow;
+                //读取到的数据，保存到数组$data中
+                $cell = $currentSheet->getCell($address)->getValue();
+            
+                if ($cell instanceof PHPExcel_RichText) {
+                    $cell = $cell->__toString();
+                }
+                $data[$currentRow - 1][$currentColumn] = $cell;
+                
+            }
+           
+        }
+        
+        //$data为excel表里的所有数据
+        $arr=array();
+        //物流公司
+        $shipping_name = '韵达快递';
+        $shipping_code = Db::name('shipping')->where('shipping_name', $shipping_name)
+               ->value('shipping_code');
+        foreach($data as $key=>$val){
+
+            for($i=0;$i<$fieldnum-1;$i++){
+                //手动修改字段与值
+                $arr[$key]['order_sn']   =  $val['A'];
+                $arr[$key]['consignee']  =  $val['B'];
+                $arr[$key]['mobile']     =  strval($val['C']);
+                $arr[$key]['address']    =  $val['D'];
+                $arr[$key]['invoice_no'] =  $val['E'];
+                $arr[$key]['goods']      =  $val['F'];
+                $arr[$key]['goods_num']  =  $val['G'];
+                $arr[$key]['add_time']   =  time();
+                $arr[$key]['shipping_name'] = $shipping_name;
+           }
+
+        }
+
+        // 写入数据库操作
+        foreach($arr as $k=> $v){
+            //先查找符合条件的订单
+            $where = [
+                'mobile'         => $arr[$k]['mobile'],
+                'order_sn'       => $arr[$k]['order_sn'],
+                'order_status'   => ['in','0,1'],
+                'shipping_status'=> 0,
+                'pay_status'     => 1,
+            ];
+            $order = Db::name('order')->where($where)->order('order_id DESC')->select();
+            //改变order 发货时的状态和信息
+            $update['shipping_code']    = $shipping_code;
+            $update['shipping_name']    = $shipping_name;
+            $update['order_status']     = 1;//订单改变为已确认
+            $update['shipping_status']  = 1;//订单改变为已发货
+            if(count($order) < 1){
+                $arr[$k]['status'] = 0;
+                Db::name('delivery_order_handle')->insert($arr[$k]);
+            }else{
+                foreach($order as $val){
+                    $res = Db::name('order')->where('order_sn',$val['order_sn'])->update($update);
+                    $order_data = Db::name('order')
+                                    ->where('order_sn', $val['order_sn'])
+                                    ->field('order_id, user_id, zipcode, country, city, district, shipping_price')
+                                    ->find();
+                    if($res == 1){
+                        // 发货成功
+                        $doc = [
+                            'admin_id' => session('admin_id'),
+                            'order_sn' => $val['order_sn'],
+                            'consignee'=> $val['consignee'],
+                            'address'  => $val['address'],
+                            'mobile'   => $val['mobile'],
+                            'order_id' => $order_data['order_id'],
+                            'user_id'  => $order_data['user_id'],
+                            'zipcode'  => $order_data['zipcode'],
+                            'country'  => $order_data['country'],
+                            'city'     => $order_data['city'],
+                            'district' => $order_data['district'],
+                            'shipping_code'  => $shipping_code,
+                            'shipping_name'  => $shipping_name,
+                            'shipping_price' => $order_data['shipping_price'],
+                            'invoice_no'     => $val['invoice_no'],
+                            'create_time'    => time(),
+                            'send_type'      => 0,
+                        ];
+                        $doc_cunzai = Db::name('delivery_doc')->where(['order_sn' => $val['order_sn']])->find();
+                        if(empty($doc_cunzai)){
+                            $rest = Db::name('delivery_doc')->add($doc);
+                        }
+                        $arr[$k]['status']   = 1;
+                        $arr[$k]['order_id'] = $order_data['order_id'];
+                        $arr[$k]['order_sn'] = $order_data['order_sn'];
+                    }else{
+                        $arr[$k]['status']   = 0;
+                    }
+                    $handle = Db::name('delivery_order_handle')->where(['order_sn' => $val['order_sn']])->find();
+                    if(empty($handle)){
+                        Db::name('delivery_order_handle')->insert($arr[$k]);
+                    }
+               }
+            }
+        }
+       sleep(1);
+       $this->success('处理成功');
+    }
+
+     /**
+     * ajax 发货处理订单列表
+    */
+    public function ajaxorderdelivery(){
+    	$condition = array();
+    	I('consignee')!='' ? $condition['consignee'] = trim(I('consignee')) : false;
+        I('mobile') != '' ?  $condition['mobile'] = trim(I('mobile')) : false;
+        I('status') != ''?   $condition['status'] = trim(I('status')): false;
+    	$count = M('delivery_order_handle')->where($condition)->count();
+    	$Page  = new AjaxPage($count,15);
+    	//搜索条件下 分页赋值
+    	foreach($condition as $key=>$val) {
+            if(!is_array($val)){
+                $Page->parameter[$key]   =   urlencode($val);
+            }
+    	}
+    	$show = $Page->show();
+    	$orderList = M('delivery_order_handle')->where($condition)->limit($Page->firstRow.','.$Page->listRows)->order('id DESC')->select();
+    	$this->assign('orderList',$orderList);
+    	$this->assign('page',$show);// 赋值分页输出
+        $this->assign('pager',$Page);
+        $this->assign('status',['失败','成功']);
+    	return $this->fetch();
     }
 
     /**
