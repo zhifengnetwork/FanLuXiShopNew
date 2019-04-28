@@ -293,7 +293,7 @@ class UsersLogic extends Model
 			//     $map['is_distribut']  = 1;
 			// } 
 
-			$is_cunzai = Db::name('users')->where(array('openid'=>$map['openid']))->find();
+			$is_cunzai = Db::name('users')->where(array('openid'=>$data['openid']))->find();
 
 			 if(!$is_cunzai){
 
