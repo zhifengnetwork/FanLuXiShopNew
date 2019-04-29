@@ -1,6 +1,7 @@
 <?php
+
 namespace app\mobile\controller;
-        
+
 use think\Controller;
 use think\Db;
 use app\common\logic\CartLogic;
@@ -13,8 +14,8 @@ class MobileBase extends Controller {
     public $cateTrre = array();
     public $tpshop_config = array();
     /*
-    * 初始化操作
-    */
+     * 初始化操作
+     */
     public function _initialize() {
         session('user'); //不用这个在忘记密码不能获取session('validate_code');
 //        Session::start();
@@ -66,7 +67,7 @@ class MobileBase extends Controller {
             if (empty(session('user')) ){
 
                 if(is_array($this->weixin_config) && $this->weixin_config['wait_access'] == 1){
-                    
+                  
 
                     if(!session("third_oauth")){
 
@@ -76,7 +77,8 @@ class MobileBase extends Controller {
                         }
 
                         //这里做 新 openid 登录成功
-
+                        debug_log('这里做 新 openid 登录成功');
+                        
 
                         session("third_oauth" , $wxuser);
                     }else{
@@ -90,7 +92,7 @@ class MobileBase extends Controller {
                         exit;
                     }else{
                         $old_openid = I('old_openid');
-                        
+                      
                         $wxuser['old_openid'] = $old_openid;
                     }
 
@@ -115,7 +117,7 @@ class MobileBase extends Controller {
                     
                         //新的，老的
                         $data = $logic->thirdLogin($wxuser);
-                        
+                     
                     //}
                     if($data['status'] == 1){
                         session('user',$data['result']);
@@ -152,30 +154,30 @@ class MobileBase extends Controller {
         if (!$first_login && ACTION_NAME == 'login') {
             session('first_login', 1);
         }
-        $tp_config = Db::name('config')->cache(true, TPSHOP_CACHE_TIME, 'config')->select();
-        foreach($tp_config as $k => $v)
-        {
-            if($v['name'] == 'hot_keywords'){
-                $this->tpshop_config['hot_keywords'] = explode('|', $v['value']);
-            }
-            $this->tpshop_config[$v['inc_type'].'_'.$v['name']] = $v['value'];
-        }
-        $goods_category_tree = get_goods_category_tree();
-        $this->cateTrre = $goods_category_tree;
-        $this->assign('goods_category_tree', $goods_category_tree);                     
-        $brand_list = M('brand')->cache(true,TPSHOP_CACHE_TIME)->field('id,cat_id,logo,is_hot')->where("cat_id>0")->select();
-        $this->assign('brand_list', $brand_list);
-        $this->assign('tpshop_config', $this->tpshop_config);
-        /** 修复首次进入微商城不显示用户昵称问题 **/
-        $user_id = cookie('user_id');
-        $uname = cookie('uname');
-        if(empty($user_id) && ($users = session('user')) ){
-            $user_id = $users['user_id'];
-            $uname = $users['nickname'];
-        }
-        $this->assign('user_id',$user_id);
-        $this->assign('uname',$uname);
-        
+       $tp_config = Db::name('config')->cache(true, TPSHOP_CACHE_TIME, 'config')->select();
+       foreach($tp_config as $k => $v)
+       {
+          if($v['name'] == 'hot_keywords'){
+             $this->tpshop_config['hot_keywords'] = explode('|', $v['value']);
+          }
+           $this->tpshop_config[$v['inc_type'].'_'.$v['name']] = $v['value'];
+       }
+       $goods_category_tree = get_goods_category_tree();
+       $this->cateTrre = $goods_category_tree;
+       $this->assign('goods_category_tree', $goods_category_tree);                     
+       $brand_list = M('brand')->cache(true,TPSHOP_CACHE_TIME)->field('id,cat_id,logo,is_hot')->where("cat_id>0")->select();
+       $this->assign('brand_list', $brand_list);
+       $this->assign('tpshop_config', $this->tpshop_config);
+       /** 修复首次进入微商城不显示用户昵称问题 **/
+       $user_id = cookie('user_id');
+       $uname = cookie('uname');
+       if(empty($user_id) && ($users = session('user')) ){
+           $user_id = $users['user_id'];
+           $uname = $users['nickname'];
+       }
+       $this->assign('user_id',$user_id);
+       $this->assign('uname',$uname);
+      
     }      
 
 
