@@ -165,12 +165,12 @@
 				<foreach name="favourite_goods" id="v">
 					<div class="recommend-info">
 						<div class="recommend-img">
-							<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id],'shareid'=>$shareid))}"><img
+							<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id]))}"><img
 									src="{$v[goods_id]|goods_thum_images=400,400}" alt=""></a>
 						</div>
 						<div class="recommend-text">
 							<div class="recommend-name">
-								<a href="{:U('Shop/goods/goodsInfo',array('id'=>$v['goods_id'],'shareids'=>1))}">
+								<a href="{:U('Shop/goods/goodsInfo',array('id'=>$v['goods_id']))}">
 									{$v.goods_name|getSubstr=0,33}
 								</a>
 							</div>

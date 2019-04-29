@@ -175,12 +175,12 @@
 					<foreach name="favourite_goods" id="v">
 						<li>
 							<div class="img-wrap">
-								<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id],'shareid'=>$shareid))}"><img
+								<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$v[goods_id]))}"><img
 										src="{$v[goods_id]|goods_thum_images=400,400}?v={:date('Ymd')}" /></a>
 							</div>
 							<div class="text">
 								<p class="tit"><a
-										href="{:U('Shop/goods/goodsInfo',array('id'=>$v['goods_id'],'shareids'=>1))}">{$v.goods_name|getSubstr=0,33}</a>
+										href="{:U('Shop/goods/goodsInfo',array('id'=>$v['goods_id']))}">{$v.goods_name|getSubstr=0,33}</a>
 								</p>
 								<p class="line2">
 									<span class="price">￥{$v.shop_price}</span>
@@ -197,7 +197,7 @@
 		<include file="public/footer_nav" />
 
 		<!-- 免费领取面膜弹框 -->
-        <if condition="$is_code eq 1">
+      <if condition="$is_code eq 1">
     		<div class="free-receive">
     			<a href="{:U('shop/Goods/goodsInfo',['id'=>37])}">
     				<div class="dialog-content">
@@ -205,9 +205,8 @@
     				</div>
     			</a>
     		</div>
-        </if>
-		
-
+			</if>
+			
 	</div>
 
 	<script src="__STATIC__/js/public/jquery-1.8.3.min.js"></script>

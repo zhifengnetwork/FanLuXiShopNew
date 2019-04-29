@@ -29,7 +29,7 @@
         page++;
         $.ajax({
             type:'GET',
-            url:'/index.php/Mobile/User/performance_log/is_ajax/1/p/'+page,
+            url:'/index.php/shop/User/performance_log/is_ajax/1/p/'+page,
             success:function(data){
                 if($.trim(data)==''){
                     $('#getmore').show();
