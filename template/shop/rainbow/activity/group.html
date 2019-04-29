@@ -259,12 +259,12 @@
             <ul>
                 <if condition="$group_buy_info['buy_num'] lt $group_buy_info['goods_num']">
                     <li class="o">
-                        <a class="pb_plusshopcar button active_button " href="javascript:void(0);" onClick="AjaxAddCart({$goods.goods_id},1);">
+                        <a class="pb_plusshopcar button active_button " href="javascript:void(0);" onClick="AjaxAddCart('{$goods.goods_id}',1);">
                             加入购物车
                         </a>
                     </li>
                     <li class="r">
-                        <a style="display:block;" href="javascript:void(0);"  onclick="AjaxAddCart({$goods.goods_id},1);">
+                        <a style="display:block;" href="javascript:void(0);"  onclick="AjaxAddCart('{$goods.goods_id}',1);">
                             立即购买
                         </a>
                     </li>
@@ -347,8 +347,8 @@
         </div>
         <div class="plusshopcar-buy p">
             <if condition="$group_buy_info['buy_num'] lt $group_buy_info['goods_num']">
-                <a class="pb_plusshopcar button active_button " href="javascript:void(0);" onClick="AjaxAddCart({$goods.goods_id},1);">加入购物车</a>
-                <a class="pb_buy" href="javascript:void(0);"  onclick="AjaxAddCart({$goods.goods_id},1);">立即购买 </a>
+                <a class="pb_plusshopcar button active_button " href="javascript:void(0);" onClick="AjaxAddCart('{$goods.goods_id}',1);">加入购物车</a>
+                <a class="pb_buy" href="javascript:void(0);"  onclick="AjaxAddCart('{$goods.goods_id}',1);">立即购买 </a>
                 <else/>
                 <a class="pb_plusshopcar button active_button " href="javascript:void(0);" style="color: #1a2226">加入购物车</a>
                 <a class="pb_buy" href="javascript:void(0);" style="color: #1a2226">立即购买 </a>
@@ -596,8 +596,8 @@ $(document).ready(function(){
 
    function get_goods_price()
     {
-        var goods_price = {$group_buy_info.price}; // 商品起始价
-        var store_count = {$group_buy_info.goods_num}; // 商品起始库存
+        var goods_price = "{$group_buy_info.price}"; // 商品起始价
+        var store_count = "{$group_buy_info.goods_num}"; // 商品起始库存
         var spec_goods_price = {$spec_goods_price};  // 规格 对应 价格 库存表   //alert(spec_goods_price['28_100']['price']);
         // 如果有属性选择项
         if(spec_goods_price != null && spec_goods_price !='')

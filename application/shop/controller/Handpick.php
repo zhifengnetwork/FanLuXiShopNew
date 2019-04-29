@@ -5,7 +5,7 @@
  And
  站内信息
 */
-// namespace app\mobile\controller;
+
 namespace app\shop\controller;
 
 use think\Db;
