@@ -446,10 +446,10 @@ class User extends MobileBase
      */
     public function login()
     {
-        if ($this->user_id > 0) {
-//            header("Location: " . U('Mobile/User/index'));
-            $this->redirect('Shop/User/index');
-        }
+//         if ($this->user_id > 0) {
+// //            header("Location: " . U('Mobile/User/index'));
+//             $this->redirect('Shop/User/index');
+//         }
         $referurl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : U("Shop/User/index");
         $this->assign('referurl', $referurl);
         // 新版支付宝跳转链接
