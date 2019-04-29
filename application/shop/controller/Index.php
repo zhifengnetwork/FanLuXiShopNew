@@ -278,4 +278,81 @@ class Index extends MobileBase {
         $this->assign('wap_url' , $wap_url);
         return $this->fetch();
     }
+
+     public function delectyeji()
+    {
+            $where_goods = [
+           // 'og.is_send'    => 1,
+            'og.prom_type' =>0,//只有普通订单才算业绩
+            //'u.first_leader'=>$v['user_id'],
+            //"og.goods_num" =>'>1',
+            //'od.pay_status'=>1,
+
+            'gs.sign_free_receive'=>['IN','1,2'],
+            
+          ];
+    $order_goods = Db::name('order_goods')->alias('og')
+             ->field('og.order_id,og.goods_price,og.prom_type,og.goods_name,og.goods_id,gs.sign_free_receive,o.user_id')
+             ->where($where_goods)
+             ->join('goods gs','gs.goods_id=og.goods_id','LEFT')
+             ->join('order o','og.order_id=o.order_id','LEFT')
+             ->order('og.order_id desc')
+             ->limit(0,20)
+             ->select();
+    
+    foreach($order_goods as $k=>$v)
+    {
+        $order_amount = $v['goods_price'];
+    //加个人业绩(下单人)
+        $order_id=$v["order_id"];
+        $where="note='订单{$order_id}业绩'";
+        $cunzai = M('agent_performance_log')->where($where)->select();
+        //存在
+        if(!empty($cunzai))
+        {
+            foreach ($cunzai as $ke=>$ye)
+            {
+                //删除个人业绩
+                if($ye['user_id']==$v['user_id'])
+                {
+               // $data['ind_per'] = $ye['ind_per'] - $order_amount;
+                 $ind_per = M('agent_performance')->where(['user_id'=>$ye['user_id']])->value('ind_per');
+                 if($ind_per>=$order_amount)
+                 {
+                      M('agent_performance')->where(['user_id'=>$ye['user_id']])->setDec('ind_per',$order_amount);
+
+                    //agent_performance_log($user_id,$order_amount,$order_id);
+                     echo '成功删除ID:'.$ye["user_id"].'个人业绩<br/>';
+
+                     }else
+                     {
+                         echo '业绩不够删除';
+                     }
+               
+
+                }
+                //删除团队业绩
+                else
+                {
+                  $agent_per = M('agent_performance')->where(['user_id'=>$ye['user_id']])->value('agent_per');
+                 if($agent_per>=$order_amount)
+                 {
+                     M('agent_performance')->where(['user_id'=>$ye['user_id']])->setDec('agent_per',$order_amount);
+                    echo '成功删除ID:'.$ye["user_id"].'团队业绩<br/>';
+                  }else
+                  {
+                    echo '团队业绩不够删除';
+                  }
+
+                }
+                 Db::name('agent_performance_log')->where('performance_id', $ye['performance_id'])->delete();
+                 echo '成功删除ID:'.$ye["performance_id"].'业绩记录<br/>';
+                
+             }
+        }else
+        {
+            echo '已删除或找不到业绩记录'. $where;
+        }
+    }
+    }
 }
