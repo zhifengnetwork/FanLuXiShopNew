@@ -361,21 +361,21 @@ class UsersLogic extends Model
 		} else {
 			$map['head_pic'] = !empty($data['head_pic']) ? $data['head_pic'] : '/public/images/icon_goods_thumb_empty_300.png';
             $time=date("Y-m-d H:i:s");
-             write_log('已注册：openid'.$data['openid'].'--name--'.$data['nickname'].'time'.$time);
+             write_log('已注册：openid'.$data['openid'].'--name--'.$data['nickname'].'time'.$time.'访问ip地址：' . $request->ip());
 			$is_cunzai_data = Db::name('users')->where(array('openid'=>$data['openid']))->find();
 
 			if(!empty($is_cunzai_data)){
-				write_log('已注册数据查询1：openid='.$is_cunzai_data['openid'].'--name--'.$is_cunzai_data['nickname'].'time'.$time);
+				write_log('已注册数据查询1：openid='.$is_cunzai_data['openid'].'--name--'.$is_cunzai_data['nickname'].'time'.$time.'访问ip地址：' . $request->ip());
 				$map['sign_old_openid'] = 6666;
 				Db::name('users')->where('openid', $data['openid'])->save($map);
 		
 			}else {
 
 			  $time=date("Y-m-d H:i:s");
-              write_log('已注册：old_openid'.$data['old_openid'].'--name--'.$data['nickname'].'time'.$time);
+              write_log('已注册：old_openid'.$data['old_openid'].'--name--'.$data['nickname'].'time'.$time.'访问ip地址：' . $request->ip());
 			 	//查找是否已有老数据
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
-				write_log('已注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'---openid---'.$data['old_openid']);
+				write_log('已注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'---openid---'.$data['old_openid'].'访问ip地址：' . $request->ip());
 				if($old_user){
 				//更新老数据并删除新注册的数据
 					$map['openid'] = $data['openid'];
