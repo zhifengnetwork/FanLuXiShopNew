@@ -972,7 +972,7 @@ class Order extends Base {
         $allRow = $currentSheet->getHighestRow();
     
         //循环获取表中的数据，$currentRow表示当前行，从哪行开始读取数据，索引值从0开始
-        for ($currentRow = 2; $currentRow <= $allRow; $currentRow++) {
+        for ($currentRow = 1; $currentRow <= $allRow; $currentRow++) {
             //从哪列开始，A表示第一列
             for ($currentColumn = 'A'; $currentColumn <= $allColumn; $currentColumn++) {
                 //数据坐标
@@ -988,27 +988,25 @@ class Order extends Base {
             }
            
         }
-        
+
         //$data为excel表里的所有数据
         $arr=array();
-        //物流公司
-        $shipping_name = '韵达快递';
-        $shipping_code = Db::name('shipping')->where('shipping_name', $shipping_name)
-               ->value('shipping_code');
         foreach($data as $key=>$val){
 
             for($i=0;$i<$fieldnum-1;$i++){
-                if($val['A'] && $val['B'] && $val['C'] && $val['D'] && $val['E']){
+                if($val['A'] && $val['G'] && $val['M']){
                     //手动修改字段与值
-                    $arr[$key]['order_sn']   =  ltrim($val['A']);
-                    $arr[$key]['mobile']     =  strval(trim($val['C']));
-                    $arr[$key]['consignee']  =  $val['B'];
-                    $arr[$key]['address']    =  $val['D'];
-                    $arr[$key]['invoice_no'] =  $val['E'];
-                    $arr[$key]['goods']      =  $val['F'];
-                    $arr[$key]['goods_num']  =  $val['G'];
+                    $arr[$key]['order_sn']   =  preg_replace('/\D/s', '', $val['A']);
+                    $arr[$key]['mobile']     =  strval(trim($val['G']));
+                    $arr[$key]['consignee']  =  $val['F'];
+                    $arr[$key]['address']    =  $val['I'];
+                    $arr[$key]['invoice_no'] =  $val['M'];
+                    $arr[$key]['goods']      =  $val['J'];
                     $arr[$key]['add_time']   =  time();
-                    $arr[$key]['shipping_name'] = $shipping_name;
+                    //快递信息
+                    $arr[$key]['shipping_name'] = $val['K'];
+                    $arr[$key]['shipping_code'] = Db::name('shipping')->where('shipping_name', $val['K'])
+                        ->value('shipping_code');
                 }
            }
 
@@ -1025,9 +1023,10 @@ class Order extends Base {
                 'pay_status'     => 1,
             ];
             $order = Db::name('order')->where($where)->order('order_id DESC')->select();
+            
             //改变order 发货时的状态和信息
-            $update['shipping_code']    = $shipping_code;
-            $update['shipping_name']    = $shipping_name;
+            $update['shipping_code']    = $v['shipping_code'];
+            $update['shipping_name']    = $v['shipping_name'];
             $update['order_status']     = 1;//订单改变为已确认
             $update['shipping_status']  = 1;//订单改变为已发货
             if(count($order) < 1){
@@ -1038,6 +1037,19 @@ class Order extends Base {
                     $res = Db::name('order')->where('order_sn',$val['order_sn'])->update($update);
                     
                     if($res == 1){
+                        // 记录订单操作日志
+                        $action_info = array(
+                            'order_id'        =>$val['order_id'],
+                            'action_user'     =>session('admin_id'),
+                            'order_status'    =>1,
+                            'shipping_status' =>1,
+                            'pay_status'      =>1,
+                            'action_note'     =>'确认发货',
+                            'status_desc'     =>'已确认订单', //''
+                            'log_time'        =>time(),
+                        );
+                        Db::name('order_action')->add($action_info);
+
                         // 发货成功
                         $doc = [
                             'admin_id' => session('admin_id'),
@@ -1052,8 +1064,8 @@ class Order extends Base {
                             'province' => $val['province'],
                             'city'     => $val['city'],
                             'district' => $val['district'],
-                            'shipping_code'  => $shipping_code,
-                            'shipping_name'  => $shipping_name,
+                            'shipping_code'  => $v['shipping_code'],
+                            'shipping_name'  => $v['shipping_name'],
                             'shipping_price' => $val['shipping_price'],
                             'invoice_no'     => $v['invoice_no'],
                             'create_time'    => $v['add_time'],

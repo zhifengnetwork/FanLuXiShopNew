@@ -59,15 +59,18 @@
 			<div class="hDivBox">
 				<table cellspacing="0" cellpadding="0">
 					<thead>
-					<tr>
+					<tr>  
 						<th class="sign" axis="col0">
 							<div style="width: 24px;"><i class="ico-check"></i></div>
 						</th>
 						<th align="center" abbr="article_title" axis="col3" class="">
-							<div style="text-align: center; width: 50px;" class="">ID</div>
+							<div style="text-align: center; width: 100px;" class="">用户ID</div>
+						</th>
+						<th align="center" abbr="article_title" axis="col3" class="">
+							<div style="text-align: center; width: 100px;" class="">用户昵称</div>
 						</th>
 						<th align="center" abbr="ac_id" axis="col4" class="">
-							<div style="text-align: center; width: 50px;" class="">排行</div>
+							<div style="text-align: center; width: 100px;" class="">排行</div>
 						</th>
 						<th align="center" abbr="article_show" axis="col5" class="">
 							<div style="text-align: center; width: 150px;" class="">个人业绩</div>
@@ -105,10 +108,13 @@
 								<div style="width: 24px;"><i class="ico-check"></i></div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 50px;">{$vo.user_id}</div>
+								<div style="text-align: center; width: 100px;">{$vo.user_id}</div>
 							</td>
 							<td align="center" class="">
-								<div style="text-align: center; width: 50px;">{$k+1+(($p-1)*$page_size)}</div>
+								<div style="text-align: center; width: 100px;">{$vo.nickname}</div>
+							</td>
+							<td align="center" class="">
+								<div style="text-align: center; width: 100px;">{$k+1+(($p-1)*$page_size)}</div>
 							</td>
 							<td align="center" class="">
 								<div style="text-align: center; width: 150px;">{$vo.ind_per}</div>
