@@ -1,12 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2019/3/8 0008
- * Time: 14:04
- */
-
-// namespace app\mobile\controller;
 namespace app\shop\controller;
 use app\common\logic\ActivityLogic;
 use app\common\model\Combination;

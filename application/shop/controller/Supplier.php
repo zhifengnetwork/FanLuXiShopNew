@@ -1,5 +1,4 @@
 <?php
-// namespace app\mobile\controller;
 namespace app\shop\controller;
 use app\common\model\Order as OrderModel;
 /**

@@ -28,8 +28,6 @@ class MobileBase extends Controller {
         else 
             cookie('is_mobile','0',3600);
         
-        debug_log(session('user.user_id').'来到mobile的：'.$this->get_url());
-
         /**
          * 模拟登录
          */
@@ -77,8 +75,15 @@ class MobileBase extends Controller {
                         }
 
                         //这里做 新 openid 登录成功
-                        debug_log('这里做 新 openid 登录成功');
-                        
+                        $is_cunzai_user = M('users')->where(['openid'=>$wxuser['openid']])->find();
+                        if($is_cunzai_user){
+                            session('user',$is_cunzai_user);
+                            setcookie('user_id',$is_cunzai_user['user_id'],null,'/');
+                            setcookie('is_distribut',$is_cunzai_user['is_distribut'],null,'/');
+                            setcookie('uname',$is_cunzai_user['nickname'],null,'/');
+                            session('openid',$is_cunzai_user['openid']);
+                        }
+
 
                         session("third_oauth" , $wxuser);
                     }else{
@@ -86,54 +91,60 @@ class MobileBase extends Controller {
                     }
 
 
-                    if(I('old_openid') == ''){
-                        //跳去获取旧openid
-                        header('Location:/shop/code/index');
-                        exit;
-                    }else{
-                        $old_openid = I('old_openid');
-                      
-                        $wxuser['old_openid'] = $old_openid;
+                    //如果 没有  is_cunzai_user
+                    if(!$is_cunzai_user){
+
+                        if(I('old_openid') == ''){
+                            //跳去获取旧openid
+                            header('Location:/shop/code/index');
+                            exit;
+                        }else{
+                            $old_openid = I('old_openid');
+                        
+                            $wxuser['old_openid'] = $old_openid;
+                        }
+
+                        //过滤特殊字符串
+                        $wxuser['nickname'] && $wxuser['nickname'] = replaceSpecialStr($wxuser['nickname']);
+                        
+                        session('subscribe', $wxuser['subscribe']);// 当前这个用户是否关注了微信公众号
+                        setcookie('subscribe',$wxuser['subscribe']);
+                        $logic = new UsersLogic(); 
+                        //$is_bind_account = tpCache('basic.is_bind_account');
+                        //if ($is_bind_account) {
+                            //  if (CONTROLLER_NAME != 'User' || ACTION_NAME != 'bind_guide') {
+
+                            //     $data = $logic->thirdLogin_new($wxuser);//微信自动登录
+                            //     if ($data['status'] != 1 && $data['result'] === '100') {
+                                    
+                            //          $first_leader = I('first_leader');
+                            //          $this->redirect(U('Mobile/User/bind_guide',['first_leader'=>$first_leader]));
+                            //    }
+                            //  }
+                        //} else {
+                        
+                            //新的，老的
+                            $data = $logic->thirdLogin($wxuser);
+                        
+                        //}
+                        if($data['status'] == 1){
+                            session('user',$data['result']);
+                            setcookie('user_id',$data['result']['user_id'],null,'/');
+                            setcookie('is_distribut',$data['result']['is_distribut'],null,'/');
+                            setcookie('uname',$data['result']['nickname'],null,'/');
+                            // 登录后将购物车的商品的 user_id 改为当前登录的id
+                            M('cart')->where("session_id" ,$this->session_id)->save(array('user_id'=>$data['result']['user_id']));
+                            $cartLogic = new CartLogic();
+                            $cartLogic->setUserId($data['result']['user_id']);
+                            $logic->update_receipt_num(); // 更新每月免费领取次数
+                            $logic->get_curr_time_section(); // VIP更新每天免费领取次数
+                            $cartLogic->doUserLoginHandle();  //用户登录后 需要对购物车 一些操作
+                        } elseif ($data['status'] == -1) {
+                            header('Location:/shop/user/logout');
+                        }
+
                     }
 
-                    //过滤特殊字符串
-                    $wxuser['nickname'] && $wxuser['nickname'] = replaceSpecialStr($wxuser['nickname']);
-                    
-                    session('subscribe', $wxuser['subscribe']);// 当前这个用户是否关注了微信公众号
-                    setcookie('subscribe',$wxuser['subscribe']);
-                    $logic = new UsersLogic(); 
-                    //$is_bind_account = tpCache('basic.is_bind_account');
-                    //if ($is_bind_account) {
-                        //  if (CONTROLLER_NAME != 'User' || ACTION_NAME != 'bind_guide') {
-
-                        //     $data = $logic->thirdLogin_new($wxuser);//微信自动登录
-                        //     if ($data['status'] != 1 && $data['result'] === '100') {
-                                
-                        //          $first_leader = I('first_leader');
-                        //          $this->redirect(U('Mobile/User/bind_guide',['first_leader'=>$first_leader]));
-                        //    }
-                        //  }
-                    //} else {
-                    
-                        //新的，老的
-                        $data = $logic->thirdLogin($wxuser);
-                     
-                    //}
-                    if($data['status'] == 1){
-                        session('user',$data['result']);
-                        setcookie('user_id',$data['result']['user_id'],null,'/');
-                        setcookie('is_distribut',$data['result']['is_distribut'],null,'/');
-                        setcookie('uname',$data['result']['nickname'],null,'/');
-                        // 登录后将购物车的商品的 user_id 改为当前登录的id
-                        M('cart')->where("session_id" ,$this->session_id)->save(array('user_id'=>$data['result']['user_id']));
-                        $cartLogic = new CartLogic();
-                        $cartLogic->setUserId($data['result']['user_id']);
-                        $logic->update_receipt_num(); // 更新每月免费领取次数
-                        $logic->get_curr_time_section(); // VIP更新每天免费领取次数
-                        $cartLogic->doUserLoginHandle();  //用户登录后 需要对购物车 一些操作
-                    } elseif ($data['status'] == -1) {
-                        header('Location:/shop/user/logout');
-                    }
                 }
             }else{ 
                 setcookie('user_id',$user_temp['user_id'],null,'/');

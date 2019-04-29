@@ -11,7 +11,9 @@ class TemplateMessage
      * 佣金
      */
     public function yongjin($openid,$goods_name,$yongjin,$order_sn){
-
+        $yongjin = round(float($yongjin), 2);
+        //四舍五入
+        
         $data = array(
             'touser'=> $openid,
             'template_id' => "58i9tVawAXWrwGWiLS5Csh-_PRVO5W4jAXc3qnQhWec",

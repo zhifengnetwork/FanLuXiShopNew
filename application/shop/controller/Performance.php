@@ -2,7 +2,7 @@
 /**
  * 业绩
  */
-// namespace app\mobile\controller;
+
 namespace app\shop\controller;
 
 use think\Db;
