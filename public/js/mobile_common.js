@@ -15,7 +15,7 @@ function AjaxAddCart(goods_id, num) {
 	}
 	$.ajax({
 		type: "POST",
-		url: "/index.php?m=Mobile&c=Cart&a=add",
+		url: "/index.php?m=Shop&c=Cart&a=add",
 		data: data,
 		dataType: 'json',
 		success: function (data) {
@@ -27,7 +27,7 @@ function AjaxAddCart(goods_id, num) {
 						btn: ['去登录', '取消'],
 						shadeClose: false,
 						yes: function () {
-							location.href = "/index.php?m=Mobile&c=User&a=Login";
+							location.href = "/index.php?m=Shop&c=User&a=Login";
 						}, no: function () {
 							layer.closeAll();
 						}
@@ -53,7 +53,7 @@ function AjaxAddCart(goods_id, num) {
 
 			} else {
 				if (data.status == -1) {
-					location.href = "/index.php?m=Mobile&c=Goods&a=goodsInfo&id=" + goods_id;
+					location.href = "/index.php?m=Shop&c=Goods&a=goodsInfo&id=" + goods_id;
 				}
 				if (data.status <= 0) {
 					if(!$.isEmptyObject(data.result)){
@@ -83,7 +83,7 @@ function buyIntegralGoods(goods_id, num){
 			btn: ['去登录', '取消'],
 			shadeClose: false,
 			yes: function () {
-				location.href = "/index.php?m=Mobile&c=User&a=Login";
+				location.href = "/index.php?m=Shop&c=User&a=Login";
 			}, no: function () {
 				layer.closeAll();
 			}
@@ -97,7 +97,7 @@ function buyIntegralGoods(goods_id, num){
 	}
 	$.ajax({
 		type: "POST",
-		url: "/index.php?m=Mobile&c=Cart&a=buyIntegralGoods",
+		url: "/index.php?m=Shop&c=Cart&a=buyIntegralGoods",
 		data: data,
 		dataType: 'json',
 		success: function (data) {
@@ -121,7 +121,7 @@ function collect_goods(goods_id){
 	$.ajax({
 		type : "GET",
 		dataType: "json",
-		url:"/index.php?m=Mobile&c=goods&a=collect_goods&goods_id="+goods_id,//+tab,
+		url:"/index.php?m=Shop&c=goods&a=collect_goods&goods_id="+goods_id,//+tab,
 		success: function(data){
 			alert(data.msg);
 		}
