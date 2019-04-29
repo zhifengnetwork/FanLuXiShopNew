@@ -57,14 +57,14 @@
     markerHTML +=   '<div class="date-marker-header">';
     markerHTML +=   	'<div class="date-marker-header_timeBox">';
     markerHTML +=     		'<p class="month-prev">';
-    markerHTML +=       		'<img class="buttonImg" src="/template/mobile/rainbow/static/images/public_lb/returnImg666_lb.png"/>';
+    markerHTML +=       		'<img class="buttonImg" src="/template/shop/rainbow/static/images/public_lb/returnImg666_lb.png"/>';
     markerHTML +=     		'</p>';
     /*年份*/
     markerHTML +=     		this.buildYearSelect();
     /*月份*/
     markerHTML +=     		this.buildMonthSelect();
     markerHTML +=     		'<p class="month-next">';
-    markerHTML +=       		'<img class="buttonImg" src="/template/mobile/rainbow/static/images/public_lb/leftImg666.png"/>';
+    markerHTML +=       		'<img class="buttonImg" src="/template/shop/rainbow/static/images/public_lb/leftImg666.png"/>';
     markerHTML +=     		'</p>';
     markerHTML +=   	'</div>';
     markerHTML +=   '</div>';
@@ -180,7 +180,7 @@
 					/**传过来的数据-不要在月份和日期前加0 =>'2019/3/6' **/
 					if($('.date-marker-body li').eq(i).attr('data-markdate') == signData[j]) {
 						$('.date-marker-body li').eq(i).append(`
-							<img class="signInIconL" src="/template/mobile/rainbow/static/images/sign/signInIconS.png" />
+							<img class="signInIconL" src="/template/shop/rainbow/static/images/sign/signInIconS.png" />
 						`);
 					}
 				}

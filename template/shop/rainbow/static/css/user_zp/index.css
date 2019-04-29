@@ -1,12 +1,9 @@
-/*@font-face{
-	font-family: 'PingFangBold';
-	src:url("/template/mobile/rainbow/static/font/PingFangMedium.ttf")
-}*/
+
 .wrapper{
 	width: 100%;
 	height: 100%;
 	background: #ededed;
-	font-family: "PingFangBold";
+	
 	padding-bottom: 1rem;
 }
 

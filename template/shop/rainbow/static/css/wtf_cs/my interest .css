@@ -1,7 +1,4 @@
-/*@font-face{
-	font-family: 'PingFangMedium';
-	src:url("/template/mobile/rainbow/static/font/PingFangMedium.ttf")
-}*/
+
 
 *{margin:0;padding:0;line-height:1;}
 a{text-decoration:none;}
@@ -21,7 +18,7 @@ body{max-width:7.5rem;min-width:3.2rem;width:7.5rem;margin:0 auto;background:#f5
 .wtf_head span:last-child{right:0.32rem;left:auto;}
 .wtf_head span:nth-child(1){width:0.26rem;height:0.42rem;}
 .wtf_head span img{width:100%;height:100%;}
-.wtf_head p{text-align:center;font-size:0.38rem;color:#0f0f0f;line-height:0.88rem;font-family:PingFangBold;}
+.wtf_head p{text-align:center;font-size:0.38rem;color:#0f0f0f;line-height:0.88rem;}
 
 .wtf_t {text-align: center; width: 100%;background: #fff;height: 0.68rem;border-top: 1px solid #bfbfbf;border-bottom: 1px solid #bfbfbf;}
 .wtf_t_l{width: 50%;margin-left: 1.47rem;}

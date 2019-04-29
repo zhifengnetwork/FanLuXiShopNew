@@ -51,7 +51,7 @@ function receiveAlert(_butShow,_title,_urlTitleOne,_urlTitleOneUrl,_urlTitleTwo,
 			strR += '<div class="signOutBox-title">';
 				strR += '<span>'+ _title +'</span>';
 				strR += '<p class="closeImgBox" onclick="closeCBut()">';
-					strR += '<img class="closeImg" src="/template/mobile/rainbow/static/images/public_lb/closeIcon.png"/>';
+					strR += '<img class="closeImg" src="/template/shop/rainbow/static/images/public_lb/closeIcon.png"/>';
 				strR += '</p>';
 			strR += '</div>';
 			strR += '<div class="signOutBox-buttonC">';

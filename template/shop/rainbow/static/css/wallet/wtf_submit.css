@@ -36,10 +36,10 @@ img{max-width: 100%;}
 .wtf_s_item2_r{float: right;margin-top: 0.24rem;}
 .wtf_on{border: 1px solid #6a6a6a;display: block;width: 0.24rem;height: 0.24rem;border-radius: 50%;}
 
-.wtf_onnn{background: url(/template/mobile/rainbow/static/images/Distributionmember/wtf_s_item2_dh.png)no-repeat;border: 1px solid #fff;}
+.wtf_onnn{background: url(/template/shop/rainbow/static/images/Distributionmember/wtf_s_item2_dh.png)no-repeat;border: 1px solid #fff;}
 
 
-.wtf_f_footer{background: url(/template/mobile/rainbow/static/images/Distributionmember/lj_f_footer.png)no-repeat;background-size: 100% 100%; width: 100%;height: 0.85rem;margin-top: 0.5rem;text-align: center;line-height: 0.85rem;}
+.wtf_f_footer{background: url(/template/shop/rainbow/static/images/Distributionmember/lj_f_footer.png)no-repeat;background-size: 100% 100%; width: 100%;height: 0.85rem;margin-top: 0.5rem;text-align: center;line-height: 0.85rem;}
 .wtf_f_footer a{font-size: 0.31rem;color: #fff;}
 
 
