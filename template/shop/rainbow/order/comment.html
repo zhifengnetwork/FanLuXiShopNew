@@ -52,6 +52,11 @@
                         </if>
                     </div>
                 </div>
+                <!--商家回复-s-->
+                <foreach name="$v1['replyList']" item="reply" key="k">
+                    <p class="pay-date">客服回复：{$reply['content']}</p>
+                </foreach>
+                <!--商家回复-e-->
             </foreach>
         </div>
     </div>

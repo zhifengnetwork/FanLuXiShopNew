@@ -41,12 +41,18 @@
                         </a>
                     </div>
 				</notempty>  
+                    <!--商家回复-s-->
+                    <foreach name="comment_info.replyList" item="replys" key="k">
+                            <p class="pay-date">客服回复：{$replys['content']}</p>
+                    </foreach>
+                    <!--商家回复-e-->
 				<div class="de_font desupp p">
 					<div class="keep fr">
 						<i class="<if condition="in_array($user_id,explode(',',$comment_info.zan_userid))">red</if>""></i>
 						<span id="span_zan">{$comment_info.zan_num|default=0}</span>
 					</div>
 				</div>
+
 			</div>
 		</div>
 		<div class="replaylist ma-to-20">
