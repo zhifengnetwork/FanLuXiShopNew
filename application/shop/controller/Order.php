@@ -449,7 +449,7 @@ class Order extends MobileBase
         $data['status'] = 2;
         $res = M('return_goods')->where(['id'=>$data['id'],'user_id'=>$this->user_id])->save($data);
         if($res !== false){
-            $this->ajaxReturn(['status'=>1,'msg'=>'发货提交成功','url'=>U('Mobile/Order/return_goods_info',['id'=>$data['id']])]);
+            $this->ajaxReturn(['status'=>1,'msg'=>'发货提交成功','url'=>U('Shop/Order/return_goods_info',['id'=>$data['id']])]);
         }else{
             $this->ajaxReturn(['status'=>-1,'msg'=>'提交失败','url'=>'']);
         }
@@ -586,7 +586,7 @@ class Order extends MobileBase
             //添加评论
             $row = $logic->add_comment($add);
             if ($row['status'] == 1) {
-                $this->ajaxReturn(['status' => 1,'msg' =>'评论成功','url' =>U('/Mobile/Order/comment',['status'=>1])]);
+                $this->ajaxReturn(['status' => 1,'msg' =>'评论成功','url' =>U('/Shop/Order/comment',['status'=>1])]);
             } else {
                 $this->ajaxReturn(['status' => -1,'msg' =>$row['msg']]);
             }
