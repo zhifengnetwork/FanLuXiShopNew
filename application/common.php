@@ -269,13 +269,13 @@ function getAllUp($invite_id,&$userList=array())
             $cunzai = M('agent_performance')->where(['user_id'=>$v['user_id']])->find();
             //存在
             if($cunzai){
-                $data1['team_per'] = $cunzai['team_per'] + $order_amount;
+                $data1['agent_per'] = $cunzai['agent_per'] + $order_amount;
                 $data1['update_time'] = date('Y-m-d H:i:s');
                 $res = M('agent_performance')->where(['user_id'=>$v['user_id']])->save($data1);
             }else{
 
                 $data1['user_id'] =  $v['user_id'];
-                $data1['team_per'] =  $order_amount;
+                $data1['agent_per'] =  $order_amount;
                 $data1['create_time'] = date('Y-m-d H:i:s');
                 $data1['update_time'] = date('Y-m-d H:i:s');
                 $res = M('agent_performance')->add($data1);
