@@ -340,7 +340,7 @@
     </div>
     </if>
     <!--添加购物车JS-->
-    <script src="__PUBLIC__/js/mobile_common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__PUBLIC__/js/mobile_common.js?v=1" type="text/javascript" charset="utf-8"></script>
 </div>
 <!--商品-e-->
 
@@ -1092,7 +1092,7 @@
     function ajaxComment(commentType,page){
         $.ajax({
             type : "GET",
-            url:"/index.php?m=Mobile&c=goods&a=ajaxComment&goods_id={$goods['goods_id']}&commentType="+commentType+"&p="+page,//+tab,
+            url:"/index.php?m=Shop&c=goods&a=ajaxComment&goods_id={$goods['goods_id']}&commentType="+commentType+"&p="+page,//+tab,
             success: function(data){
                 $(".my_comment_list").empty().append(data);
             }
@@ -1146,7 +1146,7 @@
                     $('.team-pies').show();
                     var prom_id = $('input[name="prom_id"]').attr('value');
                     var goods_id = $('input[name="goods_id"]').attr('value');
-                    $('.team_button').attr('href',"/index.php?m=Mobile&c=Team&a=info&team_id="+prom_id+"&goods_id="+goods_id);
+                    $('.team_button').attr('href',"/index.php?m=Shop&c=Team&a=info&team_id="+prom_id+"&goods_id="+goods_id);
                     setNormalGoodsPrice();
                     break;
                 default:
@@ -1292,7 +1292,7 @@
                 goods_id:$('input[name=goods_id]').val(),
                 item_id:$('input[name=item_id]').val()
             },
-            url: "/index.php?m=Mobile&c=Goods&a=checkGoodsPromotionType",//+tab,
+            url: "/index.php?m=Shop&c=Goods&a=checkGoodsPromotionType",//+tab,
             success: function (data) {
                 if(data.status == 1 && data.result == 3){
                     $("#price").html("￥" + prom_goods_price); //变动价格显示
@@ -1375,7 +1375,7 @@
             type: "POST",
             data: {comment_id: comment_id},
             dataType: 'json',
-            url: "/index.php?m=Mobile&c=Order&a=ajaxZan",
+            url: "/index.php?m=Shop&c=Order&a=ajaxZan",
             success: function (data) {
                 ajax_return_stauts = 1
                 if (data.status==1) {
@@ -1469,7 +1469,7 @@ function combinationCurl(goods_id,item,combination_id) {
     function couponList() {
         var goods_id = parseInt($("input[name='goods_id']").val());
         var item_id = $("input[name='item_id']").val();
-        var url = "/index.php?m=Mobile&c=Goods&a=couponList";
+        var url = "/index.php?m=Shop&c=Goods&a=couponList";
         $.ajax({
             type: "Post",
             url: url,

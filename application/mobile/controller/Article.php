@@ -53,4 +53,20 @@ class Article extends MobileBase
     	return $this->fetch();
     }
     
+
+    /**
+     * 测试
+     */
+    public function logout()
+    {
+        session_unset();
+      
+        setcookie('uname','',time()-3600,'/');
+        setcookie('cn','',time()-3600,'/');
+        setcookie('user_id','',time()-3600,'/');
+        setcookie('PHPSESSID','',time()-3600,'/');
+    }
+
+
+
 }

@@ -9,26 +9,33 @@ use app\common\util\Session;
 class Index extends MobileBase {
 
     public function index(){
-        $shareid = I('shareid');
-        if (session('?user') && empty($shareid)) {
-            $user = session('user');
-            $user = M('users')->where("user_id", $user['user_id'])->find();
-            $shareid =  $user['user_id'];
-            $this->assign('is_code',$user['is_code']);
+        
+        //html 页面 免费领取面膜弹窗
+        if (session('?user')) {
+            //速度优化：如果是 1 ，赋值。不是1，去查库
+            if(session('user.is_code') == 1){
+                $this->assign('is_code',1);
+            }else{
+                $user_id = session('user.user_id');
+                $is_code = M('users')->where("user_id", $user_id)->value('is_code');
+                $this->assign('is_code',$is_code);
+            }
         }
-        $diy_index = M('mobile_template')->where('is_index=1')->field('template_html,block_info')->find();
-        if($diy_index){
-            $html = htmlspecialchars_decode($diy_index['template_html']);
-            $logo=tpCache('shop_info.wap_home_logo');
-            $this->assign('wap_logo',$logo);
-            $this->assign('html',$html);
-            $this->assign('is_index',"1");
 
-            $this->assign('info',$diy_index['block_info']);
-            return $this->fetch('index2');
-            exit();
-        }
-         $this->assign('shareid',$shareid);
+        /** 暂时 去掉  */
+        // $diy_index = M('mobile_template')->where('is_index=1')->field('template_html,block_info')->find();
+        // if($diy_index){
+        //     $html = htmlspecialchars_decode($diy_index['template_html']);
+        //     $logo=tpCache('shop_info.wap_home_logo');
+        //     $this->assign('wap_logo',$logo);
+        //     $this->assign('html',$html);
+        //     $this->assign('is_index',"1");
+
+        //     $this->assign('info',$diy_index['block_info']);
+        //     return $this->fetch('index2');
+        //     exit();
+        // }
+        
         /*
             //获取微信配置
             $wechat_list = M('wx_user')->select();

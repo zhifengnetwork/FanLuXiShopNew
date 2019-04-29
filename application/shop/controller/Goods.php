@@ -250,17 +250,6 @@ class Goods extends MobileBase
      */
     public function goodsInfo()
     {
-        $shareid = I('shareid');
-        if(!empty($shareid) && !session('?user'))
-        {
-          $user = M('users')->where("user_id", $shareid)->find();
-          $shareid =  $user['user_id'];
-          Session::set('shareid',$shareid);
-        }else
-        {
-
-        }
-
 
         C('TOKEN_ON', true);
         $goodsLogic = new GoodsLogic();

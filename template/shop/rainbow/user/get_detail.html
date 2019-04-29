@@ -57,7 +57,7 @@
 	<body>
 		<!--头部-->
 		<div class="lj_header">
-			<a href="javascript:history.back(-1)"><img src="/template/mobile/rainbow/static/images/return.png" /></a>
+			<a href="javascript:history.back(-1)"><img src="/template/shop/rainbow/static/images/return.png" /></a>
 			<p>订单详情</p>
 		</div>
 		<!--循环整个div-->
@@ -69,6 +69,10 @@
                     <div class="lj_main_c1">
                         <span class="lj_main_span">订单ID</span>
                         <span>{$detail.order_id}</span>
+                    </div>
+                    <div class="lj_main_c1">
+                        <span class="lj_main_span">下单人ID:</span>
+                        <span>{$detail.user_id}</span>
                     </div>
                     <div class="lj_main_c1">
                         <span class="lj_main_span">下单人:</span>
@@ -113,12 +117,13 @@
 
                     <notempty name="log">
                         <div class="lj_main_c1">
-                            <span class="lj_main_span"><strong>我的返利:</strong></span>
+                            <span class=""><strong>我的返利:</strong>（我的ID：{$user_id}）</span>
                         </div>
                         <foreach name="log" item="log">
                             <div class="lj_main_c1 rebate-box">
                              <div class="rebate">
                                 <div class="lj_main_span">返利金额:</div>
+                                <div class="lj_main_span">级别:</div>
                                 <div class="lj_main_span">备注:</div>
                                 <div class="lj_main_span">时间:</div>
                             </div>
@@ -126,6 +131,7 @@
                              <div class="rebate-list">
                                 <div class="rebate-info">
                                         <div class="lj_main_span">{$log.user_money}</div>
+                                        <div class="lj_main_span">{$jibie}顾客</div>
                                         <div class="lj_main_span">{$log.desc}</div>
                                         <div class="lj_main_span">{$log.change_time|date="Y-m-d H:i:s", ###}</div>
                                 </div>

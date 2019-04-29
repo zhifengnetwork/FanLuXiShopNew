@@ -1415,7 +1415,7 @@ class User extends MobileBase
         if($order_sn){
             $order_id = M('order')->where('order_sn', $order_sn)->value('order_id');
         }
-        $fir = 'order_id, level, order_sn, nickname, consignee, order.total_amount, add_time, pay_time';
+        $fir = 'order_id, order.user_id, level, order_sn, nickname, consignee, order.total_amount, add_time, pay_time';
         $detail = M('order')->alias('order')
                 ->join('users', 'order.user_id = users.user_id')
                 ->where('order_id', $order_id)
@@ -1435,6 +1435,13 @@ class User extends MobileBase
 
         $account_log = M('account_log')->where(['user_id'=>$user_id, 'order_id'=>$order_id, 'log_type'=>['neq',0]])->select();
         $this->assign('log', $account_log);
+
+        $guanxi = new \app\common\logic\GuanxiLogic();
+        $jibie = $guanxi->get_shangxiaji_guanxi($user_id,$detail['user_id']);
+        //下单人 与 本人是什么关系
+        $this->assign('jibie', $jibie);
+
+        $this->assign('user_id', $user_id);
         return $this->fetch();
     }
 

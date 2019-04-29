@@ -449,7 +449,7 @@ class Order extends MobileBase
         $data['status'] = 2;
         $res = M('return_goods')->where(['id'=>$data['id'],'user_id'=>$this->user_id])->save($data);
         if($res !== false){
-            $this->ajaxReturn(['status'=>1,'msg'=>'发货提交成功','url'=>U('Mobile/Order/return_goods_info',['id'=>$data['id']])]);
+            $this->ajaxReturn(['status'=>1,'msg'=>'发货提交成功','url'=>U('Shop/Order/return_goods_info',['id'=>$data['id']])]);
         }else{
             $this->ajaxReturn(['status'=>-1,'msg'=>'提交失败','url'=>'']);
         }
@@ -523,6 +523,10 @@ class Order extends MobileBase
         $status = I('get.status');
         $logic = new CommentLogic;
         $data = $logic->getComment($user_id, $status); //获取评论列表
+        //获取后台回复
+        foreach ($data['result'] as $k => $v) {
+            $data['result'][$k]['replyList'] = M('Comment')->where(['parent_id' => $v['comment_id']])->order("add_time desc")->select();
+        }
         $this->assign('page', $data['page']);// 赋值分页输出
         $this->assign('comment_page', $data['page']);
         $this->assign('comment_list', $data['result']);
@@ -582,7 +586,7 @@ class Order extends MobileBase
             //添加评论
             $row = $logic->add_comment($add);
             if ($row['status'] == 1) {
-                $this->ajaxReturn(['status' => 1,'msg' =>'评论成功','url' =>U('/Mobile/Order/comment',['status'=>1])]);
+                $this->ajaxReturn(['status' => 1,'msg' =>'评论成功','url' =>U('/Shop/Order/comment',['status'=>1])]);
             } else {
                 $this->ajaxReturn(['status' => -1,'msg' =>$row['msg']]);
             }
@@ -598,7 +602,6 @@ class Order extends MobileBase
 
     /**
      * 待收货列表
-
      */
     public function wait_receive()
     {
@@ -638,6 +641,9 @@ class Order extends MobileBase
         $user = get_user_info($res['comment_info']['user_id']);
         $res['comment_info']['nickname'] = $user['nickname'];
         $res['comment_info']['head_pic'] = $user['head_pic'];
+        //获取后台回复
+        $res['comment_info']['replyList'] = M('Comment')->where(['parent_id' => $res['comment_info']['comment_id']])->order("add_time desc")->select();
+
         $this->assign('comment_info',$res['comment_info']);
         $this->assign('comment_id',$res['comment_info']['comment_id']);
         $this->assign('reply',$res['reply']);
