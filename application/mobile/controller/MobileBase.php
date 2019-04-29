@@ -78,6 +78,8 @@ class MobileBase extends Controller {
 
                         //这里做 新 openid 登录成功
                         debug_log('这里做 新 openid 登录成功');
+                        debug_log(json_encode($wxuser));
+                        
                         
 
                         session("third_oauth" , $wxuser);
