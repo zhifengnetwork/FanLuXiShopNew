@@ -45,6 +45,11 @@
                         <p class="pall0">购买时间：{$v1.add_time|date='Y-m-d H:i',###}</p>
                     </div>
                     <div class="dyeai">
+                    <!--商家回复-s-->
+                    <foreach name="$v1['replyList']" item="reply" key="k">
+                        <p class="pay-date">客服回复：{$reply['content']}</p>
+                    </foreach>
+                    <!--商家回复-e-->
                         <if condition="$v1[is_comment] eq 0">
                             <a class="compj" href="{:U('Shop/Order/add_comment',array('rec_id'=>$v1[rec_id]))}"><i class="said"></i>评价订单</a>
                         <else/>
@@ -52,11 +57,6 @@
                         </if>
                     </div>
                 </div>
-                <!--商家回复-s-->
-                <foreach name="$v1['replyList']" item="reply" key="k">
-                    <p class="pay-date">客服回复：{$reply['content']}</p>
-                </foreach>
-                <!--商家回复-e-->
             </foreach>
         </div>
     </div>
