@@ -14,6 +14,11 @@ class GuanxiLogic extends Model
 	 */
 	public function get_shangxiaji_guanxi($shangji,$xiaji)
 	{
+		if($shangji == $xiaji){
+			return '自购';
+		}
+		//自购返利
+
 		$jibie = 1;
 		
 		/** 15级 就差不多了 （大于10级显示  十级以上 ）实际上大于4级就不返利了 */
