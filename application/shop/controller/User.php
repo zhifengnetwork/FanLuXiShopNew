@@ -450,6 +450,7 @@ class User extends MobileBase
 // //            header("Location: " . U('Mobile/User/index'));
 //             $this->redirect('Shop/User/index');
 //         }
+        write_log('跳转链接：'.$$_SERVER['HTTP_REFERER'].'===');
         $referurl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : U("Shop/User/index");
         $this->assign('referurl', $referurl);
         // 新版支付宝跳转链接
