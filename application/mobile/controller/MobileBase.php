@@ -1,6 +1,6 @@
 <?php
 
-namespace app\shop\controller;
+namespace app\mobile\controller;
 
 use think\Controller;
 use think\Db;
