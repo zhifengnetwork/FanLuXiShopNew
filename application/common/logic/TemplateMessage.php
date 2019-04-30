@@ -46,11 +46,8 @@ class TemplateMessage
             )
         );
 
-        $content = json_encode($data);
-        $task_id = md5($content.$openid);
-        $res = $this->send_tpl($openid,$task_id,$data);
-       // exit($openid.'--'.$goods_name.'--'.$yongjin.'---'.$order_sn);
-        //exit($res);
+        $res = $this->send_tpl($openid,$data);
+        return $res;
     }
 
     /**
@@ -59,15 +56,18 @@ class TemplateMessage
      *
      * 发送消息模板
      */
-    public function send_tpl($openid, $task_id, $data)
+    public function send_tpl($openid, $data)
     {
-        // file_get_contents('https://www.wapdu.cn/api/token/access_token')
-        $access_token = access_token();
-
+       
+        $content = json_encode($data);
+        $task_id = md5($content.$openid);
+       
         $res = M('template_message')->where(['task_id' => $task_id])->value('res');
         if ($res) {
             return $res;
         }
+
+        $access_token = access_token();
 
         $url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" . $access_token;
         $json = json_encode($data);
