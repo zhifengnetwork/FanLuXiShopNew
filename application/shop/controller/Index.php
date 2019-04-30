@@ -75,8 +75,6 @@ class Index extends MobileBase {
         return $this->fetch();
     }
 
- 
-
     //商品列表板块参数设置
     public function goods_list_block(){
         $data=I('post.');

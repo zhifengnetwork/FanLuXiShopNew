@@ -577,10 +577,7 @@ class App
                 $config['empty_controller']
             );
         } catch (ClassNotFoundException $e) {
-                      if (is_null($instance) && $controller == 'Distribut') {
-			header("Content-type: text/html; charset=utf-8");
-			exit('要使用分销模块请联系DC环球直供网络客服,官网地址 www.tp-shop.cn');
-                       }   
+                     
             throw new HttpException(404, 'controller not exists:' . $e->getClass());
         }
 
@@ -596,12 +593,6 @@ class App
             $call = [$instance, '_empty'];
             $vars = [$actionName];
         } else {
-			
-		//echo $instance.$actionName ;
-        if ($actionName == 'pre_sell_list') {
-			header("Content-type: text/html; charset=utf-8");
-			exit('要使用预售功能请联系DC环球直供网络客服,官网地址 www.tp-shop.cn');
-        }
 			
             // 操作不存在
             throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . $action . '()');
