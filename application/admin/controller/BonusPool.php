@@ -11,19 +11,33 @@ class BonusPool extends Base {
      */
     public function ranking()
     {
-        $bonus_time = M('config')->where('name', 'bonus_time')->value('value');
-        $bonus_time = (int)$bonus_time;
+        $arr = array(
+            'name' => ['in', ['day', 'bonus_time']],
+            'inc_type' => 'bonus',
+        );
+        $config = M('config')->where($arr)->column('name, value');
+        $bonus_day = (int)$config['day'];
+		//当月奖励时间
+		$tb_time['bonus_now']  = strtotime(date('Y-m') . '-' . $bonus_day . ' 00:00:00');
+		//上次奖励时间
+        $tb_time['bonus_time'] = (int)$config['bonus_time'];
+        $condition['create_time'] = [['<=', $tb_time['bonus_now']], ['>', $tb_time['bonus_time']]];
         $condition['rank.status'] = 0;
         if($bonus_time){
             $condition['rank.create_time'] = ['>', $bonus_time];
         }
 
-        $count = M('bonus_rank')->alias('rank')->join('users', 'users.user_id = rank.user_id')
-                ->where($condition)->count();
-        $page = new Page($count, 2);
-        $rank_list = M('bonus_rank')->alias('rank')->join('users', 'users.user_id = rank.user_id')
-                ->field('rank.*, users.nickname')->where($condition)->limit($page->firstRow, $page->listRows)
-                ->order('rank.nums DESC, rank.create_time DESC')->select();
+        $count = M('bonus_rank')->alias('rank')
+                ->join('users', 'users.user_id = rank.user_id')
+                ->where($condition)
+                ->count();
+        $page = new Page($count, 20);
+        $rank_list = M('bonus_rank')->alias('rank')
+                ->join('users', 'users.user_id = rank.user_id')
+                ->field('rank.*, users.nickname')->where($condition)
+                ->limit($page->firstRow, $page->listRows)
+                ->order('rank.nums DESC, rank.money DESC, rank.create_time ASC, rank.id ASC')
+                ->select();
 
         $this->assign('page', $page->firstRow);
         $this->assign('pager', $page);
@@ -37,11 +51,13 @@ class BonusPool extends Base {
     public function receive_log()
     {
         $map = $this->search();
-        $count = M('bonus_receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id', 'LEFT')
+        $count = M('bonus_receive_log')->alias('receive')
+               ->join('users','users.user_id = receive.leader_id', 'LEFT')
                ->where($map)->count(); 
                
-        $page = new Page($count, 2);
-        $receive_list = M('bonus_receive_log')->alias('receive')->join('users','users.user_id = receive.leader_id', 'LEFT')
+        $page = new Page($count, 20);
+        $receive_list = M('bonus_receive_log')->alias('receive')
+                ->join('users','users.user_id = receive.leader_id', 'LEFT')
                 ->where($map)->field('users.nickname as leader, receive.*')->order('id DESC')
                 ->limit($page->firstRow, $page->listRows)->select();
 
@@ -58,7 +74,7 @@ class BonusPool extends Base {
         $map = $this->search();
         $count = M('bonus_log')->alias('bonus')->join('users','users.user_id = bonus.user_id')
                ->where($map)->count(); 
-        $page = new Page($count, 2);
+        $page = new Page($count, 20);
         $bonus_list = M('bonus_log')->alias('bonus')->join('users','users.user_id = bonus.user_id')->where($map)
                 ->field('users.nickname, bonus.*')->order('id DESC')->limit($page->firstRow, $page->listRows)
                 ->select();

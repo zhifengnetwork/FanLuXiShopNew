@@ -27,36 +27,52 @@ class Pool extends MobileBase {
     //排名
 	public function index()
 	{
-		//奖金池奖励
-        // $BonusPoolLogic = new BonusPoolLogic();
-		// $BonusPoolLogic->bonus_reward(); 
+		$arr = array('name' => 'bonus_open', 'inc_type' => 'bonus');
+		$bonus_open = M('config')->where($arr)->value('value');
+		if($bonus_open){
+			//奖金池奖励
+			// $BonusPoolLogic = new BonusPoolLogic();
+			// $BonusPoolLogic->bonus_reward(); 
+			
+			$user_id = $this->user_id;
+			$data = array('bonus_time', 'bonus_total', 'day');
+			$data = M('config')->where('name', ['in', $data])
+							->column('name, value');
+
+			$bonus_time = (int)$data['bonus_time'];
+			$bonus_day  = (int)$data['day'];
+			$bonus_now  = strtotime(date('Y-m') . '-' . $bonus_day . ' 00:00:00');
+			$condition  = array(
+				'rank.status' => 0,
+				'rank.create_time' => [['>', $bonus_time], ['<=', $bonus_now]],
+			);
+
+			$my_rank = M('bonus_rank')->alias('rank')
+					->join('users','users.user_id = rank.user_id' )
+					->where($condition)->where(['rank.user_id' => $user_id])
+					->field('rank.*,users.nickname')
+					->order('id DESC')->find();
+			if($my_rank){
+				$rank_sort = M('bonus_rank')
+						->alias('rank')
+						->where($condition)
+						->order('money DESC, nums DESC, create_time ASC')
+						->column('user_id');
+				$rank_sort = array_flip($rank_sort);
+				$my_rank['ranking'] = $rank_sort[$my_rank['user_id']]+1; 
+			}
+
+			$rank = M('bonus_rank')->alias('rank')
+					->join('users','users.user_id = rank.user_id' )
+					->where($condition)->field('rank.*,users.nickname')
+					->order('rank.nums DESC, rank.money DESC, rank.create_time ASC, rank.id ASC')
+					->limit(4)->select();
+		}else{
+			$data = array();
+			$rank = array();
+			$my_rank = array();
+		}
 		
-		$user_id = $this->user_id;
-		$data = array('bonus_time', 'bonus_total', 'day');
-		$data = M('config')->where('name', ['in', $data])
-						   ->column('name, value');
-
-		$bonus_time = (int)$data['bonus_time'];
-		$condition = array(
-			'rank.status' => 0,
-		);
-		if($bonus_time){
-			$condition['rank.create_time'] = ['>', $bonus_time];
-		}
-
-		$my_rank = M('bonus_rank')->alias('rank')->join('users','users.user_id = rank.user_id' )
-				->where($condition)->where(['rank.user_id' => $user_id])->field('rank.*,users.nickname')
-				->order('id DESC')->find();
-		if($my_rank){
-			$rank_sort = M('bonus_rank')->where('status', 0)->where('create_time', '>', $bonus_time)
-					->order('money DESC, nums DESC, create_time ASC')->column('user_id');
-			$rank_sort = array_flip($rank_sort);
-			$my_rank['ranking'] = $rank_sort[$my_rank['user_id']]+1; 
-		}
-
-		$rank = M('bonus_rank')->alias('rank')->join('users','users.user_id = rank.user_id' )
-				->where($condition)->field('rank.*,users.nickname')->order('rank.nums DESC, rank.money DESC, rank.create_time ASC')
-				->limit(4)->select();
 		$this->assign('data', $data);
 		$this->assign('my_rank', $my_rank);
 		$this->assign('rank', $rank);

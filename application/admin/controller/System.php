@@ -535,34 +535,49 @@ class System extends Base
         echo "数据已清空,请立即删除这个方法";
         */ 
          
-    }        
-	public function bonus_set(){//奖金池配置
+    }
+    
+    //奖金池配置
+	public function bonus_set(){
 		if($_POST){
     		$inc_type = input('inc_type/s');
             $bonus_total = input('bonus_total/s');
+            $pool_open  = input('pool/s');
+            $bonus_open = input('bonus/s');
     		$bonus_pool =input('bonus_pool/s');
     		$ranking1 = input('ranking1/s');
     		$ranking2 = input('ranking2/s');
     		$ranking3 = input('ranking3/s');
-            // $ranking4 = input('ranking4/s');
-            $day = input('day/s');
+            // $day = input('day/s');
+            $flag = input('flag/s');
 
-            // $total = $ranking1 + $ranking2 + $ranking3;
-            // if($total > 100){
-            //     $this->error("比例总和不能超过100%");
-            // }
+            //关闭奖金池奖励则将未当期未奖励的用户设为作废
+            if($flag == '1'){
+                $arr = array(
+                    'name' => ['in', ['day', 'bonus_time']],
+                    'inc_type' => 'bonus',
+                );
+                $config = M('config')->where($arr)->column('name, value');
+                $bonus_day = strtotime(date('Y-m') . '-' . $config['day'] . ' 00:00:00');
+                $tb_time['bonus_time'] = (int)$config['bonus_time'];
+                $tb_time['bonus_now'] = (int)$bonus_day;
+                $condition['create_time'] = [['>', $tb_time['bonus_time']], ['<=', $tb_time['bonus_now']]];
+                $condition['status'] = 0;
+                $users = M('bonus_rank')->where($condition)->update(['status' => 2]);
+            }
+
     		$data = array(
                 'bonus_total' => $bonus_total,
+                'pool_open' => $pool_open,
+                'bonus_open' => $bonus_open,
     			'bonus_pool'=>$bonus_pool,
     			'ranking1' =>$ranking1,
     			'ranking2' =>$ranking2,
     			'ranking3' =>$ranking3,
-                'ranking4' =>$ranking4,
-                'day' =>$day,
+                // 'day' =>$day,
     			);
     		foreach($data as $k =>$v){
     			$updata = Db::query("update tp_config set value='$v' where inc_type='$inc_type' and name='$k'");
-    			// isset("$k",$v);
     		}
     		delFile(RUNTIME_PATH);
     		clearCache();

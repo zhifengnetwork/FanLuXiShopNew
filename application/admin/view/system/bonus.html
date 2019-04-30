@@ -23,12 +23,44 @@
             <span id="explanationZoom" title="收起提示"></span></div>
         <ul>
             <li>系统平台全局设置,包括基础设置、奖金池、排名等相关模块。</li>
+            <li>开启奖金池则将邮费放进奖金池，否则不抽取邮费放进奖金池。</li>
+            <li>开启奖金池奖励则按用户排名进行奖励，否则不进行奖励。</li>
         </ul>
     </div>
-    <form method="post" enctype="multipart/form-data" name="form1" action="{:U('System/bonus_set')}">
+    <form method="post" enctype="multipart/form-data" name="form1" id="form1" action="{:U('System/bonus_set')}">
         <input type="hidden" name="inc_type" value="{$inc_type}">
+        <input type="hidden" name="flag" id="flag" value="">
         <div class="ncap-form-default">
-            
+            <dl class="row">
+                <dt class="tit">
+                    <label for="bonus_total">奖金池设置:</label>
+                </dt>
+                <dd class="opt">
+                    <div class="onoff">
+                        <label for="is_pool_open" class="cb-enable <if condition='$config.pool_open eq 1'>selected</if>">开启</label>
+                        <label for="is_pool_close" class="cb-disable <if condition='$config.pool_open eq 0'>selected</if>">关闭</label>
+                        <input id="is_pool_open" name="pool" <if condition="$config.pool_open eq 1">checked="checked"</if> value="1" type="radio"> 
+                        <input id="is_pool_close" name="pool" <if condition="$config.pool_open eq 0">checked="checked"</if> value="0" type="radio">
+                    </div>
+                    <p class="notic">是否开启奖金池</p>
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dt class="tit">
+                    <label for="bonus_total">奖金池奖励设置:</label>
+                </dt>
+                <dd class="opt">
+                    <div class="onoff">
+                        <label for="is_bonus_open" class="cb-enable <if condition='$config.bonus_open eq 1'>selected</if>">开启</label>
+                        <label for="is_bonus_close" class="cb-disable <if condition='$config.bonus_open eq 0'>selected</if>">关闭</label>
+                        <input id="is_bonus_open" name="bonus" <if condition="$config.bonus_open eq 1">checked="checked"</if> value="1" type="radio"> 
+                        <input id="is_bonus_close" name="bonus" <if condition="$config.bonus_open eq 0">checked="checked"</if> value="0" type="radio">
+                    </div>
+                    <p class="notic">是否开启奖金池奖励</p>
+                </dd>
+            </dl>
+
             <dl class="row">
                 <dt class="tit">
                     <label for="bonus_total">奖金池总额:</label>
@@ -101,8 +133,9 @@
                     <label for="day">每月奖励发放时间:</label>
                 </dt>
                 <dd class="opt">
+                    <span>{$config.day}</span>
                     <!-- <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="ranking0" value="{$config.ranking0|default=0}" class="input-txt" type="text"> -->
-                    <select name="day" id="day">
+                    <!-- <select name="day" id="day">
                         <option value="1" <if condition="$config.day eq 1">selected</if>>1</option>
                         <option value="2" <if condition="$config.day eq 2">selected</if>>2</option>
                         <option value="3" <if condition="$config.day eq 3">selected</if>>3</option>
@@ -130,11 +163,11 @@
                         <option value="25" <if condition="$config.day eq 25">selected</if>>25</option>
                         <option value="26" <if condition="$config.day eq 26">selected</if>>26</option>
                         <option value="27" <if condition="$config.day eq 27">selected</if>>27</option>
-                        <option value="28" <if condition="$config.day eq 28">selected</if>>28</option>
+                        <option value="28" <if condition="$config.day eq 28">selected</if>>28</option> -->
                         <!-- <option value="29" <if condition="$config.day eq 29">selected</if>>29</option>
                         <option value="30" <if condition="$config.day eq 30">selected</if>>30</option> -->
                         <!-- <option value="31" <if condition="$config.day eq 31">selected</if>>31</option> -->
-                    </select>
+                    <!-- </select> -->
                     <span>号</span>
                 </dd>
             </dl>   
@@ -143,22 +176,79 @@
     </form>
 </div>
 <script type="text/javascript">
+    // // 奖金池设置
+    // function pool_open(data){
+    //     var msg;
+    //     if(data == 0){
+    //         msg = '关闭后当月期的奖励就已确定不会再进行发放,<br> 确定关闭吗?';
+    //     }else{
+    //         msg = '确定开启吗?';
+    //     }
+    //     layer.confirm(msg, {
+    //         btn: ["确定","取消"] //按钮
+    //     }, function(){
+    //         $.ajax({
+	// 			type: "get",
+	// 			url: "/index.php?m=Admin&c=BonusPool&a=change_status",
+	// 			success: function (data) {
+    //                 $('#form1').submit();
+	// 			}
+	// 		});
+    //     }, function(){
+    //         location.reload();
+    //     });
+    // }
+
     function fromsubmit(){
+        var bonus_open = $('input:radio[name="bonus"]:checked').val();
+        var bonus_now  = '{$config.bonus_open}';
         var bonus_total = $("#bonus_total").val();
+        var date = new Date();
+        date = date.getDate();
+        var day = $("#day").val();
         var ranking1 = document.getElementById("ranking1").value;
         var ranking2 = document.getElementById("ranking2").value;
         var ranking3 = document.getElementById("ranking3").value;
+        var ranking3 = document.getElementById("ranking3").value;
         var total = parseInt(ranking1) + parseInt(ranking2) + parseInt(ranking3);
+        
         if(total > 100){
             layer.msg('排名比例总和不能超过100%！', {icon: 2,time: 1000});
             // layer.msg(total, {icon: 2,time: 1000});
             return false;
         }
+
         if(bonus_total<=0){
             layer.msg('奖金池必须大于0！', {icon: 2,time: 1000});
             return false;
         }
-        document.form1.submit();
+
+        // if(date >= date){
+        //     layer.msg('奖励发放日只能设置为本日之后！', {icon: 2,time: 1000});
+        //     return false;
+        // }
+
+        if((bonus_open == '0') && (bonus_open != bonus_now)){
+            var msg = '注意: 奖励关闭后当期未进行奖励的用户都会作废，不再进行奖励，确定关闭吗？';
+            layer.confirm(msg, {
+                //按钮
+                btn: ["确定","取消"] 
+            }, function(){
+                document.getElementById("flag").value = 1;
+                document.form1.submit();
+            });
+        }else if((bonus_open == '1') && (bonus_open != bonus_now)){
+            var msg = '注意: 奖励开启后当期未进行奖励的用户都会作废，不再进行奖励，开始新的排名，确定开启吗？';
+            layer.confirm(msg, {
+                //按钮
+                btn: ["确定","取消"] 
+            }, function(){
+                document.getElementById("flag").value = 1;
+                document.form1.submit();
+            });
+        }else{
+            document.form1.submit();
+        }
     }
 </script>
 <div id="goTop">
