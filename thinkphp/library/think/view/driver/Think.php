@@ -77,11 +77,7 @@ class Think
         }
         // 模板不存在 抛出异常
         if (!is_file($template)) {
-			
-			if(strstr($template,'pre_sell_list')){
-				header("Content-type: text/html; charset=utf-8");
-				exit('要使用预售功能请联系DC环球直供网络客服,官网地址 www.tp-shop.cn');
-			}
+		
             throw new TemplateNotFoundException('template not exists:' . $template, $template);
         }
         // 记录视图信息

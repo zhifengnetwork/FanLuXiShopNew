@@ -361,54 +361,68 @@ class Report extends Base
      * @return mixed
      */
 	public function performance(){
-		// $mobile = I('mobile');
-		// $email = I('email');
-        // $order_where = [
-        //     'o.add_time'=>['Between',"$this->begin,$this->end"],
-        //     'o.pay_status'=>1,
-        //     'o.order_status'=>['notIn','3,5']
-        // ];
-		// if($mobile){
-		// 	$user_where['mobile'] =$mobile;
-		// }		
-		// if($email){
-        //     $user_where['email'] = $email;
-		// }
-        // if($user_where){   //有查询单个用户的条件就去找出user_id
-        //     $user_id = Db::name('users')->where($user_where)->getField('user_id');
-        //     $order_where['o.user_id']=$user_id;
-        // }
-
-        // $count = Db::name('order')->alias('o')->where($order_where)->group('o.user_id')->count();  //统计数量
-        // $Page = new Page($count,$this->page_size);
-        // $list = Db::name('order')->alias('o')
-        //     ->field('count(o.order_id) as order_num,sum(o.total_amount) as amount,o.user_id,u.mobile,u.email,u.nickname')
-        //     ->join('users u','o.user_id=u.user_id','LEFT')
-        //     ->where($order_where)
-        //     ->group('o.user_id')
-        //     ->order('amount DESC')
-        //     ->limit($Page->firstRow,$Page->listRows)
-        //     ->cache(true)->select();   //以用户ID分组查询
-        // $this->assign('page',$Page);
-        // $this->assign('p',I('p/d',1));
-        // $this->assign('page_size',$this->page_size);
-        // $this->assign('list',$list);
-        // return $this->fetch();
+        
+        exit('数据正在调整');
+        
         if ($_POST) {
             $user_id = input('user_id/s');
             $where = "and  b.user_id like '%$user_id%' ";
             $cwhere = "tp_users.user_id like '%$user_id%' ";
         }
-
+       
         $count = Db::table("tp_users")->join('tp_agent_performance',' tp_users.user_id=tp_agent_performance.user_id')->where($cwhere)->count();
         $page = new Page($count,10);
-        $Pickup =  Db::query("select * from tp_agent_performance as a,tp_users as b where a.user_id = b.user_id $where order by b.user_id desc limit $page->firstRow,$page->listRows");
-        // var_dump($Pickup);exit;
+
+        //$Pickup =  Db::query("select * from tp_agent_performance as a,tp_users as b where a.user_id = b.user_id $where order by a.team_per desc limit $page->firstRow,$page->listRows");
+        // dump($page->firstRow.'='.$page->listRows);
+        $Pickup = M('agent_performance')->alias('a')
+        // ->field('')
+        ->join('tp_users u','a.user_id=u.user_id')
+        ->page($page->firstRow,$page->listRows)->order('a.team_per desc')->select();
+
         // $res = $Pickup->order('order_id desc')->select();
         $this->assign('page',$page);
         $this->assign('list',$Pickup);
 
-
         return $this->fetch();
-	}
+    }
+    
+     /**
+     * 佣金排行榜
+     * 
+     */
+    public function rebate_log()
+    {
+        $count = M('account_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
+        ->field('users.nickname, acount.log_type,acount.user_id,sum(acount.user_money) as sums')
+        ->order('sums DESC')
+        ->group('acount.user_id')
+        ->where("acount.log_type", ">=", "1")
+        ->count();
+
+        $page = new Page($count, 10);
+        $this->assign('page_size',10);
+
+        $log = M('account_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
+                               ->field('users.nickname,users.head_pic, acount.log_type,acount.user_id,sum(acount.user_money) as sums')
+                               ->order('sums DESC')
+                               ->group('acount.user_id')
+                               ->where("acount.log_type", ">=", "1")
+                               ->limit($page->firstRow, $page->listRows)
+                               ->select();
+       
+        $this->assign('pager', $page);
+        
+        $this->assign('log',$log);
+        return $this->fetch();
+    }
+
+    /**
+     * 单人 佣金明细
+     */
+    public function rebate_log_detail(){
+        $user_id = I('user_id');
+        exit('功能正在调整'.$user_id);
+
+    }
 }
