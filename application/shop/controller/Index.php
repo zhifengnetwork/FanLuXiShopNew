@@ -75,11 +75,6 @@ class Index extends MobileBase {
         return $this->fetch();
     }
 
-    public function levelCode(){
-        $a = M('Users')->where('level',1)->update(['is_code'=>1]);
-        dump($a);
-     }
-
     //商品列表板块参数设置
     public function goods_list_block(){
         $data=I('post.');
