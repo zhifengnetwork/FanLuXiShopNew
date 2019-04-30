@@ -316,7 +316,7 @@ class UsersLogic extends Model
 
 				  	write_log('新注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'==data_old_openid'.$data['old_openid'].'访问ip地址：' . $request->ip());
 				 
-					if(!empty($old_user))){
+					if(!empty($old_user)){
 						
 						$map['sign_old_openid'] = 222;
 						Db::name('users')->where(array('user_id'=>$old_user['user_id']))->update($map);
