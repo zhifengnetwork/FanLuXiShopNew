@@ -295,9 +295,10 @@ class UsersLogic extends Model
 
 			$is_cunzai = Db::name('users')->where(array('openid'=>$data['openid']))->find();
 			$time=date("Y-m-d H:i:s");
-             write_log('新注册：openid'.$data['openid'].'--name--'.$data['nickname'].'time'.$time.'访问ip地址：' . $request->ip());
-			 if(!empty($is_cunzai)){
-			 	 write_log('新注册数据查询1：openid='.$is_cunzai['openid'].'--name--'.$is_cunzai['nickname'].'time'.$time.'==data_openid'.$data['openid'].'访问ip地址：' . $request->ip());
+            write_log('新注册：openid'.$data['openid'].'--name--'.$data['nickname'].'time'.$time.'访问ip地址：' . $request->ip());
+			
+			if(!empty($is_cunzai)){
+			 	write_log('新注册数据查询1：openid='.$is_cunzai['openid'].'--name--'.$is_cunzai['nickname'].'time'.$time.'==data_openid'.$data['openid'].'访问ip地址：' . $request->ip());
 				$map['sign_old_openid'] = 555;
 				Db::name('users')->where(array('openid'=>$map['openid']))->update($map);
 				$row_id = $is_cunzai['user_id'];
@@ -305,26 +306,32 @@ class UsersLogic extends Model
 			}else{
 
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
-				 write_log('新注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'==data_old_openid'.$data['old_openid'].'访问ip地址：' . $request->ip());
-				 
-				if($old_user == null || empty($old_user) || !$old_user || empty($data['old_openid'])){
+				$matched_user = Db::name('users')->where('openid','<>',$old_user['old_openid'])->find();
+				if(!empty($matched_user))
+				{
 					//新用户
-
-
-					$map['sign_old_openid'] = 111;
+					$map['sign_old_openid'] = 7777;
 					$row_id = Db::name('users')->add($map);
-
-
 				}else{
-			
+
+				  	write_log('新注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'==data_old_openid'.$data['old_openid'].'访问ip地址：' . $request->ip());
+				 
+					if(!empty($old_user))){
+						
+						$map['sign_old_openid'] = 222;
+						Db::name('users')->where(array('user_id'=>$old_user['user_id']))->update($map);
+						$row_id = $old_user['user_id'];
+
+					}else{
 				
-					$map['sign_old_openid'] = 222;
-					Db::name('users')->where(array('user_id'=>$old_user['user_id']))->update($map);
-					$row_id = $old_user['user_id'];
+						//新用户
+						$map['sign_old_openid'] = 111;
+						$row_id = Db::name('users')->add($map);
+					}
 				}
 
-			}
 
+			}
 
 
 			$user = Db::name('users')->where(array('user_id'=>$row_id))->find();
@@ -377,8 +384,9 @@ class UsersLogic extends Model
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
 				write_log('已注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'---openid---'.$data['old_openid'].'访问ip地址：' . $request->ip());
 				if($old_user){
-				//更新老数据并删除新注册的数据
+					//更新老数据并删除新注册的数据
 					$map['openid'] = $data['openid'];
+					$map['is_code'] = $user['is_code'];
 					$map['sign_old_openid'] = 333;
 					Db::name('users')->where('user_id', $old_user['user_id'])->save($map);
 					Db::name('oauth_users')->where('openid', $data['openid'])->save(['user_id'=>$old_user['user_id']]);
