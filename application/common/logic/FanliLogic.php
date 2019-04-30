@@ -71,10 +71,13 @@ class FanliLogic extends Model
 		$parent_info = M('users')->where('user_id',$user_info['first_leader'])->field('level')->find();
         //判断是否特殊产品成为店主，则不走返利流程
         //用户购买后检查升级
+      	$goods_info=$this->getgoodsinfo();
         if($goods_info['sign_free_receive']==0) //免费领取，签到产品不参与返利
         {
+        	  
 		 $this->checkuserlevel($this->userId,$this->orderId);
 	    }
+
 		$pro_num = $this->getproductnum();
 		//echo $this->goodId.'-'.$this->tgoodsid.'-'.$user_info['level'];exit;
         if($this->goodId==$this->tgoodsid )//是否特殊产品
