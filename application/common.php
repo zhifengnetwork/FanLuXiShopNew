@@ -239,9 +239,9 @@ function getAllUp($invite_id,&$userList=array())
         $cunzai = M('agent_performance')->where(['user_id'=>$user_id])->find();
         //存在
         if($cunzai){
-            $data['ind_per'] = $cunzai['ind_per'] + $order_amount;
-            $data['update_time'] = date('Y-m-d H:i:s');
-            $res = M('agent_performance')->where(['user_id'=>$user_id])->save($data);
+            $data_new['ind_per'] = $cunzai['ind_per'] + $order_amount;
+            $data_new['update_time'] = date('Y-m-d H:i:s');
+            $res = M('agent_performance')->where(['user_id'=>$user_id])->save($data_new);
 
             agent_performance_log($user_id,$order_amount,$order_id);
 
@@ -269,9 +269,9 @@ function getAllUp($invite_id,&$userList=array())
             $cunzai = M('agent_performance')->where(['user_id'=>$v['user_id']])->find();
             //存在
             if($cunzai){
-                $data1['team_per'] = $cunzai['team_per'] + $order_amount;
-                $data1['update_time'] = date('Y-m-d H:i:s');
-                $res = M('agent_performance')->where(['user_id'=>$v['user_id']])->save($data1);
+                $data11['team_per'] = $cunzai['team_per'] + $order_amount;
+                $data11['update_time'] = date('Y-m-d H:i:s');
+                $res = M('agent_performance')->where(['user_id'=>$v['user_id']])->save($data11);
             }else{
 
                 $data1['user_id'] =  $v['user_id'];
@@ -300,7 +300,8 @@ function agent_performance_log($user_id,$order_amount,$order_id){
         'user_id'=>$user_id,
         'money'=>$order_amount,
         'create_time'=>date('Y-m-d H:i:s'),
-        'note'=>'订单'.$order_id.'业绩'
+        'note'=>'订单'.$order_id.'业绩',
+         'order_id'=>$order_id
     );
     M('agent_performance_log')->add($log);
 
