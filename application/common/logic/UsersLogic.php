@@ -307,7 +307,8 @@ class UsersLogic extends Model
 
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
 				$matched_user = Db::name('users')->where('openid','<>',$old_user['old_openid'])->find();
-				if(!empty($matched_user))
+				//if(!empty($matched_user))
+				if($old_user['old_openid']!=$old_user['openid'])
 				{
 					//新用户
 					$map['sign_old_openid'] = 7777;
