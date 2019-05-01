@@ -73,7 +73,7 @@ class Base extends Controller {
         $this->assign('start_time',$begin);
         $this->assign('end_time',$end);
         $this->begin = strtotime($begin);
-        $this->end = strtotime($end)+86399;
+        $this->end = strtotime($end);//+86399;
         $this->page_size = C('PAGESIZE');
        $this->assign('tpshop_config', $tpshop_config);
     }

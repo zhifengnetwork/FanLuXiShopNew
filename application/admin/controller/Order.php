@@ -1422,6 +1422,12 @@ class Order extends Base {
         if($order_ids){
             $where['order_id'] = ['in', $order_ids];
         }
+
+        I('pay_status') != '' ? $where['pay_status'] = I('pay_status') : false;
+        I('shipping_status') != '' ? $where['shipping_status'] = I('shipping_status') : false;
+        // $where['pay_status'] = I('pay_status');
+        // $where['shipping_status'] = I('shipping_status');
+
         if(I('pay_code')){
             switch (I('pay_code')){
                 case '余额支付':
