@@ -989,6 +989,7 @@ class Order extends Base {
            
         }
 
+     
         //$data为excel表里的所有数据
         $arr=array();
         foreach($data as $key=>$val){
@@ -1008,8 +1009,13 @@ class Order extends Base {
                     $arr[$key]['shipping_code'] = Db::name('shipping')->where('shipping_name', $val['K'])
                         ->value('shipping_code');
                 }
-           }
+            }
 
+        }
+
+        //如果第一行是 null，去掉
+        if($arr[0]['shipping_code'] == NULL){
+            unset($arr[0]);
         }
 
         // 写入数据库操作
