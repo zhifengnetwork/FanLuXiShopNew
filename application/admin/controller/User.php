@@ -1018,7 +1018,6 @@ class User extends Base
             }
         }
         
-        dump($alipay);exit;
         if ($alipay['batch_num'] > 0) {
             //支付宝在线批量即时到账付款
             include_once PLUGIN_PATH . "payment/alipay/alipay.class.php";
