@@ -305,8 +305,8 @@
     function audit(chks , wst ,  remark){
     	$.ajax({
             type: "POST",
-            // url: "/index.php?m=Admin&c=User&a=withdrawals_update",//+tab,
-            url: "/index.php?m=Admin&c=User&a=transfer",//+tab,
+            url: "/index.php?m=Admin&c=User&a=withdrawals_update",//+tab,
+            
             data: {id:chks,status:wst,remark:remark},
             dataType: 'json',
             success: function (data) {
