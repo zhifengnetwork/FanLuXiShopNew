@@ -985,8 +985,8 @@ class User extends Base
         }
 
 
-        $messageFactory = new \app\common\logic\MessageFactory();
-        $messageLogic = $messageFactory->makeModule(['category' => 0]);
+        // $messageFactory = new \app\common\logic\MessageFactory();
+        // $messageLogic = $messageFactory->makeModule(['category' => 0]);
 
         $alipay['batch_num'] = 0;
         $alipay['batch_fee'] = 0;
@@ -1011,19 +1011,20 @@ class User extends Base
                     accountLog($val['user_id'], ($val['money'] * -1), 0, "管理员处理用户提现申请");//手动转账，默认视为已通过线下转方式处理了该笔提现申请
                     $r = M('withdrawals')->where(array('id' => $val['id']))->save(array('status' => 2, 'pay_time' => time()));
                     expenseLog($rdata);//支出记录日志
+                    
                     // 提现通知
-                    $messageLogic->withdrawalsNotice($val['id'], $val['user_id'], $val['money'] - $val['taxfee']);
+                    //$messageLogic->withdrawalsNotice($val['id'], $val['user_id'], $val['money'] - $val['taxfee']);
 
                 }
             }
         }
         
-        if ($alipay['batch_num'] > 0) {
-            //支付宝在线批量即时到账付款
-            include_once PLUGIN_PATH . "payment/alipay/alipay.class.php";
-            $alipay_obj = new \alipay();
-            $alipay_obj->transfer($alipay);
-        }
+        // if ($alipay['batch_num'] > 0) {
+        //     //支付宝在线批量即时到账付款
+        //     include_once PLUGIN_PATH . "payment/alipay/alipay.class.php";
+        //     $alipay_obj = new \alipay();
+        //     $alipay_obj->transfer($alipay);
+        // }
         $this->success("操作成功!", U('remittance'), 3);
     }
 
