@@ -396,7 +396,7 @@ class Index extends MobileBase {
             $data_new['update_time'] = date('Y-m-d H:i:s');
             $res = M('agent_performance_new')->where(['user_id'=>$user_id])->save($data_new);
 
-            agent_performance_log_new($user_id,$order_amount,$order_id);
+            agent_performance_log_new($user_id,$order_amount,$order_id,$ve['ogoods_id'],$ve['oaddtime']);
               echo '成功加上存在ID:'.$v["user_id"].'个人业绩<br/>';
         }else{
 
