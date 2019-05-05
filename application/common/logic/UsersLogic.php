@@ -384,6 +384,8 @@ class UsersLogic extends Model
               write_log('已注册：old_openid'.$data['old_openid'].'--name--'.$data['nickname'].'time'.$time.'访问ip地址：' . $request->ip());
 			 	//查找是否已有老数据
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
+				$sql =Db::name('users')->getlastsql();
+				write_log($sql);
 				write_log('已注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'---openid---'.$data['old_openid'].'访问ip地址：' . $request->ip());
 				if($old_user){
 					write_log('已找到老数据');
