@@ -368,7 +368,7 @@ class Index extends MobileBase {
             
           ];
     $order_goods = Db::name('order_goods')->alias('og')
-             ->field('og.order_id,o.order_sn,og.goods_price,og.prom_type,og.goods_name,og.goods_id as ogoods_id,gs.sign_free_receive,o.user_id,og.goods_num,o.add_time as oaddtime')
+             ->field('og.order_id,o.order_sn,og.goods_price,og.prom_type,og.goods_name,og.goods_id as ogoods_id,gs.sign_free_receive,o.user_id,og.goods_num,o.add_time as oaddtime,og.rec_id')
              ->where($where_goods)
              ->join('goods gs','gs.goods_id=og.goods_id','LEFT')
              ->join('order o','og.order_id=o.order_id','LEFT')
@@ -383,7 +383,7 @@ class Index extends MobileBase {
         $user_id = $ve["user_id"];
 
         //$where="note='订单{$order_id}业绩'";
-        $where = "ogoods_id=".$ve['ogoods_id'];
+        $where = "ogoods_id=".$ve['rec_id'];
 
         $agent_performance = M('agent_performance_log_new')->where($where)->find();
         if(empty($agent_performance))
@@ -396,7 +396,7 @@ class Index extends MobileBase {
             $data_new['update_time'] = date('Y-m-d H:i:s');
             $res = M('agent_performance_new')->where(['user_id'=>$user_id])->save($data_new);
 
-            agent_performance_log_new($user_id,$order_amount,$order_id,$ve['ogoods_id'],$ve['oaddtime']);
+            agent_performance_log_new($user_id,$order_amount,$order_id,$ve['rec_id'],$ve['oaddtime']);
               echo '成功加上存在ID:'.$v["user_id"].'个人业绩<br/>';
         }else{
 
@@ -406,7 +406,7 @@ class Index extends MobileBase {
             $data['update_time'] = date('Y-m-d H:i:s');
             $res = M('agent_performance_new')->add($data);
 
-            agent_performance_log_new($user_id,$order_amount,$order_id,$ve['ogoods_id'],$ve['oaddtime']);
+            agent_performance_log_new($user_id,$order_amount,$order_id,$ve['rec_id'],$ve['oaddtime']);
             echo '成功加上不存在ID:'.$v["user_id"].'个人业绩<br/>';
         }
 
@@ -440,7 +440,7 @@ class Index extends MobileBase {
             }
 
             
-            agent_performance_log_new($v['user_id'],$order_amount,$order_id,$ve['ogoods_id'],$ve['oaddtime']);
+            agent_performance_log_new($v['user_id'],$order_amount,$order_id,$ve['rec_id'],$ve['oaddtime']);
             
         }
 
