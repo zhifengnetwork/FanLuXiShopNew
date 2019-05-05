@@ -412,6 +412,7 @@ class UsersLogic extends Model
 	 */
 	public function thirdLogin_new($data = array())
 	{
+		write_log("thirdLogin_newopenid=".$data['openid']);
 		if((empty($data['openid']) && empty($data['unionid'])) || empty($data['oauth'])){
 			return ['status' => -1, 'msg' => '参数错误, openid,unionid或oauth为空','result'=>''];
 		}
