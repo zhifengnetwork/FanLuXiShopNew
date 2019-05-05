@@ -375,7 +375,7 @@ class Index extends MobileBase {
              ->order('og.order_id desc')
              ->limit($pe,50)
              ->select();
-        // print_R($order_goods);exit;
+         print_R(Db::name('order_goods')->getlastsql());exit;
     foreach($order_goods as $ke=>$ve)
     {
         $order_amount = $ve['goods_price'] * $ve['goods_num'];

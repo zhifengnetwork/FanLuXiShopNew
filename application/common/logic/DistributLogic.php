@@ -25,10 +25,14 @@ class DistributLogic
             $pay_status['status']=$pay_status;
         }
         if($table='agent_performance_log'){
-            $count = M('agent_performance_log')->where($recharge_log_where)->count();
+            $count = M('agent_performance_log')->where($recharge_log_where)
+            ->group('order_id')
+            ->count();
             $Page = new Page($count, 15);
-            $recharge_log = M('agent_performance_log')->where($recharge_log_where)
-                ->order('performance_id desc')
+            $recharge_log = M('agent_performance_log')->field('sum(money) as money,performance_id,user_id,create_time,note,order_id')->where($recharge_log_where)
+                ->group('order_id')
+                ->order('create_time desc')
+                //->group('order_id')
                 ->limit($Page->firstRow . ',' . $Page->listRows)
                 ->select(); 
         }else{
