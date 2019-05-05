@@ -31,10 +31,14 @@
 
 
         <ul class="nav"> 
-                <li class="nav-item multiple ">
+               <!--  <li class="nav-item multiple ">
                     综合
                     <i class="multipleimg"></i>
-               </li> 
+               </li> -->
+
+                <li class="nav-item multiple <if condition="I('sort') eq 'comment_count'">red</if>"><a href="<?php echo urldecode(U('Shop/Goods/search',array_merge($filter_param,array('sort'=>'comment_count')),''));?>">
+                    综合
+                </a></li> 
                 <li class="nav-item  <if condition="I('sort') eq 'sales_sum'">red</if>"><a href="<?php echo urldecode(U('Shop/Goods/search',array_merge($filter_param,array('sort'=>'sales_sum')),''));?>">
                     销量
                 </a></li> 
@@ -43,7 +47,7 @@
                     <i class=" <if condition="I('sort_asc') eq 'asc'">tariff</if>  <if condition="I('sort_asc') eq 'desc'"> bb </if>"></i>
                     <i class="icon  <if condition="I('sort_asc') eq 'asc'">bb</if>  <if condition="I('sort_asc') eq 'desc'"> icon3 </if>"></i> 
                 </a></li>  
-                <li class="nav-item <if condition="I('sort') eq 'sales_sum'">red</if>"><a href="<?php echo urldecode(U('Shop/Goods/search',array_merge($filter_param,array('sort'=>'sales_sum')),''));?>">
+                <li class="nav-item <if condition="I('sort') eq 'is_new'">red</if>"><a href="<?php echo urldecode(U('Shop/Goods/search',array_merge($filter_param,array('sort'=>'is_new')),''));?>">
                     新品
                 </a></li> 
                 <li class="nav-item"><a href="#" class="sx">
@@ -74,13 +78,10 @@
                             <div class="prices">
                                 <p class="sc_pri fl"><span>￥</span><b>{$vo[shop_price]}元</b></p>
                             </div>
-                                <!-- <a href="" class="moda">
-                                    <span>MODA专营店<img src="/template/shop/rainbow/static/images/Back@2x.png"></span>
-                                </a> -->
+                              
                             <p class="weight">
                                 <span class="proli-eva">{$vo['comment_statistics']['high_rate']}%好评</span>
-                                <span>销量:82</span>
-                                <span class="proli-eva">已付款:{$vo[comment_count]}</span>
+                                <span>销量:{$vo[sales_sum]}</span>
                                 <!-- <span goods_id="{$vo.goods_id}" class="add_cart"><img src="__STATIC__/images/red-icon-cart.png" alt=""></span> -->
                              </p>
                         </a>
