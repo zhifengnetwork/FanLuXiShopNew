@@ -62,7 +62,14 @@ class Order extends Base {
         $condition['prom_type'] = array('lt',5);
         $order_sn = ($keyType && $keyType == 'order_sn') ? $keywords : I('order_sn') ;
         $order_sn ? $condition['order_sn'] = trim($order_sn) : false;
+        //下单人ID
+        $member_id = ($keyType && $keyType == 'member_id') ? $keywords : I('member_id') ;
+        $member_id ? $condition['user_id'] = trim($member_id) : false;
         
+
+        $user_id = ($keyType && $keyType == 'user_id') ? $keywords : I('user_id') ;
+        $user_id ? $condition['user_id'] = trim($user_id) : false;
+
         I('order_status') != '' ? $condition['order_status'] = I('order_status') : false;
         I('pay_status') != '' ? $condition['pay_status'] = I('pay_status') : false;
         //I('pay_code') != '' ? $condition['pay_code'] = I('pay_code') : false;
@@ -1417,7 +1424,8 @@ class Order extends Base {
         $keywords = I('keywords','','trim');
         $where= ['add_time'=>['between',"$this->begin,$this->end"]];
         if(!empty($keywords)){
-            $keyType == 'mobile'   ? $where['mobile']  = $keywords : false;
+            $keyType == 'mobile' ? $where['mobile']  = $keywords : false;
+            $keyType == 'user_id' ? $where['user_id'] = $keywords: false;
             $keyType == 'order_sn' ? $where['order_sn'] = $keywords: false;
             $keyType == 'consignee' ? $where['consignee'] = $keywords: false;
         }
