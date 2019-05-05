@@ -62,6 +62,9 @@ class Order extends Base {
         $condition['prom_type'] = array('lt',5);
         $order_sn = ($keyType && $keyType == 'order_sn') ? $keywords : I('order_sn') ;
         $order_sn ? $condition['order_sn'] = trim($order_sn) : false;
+        //下单人ID
+        $member_id = ($keyType && $keyType == 'member_id') ? $keywords : I('member_id') ;
+        $member_id ? $condition['user_id'] = trim($member_id) : false;
         
 
         $user_id = ($keyType && $keyType == 'user_id') ? $keywords : I('user_id') ;
