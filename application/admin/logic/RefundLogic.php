@@ -153,6 +153,15 @@ class RefundLogic extends Model
             $update_coupon_data = ['status'=>0,'use_time'=>0,'order_id'=>0];
             Db::name('coupon_list')->where(['id'=>$coupon_list['id'],'status'=>1])->save($update_coupon_data);
         }
+        
+        //免费领取退回次数（如果是上月订单不退回次数）
+        $Month = date('m',time()); //当前月
+        $addTime = date('m',$order['add_time']); //下单时间
+
+        if ($addTime >= $Month) {
+            ReturnReceiveNumber($order['user_id'],$order);
+        }
+        
         Db::name('order')->where(array('order_id'=>$order['order_id']))->save(array('pay_status'=>3)); //更改订单状态
         $orderLogic = new adminOrderLogic();
         $orderLogic->alterReturnGoodsInventory($order);//取消订单后改变库存
@@ -161,7 +170,7 @@ class RefundLogic extends Model
         $User->updateUserLevel();
         $expense_data = [
             'money'         => $order['user_money'],
-            'integral'         => $order['integral'],
+            'integral'      => $order['integral'],
             'log_type_id'   => $order['order_id'],
             'type'          => 2,
             'user_id'       => $order['user_id'],

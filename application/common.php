@@ -2035,3 +2035,24 @@ function provingReceive($user, $type, $num = 1)
 
     return array('status' => 2, 'msg' => '可领取', 'result' => array());
 }
+
+/*
+* 免费领取商品返还领取次数
+* $user 
+* $order 
+*/
+function ReturnReceiveNumber($user, $order)
+{
+    if ($order['sign_price'] > 0 || $order['discount'] > 0) {
+
+        $signNum = M('order_sign_receive')->where(array('order_id'=>$order['order_id'],'uid'=>$user))->select();
+
+        foreach ($signNum as $key => $value) {
+            if ($value['type'] == 1) {
+                M('Users')->where(array('user_id' => $user ))->setInc('sign_free_num',$value['goods_num']);
+            } elseif ($value['type'] == 2) {
+                M('Users')->where(array('user_id' => $user ))->setInc('distribut_free_num',$value['goods_num']);
+            }
+        }
+    }
+}

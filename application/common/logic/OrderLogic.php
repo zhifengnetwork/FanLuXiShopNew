@@ -57,25 +57,12 @@ class OrderLogic
 			M('coupon_list')->where(array('order_id'=>$order_id,'uid'=>$user_id))->save($res);
 		}
 
-		//退回免费领取次数
+		//免费领取退回次数（如果是上月订单不退回次数）
 		$Month = date('m',time()); //当前月
 		$addTime = date('m',$order['add_time']); //下单时间
-		
+
 		if ($addTime >= $Month) {
-
-			if ($order['sign_price'] > 0 || $order['discount'] > 0) {
-
-				$signNum = M('order_sign_receive')->where(array('order_id'=>$order_id,'uid'=>$user_id))->select();
-
-				foreach ($signNum as $key => $value) {
-					if ($value['type'] == 1) {
-						M('Users')->where(array('user_id' => $user_id ))->setInc('sign_free_num',$value['goods_num']);
-					} elseif ($value['type'] == 2) {
-						M('Users')->where(array('user_id' => $user_id ))->setInc('distribut_free_num',$value['goods_num']);
-					}
-				}
-			}
-
+			ReturnReceiveNumber($user_id,$order);
 		}
 
 		$row = M('order')->where(array('order_id'=>$order_id,'user_id'=>$user_id))->save(array('order_status'=>3));
