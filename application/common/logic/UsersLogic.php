@@ -386,6 +386,7 @@ class UsersLogic extends Model
 				$old_user = Db::name('users')->where(['old_openid'=>$data['old_openid']])->find();
 				write_log('已注册数据查询2：old_openid='.$old_user['old_openid'].'--name--'.$old_user['nickname'].'time'.$time.'---openid---'.$data['old_openid'].'访问ip地址：' . $request->ip());
 				if($old_user){
+					write_log('已找到老数据');
 					//更新老数据并删除新注册的数据
 					$map['openid'] = $data['openid'];
 					$map['is_code'] = $user['is_code'];
@@ -394,6 +395,8 @@ class UsersLogic extends Model
 					Db::name('oauth_users')->where('openid', $data['openid'])->save(['user_id'=>$old_user['user_id']]);
 					Db::name('users')->where(array('user_id'=>$user['user_id']))->delete();
 				}else{
+					write_log('新数据');
+					$map['openid'] = $data['openid'];
 					$map['sign_old_openid'] = 444;
 					Db::name('users')->where('user_id', $user['user_id'])->save($map);
 				}
