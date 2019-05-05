@@ -353,7 +353,7 @@ class Index extends MobileBase {
     }
 
 
-       public function jiayeji()
+    public function jiayeji()
     {
         $ps =I('ps');
         $pe =!empty($ps)?$ps:0;
@@ -368,12 +368,12 @@ class Index extends MobileBase {
             
           ];
     $order_goods = Db::name('order_goods')->alias('og')
-             ->field('og.order_id,o.order_sn,og.goods_price,og.prom_type,og.goods_name,og.goods_id,gs.sign_free_receive,o.user_id,og.goods_num')
+             ->field('og.order_id,o.order_sn,og.goods_price,og.prom_type,og.goods_name,og.goods_id,gs.sign_free_receive,o.user_id,og.goods_num,o.add_time as oaddtime')
              ->where($where_goods)
              ->join('goods gs','gs.goods_id=og.goods_id','LEFT')
              ->join('order o','og.order_id=o.order_id','LEFT')
              ->order('og.order_id desc')
-             ->limit($pe,20)
+             ->limit($pe,50)
              ->select();
             // echo count($order_goods);exit;
     foreach($order_goods as $ke=>$ve)
@@ -382,7 +382,8 @@ class Index extends MobileBase {
         $order_id=$ve["order_id"];
         $user_id = $ve["user_id"];
 
-        $where="note='订单{$order_id}业绩'";
+        //$where="note='订单{$order_id}业绩'";
+        $where = "ogoods_id=".$ve['goods_id'];
 
         $agent_performance = M('agent_performance_log_new')->where($where)->find();
         if(empty($agent_performance))
@@ -405,7 +406,7 @@ class Index extends MobileBase {
             $data['update_time'] = date('Y-m-d H:i:s');
             $res = M('agent_performance_new')->add($data);
 
-            agent_performance_log_new($user_id,$order_amount,$order_id);
+            agent_performance_log_new($user_id,$order_amount,$order_id,$ve['goods_id'],$ve['oaddtime']);
             echo '成功加上不存在ID:'.$v["user_id"].'个人业绩<br/>';
         }
 
@@ -439,7 +440,7 @@ class Index extends MobileBase {
             }
 
             
-            agent_performance_log_new($v['user_id'],$order_amount,$order_id);
+            agent_performance_log_new($v['user_id'],$order_amount,$order_id,$ve['goods_id'],$ve['oaddtime']);
             
         }
 
@@ -458,14 +459,15 @@ class Index extends MobileBase {
 
 }
 
-    function agent_performance_log_new($user_id,$order_amount,$order_id){
+    function agent_performance_log_new($user_id,$order_amount,$order_id,$ogoods_id,$time){
 
     $log = array(
         'user_id'=>$user_id,
         'money'=>$order_amount,
-        'create_time'=>date('Y-m-d H:i:s'),
+        'create_time'=>date('Y-m-d H:i:s',$time),
         'note'=>'订单'.$order_id.'业绩',
-        'order_id'=>$order_id
+        'order_id'=>$order_id,
+        'ogoods_id'=>$ogoods_id,
     );
     M('agent_performance_log_new')->add($log);
     }
