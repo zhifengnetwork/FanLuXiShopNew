@@ -45,7 +45,7 @@ class Order extends Base {
     /**
      * Ajax首页
      */
-    public function ajaxindex(){
+    public function ajaxindex(){ 
         $begin = $this->begin;
         $end = $this->end;
         // 搜索条件
@@ -65,6 +65,16 @@ class Order extends Base {
 
         $user_id = ($keyType && $keyType == 'user_id') ? $keywords : I('user_id') ;
         $user_id ? $condition['user_id'] = trim($user_id) : false;
+
+        $words = ($keyType && $keyType == 'words') ? $keywords : I('words') ;
+        if($words){
+            $order_ids = M('order_goods')->where(['goods_name' => ['like', '%' . $words . '%']])->column('order_id');
+            if($order_ids){
+                $condition['order_id'] = ['in', $order_ids];
+            }else{
+                $condition['order_id'] = '';
+            }
+        }
 
         I('order_status') != '' ? $condition['order_status'] = I('order_status') : false;
         I('pay_status') != '' ? $condition['pay_status'] = I('pay_status') : false;
