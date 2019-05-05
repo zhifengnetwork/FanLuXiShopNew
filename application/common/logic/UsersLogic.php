@@ -253,11 +253,12 @@ class UsersLogic extends Model
 	 */
 	public function thirdLogin($data = array())
 	{
+		write_log("newopenid=".$data['openid']);
 	  
 		if (!$data['openid'] || !$data['oauth'] || !$data['old_openid']) {
 			return array('status' => -1, 'msg' => '参数有误openid或oauth丢失', 'result' => 'aaa');
 		}
-
+		write_log("oldopenid=".$data['old_openid']);
 		// $user2 = session('user');
 		// if (!empty($user2)) {
 		//     $r = $this->oauth_bind($data);//绑定账号
