@@ -979,7 +979,7 @@ class User extends Base
         if ($status == 1){
             $data['check_time']  = time();
 
-            if($falg['id'] <= 25){
+            if($falg['id'] <= 217){
                 //未改流程前的提现流程
                 $user_find = M('users')->where(['user_id'=>$falg['user_id']])->find();
                 if($user_find['user_money'] < $falg['money'])
@@ -1014,7 +1014,7 @@ class User extends Base
         } else{
             $data['refuse_time'] = time();
 
-            if($falg['id'] > 25){
+            if($falg['id'] > 217){
                 //修改流程后,拒绝提现需退还金额
                 //审核未通过退还金额
                 accountLog($falg['user_id'], $falg['money'] , 0, '提现未通过退款',  0, 0, '');
