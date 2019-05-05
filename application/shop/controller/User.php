@@ -1614,6 +1614,8 @@ class User extends MobileBase
             }
 
             if (M('withdrawals')->add($data)) {
+                //扣钱
+                accountLog($this->user['user_id'], -$data['money'] , 0, '提现扣款',  0, 0, '');
                 $this->ajaxReturn(['status'=>1,'msg'=>"已提交申请",'url'=>U('User/wallet',['type'=>2])]);
             } else {
                 $this->ajaxReturn(['status'=>0,'msg'=>'提交失败,联系客服!']);
