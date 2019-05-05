@@ -422,7 +422,32 @@ class Report extends Base
      */
     public function rebate_log_detail(){
         $user_id = I('user_id');
-        exit('功能正在调整'.$user_id);
+        
+      
+        $count = M('account_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
+        ->field('users.nickname, acount.*')
+         ->order('log_id DESC')
+         ->where(['acount.user_id'=>$user_id])
+          ->where("acount.log_type", ">=", "1")
+       
+        ->count();
 
+        $page = new Page($count,$this->page_size);
+
+
+        $log = M('account_log')->alias('acount')->join('users', 'users.user_id = acount.user_id')
+                               ->field('users.nickname, acount.*')
+                                ->order('log_id DESC')
+                                ->where(['acount.user_id'=>$user_id])
+                                 ->where("acount.log_type", ">=", "1")
+                               ->limit($page->firstRow, $page->listRows)
+                               ->select();
+       
+      
+        $this->assign('page', $page);
+        
+        $this->assign('list',$log);
+
+        return $this->fetch();
     }
 }
