@@ -63,6 +63,10 @@ class Order extends Base {
         $order_sn = ($keyType && $keyType == 'order_sn') ? $keywords : I('order_sn') ;
         $order_sn ? $condition['order_sn'] = trim($order_sn) : false;
         
+        
+        $user_id = ($keyType && $keyType == 'user_id') ? $keywords : I('user_id') ;
+        $user_id ? $condition['user_id'] = trim($user_id) : false;
+
         I('order_status') != '' ? $condition['order_status'] = I('order_status') : false;
         I('pay_status') != '' ? $condition['pay_status'] = I('pay_status') : false;
         //I('pay_code') != '' ? $condition['pay_code'] = I('pay_code') : false;
