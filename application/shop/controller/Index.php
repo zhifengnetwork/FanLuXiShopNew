@@ -355,6 +355,8 @@ class Index extends MobileBase {
 
        public function jiayeji()
     {
+        $ps =I('ps');
+        $pe =!empty($ps)?$ps:0;
             $where_goods = [
            // 'og.is_send'    => 1,
             'og.prom_type' =>0,//只有普通订单才算业绩
@@ -366,16 +368,17 @@ class Index extends MobileBase {
             
           ];
     $order_goods = Db::name('order_goods')->alias('og')
-             ->field('og.order_id,o.order_sn,og.goods_price,og.prom_type,og.goods_name,og.goods_id,gs.sign_free_receive,o.user_id')
+             ->field('og.order_id,o.order_sn,og.goods_price,og.prom_type,og.goods_name,og.goods_id,gs.sign_free_receive,o.user_id,og.goods_num')
              ->where($where_goods)
              ->join('goods gs','gs.goods_id=og.goods_id','LEFT')
              ->join('order o','og.order_id=o.order_id','LEFT')
              ->order('og.order_id desc')
-             ->limit(0,20)
+             ->limit($pe,20)
              ->select();
+             echo count($order_goods);exit;
     foreach($order_goods as $ke=>$ve)
     {
-        $order_amount = $ve['goods_price'];
+        $order_amount = $ve['goods_price'] * $ve['goods_num'];
         $order_id=$ve["order_id"];
         $user_id = $ve["user_id"];
 
@@ -385,24 +388,25 @@ class Index extends MobileBase {
         if(empty($agent_performance))
         {
          //加个人业绩(下单人)
-        $cunzai = M('agent_performance')->where(['user_id'=>$user_id])->find();
+        $cunzai = M('agent_performance_new')->where(['user_id'=>$user_id])->find();
         //存在
         if($cunzai){
             $data_new['ind_per'] = $cunzai['ind_per'] + $order_amount;
             $data_new['update_time'] = date('Y-m-d H:i:s');
-            $res = M('agent_performance')->where(['user_id'=>$user_id])->save($data_new);
+            $res = M('agent_performance_new')->where(['user_id'=>$user_id])->save($data_new);
 
             agent_performance_log_new($user_id,$order_amount,$order_id);
-
+              echo '成功加上存在ID:'.$v["user_id"].'个人业绩<br/>';
         }else{
 
             $data['user_id'] =  $user_id;
             $data['ind_per'] =  $order_amount;
             $data['create_time'] = date('Y-m-d H:i:s');
             $data['update_time'] = date('Y-m-d H:i:s');
-            $res = M('agent_performance')->add($data);
+            $res = M('agent_performance_new')->add($data);
 
             agent_performance_log_new($user_id,$order_amount,$order_id);
+            echo '成功加上不存在ID:'.$v["user_id"].'个人业绩<br/>';
         }
 
 
@@ -416,14 +420,12 @@ class Index extends MobileBase {
         //加 团队业绩
          foreach($arr['recUser'] as $k => $v){
        
-            $cunzais = M('agent_performance')->where(['user_id'=>$v['user_id']])->find();
-            echo M('agent_performance')->getlastsql().'<br/>';
-            var_dump($cunzais['user_id']);
+            $cunzais = M('agent_performance_new')->where(['user_id'=>$v['user_id']])->find();
             //存在
             if($cunzais && !empty($cunzais)){
                 $data11['team_per'] = $cunzais['team_per'] + $order_amount;
                 $data11['update_time'] = date('Y-m-d H:i:s');
-                $res = M('agent_performance')->where(['user_id'=>$v['user_id']])->update($data11);
+                $res = M('agent_performance_new')->where(['user_id'=>$v['user_id']])->update($data11);
                 echo '成功加上存在ID:'.$v["user_id"].'团队业绩<br/>';
 
             }else{
@@ -432,7 +434,7 @@ class Index extends MobileBase {
                 $data1['team_per'] =  $order_amount;
                 $data1['create_time'] = date('Y-m-d H:i:s');
                 $data1['update_time'] = date('Y-m-d H:i:s');
-                $res = M('agent_performance')->add($data1);
+                $res = M('agent_performance_new')->add($data1);
                   echo '成功加上不存在ID:'.$v["user_id"].'团队业绩<br/>';
             }
 

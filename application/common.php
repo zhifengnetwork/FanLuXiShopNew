@@ -226,7 +226,7 @@ function getAllUp($invite_id,&$userList=array())
             
           ];
     $order_goods = Db::name('order_goods')->alias('og')
-             ->field('og.goods_price,og.prom_type,gs.sign_free_receive')
+             ->field('og.goods_price,og.prom_type,gs.sign_free_receive,og.goods_num')
              ->where($where_goods)
              ->order('og.goods_id DESC')
              ->join('goods gs','gs.goods_id=og.goods_id','LEFT')
@@ -234,7 +234,7 @@ function getAllUp($invite_id,&$userList=array())
              ->select();
     foreach($order_goods as $k=>$v)
     {
-        $order_amount = $v['goods_price'];
+        $order_amount = $v['goods_price'] * $v['goods_num'];
     //加个人业绩(下单人)
         $cunzai = M('agent_performance')->where(['user_id'=>$user_id])->find();
         //存在
