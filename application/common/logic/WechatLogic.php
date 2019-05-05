@@ -96,7 +96,7 @@ class WechatLogic
                 'nickname'  => $wxdata['nickname'] ?: '微信用户',
                 'sex'       => $wxdata['sex'] ?: 0,
                 'reg_time'  => time(),
-                'openid'  => $openid,
+                'openid'  => time(),
                 'password'  => '',
                 'is_code'=>1,
 
