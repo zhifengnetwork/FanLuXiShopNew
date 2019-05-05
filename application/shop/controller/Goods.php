@@ -572,6 +572,7 @@ class Goods extends MobileBase
      */
     public function ajaxSearch()
     {
+        
         return $this->fetch();
     }
 

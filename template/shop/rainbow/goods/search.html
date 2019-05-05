@@ -61,28 +61,29 @@
             <foreach name="goods_list" item="vo" key="k">
              <div class="pro-box">
                  <div class="itemImg">
-                    <a href="">
+                    <a href="{:U('Shop/Goods/goodsInfo',array('id'=>$vo[goods_id]))}" class="item">
                         <img src="{$vo.goods_id|goods_thum_images=400,400}" alt="">
                     </a>
                  </div>
                  <div class="itemMsg">
-                     <div class="deletes">
-                         <a href="{:U('Shop/Goods/goodsInfo',array('id'=>$vo[goods_id]))}" class="item">
-                            <span class="similar-product-text fl">{$vo.goods_name|getSubstr=0,20}</span>
-                        </a>
-                           </div>
-                          <div class="prices">
-                           <p class="sc_pri fl"><span>￥</span><b>{$vo[shop_price]}元</b></p>
-                          </div>
-                                <a href="" class="moda">
+
+                        <a href="{:U('Shop/Goods/goodsInfo',array('id'=>$vo[goods_id]))}" class="item">
+                            <div class="deletes">
+                                <span class="similar-product-text fl">{$vo.goods_name|getSubstr=0,20}</span>
+                            </div>
+                            <div class="prices">
+                                <p class="sc_pri fl"><span>￥</span><b>{$vo[shop_price]}元</b></p>
+                            </div>
+                                <!-- <a href="" class="moda">
                                     <span>MODA专营店<img src="/template/shop/rainbow/static/images/Back@2x.png"></span>
-                                </a>
-                          <p class="weight">
-                            <span class="proli-eva">{$vo['comment_statistics']['high_rate']}%好评</span>
-                            <span>销量:100</span>
-                            <span class="proli-eva">已付款:{$vo[comment_count]}</span>
-                            <!-- <span goods_id="{$vo.goods_id}" class="add_cart"><img src="__STATIC__/images/red-icon-cart.png" alt=""></span> -->
-                         </p>
+                                </a> -->
+                            <p class="weight">
+                                <span class="proli-eva">{$vo['comment_statistics']['high_rate']}%好评</span>
+                                <span>销量:82</span>
+                                <span class="proli-eva">已付款:{$vo[comment_count]}</span>
+                                <!-- <span goods_id="{$vo.goods_id}" class="add_cart"><img src="__STATIC__/images/red-icon-cart.png" alt=""></span> -->
+                             </p>
+                        </a>
                  </div>
              </div>
 
@@ -243,19 +244,20 @@
     })
     /*点击搜索*/
     $(document).keydown(function (event) {
-            if (event.keyCode == 13) {
-                
-                var val = $(".SsearchIput").val()
-                if(!val.length){
-                    $(".SsearchIput").attr("placeholder","请输入关键字！")
-                    return false;
-                }else{
-                    window.location.href='/shop/Goods/search.html?q='+val;
-                }
-               
+        if (event.keyCode == 13) {
+            
+            var val = $(".SsearchIput").val()
+            if(!val.length){
+                $(".SsearchIput").attr("placeholder","请输入关键字！")
+                return false;
+            }else{
+                window.location.href='/shop/Goods/search.html?q='+val;
             }
-        })
-        $(function(){
+           
+        }
+    })
+
+    $(function(){
             $(".searchimg").click(function(){
                 var val = $(".SsearchIput").val()
                 window.location.href='/shop/Goods/search.html?q='+val;
@@ -277,44 +279,44 @@
                 $(".mask-filter-div").hide()
             })
             
-    //显示隐藏筛选弹窗
-    $('.nav-item .sx').click(function(){
-        $('body').css('position','relative');
-        $('.screen_wi').animate({width: '7rem', opacity: 'show'}, 'normal',function(){
-            $('.screen_wi').show();
-            $(".mask-filter-div").show()
-        });
+        //显示隐藏筛选弹窗
+        $('.nav-item .sx').click(function(){
+            $('body').css('position','relative');
+            $('.screen_wi').animate({width: '7rem', opacity: 'show'}, 'normal',function(){
+                $('.screen_wi').show();
+                $(".mask-filter-div").show()
+            });
 
-        $(".ds-in-bl").click(function(){
-            $('body').css('');
-        $('.screen_wi').animate({width: '0', opacity: 'show'}, 'normal',function(){
-            $('.screen_wi').hide();
-            $(".mask-filter-div").hide()
-             })
-        })
+            $(".ds-in-bl").click(function(){
+                $('body').css('');
+            $('.screen_wi').animate({width: '0', opacity: 'show'}, 'normal',function(){
+                $('.screen_wi').hide();
+                $(".mask-filter-div").hide()
+                 })
+            })
 
-        $(".popcover>ul>li>span").click(function(){
-            $(this).addClass("ch_dg")
-            .parent().siblings().children().removeClass("ch_dg")
-        })
+            $(".popcover>ul>li>span").click(function(){
+                $(this).addClass("ch_dg")
+                .parent().siblings().children().removeClass("ch_dg")
+            })
 
-        $('.two-related .myorder .order').click(function(){
-            var mright = $(this).find('.fr i');
-            var input = mright.find("input");
-            mright.toggleClass('Mright');
-            //改变复选框状态
-            mright.hasClass('Mright') ? input.attr('checked',true) : input.attr('checked',false);
+            $('.two-related .myorder .order').click(function(){
+                var mright = $(this).find('.fr i');
+                var input = mright.find("input");
+                mright.toggleClass('Mright');
+                //改变复选框状态
+                mright.hasClass('Mright') ? input.attr('checked',true) : input.attr('checked',false);
+            })
         })
-    })
-    //确定按钮
-    $('.suce_ok').click(function(){
+        //确定按钮
+        $('.suce_ok').click(function(){
             //判断当前二级筛选状态
             if($('.suce_ok').is('.two')) {
-//                        get_parment += 'spec=@'+key+'_'+val.join('_');
-////                        $('.screen_wi,.popcover,.one-related').show();
-////                        $('.two-related').hide();
-////                        $('.sx_jsxz').html('筛选');
-////                        $('.suce_ok').removeClass('two');
+                // get_parment += 'spec=@'+key+'_'+val.join('_');
+                // $('.screen_wi,.popcover,.one-related').show();
+                // $('.two-related').hide();
+                // $('.sx_jsxz').html('筛选');
+                // $('.suce_ok').removeClass('two');
                 var t=$('#key').attr('class');
                 submitMoreFilter(t);
             }else{
@@ -354,100 +356,100 @@
                 });
             }
         })
-    //筛选弹窗的品牌筛选
-    function filtercriteria(criteria){
-        $('#key').addClass(criteria);
-        $('.filter').show();
-        $('.tow-price').hide();
-    }
-
-    //筛选弹窗的价格筛选
-    function filterprice(){
-        $('.tow-price').show();
-        $('.filter').hide();
-    }
-
-    //加载更多商品
-    var  page = 1;
-    /*** ajax 提交表单 查询订单列表结果*/
-    var ajax_status = 1;
-    function ajax_sourch_submit(){
-        if(ajax_status == 0){
-            return false;
+        //筛选弹窗的品牌筛选
+        function filtercriteria(criteria){
+            $('#key').addClass(criteria);
+            $('.filter').show();
+            $('.tow-price').hide();
         }
-        ajax_status = 0;
-        page += 1;
-        $.ajax({
-            type : "GET",
-            url:"{:U('Shop/Goods/search')}",//+tab,
-            data:{brand_id:'{$Request.param.brand_id}',id:'{$Request.param.id}',sort:'{$Request.param.sort}',sort_asc:'{$Request.param.sort_asc}',sel:'{$Request.param.sel}',q:$('#q').val(),is_ajax:1,p:page},
-            success: function(data)
+
+        //筛选弹窗的价格筛选
+        function filterprice(){
+            $('.tow-price').show();
+            $('.filter').hide();
+        }
+
+        //加载更多商品
+        var  page = 1;
+        /*** ajax 提交表单 查询订单列表结果*/
+        var ajax_status = 1;
+        function ajax_sourch_submit(){
+            if(ajax_status == 0){
+                return false;
+            }
+            ajax_status = 0;
+            page += 1;
+            $.ajax({
+                type : "GET",
+                url:"{:U('Shop/Goods/search')}",//+tab,
+                data:{brand_id:'{$Request.param.brand_id}',id:'{$Request.param.id}',sort:'{$Request.param.sort}',sort_asc:'{$Request.param.sort_asc}',sel:'{$Request.param.sel}',q:$('#q').val(),is_ajax:1,p:page},
+                success: function(data)
+                {
+                   
+                    ajax_status = 1;
+                    if($.trim(data) == ''){
+                        // $('#getmore').hide();
+                    }else{
+                        $("#goods_list").append(data);
+                    }
+                }
+            });
+        }
+
+        //筛选菜单栏切换效果
+        var lb = $('.search_list_dump .lb')
+        var fil = $('.fil_all_comm');
+        var cs = $('.classreturn,.search_list_dump');
+        var son = $('.search_list_dump .jg').siblings();
+        $(function(){
+        $('.storenav ul li span').click(function(){
+            $(this).parent().parent().addClass('red').siblings('li').removeClass('red')
+            if(!$(this).hasClass('lb')){
+                fil.hide();
+                undercover();
+                cs.removeClass('pore');
+            }
+            if(!$(this).hasClass('jg')){
+                son.removeClass('bpr1');
+                son.removeClass('bpr2');
+            }
+        });
+
+                //############   点击多选确定按钮      ############
+        // t 为类型  是品牌 还是 规格 还是 属性
+        // btn 是点击的确定按钮用于找位置
+        get_parment = <?php echo json_encode($_GET); ?>;
+        function submitMoreFilter(t){
+            var val = new Array();  // 请求的参数值
+            $(".filter").each(function(i,o){
+                var che=$(o).find('.fr input');
+                if(che.attr('checked')){    //选中的值
+                    val.push(che.val());
+                }
+            });
+            // 没有被勾选的时候
+            if(key == ''){
+                return false;
+            }
+            // 品牌
+            if(t == 'brand')
             {
-               
-                ajax_status = 1;
-                if($.trim(data) == ''){
-                    // $('#getmore').hide();
-                }else{
-                    $("#goods_list").append(data);
+                get_parment.brand_id = val.join('_');
+            }
+
+            // 组装请求的url
+            var url = '';
+            for ( var k in get_parment )
+            {
+                if(k != 'a' && k != 'c' && k != 'm') {
+                    url += "&" + k + '=' + get_parment[k];
                 }
             }
-        });
-    }
-
-    //筛选菜单栏切换效果
-    var lb = $('.search_list_dump .lb')
-    var fil = $('.fil_all_comm');
-    var cs = $('.classreturn,.search_list_dump');
-    var son = $('.search_list_dump .jg').siblings();
-    $(function(){
-    $('.storenav ul li span').click(function(){
-        $(this).parent().parent().addClass('red').siblings('li').removeClass('red')
-        if(!$(this).hasClass('lb')){
-            fil.hide();
-            undercover();
-            cs.removeClass('pore');
+            location.href ="/index.php?m=Shop&c=Goods&a=search"+url;
         }
-        if(!$(this).hasClass('jg')){
-            son.removeClass('bpr1');
-            son.removeClass('bpr2');
-        }
-    });
-
-            //############   点击多选确定按钮      ############
-    // t 为类型  是品牌 还是 规格 还是 属性
-    // btn 是点击的确定按钮用于找位置
-    get_parment = <?php echo json_encode($_GET); ?>;
-    function submitMoreFilter(t){
-        var val = new Array();  // 请求的参数值
-        $(".filter").each(function(i,o){
-            var che=$(o).find('.fr input');
-            if(che.attr('checked')){    //选中的值
-                val.push(che.val());
-            }
-        });
-        // 没有被勾选的时候
-        if(key == ''){
-            return false;
-        }
-        // 品牌
-        if(t == 'brand')
-        {
-            get_parment.brand_id = val.join('_');
-        }
-
-        // 组装请求的url
-        var url = '';
-        for ( var k in get_parment )
-        {
-            if(k != 'a' && k != 'c' && k != 'm') {
-                url += "&" + k + '=' + get_parment[k];
-            }
-        }
-        location.href ="/index.php?m=Shop&c=Goods&a=search"+url;
-    }
             
-        })
-        $(window).scroll(
+    })
+    $(window).scroll(
              function() {
             var scrollTop = parseInt($(this).scrollTop());
             var scrollHeight = parseInt($(document).height());

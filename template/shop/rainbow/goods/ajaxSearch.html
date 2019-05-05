@@ -41,37 +41,21 @@
               </div>
          </div>
 
-         <div class="lsw_details">
-                <div class="lsw_hotsearch">
-                    <span>热门搜索</span>
-                </div>
+        <div class="lsw_details">
+            <div class="lsw_hotsearch">
+                <span>热门搜索</span>
             </div>
-            <div class="lsw_product" style="display: block;">
-                <div class="lsw_product_list">
-                    <ul>
-                        <foreach name="tpshop_config.hot_keywords" item="wd" key="k">
-                            <!-- <li><a href="{:U('Goods/search',array('q'=>$wd))}" <if condition="$k eq 0">class="ht"</if>>{$wd}</a></li> -->
-                            <span class="lsw_sousuo-text"><a href="{:U('Goods/search',array('q'=>$wd))}" <if condition="$k eq 0">class="ht"</if>>{$wd}</a></span>
-                        </foreach>
-                    </ul>
-                </div>
+        </div>
+        <div class="lsw_product" style="display: block;">
+            <div class="lsw_product_list">
+                <ul>
+                    <foreach name="tpshop_config.hot_keywords" item="wd" key="k">
+                        <!-- <li><a href="{:U('Goods/search',array('q'=>$wd))}" <if condition="$k eq 0">class="ht"</if>>{$wd}</a></li> -->
+                        <span class="lsw_sousuo-text"><a href="{:U('Goods/search',array('q'=>$wd))}" <if condition="$k eq 0">class="ht"</if>>{$wd}</a></span>
+                    </foreach>
+                </ul>
             </div>
-                <br style="margin-top:-0.2rem">
-            <div class="lsw_details">
-                    <div class="lsw_hotsearch">
-                        <span>热门搜索</span>
-                    </div>
-                </div>
-                <div class="lsw_product" style="display: block;">
-                    <div class="lsw_product_list">
-                        <ul>
-                            <foreach name="tpshop_config.hot_keywords" item="wd" key="k">
-                                <!-- <li><a href="{:U('Goods/search',array('q'=>$wd))}" <if condition="$k eq 0">class="ht"</if>>{$wd}</a></li> -->
-                                <span class="lsw_sousuo-text"><a href="{:U('Goods/search',array('q'=>$wd))}" <if condition="$k eq 0">class="ht"</if>>{$wd}</a></span>
-                            </foreach>
-                        </ul>
-                    </div>
-                </div>
+        </div>
     </div>
 
 
