@@ -63,7 +63,7 @@ class Order extends Base {
         $order_sn = ($keyType && $keyType == 'order_sn') ? $keywords : I('order_sn') ;
         $order_sn ? $condition['order_sn'] = trim($order_sn) : false;
         
-        
+
         $user_id = ($keyType && $keyType == 'user_id') ? $keywords : I('user_id') ;
         $user_id ? $condition['user_id'] = trim($user_id) : false;
 
@@ -1421,7 +1421,8 @@ class Order extends Base {
         $keywords = I('keywords','','trim');
         $where= ['add_time'=>['between',"$this->begin,$this->end"]];
         if(!empty($keywords)){
-            $keyType == 'mobile'   ? $where['mobile']  = $keywords : false;
+            $keyType == 'mobile' ? $where['mobile']  = $keywords : false;
+            $keyType == 'user_id' ? $where['user_id'] = $keywords: false;
             $keyType == 'order_sn' ? $where['order_sn'] = $keywords: false;
             $keyType == 'consignee' ? $where['consignee'] = $keywords: false;
         }
