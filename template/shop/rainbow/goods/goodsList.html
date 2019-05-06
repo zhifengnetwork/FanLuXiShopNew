@@ -585,7 +585,7 @@
         $.ajax({
             type : "POST",
             url:"/index.php/Shop/Goods/goodsList", //+tab,{:U('Shop/Goods/goodsList')}
-//			data : $('#filter_form').serialize(),// 你的formid 搜索表单 序列化提交
+			// data : $('#filter_form').serialize(),// 你的formid 搜索表单 序列化提交
             data:{
                 id:'{$Request.param.id}',
                 sort:'{$Request.param.sort}',
