@@ -1102,7 +1102,7 @@ function update_pay_status($order_sn,$ext=array())
         if (!$order) return false;// 看看有没已经处理过这笔订单  支付宝返回不重复处理操作
         M('AuctionDeposit')->where("order_sn", $order_sn)->save(array('status' => 1, 'pay_time' => $time));
         M('Auction')->where('id',2)->setInc('buy_num');
-        dump(8888);exit;
+        
     }else{
 
         // 如果这笔订单已经处理过了
