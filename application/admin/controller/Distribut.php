@@ -57,38 +57,27 @@ class Distribut extends Base {
    /****补发按钮***********/
    public function bufa_sent()
    {
-         $order_id = I('order_id');
+        $order_id = I('order_id');
         $account_log = M('account_log')->where(['order_id'=>$order_id])->where('log_type>=1')->find();;
-        if(!$account_log)
-        {
-
-       
-        $order = M('order')->where(['order_id'=>$order_id])->find();
-
-
-        $userId = $order['user_id'];
-        $orderSn = $order['order_sn'];
-
-        $goods_list = M('order_goods')->where(['order_id'=>$order_id])->select();
-        foreach($goods_list as $k => $v){
-
-            $goodId = $v['goods_id'];
-            $goodNum = $v['goods_num'];
-           
-            $model = new FanliLogic($userId, $goodId,$goodNum,$orderSn,$order_id);
-            $res = $model->fanliModel();
-        }
-          $return = ['status' => 1, 'msg' => '补发返利成功', 'result' => $order_id];
-
+        if(!$account_log){
+            $order = M('order')->where(['order_id'=>$order_id])->find();
+            $userId = $order['user_id'];
+            $orderSn = $order['order_sn'];
+            $goods_list = M('order_goods')->where(['order_id'=>$order_id])->select();
+            foreach($goods_list as $k => $v){
+                $goodId = $v['goods_id'];
+                $goodNum = $v['goods_num'];
+                $model = new FanliLogic($userId, $goodId,$goodNum,$orderSn,$order_id);
+                $res = $model->fanliModel();
+            }
+            $return = ['status' => 1, 'msg' => '补发返利成功', 'result' => $order_id];
         }else
         {
             $return = ['status' => 0, 'msg' => '该订单已有返利,不能重复发放', 'result' => ''];
         }
        
         $this->ajaxReturn($return);
-
    }
-
 
     /**
      * 分销商列表
