@@ -464,7 +464,7 @@ class FanliLogic extends Model
 	        $bool = M('users')->where('user_id',$p_parent_info['user_id'])->setInc('user_money',$commission_n);
 	       	$desc = "大区直属总监邀店主获得金额";
 	        $log = $this->writeLog($p_parent_info['user_id'],$commission_n,$desc,6); //写入日志
-	        /*
+	        
 	        $first_leader = $this->newgetAllUps($user_id);
 	        foreach($first_leader as $k=>$v)
 	        {
@@ -472,12 +472,13 @@ class FanliLogic extends Model
 			  {
 			  	if($k>=1)
 			  	{
-			  		  $fanli = M('user_level')->where('level',$v['level'])->field('pin_reward')->find();
-						 $commission = $fanli['pin_reward']; //计算金额
+			  		 // $fanli = M('user_level')->where('level',$v['level'])->field('pin_reward')->find();
+						// $commission = $fanli['pin_reward']; //计算金额
 				          //按上一级等级各自比例分享返利
-				         $bool = M('users')->where('user_id',$v['user_id'])->setInc('user_money',$commission);
-				       	 $desc = "大区平级奖";
-				         $log = $this->writeLog($v['user_id'],$commission,$desc,6); //写入日志
+				         //$bool = M('users')->where('user_id',$v['user_id'])->setInc('user_money',$commission);
+				       	 //$desc = "大区平级奖";
+				         //$log = $this->writeLog($v['user_id'],$commission,$desc,6); //写入日志
+			  		//echo 11;exit;
                          $this->jintienew($v['user_id'],$commission_n);//平级领导奖
 			  	     return false;
                      break;
@@ -486,7 +487,7 @@ class FanliLogic extends Model
 			
 			  }
 
-	        }*/
+	        }
 
 		}
 		else
