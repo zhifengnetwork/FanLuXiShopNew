@@ -30,15 +30,30 @@ class Debug extends Controller
     }
 
 
+    /**
+     * 模板消息测试
+     */
     public function msg(){
 
-        $user_id = 17952169;
+        $order_sn = I('order_sn');
+        if(!$order_sn){
+            exit('order_sn不存在');
+        }
+
+        $user_id = I('user_id');
+        if(!$user_id){
+            exit('user_id不存在');
+        }
+
+        $yongjin = I('yongjin');
+        if(!$yongjin){
+            exit('yongjin不存在');
+        }
 
         $logic = new \app\common\logic\TemplateMessage();
         $openid = M('users')->where(['user_id'=>$user_id])->value('openid');
-        $goods_name = '垃圾6666';
-        $yongjin = '2.88';
-        $order_sn = '201904191933224360';
+        $goods_name = '测试';
+        
         $res = $logic->yongjin($openid,$goods_name,$yongjin,$order_sn);
 
         dump($res);
