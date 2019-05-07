@@ -362,7 +362,7 @@ class Report extends Base
      */
 	public function performance(){
         
-        exit('数据正在调整');
+        //exit('数据正在调整');
         
         if ($_POST) {
             $user_id = input('user_id/s');
