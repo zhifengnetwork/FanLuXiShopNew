@@ -12,6 +12,7 @@ class Achieve extends Base
 {
 	public function config()
     {
+        
         $config = tpCache('achieve');
         $config['averanking1'] = unserialize($config['averanking1']);
         $config['averanking2'] = unserialize($config['averanking2']);
