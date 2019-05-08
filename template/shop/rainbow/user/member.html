@@ -27,14 +27,14 @@
                 </p>
             </div>
         </div>
-	     <!-- <div class="wtf_main">
+	     <div class="wtf_main">
         	<div class="wtf_wrap clear">
                     <p class="wtf_p1">团队总人数:<span id="all_num">{$underling_number_total|default=0}</span>
                     </p>
                     <span class="update" id="update">更新</span>
         		</p>
         	</div>
-        </div> -->
+        </div>
         <div class="wtf_main">
             <div class="wtf_wrap clear">
                     <p class="wtf_p1">一级总人数：<span>{$underling_number|default=0}</span>
@@ -73,19 +73,19 @@
              <script src="__STATIC__/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
             <script>
 
-                // $("#update").click(function () {
-                //     $("#update").html('正在更新');
-                //     var url = "/api/distribut/get_team_num?user_id={$user_id}";
+                $("#update").click(function () {
+                    $("#update").html('正在更新');
+                    var url = "/api/distribut/get_team_num?user_id={$user_id}";
 
-                //     $.ajax({
-                //         url: url, 
-                //         success: function (result) {
-                //             $("#all_num").text(result);
-                //             $("#update").html('已更新');
-                //         }
-                //     });
+                    $.ajax({
+                        url: url, 
+                        success: function (result) {
+                            $("#all_num").text(result);
+                            $("#update").html('已更新');
+                        }
+                    });
                     
-                // });
+                });
 
             </script>
 	</body>

@@ -82,20 +82,17 @@ class Distribut extends Controller
 
 
     public function get_team_num(){
-
         $user_id = I('user_id');
         if(!$user_id){
             echo 0;
         }
-
         $logic = new UsersLogic();
         $arr = [];
-
         $res = $logic->getUserLevBotAll($user_id,$arr);
-
-        echo count($res);
+        $num = count($res);
+        M('users')->where(['user_id'=>$user_id])->update(['underling_number'=>$num]);
+        echo $num;
     }
-
 
     /**
      * 通过 user_id  查  所有

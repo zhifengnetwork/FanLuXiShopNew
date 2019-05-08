@@ -292,10 +292,14 @@ class User extends MobileBase
         }
         
         $this->assign('user_id', $user['user_id']);
-        // $underling_number_total = M('users')->where(['user_id'=>$user['user_id']])->value('underling_number');
+        
+        //总一级
         $underling_number = M('users')->where(['first_leader'=>$user['user_id']])->count();
-        // $this->assign('underling_number_total', $underling_number_total);
         $this->assign('underling_number', $underling_number);
+
+        //团队总人数
+        $underling_number_total = M('users')->where(['user_id'=>$user['user_id']])->value('underling_number');
+        $this->assign('underling_number_total', $underling_number_total);
 
         return $this->fetch();
     }
