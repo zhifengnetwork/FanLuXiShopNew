@@ -5,6 +5,7 @@
 namespace app\api\controller;
 use app\common\model\Users;
 
+use app\common\logic\UsersLogic;
 use think\Db;
 use think\Controller;
 
@@ -80,12 +81,27 @@ class Distribut extends Controller
     }
 
 
+    public function get_team_num(){
+
+        $user_id = I('user_id');
+        if(!$user_id){
+            echo 0;
+        }
+
+        $logic = new UsersLogic();
+        $arr = [];
+
+        $res = $logic->getUserLevBotAll($user_id,$arr);
+
+        echo count($res);
+    }
 
 
     /**
      * 通过 user_id  查  所有
+     * 【 不行 】
      */
-    public function get_team_num(){
+    public function get_team_num55555555(){
         ini_set('max_execution_time', '0');
 
         $user_id = I('user_id');
