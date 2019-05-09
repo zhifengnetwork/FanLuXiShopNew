@@ -7,7 +7,7 @@
     <div class="fixed-bar">
         <div class="item-title">
             <div class="subject">
-                <h3>业绩分红 - 业绩分红</h3>
+                <h3>业绩分红 - 业绩分红记录</h3>
                 <h5>网站系统业绩分红</h5>
             </div>
         </div>
@@ -19,21 +19,22 @@
             <span title="收起提示" id="explanationZoom" style="display: block;"></span>
         </div>
         <ul>
-            <li>平台按照当天订单总业绩分给指定的会员（活动订单，免费面膜订单，邮费，不计算在内）</li>
+            <li></li>
         </ul>
     </div>
     <div class="flexigrid">
         <div class="mDiv">
             <div class="ftitle">
-                <h3>业绩分红列表</h3>
+                <h3>业绩分红记录</h3>
                       <h5>(共{$page->totalRows}条记录)</h5>
-                      <h3>当天订单的总业绩为{$sale_money}</h3>
               
             </div>
             <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
 
             <form class="navbar-form form-inline" id="search-form" method="post" action="{:U('Achieve/slist')}" onSubmit="">
                 <div class="sDiv">
+
+                    <!--
                      <div class="sDiv2" style="margin-right: 10px;">
                         <input type="text" size="30" name="start_time" id="start_time" value="{$start_time}" placeholder="起始时间" class="qsbox">
                         <input type="button" class="btn" value="起始时间">
@@ -41,7 +42,7 @@
                     <div class="sDiv2" style="margin-right: 10px;">
                         <input type="text" size="30" name="end_time" id="end_time" value="{$end_time}" placeholder="截止时间" class="qsbox">
                         <input type="button" class="btn" value="截止时间">
-                    </div>
+                    </div>-->
                     <!--
                     <div class="sDiv2" style="margin-right: 10px;">
                         <input size="30" name="mobile" value="{$Think.get.mobile}" placeholder="手机号码" class="qsbox" type="text">
@@ -50,12 +51,14 @@
                         <input size="30" placeholder="email" value="{$Think.get.email}" name="email" class="qsbox" type="text">
                         <input class="btn" value="搜索" type="submit">
                     </div>-->
+                    <!--
                     <div class="sDiv2">
                         <input type="text" size="30" name="user_id" value="" class="qsbox" placeholder="请输入ID号">
-                    </div>
+                    </div>-->
+                    <!--
                     <div class="sDiv2">
                         <input class="btn" value="搜索" type="submit">
-                    </div>
+                    </div>-->
                 </div>
             </form>
         </div>
@@ -73,18 +76,10 @@
                         <th align="center" abbr="ac_id" axis="col4" class="">
                             <div style="text-align: center; width: 50px;" class="">等级</div>
                         </th>
-                         <th align="center" abbr="ac_id" axis="col4" class="">
-                            <div style="text-align: center; width: 70px;" class="">分红状态</div>
-                        </th>
-                          <th align="center" abbr="ac_id" axis="col4" class="">
-                            <div style="text-align: center; width: 70px;" class="">分红比例</div>
-                        </th>
+       
                          <th align="center" abbr="ac_id" axis="col4" class="">
                             <div style="text-align: center; width: 150px;" class="">昵称</div>
-                        </th>
-                           <th align="center" abbr="article_show" axis="col5" class="">
-                            <div style="text-align: center; width: 150px;" class="">日业绩</div>
-                        </th>
+      
                         <th align="center" abbr="article_show" axis="col5" class="">
                             <div style="text-align: center; width: 150px;" class="">分成金额</div>
                         </th>
@@ -92,9 +87,7 @@
                         <th align="center" abbr="article_show" axis="col5" class="">
                             <div style="text-align: center; width: 200px;" class="">分钱时间</div>
                         </th>
-                         <th align="center" axis="col1" class="handle">
-                            <div style="text-align: center; width: 150px;">操作</div>
-                        </th> 
+
              
                         <th align="center" abbr="article_time" axis="col6" class="">
                             <div style="text-align: center; width: 100px;" class="">备注</div>
@@ -123,46 +116,22 @@
                             <td align="center" class="">
                                 <div style="text-align: center; width: 50px;">{$vo.level}</div>
                             </td>
-                            <td align="center" class="">
-                                <div style="text-align: center; width: 70px;">
-                                <if condition="($vo['ach_pool'] eq 1)">
-                                <font style="color:#1BBC9D;">开启</font>
-                                <else/>
-                                关闭
-                                </if>
-                               </div>
-                            </td>
-                               <td align="center" class="">
-                                <div style="text-align: center; width: 70px;">
-                                     <if condition="($vo['ach_pool'] neq '')">
-                                {$vo.ach_rate}%
-                            </if>
-                               </div>
-                            </td>
+   
                                <td align="center" class="">
                                 <div style="text-align: center; width: 150px;">{$vo.nickname}</div>
                             </td>
+           
                             <td align="center" class="">
-                                <div style="text-align: center; width: 150px;">{$vo.new_money}</div>
+                                <div style="text-align: center; width: 150px;">{$vo.user_money}</div>
                             </td>
                             <td align="center" class="">
-                                <div style="text-align: center; width: 150px;">{$vo.p_money}</div>
-                            </td>
-                            <td align="center" class="">
-                                <div style="text-align: center; width: 200px;">{$vo.change_time}</div>
+                                <div style="text-align: center; width: 200px;">
+                                {$vo.change_time|date="Y-m-d H:i:s",###}</div>
                             </td>
 
                            
-                             <td align="center" class="handle">
-                                <div style="text-align: center; width: 170px; max-width:170px;">
-                                    <a href="{:U('Achieve/info',array('id'=>$vo['user_id'],'m'=>$vo['new_money']))}"  class="btn blue"><i class="fa fa-search"></i>设置</a>
-                                    <!--
-                                      <a href="javascript:;" onclick="userOrder('{$vo.user_id}')" class="btn blue"><i class="fa fa-search"></i>查看业绩</a>-->
-                                </div>                   
-                                  
-                            </td> 
                              <td align="center" class="">
-                                <div style="text-align: center; width: 100px;">{$vo.log_desc}</div>
+                                <div style="text-align: center; width: 100px;">{$vo.desc}</div>
                             </td>
                 
                             <td align="" class="" style="width: 100%;">

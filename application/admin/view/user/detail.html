@@ -159,6 +159,30 @@
                 </dt>
                 <dd class="opt">{$user.reg_time|date='Y-m-d H:i',###}</dd>
             </dl>
+               <dl class="row">
+                <dt class="tit">
+                    <label for="bonus_total">会员业绩分红开关设置:</label>
+                </dt>
+                <dd class="opt">
+                    <div class="onoff">
+                        <label for="is_pool_open" class="cb-enable <if condition='$user.ach_pool eq 1'>selected</if>">开启</label>
+                        <label for="is_pool_close" class="cb-disable <if condition='$user.ach_pool eq 0'>selected</if>">关闭</label>
+                        <input id="is_pool_open" name="ach_pool" <if condition="$user.ach_pool eq 1">checked="checked"</if> value="1" type="radio"> 
+                        <input id="is_pool_close" name="ach_pool" <if condition="$user.ach_pool eq 0">checked="checked"</if> value="0" type="radio">
+                    </div>
+                    <p class="notic">是否开启业绩分红</p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="level_name">业绩百分比</label>
+                </dt>
+                <dd class="opt">
+                    <input type="text" name="ach_rate" value="{$user.ach_rate}" id="ach_rate" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span>%</span>
+                    <p class="notic">设置会员分红奖励百分比，单位%</p>
+                </dd>
+            </dl>
             <dl class="row">
                 <dt class="tit">
                     <label>冻结会员</label>

@@ -29,7 +29,12 @@
         <div class="ncap-form-default">
             <dl class="row">
                 <dt class="tit">
-                    <label for="bonus_total">业绩分红开关设置:</label>
+                    <label for="reg_integral">今天平台总业绩为:{$sale_money}</label>
+                </dt>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="bonus_total">大区分红开关设置:</label>
                 </dt>
                 <dd class="opt">
                     <div class="onoff">
@@ -37,6 +42,20 @@
                         <label for="is_pool_close" class="cb-disable <if condition='$config.achieve_pool eq 0'>selected</if>">关闭</label>
                         <input id="is_pool_open" name="pool" <if condition="$config.achieve_pool eq 1">checked="checked"</if> value="1" type="radio"> 
                         <input id="is_pool_close" name="pool" <if condition="$config.achieve_pool eq 0">checked="checked"</if> value="0" type="radio">
+                    </div>
+                    <p class="notic">是否开启大区业绩分红</p>
+                </dd>
+            </dl>
+             <dl class="row">
+                <dt class="tit">
+                    <label for="bonus_total">其他等级分红开关设置:</label>
+                </dt>
+                <dd class="opt">
+                    <div class="onoff">
+                        <label for="is_pool_opens" class="cb-enable <if condition='$config.achieve_pool_s eq 1'>selected</if>">开启</label>
+                        <label for="is_pool_closes" class="cb-disable <if condition='$config.achieve_pool_s eq 0'>selected</if>">关闭</label>
+                        <input id="is_pool_opens" name="pool_s" <if condition="$config.achieve_pool_s eq 1">checked="checked"</if> value="1" type="radio"> 
+                        <input id="is_pool_closes" name="pool_s" <if condition="$config.achieve_pool_s eq 0">checked="checked"</if> value="0" type="radio">
                     </div>
                     <p class="notic">是否开启业绩分红</p>
                 </dd>
@@ -49,6 +68,7 @@
 			        <label for="reg_integral">业绩奖励:</label>
 			    </dt>
 			</dl>
+            <!--
                 <dl class="row">
                 <dt class="tit">
                     <label for="ranking1">业绩达：</label>
@@ -65,11 +85,11 @@
 			        <label for="ranking1">总监</label>
 			    </dt>
 			    <dd class="opt">
-                    <!--
+                    
                      业绩达：
                      <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="averanking1[a][]"
                     id="averanking1" value="{$config['averanking1'][a][0]}" class="input-txt" type="text">
-                    <span>元</span>-->
+                    <span>元</span>
 			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="averanking1[b][]"
                     id="averanking2" value="{$config['averanking1'][b][0]}" class="input-txt" type="text">
 			        <span>%</span>
@@ -82,17 +102,17 @@
 			        <label for="ranking2">大区</label>
 			    </dt>
 			    <dd class="opt">
-                    <!--
+                    
                         业绩达：
                      <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="averanking2[a][]"
                     id="averanking3" value="{$config['averanking2'][a][0]}" class="input-txt" type="text">
-                    <span>元</span>-->
+                    <span>元</span>
 			        <input onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" pattern="^\d{1,}$"  name="averanking2[b][]" id="averanking2" value="{$config['averanking2'][b][0]}" class="input-txt" type="text">
 			        <span>%</span>
                        <p class="notic">奖励百分比</p>
 			    </dd>
       
-			</dl>
+			</dl>-->
 			
 			<!-- <dl class="row">
 			    <dt class="tit">
