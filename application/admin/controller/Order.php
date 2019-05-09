@@ -365,6 +365,7 @@ class Order extends Base {
             	//取消订单退款退余额
                 if($refundLogic->updateRefundOrder($order,1)){
                     $messageLogic->sendRefundNotice($data['order_id'],$order['order_amount']);
+                    $this->returnfanlilevel($data['order_id']);
                     $this->success('成功退款到账户余额');
                 }else{
                     $this->error('退款失败');
@@ -385,6 +386,67 @@ class Order extends Base {
             $this->success('拒绝退款操作成功');
         }
     }
+    //处理退回的佣金和等级
+    public function returnfanlilevel($order_id)
+    {
+          $account_log = M('account_log')->where(['order_id'=>$order_id])->where('log_type>=1')->select();
+          if(!empty($account_log))
+          {
+            foreach($account_log as $k=>$v)
+            {
+               $user_info=M('users')->where('user_id',$v['user_id'])->field('user_money')->find();
+              //判断用户余额是否大于退还的佣金
+              if($user_info['user_money']>=$v['user_money'] && $v['user_money']>0)
+              {
+                
+               // M('users')->where(['user_id'=>$v['user_id']])->setDec('user_money',$v['user_money']);
+                //$this->writeLog($v['user_id'],-$v['money'],'退款退还佣金',$v['order_sn'],$v['order_id']);
+                $bools =accountLog($v['user_id'],-$v['user_money'], 0,'退款退还佣金', 0, $v['order_id'],$v['order_sn']);
+              }
+              
+             //删除用户余额
+              
+            }
+            //降级检查订单产品表
+              $upgrade_log = Db::name('upgrade_log')->where(['order_id'=>$order_id,'log_type'=>2])->select();
+              if($upgrade_log)
+              {
+                 foreach($upgrade_log as $k=>$v)
+                 {
+                    //检查现在等级
+                    $user_info=M('users')->where('user_id',$v['user_id'])->field('level')->find();
+                    $num =$user_info['level']-1;
+                    if($num>=1)
+                    {
+                        //降级
+                         M('users')->where(['user_id'=>$v['user_id']])->setDec('level',1);
+                        $this->writeLog_down($v['user_id'],0,'退款降级',$v['order_sn'],$v['order_id'],'3');
+
+                    }
+                 }
+              }
+            
+          }
+    }
+
+    //升级记录
+    public function writeLog_down($userId,$money,$desc,$order_sn,$order_id,$states)
+    {
+        $data = array(
+            'user_id'=>$userId,
+            'user_money'=>$money,
+            'change_time'=>time(),
+            'desc'=>$desc,
+            'order_sn'=>$order_sn,
+            'order_id'=>$order_id,
+            'log_type'=>$states
+        );
+
+        $bool = M('upgrade_log')->insert($data);
+        
+        return $bool;
+    }
+
 
     /**
      * 订单详情
