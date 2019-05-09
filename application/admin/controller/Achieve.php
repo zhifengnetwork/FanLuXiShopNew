@@ -114,7 +114,7 @@ class Achieve extends Base
         ->having('new_money>='.$config['averanking'])
         ->group('a.user_id')
         ->limit($Page->firstRow,$Page->listRows)
-        ->order('new_money desc')
+        ->order('ach_pool desc,new_money desc,user_id desc')
         ->select();
         foreach ($Pickup as $key=>$val)
         {  $log_where = " change_time>=".$beginToday.' and change_time<='.$endToday.' and log_type=-1 and user_id='.$val['user_id'];
