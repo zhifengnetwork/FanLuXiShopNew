@@ -2248,16 +2248,6 @@ class User extends MobileBase
         return $this->fetch();
     }
 
-    public function debugg()
-    {
-
-        $url = SITE_URL."/Shop/Goods/goodsInfo?id=38";//.$order_sn;
-        $wx_content = "测试订单支付成功！\n\n<a href='{$url}'>点击处理</a>";
-            $wechat = new \app\common\logic\wechat\WechatUtil();
-            
-            $a = $wechat->sendMsg('okGVu1fGEsUsjqXkPImuzcPZeJZs', 'text', $wx_content);
-            dump($a);
-    }
 
     // public function logout()
     // {
