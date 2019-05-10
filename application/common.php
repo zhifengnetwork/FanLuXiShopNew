@@ -212,7 +212,7 @@ function getAllUp($invite_id,&$userList=array())
   * 业绩
   */
  function agent_performance($order_id){
-    $agent_end =0;
+
     $order = M('order')->where(['order_id'=>$order_id])->field('order_amount,user_id,goods_price')->find();
     $order_amount = $order['goods_price'];
     $user_id = $order['user_id'];
@@ -289,6 +289,7 @@ function getAllUp($invite_id,&$userList=array())
 
         }else
         {
+            $agent_end=0;
             foreach($arr['recUser'] as $k => $v){
               if($agent_end==0) //判断是否已加业绩，加了就不往下加了
               {
