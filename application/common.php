@@ -157,7 +157,7 @@ function get_uper_user($data)
  */
 function getAllUp($invite_id,&$userList=array())
 {           
-    $field  = "user_id,first_leader,agent_user,is_lock";
+    $field  = "user_id,first_leader,agent_user,is_lock,level";
     $UpInfo = M('users')->field($field)->where(['user_id'=>$invite_id])->find();
     if($UpInfo)  //有上级
     {
@@ -212,6 +212,7 @@ function getAllUp($invite_id,&$userList=array())
   * 业绩
   */
  function agent_performance($order_id){
+    $agent_end =0;
     $order = M('order')->where(['order_id'=>$order_id])->field('order_amount,user_id,goods_price')->find();
     $order_amount = $order['goods_price'];
     $user_id = $order['user_id'];
@@ -226,15 +227,16 @@ function getAllUp($invite_id,&$userList=array())
             
           ];
     $order_goods = Db::name('order_goods')->alias('og')
-             ->field('og.goods_price,og.prom_type,gs.sign_free_receive,og.goods_num')
+             ->field('og.goods_price,og.prom_type,gs.sign_free_receive,og.goods_num,gs.cat_id,og.rec_id')
              ->where($where_goods)
              ->order('og.goods_id DESC')
              ->join('goods gs','gs.goods_id=og.goods_id','LEFT')
             // ->limit($Page->firstRow,$Page->listRows)
              ->select();
-    foreach($order_goods as $k=>$v)
+    foreach($order_goods as $k=>$vs)
     {
-        $order_amount = $v['goods_price'] * $v['goods_num'];
+        $order_amount = $vs['goods_price'] * $vs['goods_num'];
+        $rec_id=$vs['rec_id'];
     //加个人业绩(下单人)
         $cunzai = M('agent_performance')->where(['user_id'=>$user_id])->find();
         //存在
@@ -243,7 +245,7 @@ function getAllUp($invite_id,&$userList=array())
             $data_new['update_time'] = date('Y-m-d H:i:s');
             $res = M('agent_performance')->where(['user_id'=>$user_id])->save($data_new);
 
-            agent_performance_log($user_id,$order_amount,$order_id);
+            agent_performance_log($user_id,$order_amount,$order_id,$rec_id);
 
         }else{
 
@@ -253,7 +255,7 @@ function getAllUp($invite_id,&$userList=array())
             $data['update_time'] = date('Y-m-d H:i:s');
             $res = M('agent_performance')->add($data);
 
-            agent_performance_log($user_id,$order_amount,$order_id);
+            agent_performance_log($user_id,$order_amount,$order_id,$rec_id);
         }
 
         
@@ -261,52 +263,89 @@ function getAllUp($invite_id,&$userList=array())
         $first_leader = M('users')->where(['user_id'=>$user_id])->value('first_leader');
         $arr = get_uper_user($first_leader);
 
+        if($vs['cat_id']==8)
+        {
+            //加 团队业绩
+           foreach($arr['recUser'] as $k => $v){
 
-    //加 团队业绩
-    foreach($arr['recUser'] as $k => $v){
-       
+                $cunzai = M('agent_performance')->where(['user_id'=>$v['user_id']])->find();
+                //存在
+                if($cunzai){
+                    $data11['team_per'] = $cunzai['team_per'] + $order_amount;
+                    $data11['update_time'] = date('Y-m-d H:i:s');
+                    $res = M('agent_performance')->where(['user_id'=>$v['user_id']])->save($data11);
+                }else{
 
-            $cunzai = M('agent_performance')->where(['user_id'=>$v['user_id']])->find();
-            //存在
-            if($cunzai){
-                $data11['team_per'] = $cunzai['team_per'] + $order_amount;
-                $data11['update_time'] = date('Y-m-d H:i:s');
-                $res = M('agent_performance')->where(['user_id'=>$v['user_id']])->save($data11);
-            }else{
+                    $data1['user_id'] =  $v['user_id'];
+                    $data1['team_per'] =  $order_amount;
+                    $data1['create_time'] = date('Y-m-d H:i:s');
+                    $data1['update_time'] = date('Y-m-d H:i:s');
+                    $res = M('agent_performance')->add($data1);
+                }
 
-                $data1['user_id'] =  $v['user_id'];
-                $data1['team_per'] =  $order_amount;
-                $data1['create_time'] = date('Y-m-d H:i:s');
-                $data1['update_time'] = date('Y-m-d H:i:s');
-                $res = M('agent_performance')->add($data1);
+                
+                agent_performance_log($v['user_id'],$order_amount,$order_id,$rec_id);
             }
 
-            
-            agent_performance_log($v['user_id'],$order_amount,$order_id);
+        }else
+        {
+            foreach($arr['recUser'] as $k => $v){
+              if($agent_end==0) //判断是否已加业绩，加了就不往下加了
+              {
+                  if($v['level']==4 || $v['level']==5)
+                  {
+
+                    $cunzai = M('agent_performance')->where(['user_id'=>$v['user_id']])->find();
+                    //存在
+                    if($cunzai){
+                        $data22['team_per'] = $cunzai['team_per'] + $order_amount;
+                        $data22['update_time'] = date('Y-m-d H:i:s');
+                        $res = M('agent_performance')->where(['user_id'=>$v['user_id']])->save($data22);
+                    }else{
+
+                        $data2['user_id'] =  $v['user_id'];
+                        $data2['team_per'] =  $order_amount;
+                        $data2['create_time'] = date('Y-m-d H:i:s');
+                        $data2['update_time'] = date('Y-m-d H:i:s');
+                        $res = M('agent_performance')->add($data2);
+                    }
+                    
+                    agent_performance_log($v['user_id'],$order_amount,$order_id,$rec_id);
+                    $agent_end =1; 
+                  }
+              }
+              
+           }
         }
+        
+
     }
+
 
 
  }
 
 
 
+
  /**
   * log
   */
-function agent_performance_log($user_id,$order_amount,$order_id){
+function agent_performance_log($user_id,$order_amount,$order_id,$ogoods_id){
 
     $log = array(
         'user_id'=>$user_id,
         'money'=>$order_amount,
         'create_time'=>date('Y-m-d H:i:s'),
         'note'=>'订单'.$order_id.'业绩',
-         'order_id'=>$order_id
+         'order_id'=>$order_id,
+         'ogoods_id'=>$ogoods_id,
     );
     M('agent_performance_log')->add($log);
 
 
 }
+
 
 /**
  * 检验登陆

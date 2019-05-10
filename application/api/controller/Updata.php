@@ -188,6 +188,108 @@ class Updata extends Controller
         echo $i++;
     }
     }
+
+
+     public function jiayeji()
+    {
+        $ps =I('ps');
+        $pe =!empty($ps)?$ps:0;
+            $where_goods = [
+           // 'og.is_send'    => 1,
+            'og.prom_type' =>0,//只有普通订单才算业绩
+            //'u.first_leader'=>$v['user_id'],
+            //"og.goods_num" =>'>1',
+            'o.pay_status'=>1,
+
+            'gs.sign_free_receive'=>0,
+            
+          ];
+    $order_goods = Db::name('order_goods')->alias('og')
+             ->field('og.order_id,o.order_sn,og.goods_price,og.prom_type,og.goods_name,og.goods_id as ogoods_id,gs.sign_free_receive,o.user_id,og.goods_num,o.add_time as oaddtime,og.rec_id')
+             ->where($where_goods)
+             ->join('goods gs','gs.goods_id=og.goods_id','LEFT')
+             ->join('order o','og.order_id=o.order_id','LEFT')
+             ->order('og.order_id desc')
+             ->limit($pe,50)
+             ->select();
+         print_R(Db::name('order_goods')->getlastsql());exit;
+    foreach($order_goods as $ke=>$ve)
+    {
+        $order_amount = $ve['goods_price'] * $ve['goods_num'];
+        $order_id=$ve["order_id"];
+        $user_id = $ve["user_id"];
+
+        //$where="note='订单{$order_id}业绩'";
+        $where = "ogoods_id=".$ve['rec_id'];
+
+        $agent_performance = M('agent_performance_log_new')->where($where)->find();
+        if(empty($agent_performance))
+        {
+         //加个人业绩(下单人)
+        $cunzai = M('agent_performance_new')->where(['user_id'=>$user_id])->find();
+        //存在
+        if($cunzai){
+            $data_new['ind_per'] = $cunzai['ind_per'] + $order_amount;
+            $data_new['update_time'] = date('Y-m-d H:i:s');
+            $res = M('agent_performance_new')->where(['user_id'=>$user_id])->save($data_new);
+
+            agent_performance_log_new($user_id,$order_amount,$order_id,$ve['rec_id'],$ve['oaddtime']);
+              echo '成功加上存在ID:'.$v["user_id"].'个人业绩<br/>';
+        }else{
+
+            $data['user_id'] =  $user_id;
+            $data['ind_per'] =  $order_amount;
+            $data['create_time'] = date('Y-m-d H:i:s');
+            $data['update_time'] = date('Y-m-d H:i:s');
+            $res = M('agent_performance_new')->add($data);
+
+            agent_performance_log_new($user_id,$order_amount,$order_id,$ve['rec_id'],$ve['oaddtime']);
+            echo '成功加上不存在ID:'.$v["user_id"].'个人业绩<br/>';
+        }
+
+
+
+
+          $first_leader = M('users')->where(['user_id'=>$user_id])->value('first_leader');
+           $arr = get_uper_user($first_leader);
+  
+
+
+        //加 团队业绩
+         foreach($arr['recUser'] as $k => $v){
+       
+            $cunzais = M('agent_performance_new')->where(['user_id'=>$v['user_id']])->find();
+            //存在
+            if($cunzais && !empty($cunzais)){
+                $data11['team_per'] = $cunzais['team_per'] + $order_amount;
+                $data11['update_time'] = date('Y-m-d H:i:s');
+                $res = M('agent_performance_new')->where(['user_id'=>$v['user_id']])->update($data11);
+                echo '成功加上存在ID:'.$v["user_id"].'团队业绩<br/>';
+
+            }else{
+
+                $data1['user_id'] =  $v['user_id'];
+                $data1['team_per'] =  $order_amount;
+                $data1['create_time'] = date('Y-m-d H:i:s');
+                $data1['update_time'] = date('Y-m-d H:i:s');
+                $res = M('agent_performance_new')->add($data1);
+                  echo '成功加上不存在ID:'.$v["user_id"].'团队业绩<br/>';
+            }
+
+            
+            agent_performance_log_new($v['user_id'],$order_amount,$order_id,$ve['rec_id'],$ve['oaddtime']);
+            
+        }
+
+        }else
+        {
+            echo '已加上或找不到业绩记录'. $where.'<br/>';
+        }
+
+       
+        echo $i++;
+    }
+    }
 }
     function agent_performance_log_new($user_id,$order_amount,$order_id,$ogoods_id,$time){
 
