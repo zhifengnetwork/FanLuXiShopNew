@@ -151,7 +151,7 @@ class User extends Base
                  $c = M('users')->where("user_id != $uid and email = '$email'")->count();
                  $c && exit($this->error('邮箱不得和已有用户重复'));
              }
-             /*
+             
              if (!empty($_POST['first_leader']) && $_POST['first_leader']>0) {
                  $first_leader = trim($_POST['first_leader']);
                  $c = M('users')->where("user_id=$first_leader")->find();
@@ -161,7 +161,7 @@ class User extends Base
                     exit($this->error('绑定上级ID不存在！'));
                  }
                 // $c && exit($this->error('邮箱不得和已有用户重复'));
-             }*/
+             }
  
              if (!empty($_POST['mobile'])) {
                  $mobile = trim($_POST['mobile']);
