@@ -2250,7 +2250,7 @@ class User extends MobileBase
 
     public function debugg()
     {
-        $wx_content = "测试订单支付成功！\n\n订单：\n支付时间：\n商户：凡露希环球直供\n商品：\n金额：\n\n【凡露希环球直供】欢迎您的再次购物！";
+        $wx_content = "测试订单支付成功！\n\n订单：\n支付时间：\n商户：凡露希环球直供\n商品：\n金额：\n\n<a href='https://www.baidu.com'>点击打开百度</a>";
             $wechat = new \app\common\logic\wechat\WechatUtil();
             
             $a = $wechat->sendMsg('okGVu1fGEsUsjqXkPImuzcPZeJZs', 'text', $wx_content);
