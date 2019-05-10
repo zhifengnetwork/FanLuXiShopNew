@@ -2248,6 +2248,14 @@ class User extends MobileBase
         return $this->fetch();
     }
 
+    public function debugg()
+    {
+        $wx_content = "测试订单支付成功！\n\n订单：\n支付时间：\n商户：凡露希环球直供\n商品：\n金额：\n\n【凡露希环球直供】欢迎您的再次购物！";
+            $wechat = new \app\common\logic\wechat\WechatUtil();
+            
+            $a = $wechat->sendMsg('okGVu1fGEsUsjqXkPImuzcPZeJZs', 'text', $wx_content);
+            dump($a);
+    }
 
     // public function logout()
     // {
