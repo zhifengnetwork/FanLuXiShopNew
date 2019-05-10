@@ -192,7 +192,7 @@ class Updata extends Controller
 
      public function jiayeji_new()
     {
-         $agent_end =0;
+        
         $ps =I('ps');
         $pe =!empty($ps)?$ps:0;
             $where_goods = [
