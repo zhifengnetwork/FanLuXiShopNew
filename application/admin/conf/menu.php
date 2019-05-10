@@ -219,11 +219,11 @@ return array(
                  array('name' => '分红管理', 'child' => array(
 
                 // array('name' => '业绩奖励设置', 'act' => 'lists', 'op' => 'Rewardo'),
-                 //array('name' => '业绩统计列表', 'act' => 'preform', 'op' => 'PreForm'),
                  //array('name' => '会员返利/升级/分红', 'act' => 'checklog', 'op' => 'PreForm'),
                  array('name' => '业绩分红设置', 'act' => 'config', 'op' => 'Achieve'),
                  array('name' => '业绩分红会员', 'act' => 'slist', 'op' => 'Achieve'),
                  array('name' => '业绩分红记录', 'act' => 'flist', 'op' => 'Achieve'),
+                 // array('name' => '团队列表', 'act' => 'preform', 'op' => 'PreForm'),
 
 
             )),

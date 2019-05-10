@@ -366,25 +366,58 @@ class Report extends Base
         
         if ($_POST) {
             $user_id = input('user_id/s');
-            $where = "and  b.user_id like '%$user_id%' ";
-            $cwhere = "tp_users.user_id like '%$user_id%' ";
+            //$where = "and  b.user_id like '%$user_id%' ";
+            $cwhere = " u.user_id =$user_id ";
         }
        
-        $count = Db::table("tp_users")->join('tp_agent_performance',' tp_users.user_id=tp_agent_performance.user_id')->where($cwhere)->count();
+       // $count = Db::table("tp_users")->join('tp_agent_performance',' tp_users.user_id=tp_agent_performance.user_id')->where($cwhere)->count();
+        $count = M('agent_performance')->alias('a')
+        // ->field('')
+        ->where($cwhere)
+        ->join('tp_users u','a.user_id=u.user_id')
+        ->count();
         $page = new Page($count,10);
 
         //$Pickup =  Db::query("select * from tp_agent_performance as a,tp_users as b where a.user_id = b.user_id $where order by a.team_per desc limit $page->firstRow,$page->listRows");
         // dump($page->firstRow.'='.$page->listRows);
         $Pickup = M('agent_performance')->alias('a')
         // ->field('')
+        ->where($cwhere)
         ->join('tp_users u','a.user_id=u.user_id')
         ->page($page->firstRow,$page->listRows)->order('a.team_per desc')->select();
 
         // $res = $Pickup->order('order_id desc')->select();
         $this->assign('page',$page);
         $this->assign('list',$Pickup);
+         $this->assign('level', M('user_level')->getField('level,level_name'));
 
         return $this->fetch();
+    }
+
+    public function performlist()
+    {
+         $user_id =I('id');
+          $count = M('agent_performance_log')->alias('a')
+         ->join('tp_order o','o.order_id=a.order_id')
+         ->where('a.user_id='.$user_id)
+        ->count();
+
+        $Page = new Page($count,10);
+
+        $Pickup = M('agent_performance_log')->alias('a')
+         ->field("a.money,a.create_time,a.note,a.order_id,a.user_id,o.order_sn")
+        ->join('tp_order o','o.order_id=a.order_id')
+        //->join('tp_account_log ac','ac.user_id=u.user_id')
+        ->where('a.user_id='.$user_id)
+        ->limit($Page->firstRow,$Page->listRows)
+        ->order('a.create_time desc')
+        ->select();
+
+        $this->assign('page',$Page);
+        //$this->assign('page',$sta);
+         //$this->assign('page',$user_id);
+        $this->assign('list',$Pickup);
+         return $this->fetch();
     }
     
      /**

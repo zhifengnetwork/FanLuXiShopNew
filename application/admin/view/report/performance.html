@@ -69,24 +69,27 @@
 						<th align="center" abbr="ac_id" axis="col4" class="">
 							<div style="text-align: center; width: 50px;" class="">排行</div>
 						</th>
+						 <th align="center" abbr="article_show" axis="col5" class="">
+                            <div style="text-align: center; width: 150px;" class="">昵称</div>
+                        </th>
+                        <th align="center" abbr="ac_id" axis="col4" class="">
+							<div style="text-align: center; width: 70px;" class="">等级</div>
+						</th>
+						
 						<th align="center" abbr="article_show" axis="col5" class="">
 							<div style="text-align: center; width: 150px;" class="">个人业绩</div>
 						</th>
                         <th align="center" abbr="article_show" axis="col5" class="">
                             <div style="text-align: center; width: 150px;" class="">团队业绩</div>
                         </th>
-                        <th align="center" abbr="article_show" axis="col5" class="">
-                            <div style="text-align: center; width: 200px;" class="">创建时间</div>
-                        </th>
+                      
 						<th align="center" abbr="article_time" axis="col6" class="">
 							<div style="text-align: center; width: 200px;" class="">更新时间</div>
 						</th>
-						<th align="center" abbr="article_time" axis="col6" class="">
-							<div style="text-align: center; width: 100px;" class="">备注</div>
-						</th>
-						<!-- <th align="center" axis="col1" class="handle">
+						
+						 <th align="center" axis="col1" class="handle">
 							<div style="text-align: center; width: 150px;">操作</div>
-						</th> -->
+						</th> 
 						<th style="width:100%" axis="col7">
 							<div></div>
 						</th>
@@ -110,26 +113,33 @@
 							<td align="center" class="">
 								<div style="text-align: center; width: 50px;">{$k+1+(($p-1)*$page_size)}</div>
 							</td>
+							
+							<td align="center" class="">
+                                <div style="text-align: center; width: 150px;">{$vo.nickname}</div>
+                            </td>
+                              <td align="center" class="">
+                                <div style="text-align: center; width: 70px;">{$level[$vo['level']]}</div>
+                            </td>
+
 							<td align="center" class="">
 								<div style="text-align: center; width: 150px;">{$vo.ind_per}</div>
 							</td>
                             <td align="center" class="">
                                 <div style="text-align: center; width: 150px;">{$vo.team_per}</div>
                             </td>
-                            <td align="center" class="">
-                                <div style="text-align: center; width: 200px;">{$vo.create_time}</div>
-                            </td>
+                            
 							<td align="center" class="">
 								<div style="text-align: center; width: 200px;">{$vo.update_time}</div>
 							</td>
-							<td align="center" class="">
-								<div style="text-align: center; width: 100px;">{$vo.note}</div>
-							</td>
-							<!-- <td align="center" class="handle">
+							
+							 <td align="center" class="handle">
 								<div style="text-align: center; width: 170px; max-width:170px;">
-									<a href="javascript:;" onclick="userOrder('{$vo.user_id}')" class="btn blue"><i class="fa fa-search"></i>查看</a>
+									<!--
+									<a href="javascript:;" onclick="userOrder('{$vo.user_id}')" class="btn blue"><i class="fa fa-search"></i>查看</a>-->
+									<a href="{:U('Report/performlist',array('id'=>$vo['user_id']))}"  class="btn blue"><i class="fa fa-search"></i>查看</a>
+			
 								</div>
-							</td> -->
+							</td> 
 							<td align="" class="" style="width: 100%;">
 								<div>&nbsp;</div>
 							</td>
