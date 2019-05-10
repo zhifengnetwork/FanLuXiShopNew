@@ -2252,7 +2252,7 @@ class User extends MobileBase
     {
 
         $url = SITE_URL."/Shop/Goods/goodsInfo?id=38";//.$order_sn;
-        $wx_content = "测试订单支付成功！\n\n订单：\n支付时间：\n商户：凡露希环球直供\n商品：\n金额：\n\n<a href='{$url}'>点击打开百度</a>";
+        $wx_content = "测试订单支付成功！\n\n<a href='{$url}'>点击处理</a>";
             $wechat = new \app\common\logic\wechat\WechatUtil();
             
             $a = $wechat->sendMsg('okGVu1fGEsUsjqXkPImuzcPZeJZs', 'text', $wx_content);
