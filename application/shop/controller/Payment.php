@@ -76,7 +76,7 @@ class Payment extends MobileBase
         $config['body'] = getPayBody($order_id);
 
 
-        if ($this->pay_code == 'weixin' && session('openid') && strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {
+        if ($this->pay_code == 'weixin' && strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {
             //微信JS支付
            
             $code_str = $this->payment->getJSAPI($order);
