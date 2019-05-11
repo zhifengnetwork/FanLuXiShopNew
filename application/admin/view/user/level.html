@@ -150,6 +150,16 @@
                     <p class="notic">总监的店主邀店主得到奖励</p>
                 </dd>
             </dl>
+              <dl class="row">
+                <dt class="tit">
+                   直属总监邀店主(有平级总监)
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="h_reward" value="{$info.h_reward}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">总监的店主邀店主得到奖励（有平级总监）</p>
+                </dd>
+            </dl>
                 <dl class="row">
                 <dt class="tit">
                    直属总监的店主邀店主
@@ -161,7 +171,8 @@
                 </dd>
             </dl>
             </if>
-            <if condition="$info['level'] gt 3">
+            <if condition="$info['level'] eq 4">
+            <!--
             <dl class="row">
                 <dt class="tit">
                    管理津贴
@@ -171,15 +182,70 @@
                     <span class="err" id="err_describe"></span>
                     <p class="notic">单位%</p>
                 </dd>
-            </dl>
+            </dl>-->
              <dt class="tit">
                    平级奖
                 </dt>
                 <dd class="opt">
                          <input type="text" name="pin_reward" value="{$info.pin_reward}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
                     <span class="err" id="err_describe"></span>
-                    <p class="notic">单位元</p>
+                    <p class="notic">总监直邀店主的平级奖</p>
                 </dd>
+                  <dt class="tit">
+                   平级奖2
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="pin_reward2" value="{$info.pin_reward2}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">总监直属店主邀店主的平级奖</p>
+                </dd>
+
+            </if>
+             <if condition="$info['level'] eq 5">
+            <!--
+            <dl class="row">
+                <dt class="tit">
+                   管理津贴
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="jintie" value="{$info.jintie}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">单位%</p>
+                </dd>
+            </dl>-->
+             <dt class="tit">
+                   平级奖
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="pin_reward" value="{$info.pin_reward}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">大区直邀店主的平级奖</p>
+                </dd>
+                  <dt class="tit">
+                   平级奖2
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="pin_reward2" value="{$info.pin_reward2}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">大区直属总监的店主邀店主的平级奖</p>
+                </dd>
+                    <dt class="tit">
+                   平级奖3
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="pin_reward3" value="{$info.pin_reward3}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">大区直属店主邀店主的平级奖</p>
+                </dd>
+                       <dt class="tit">
+                   平级奖4
+                </dt>
+                <dd class="opt">
+                         <input type="text" name="pin_reward4" value="{$info.pin_reward4}" id="discount" class="input-txt" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                    <span class="err" id="err_describe"></span>
+                    <p class="notic">大区直属总监邀店主的平级奖</p>
+                </dd>
+
             </if>
              <if condition="$info['level'] egt 3">
                  <dt class="tit">
