@@ -1505,6 +1505,17 @@ class Order extends Base {
             $where['order_id'] = ['in', $order_ids];
         }
 
+        //关键字搜索
+        $words = ($keyType && $keyType == 'words') ? $keywords : I('words') ;
+        if($words){
+            $order_ids = M('order_goods')->where(['goods_name' => ['like', '%' . $words . '%']])->column('order_id');
+            if($order_ids){
+                $where['order_id'] = ['in', $order_ids];
+            }else{
+                $where['order_id'] = '';
+            }
+        }
+
         I('pay_status') != '' ? $where['pay_status'] = I('pay_status') : false;
         I('shipping_status') != '' ? $where['shipping_status'] = I('shipping_status') : false;
         // $where['pay_status'] = I('pay_status');
