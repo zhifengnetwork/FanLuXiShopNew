@@ -1589,32 +1589,8 @@ class User extends MobileBase
      */
     public function paypwd()
     {
-        //检查是否第三方登录用户
-        $user = M('users')->where('user_id', $this->user_id)->find();
-        if ($user['mobile'] == '')
-            $this->error('请先绑定手机号',U('User/setMobile',['source'=>'paypwd']));
-        $step = I('step', 1);
-        if ($step > 1) {
-            $check = session('validate_code');
-            if (empty($check)) {
-                $this->error('验证码还未验证通过', U('mobile/User/paypwd'));
-            }
-        }
-        if (IS_POST && $step == 2) {
-            $new_password = trim(I('new_password'));
-            $confirm_password = trim(I('confirm_password'));
-            $oldpaypwd = trim(I('old_password'));
-            //以前设置过就得验证原来密码
-            if(!empty($user['paypwd']) && ($user['paypwd'] != encrypt($oldpaypwd))){
-                $this->ajaxReturn(['status'=>-1,'msg'=>'原密码验证错误！','result'=>'']);
-            }
-            $userLogic = new UsersLogic();
-            $data = $userLogic->paypwd($this->user_id, $new_password, $confirm_password);
-            $this->ajaxReturn($data);
-            exit;
-        }
-        $this->assign('step', $step);
-        return $this->fetch();
+        
+        return $this->redirect('shop/user/paypwd');
     }
 
 
