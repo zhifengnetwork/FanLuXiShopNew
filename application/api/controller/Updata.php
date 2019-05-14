@@ -103,7 +103,7 @@ class Updata extends Controller
             
           ];
     $order_goods = Db::name('order_goods')->alias('og')
-             ->field('og.order_id,o.order_sn,og.goods_price,og.prom_type,og.goods_name,og.goods_id as ogoods_id,gs.sign_free_receive,o.user_id,og.goods_num,o.add_time as oaddtime,o.pay_time,og.rec_id')
+             ->field('og.order_id,o.order_sn,og.goods_price,og.prom_type,og.goods_name,og.goods_id as ogoods_id,gs.sign_free_receive,o.user_id,og.goods_num,o.add_time as oaddtime,pay_time,og.rec_id')
              ->where($where_goods)
              ->join('goods gs','gs.goods_id=og.goods_id','LEFT')
              ->join('order o','og.order_id=o.order_id','LEFT')
