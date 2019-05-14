@@ -263,8 +263,8 @@ function getAllUp($invite_id,&$userList=array())
         $first_leader = M('users')->where(['user_id'=>$user_id])->value('first_leader');
         $arr = get_uper_user($first_leader);
 
-        if($vs['cat_id']==8)
-        {
+       // if($vs['cat_id']==8)
+       // {
             //加 团队业绩
            foreach($arr['recUser'] as $k => $v){
 
@@ -287,7 +287,8 @@ function getAllUp($invite_id,&$userList=array())
                 agent_performance_log($v['user_id'],$order_amount,$order_id,$rec_id);
             }
 
-        }else
+        //}else
+        /*
         {
             $agent_end=0;
             foreach($arr['recUser'] as $k => $v){
@@ -317,7 +318,7 @@ function getAllUp($invite_id,&$userList=array())
               }
               
            }
-        }
+        }*/
         
 
     }
