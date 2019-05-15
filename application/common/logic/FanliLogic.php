@@ -238,8 +238,8 @@ class FanliLogic extends Model
           
          // print_R($goods['shop_price'].'-'.$this->goodNum.'-'.$fanli['rate']);exit;
           //按上一级等级各自比例分享返利
-          $bool = M('users')->where('user_id',$user_info['first_leader'])->setInc('user_money',$commission);
-
+          if($commission>0){
+          	 $bool = M('users')->where('user_id',$user_info['first_leader'])->setInc('user_money',$commission);
 	         if ($bool !== false) {
 	        	$desc = "推荐店主获得金额";
 	        	$log = $this->writeLog($user_info['first_leader'],$commission,$desc,3); //写入日志
@@ -248,7 +248,11 @@ class FanliLogic extends Model
 	         } else {
 	        	return false;
 	         }
-	     }else
+
+          }
+      
+	     }
+	     else
 	     {
             return false;
 	     }
@@ -421,18 +425,22 @@ class FanliLogic extends Model
 			  {
 	
 				    if($parent_info['level']==4 && $pingji_4!=1)//总监直邀店主平级奖
-				     {
+				    {
 				     	if($ke>=1)
 				     	{
-					     $fanli = M('user_level')->where('level',4)->field('pin_reward')->find();
-				     	
-				        $commission = $fanli['pin_reward']; //计算金额
-				          //按上一级等级各自比例分享返利
-				        $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
-				       	$desc = "总监平级奖";
-				        $log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
-				        $pingji_4 =1;
-				        $three = $three+1;
+						    $fanli = M('user_level')->where('level',4)->field('pin_reward')->find();
+					     	
+					        $commission = $fanli['pin_reward']; //计算金额
+					        if($commission>0){
+					        	          //按上一级等级各自比例分享返利
+					        $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
+					       	$desc = "总监平级奖";
+					        $log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
+					        $pingji_4 =1;
+					        $three = $three+1;
+
+					        }
+				
 				        }
 		
 				     }
@@ -442,32 +450,37 @@ class FanliLogic extends Model
 						 {
 	                  	    if($ke>=1)
 					     	{
-						     $fanli = M('user_level')->where('level',4)->field('pin_reward2')->find();
+						        $fanli = M('user_level')->where('level',4)->field('pin_reward2')->find();
 					     	
-					        $commission = $fanli['pin_reward2']; //计算金额
-					          //按上一级等级各自比例分享返利
-					        $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
-					       	$desc = "总监平级奖";
-					        $log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
-					        $pingji_4 =1;
-					        $three = $three+1;
+						        $commission = $fanli['pin_reward2']; //计算金额
+						        if($commission>0){
+							          //按上一级等级各自比例分享返利
+							        $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
+							       	$desc = "总监平级奖";
+							        $log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
+							        $pingji_4 =1;
+							        $three = $three+1;
+						        }
 					        }
 						 }
 						 if($three<1)
 						 {
 						 	if($ke>=1)
 					     	{
-						     $fanli = M('user_level')->where('level',$ye['level'])->field('y_reward')->find();
-						 	$commission = $fanli['y_reward']; //计算金额
-				          //按上一级等级各自比例分享返利
-				        	$bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
-				       		$desc = "总监直属店主邀店主获得金额";
-				        	$log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
-				        	$three =$three+1;
+							     $fanli = M('user_level')->where('level',$ye['level'])->field('y_reward')->find();
+							 	$commission = $fanli['y_reward']; //计算金额
+							 	if($commission>0){
+							 		 //按上一级等级各自比例分享返利
+					        	$bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
+					       		$desc = "总监直属店主邀店主获得金额";
+					        	$log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
+					        	$three =$three+1;
+
+							 	}
+				         
 				            }
 
 						 }
-				     
 				     }
 				     if($parent_info['level']==4 && $three==1)
 				     {
@@ -501,10 +514,15 @@ class FanliLogic extends Model
 				      {
 					     $fanli = M('user_level')->where('level',5)->field('pin_reward')->find();
 						 $commission = $fanli['pin_reward']; //计算金额
-				          //按上一级等级各自比例分享返利
+						 if($commission>0)
+						 {
+						 	//按上一级等级各自比例分享返利
 				         $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
 				       	 $desc = "大区平级奖";
 				         $log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
+
+						 }
+				          
 				         /*
 				         if(!empty($commission_z))
 		             	{
@@ -551,10 +569,12 @@ class FanliLogic extends Model
 					         	 $fanli = M('user_level')->where('level',5)->field('pin_reward3')->find();
 							     $commission = $fanli['pin_reward3']; //计算金额
 					         }
-
+					         if($commission>0)
+						    {
 					         $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission);
 					       	 $desc = "大区平级奖";
 					         $log = $this->writeLog($ye['user_id'],$commission,$desc,6); //写入日志
+					        }
 
 					 	}
 
@@ -576,10 +596,14 @@ class FanliLogic extends Model
 						 	$fanli = M('user_level')->where('level',$ye['level'])->field('h_reward')->find();
 						 	$commission_z = $fanli['h_reward']; //计算金额
 				          //按上一级等级各自比例分享返利
-				        	$bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission_z);
-				       		$desc = "大区直属总监邀店主获得金额";
+						 	if($commission_z>0){
+						 	 $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission_z);
+				       		 $desc = "大区直属总监邀店主获得金额";
 				       		 $log = $this->writeLog($ye['user_id'],$commission_z,$desc,6); //写入日志
 				       		 $four =$four+1;
+
+						 	}
+				        	
 				       	   }
 
 					 	}
@@ -590,11 +614,16 @@ class FanliLogic extends Model
 
 						 	$fanli = M('user_level')->where('level',$ye['level'])->field('s_reward')->find();
 						 	$commission_z = $fanli['s_reward']; //计算金额
-				          //按上一级等级各自比例分享返利
+						 	if($commission_z>0)
+						 	{
+						 		//按上一级等级各自比例分享返利
 				        	$bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission_z);
 				       		$desc = "大区直属总监邀店主获得金额";
 				       		 $log = $this->writeLog($ye['user_id'],$commission_z,$desc,6); //写入日志
 				       		 $four =$four+1;
+
+						 	}
+				          
 				       	   }
 
 					 	}
@@ -606,23 +635,29 @@ class FanliLogic extends Model
 						 	$fanli = M('user_level')->where('level',$ye['level'])->field('k_reward')->find();
 						 	$commission_z = $fanli['k_reward']; //计算金额
 				          //按上一级等级各自比例分享返利
+						 	if($commission_z>0)
+						 	{
 				        	$bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission_z);
 				       		$desc = "大区直属总监的店主邀店主获得金额";
 				       		 $log = $this->writeLog($ye['user_id'],$commission_z,$desc,6); //写入日志
 				       		 $four =$four+1;
+				       		}
 				       	   }
 
 						}else //只有大区
 						{
 						    if($ke>=1)
 					        {
-							 $fanli = M('user_level')->where('level',$ye['level'])->field('y_reward')->find();
-						 	 $commission_z = $fanli['y_reward']; //计算金额
-				             //按上一级等级各自比例分享返利
-				       		 $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission_z);
-				       		 $desc = "大区直属店主邀店主获得金额";
-				       		 $log = $this->writeLog($ye['user_id'],$commission_z,$desc,6); //写入日志
-				       		 $four =$four+1;
+								 $fanli = M('user_level')->where('level',$ye['level'])->field('y_reward')->find();
+							 	 $commission_z = $fanli['y_reward']; //计算金额
+					             //按上一级等级各自比例分享返利
+					             if($commission_z>0)
+							 	{
+					       		 $bool = M('users')->where('user_id',$ye['user_id'])->setInc('user_money',$commission_z);
+					       		 $desc = "大区直属店主邀店主获得金额";
+					       		 $log = $this->writeLog($ye['user_id'],$commission_z,$desc,6); //写入日志
+					       		 $four =$four+1;
+					       		}
 				       		}
 
 						}
