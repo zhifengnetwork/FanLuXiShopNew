@@ -34,7 +34,11 @@
 <else/>
     <div class="fukcuid mae">
         <div class="maleri30">
+            
             <foreach name="comment_list" item="v1">
+                 <div class="dinaot">
+                        <span class="naem">订单号：{$v1[order_sn]}</span>
+            </div>
                 <div class="shopprice dapco p">
                     <div class="img_or fl"><img src="{$v1[goods_id]|goods_thum_images=200,200}"></div>
                     <div class="fon_or fl">
