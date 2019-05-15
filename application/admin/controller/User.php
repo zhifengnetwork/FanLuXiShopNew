@@ -566,6 +566,7 @@ class User extends Base
              $pin_reward2 = I('pin_reward2');
              $pin_reward3 = I('pin_reward3');
              $pin_reward4 = I('pin_reward4');
+              $lead_reward = I('lead_reward');
             $jintie = I('jintie');
 			if($level==""){
 				$this->ajaxReturn(['status' => 0, 'msg' => '等级不可为空']);
@@ -602,6 +603,7 @@ class User extends Base
                 'pin_reward3'=>$pin_reward3,
                 'pin_reward4'=>$pin_reward4,
                 'direct_rate'=>$direct_rate,
+                'lead_reward'=>$lead_reward,
 			);
 			if($id>0){
 				$res = M('user_level')->where('id',$id)->data($data)->save();

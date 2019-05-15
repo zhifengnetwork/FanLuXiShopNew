@@ -280,12 +280,17 @@ class FanliLogic extends Model
 		$user_info = M('users')->where('user_id',$user_id)->field('level,user_id')->find();
 
 			$fanli = M('user_level')->where('level',$user_info['level'])->field('lead_reward')->find();
+			if($fanli['lead_reward']>0)
+			{
 			 $commission = $fanli_money * ($fanli['lead_reward'] / 100);
 
 	          //按上一级等级各自比例分享返利
-	       $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
+	        $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
 	       	$desc = "平级领导奖";
 	        $log = $this->writeLog($user_info['user_id'],$commission,$desc,5); //写入日志
+
+			}
+			
 		
 
 	}
