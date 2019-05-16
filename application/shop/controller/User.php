@@ -464,6 +464,7 @@ class User extends MobileBase
         $referurl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : U("Shop/User/index");
         $this->assign('referurl', $referurl);
         // 新版支付宝跳转链接
+         $this->assign('login_keyword', $this->tpshop_config['shop_info_login_keyword']);//提现配置项
         $this->assign('alipay_url', urlencode(SITE_URL.U("Shop/LoginApi/login",['oauth'=>'alipaynew'])));
         return $this->fetch();
     }
