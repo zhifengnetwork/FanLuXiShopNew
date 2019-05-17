@@ -2218,6 +2218,60 @@ function provingReceive($user, $type, $num = 1)
             return array('status' => 0, 'msg' => '您当前等级可领'.$levelGetNum.'盒，已超过领取次数', 'result' => array());
         }
     }
+    //下单领取
+    if ($type == 3) {
+        //活动时间 2019-05-17 开始
+         $pay_time = strtotime('2019-05-17 00:00:00');
+        //查询领取的 sign_free_receive =3 下单领取的订单
+        $where_goods = [
+           // 'og.is_send'    => 1,
+            //'og.prom_type' =>0,//只有普通订单才算业绩
+            'o.pay_status'=>1,
+            'o.user_id'=>$user['user_id'],
+            'gs.sign_free_receive'=>3,
+            
+          ];
+        $order_free_count = Db::name('order_goods')->alias('og')
+             ->where($where_goods)
+             ->join('goods gs','gs.goods_id=og.goods_id','LEFT')
+             ->join('order o','og.order_id=o.order_id','LEFT')
+             ->order('og.order_id desc')
+             ->count();
+        //查询领取的 2019-05-17 下单领取的订单
+
+        $where = [
+           // 'og.is_send'    => 1,
+            //'og.prom_type' =>0,//只有普通订单才算业绩
+            'o.pay_status'=>1,
+            'o.user_id'=>$user['user_id'],
+            'gs.sign_free_receive'=>0,
+            
+          ];
+        $order_count = Db::name('order_goods')->alias('og')
+             ->where($where)
+             ->where('pay_time>'.$pay_time)
+             ->join('goods gs','gs.goods_id=og.goods_id','LEFT')
+             ->join('order o','og.order_id=o.order_id','LEFT')
+             ->order('og.order_id desc')
+             ->count();
+             //echo Db::name('order_goods')->getlastsql();exit;
+        $user_num = $order_count-$order_free_count;
+        if($user_num>0)
+        {
+         if ($user_num < $num) {
+            $signFreeNum = empty($user_num) ? 0 : $user_num;
+            return array('status' => 0, 'msg' => '超过领取数量，目前只可领取'.$signFreeNum.'件！', 'result' => array());
+         } 
+        }else
+        {
+            return array('status' => 0, 'msg' => '超过领取数量，目前只可领取0件！', 'result' => array());
+        }
+
+     
+
+        return array('status' => 2, 'msg' => '可领取', 'result' => array());
+
+    }
 
     return array('status' => 2, 'msg' => '可领取', 'result' => array());
 }
