@@ -2164,6 +2164,7 @@ function continue_sign($user_id){
 */
 function provingReceive($user, $type, $num = 1)
 {
+ 
     //获得当日凌晨的时间戳
     // $today = strtotime(date("Y-m-d"),time());
 
@@ -2219,16 +2220,17 @@ function provingReceive($user, $type, $num = 1)
         }
     }
     //下单领取
-    if ($type == 3) {
+    if ($type>=3) {
         //活动时间 2019-05-17 开始
          $pay_time = strtotime('2019-05-17 00:00:00');
+         $order_new =array();
         //查询领取的 sign_free_receive =3 下单领取的订单
         $where_goods = [
            // 'og.is_send'    => 1,
             //'og.prom_type' =>0,//只有普通订单才算业绩
             'o.pay_status'=>1,
             'o.user_id'=>$user['user_id'],
-            'gs.sign_free_receive'=>3,
+            'gs.sign_free_receive'=>$type,
             
           ];
         $order_free_count = Db::name('order_goods')->alias('og')
@@ -2247,17 +2249,31 @@ function provingReceive($user, $type, $num = 1)
             'gs.sign_free_receive'=>0,
             
           ];
-        $order_count = Db::name('order_goods')->alias('og')
+        $order_array = Db::name('order_goods')->alias('og')
+             ->field("gs.sign_free_receive,o.order_sn")
              ->where($where)
              ->where('pay_time>'.$pay_time)
              ->join('goods gs','gs.goods_id=og.goods_id','LEFT')
              ->join('order o','og.order_id=o.order_id','LEFT')
              ->order('og.order_id desc')
-             ->count();
+             ->select();
+        foreach($order_array as $key=>$val)
+        {
+           
+             $order_new[$val['order_sn']]=$val;
+
+        }
+
+        $order_count =count($order_new);
+//print_r($order_free_count);exit;
              //echo Db::name('order_goods')->getlastsql();exit;
         $user_num = $order_count-$order_free_count;
+       // $user_num2 = $order_count-$order_free_count2;
+        //查询下单领取产品
+        $goods = M('goods')->where('sign_free_receive',3)->find();
         if($user_num>0)
         {
+
          if ($user_num < $num) {
             $signFreeNum = empty($user_num) ? 0 : $user_num;
             return array('status' => 0, 'msg' => '超过领取数量，目前只可领取'.$signFreeNum.'件！', 'result' => array());
