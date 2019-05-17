@@ -70,6 +70,8 @@ class Distribut extends Base {
                 $model = new FanliLogic($userId, $goodId,$goodNum,$orderSn,$order_id);
                 $res = $model->fanliModel();
             }
+            //补业绩
+            add_agent_performance($order_id);
             $return = ['status' => 1, 'msg' => '补发返利成功', 'result' => $order_id];
         }else
         {

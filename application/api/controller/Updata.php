@@ -327,6 +327,12 @@ class Updata extends Controller
         }
      }
    }
+   public function apiadd_add_agent_performance()
+   {
+     $order_id =I('order_id');
+      add_agent_performance($order_id);
+       echo '已加上或找不到业绩记录'. $where.'<br/>';
+   }
 
     
 }
