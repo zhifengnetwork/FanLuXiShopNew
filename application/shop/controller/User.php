@@ -2124,6 +2124,31 @@ class User extends MobileBase
         //看看头像是否为空
       
 
+        define('IMGROOT_PATH', str_replace("\\","/",realpath(dirname(dirname(__FILE__)).'/../../'))); //图片根目录（绝对路径）
+       
+        //加上 refresh == 1 , 强制重新获取海报
+        if(I('refresh') == '1'){
+            //删掉文件
+            @unlink(IMGROOT_PATH.'/public/share/head/'.$user_id.'.jpg');//删除头像
+            @unlink(IMGROOT_PATH."/public/share/picture_ok44/'.$user_id.'.jpg");//删除 44
+            @unlink(IMGROOT_PATH."/public/share/picture_888/".$user_id.".jpg");
+
+            //强制获取头像
+            $openid = session('user.openid');
+            $access_token = access_token();
+            $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
+            $resp = httpRequest($url, "GET");
+            $res = json_decode($resp, true);
+           
+            $head_pic = $res['headimgurl'];
+            if($head_pic){
+                //得到头像
+                M('users')->where(['openid'=>$openid])->update(['head_pic'=>$head_pic]);
+            }
+        }
+
+
+
 
         $logic = new ShareLogic();
         $ticket = $logic->get_ticket($user_id);
