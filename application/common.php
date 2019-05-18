@@ -2228,7 +2228,8 @@ function provingReceive($user, $type, $num = 1)
         $where_goods = [
            // 'og.is_send'    => 1,
             //'og.prom_type' =>0,//只有普通订单才算业绩
-            'o.pay_status'=>1,
+           // 'o.pay_status'=>1,
+            'o.pay_status'=> ['IN','0,1'],
             'o.user_id'=>$user['user_id'],
             'gs.sign_free_receive'=>$type,
             
@@ -2240,7 +2241,7 @@ function provingReceive($user, $type, $num = 1)
              ->order('og.order_id desc')
              ->count();
         //查询领取的 2019-05-17 下单领取的订单
-
+        
         $where = [
            // 'og.is_send'    => 1,
             //'og.prom_type' =>0,//只有普通订单才算业绩
