@@ -358,7 +358,7 @@ function getAllUp($invite_id,&$userList=array())
     {
         $order_amount = $vs['goods_price'] * $vs['goods_num'];
         $rec_id=$vs['rec_id'];
-         $agent_performance_peason= M('agent_performance_log')->where(['user_id'=>$user_id,'order_id'=>$order_id])->find();
+         $agent_performance_peason= M('agent_performance_log')->where(['user_id'=>$user_id,'order_id'=>$order_id,'rec_id'=>$rec_id])->find();
           //查看业绩是否已加，加了就不重复
          if(empty($agent_performance_peason)){
             //加个人业绩(下单人)
@@ -394,7 +394,7 @@ function getAllUp($invite_id,&$userList=array())
        // {
             //加 团队业绩
            foreach($arr['recUser'] as $k => $v){
-              $agent_performance_team= M('agent_performance_log')->where(['user_id'=>$v['user_id'],'order_id'=>$order_id])->find();
+              $agent_performance_team= M('agent_performance_log')->where(['user_id'=>$v['user_id'],'order_id'=>$order_id,'rec_id'=>$rec_id])->find();
                //查看业绩是否已加，加了就不重复
              if(empty($agent_performance_team)){
                     $cunzai = M('agent_performance')->where(['user_id'=>$v['user_id']])->find();
