@@ -2130,6 +2130,8 @@ class User extends MobileBase
         if(I('refresh') == '1'){
             //删掉文件
             @unlink(IMGROOT_PATH.'/public/share/head/'.$user_id.'.jpg');//删除头像
+            @unlink(IMGROOT_PATH.'/public/share/head/'.$user_id.'.png');//删除头像
+
             @unlink(IMGROOT_PATH.'/public/share/picture_ok44/'.$user_id.'.jpg');//删除 44
 
 
