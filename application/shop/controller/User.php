@@ -2130,8 +2130,8 @@ class User extends MobileBase
         if(I('refresh') == '1'){
             //删掉文件
             @unlink(IMGROOT_PATH.'/public/share/head/'.$user_id.'.jpg');//删除头像
-            @unlink(IMGROOT_PATH."/public/share/picture_ok44/'.$user_id.'.jpg");//删除 44
-            @unlink(IMGROOT_PATH."/public/share/picture_888/".$user_id.".jpg");
+            @unlink(IMGROOT_PATH.'/public/share/picture_ok44/'.$user_id.'.jpg');//删除 44
+
 
             //强制获取头像
             $openid = session('user.openid');
@@ -2144,6 +2144,7 @@ class User extends MobileBase
             if($head_pic){
                 //得到头像
                 M('users')->where(['openid'=>$openid])->update(['head_pic'=>$head_pic]);
+                session('user.head_pic',$head_pic);
             }
         }
 
