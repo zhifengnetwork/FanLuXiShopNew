@@ -2231,6 +2231,7 @@ function provingReceive($user, $type, $num = 1)
             //'og.prom_type' =>0,//只有普通订单才算业绩
            // 'o.pay_status'=>1,
             'o.pay_status'=> ['IN','0,1'],
+            'o.order_status'=>['notIn','3,5'],
             'o.user_id'=>$user['user_id'],
             'gs.sign_free_receive'=>$type,
             
