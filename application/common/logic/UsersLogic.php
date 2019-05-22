@@ -392,6 +392,10 @@ class UsersLogic extends Model
 					//更新老数据并删除新注册的数据
 					$map['openid'] = $data['openid'];
 					$map['is_code'] = $user['is_code'];
+					if(empty($user['first_leader'])|| $user['first_leader']==0)
+					{
+						$map['first_leader'] = $user['first_leader'];
+					}
 					$map['old_userid'] = $user['user_id'];
 					$map['sign_old_openid'] = 333;
 					Db::name('users')->where('user_id', $old_user['user_id'])->save($map);
