@@ -118,22 +118,22 @@
                                     <p class="num">{$user.user_money}</p>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{:U('/shop/Goods/goodsList/id/1')}">
+                                <img src="__STATIC__/images/user_zp/商品.png" />
+                                <p>鱼子面膜</p>
+                                <p class="num">{$user.sign_free_num}</p>
+                                </a>
+                            </li>
                             <if condition="$user.level gt 2">
                                 <li>
-                                    <a href="{:U('/shop/Goods/goodsList/id/1')}">
+                                	<a href="{:U('/shop/Goods/goodsList/id/9')}">
                                     <img src="__STATIC__/images/user_zp/商品.png" />
-                                    <p>鱼子面膜</p>
-                                    <p class="num">{$user.sign_free_num}</p>
-                                    </a>
+                                    <p>多肽面膜</p>
+                                    <p class="num">{$user.distribut_free_num}</p>
+                                	</a>
                                 </li>
                             </if>
-                            <li>
-                            	<a href="{:U('/shop/Goods/goodsList/id/9')}">
-                                <img src="__STATIC__/images/user_zp/商品.png" />
-                                <p>多肽面膜</p>
-                                <p class="num">{$user.distribut_free_num}</p>
-                            	</a>
-                            </li>
 							<!-- <li>
 								<img src="__STATIC__/images/user_zp/JF1@2x.png" />
 								<p>积分</p>

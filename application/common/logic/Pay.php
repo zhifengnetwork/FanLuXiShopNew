@@ -395,7 +395,7 @@ class Pay
             if ( $this->user['is_code'] == 1 && $this->payList[0]['goods']->sign_free_receive == 2) {
 
                 // 能否领取商品
-                $data = M('order_sign_receive')->where(['uid' => $this->user['user_id'], 'type' => 2])->select();
+                $data = M('order_sign_receive')->where(['uid' => $this->user['user_id'], 'type' => 1])->select();
 
                 //扫码只可领取1次
                 if (!empty($data)) {

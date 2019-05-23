@@ -2173,6 +2173,22 @@ function provingReceive($user, $type, $num = 1)
 
     //签到商品
     if ($type == 1) {
+        
+        // 扫码进入会员可领取1次
+        if ($user['is_code'] == 1 && $user['level'] < 2) {
+            if ($num > 1) {
+                return array('status' => 0, 'msg' => '超过领取数量，只能领取一件！', 'result' => array());
+            }
+
+            $data = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2])->find();
+            
+            //扫码只可领取1次
+            if (!empty($data)) {
+                return array('status' => 0, 'msg' => '已超出领取次数', 'result' => array());
+            }else{
+                return array('status' => 2, 'msg' => '可领取', 'result' => array());
+            }
+        }
 
         //店主以上可领取
         if ($user['level'] < 3) {
@@ -2191,21 +2207,6 @@ function provingReceive($user, $type, $num = 1)
     //免费领取商品
     if ($type == 2) {
 
-        // 扫码进入会员可领取1次
-        if ($user['is_code'] == 1 && $user['level'] < 2) {
-            if ($num > 1) {
-                return array('status' => 0, 'msg' => '超过领取数量，只能领取一件！', 'result' => array());
-            }
-
-            $data = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2])->find();
-            
-            //扫码只可领取1次
-            if (!empty($data)) {
-                return array('status' => 0, 'msg' => '已超出领取次数', 'result' => array());
-            }else{
-                return array('status' => 2, 'msg' => '可领取', 'result' => array());
-            }
-        }
 
         //当天订单
         // $order = M('order_sign_receive')->where(['uid' => $user['user_id'], 'type' => 2, 'addend_time' => ['>',$today]])->count();
