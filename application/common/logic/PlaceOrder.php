@@ -177,12 +177,12 @@ class PlaceOrder
         $user_money = $this->pay->getUserMoney();
         $payList = $this->pay->getPayList();
         $user = $this->pay->getUser();
-        if($payList[0]['goods']->sign_free_receive == 1 && $user['sign_free_num'] == 0 && $this->pay->getSignPrice() != 0){
-                throw new TpshopException('提交订单', 0, ['status' => -7, 'msg' => "免费领取次数不够", 'result' => '']);
-        }
-        if($payList[0]['goods']->sign_free_receive == 2 && $this->pay->getSignPrice() != 0){
-                throw new TpshopException('提交订单', 0, ['status' => -7, 'msg' => "免费领取次数不够", 'result' => '']);
-        }
+        // if($payList[0]['goods']->sign_free_receive == 1 && $this->pay->getSignPrice() != 0){
+        //         throw new TpshopException('提交订单', 0, ['status' => -7, 'msg' => "免费领取次数不够1", 'result' => '']);
+        // }
+        // if($payList[0]['goods']->sign_free_receive == 2 && $this->pay->getSignPrice() != 0){
+        //         throw new TpshopException('提交订单', 0, ['status' => -7, 'msg' => "免费领取次数不够2", 'result' => '']);
+        // }
         if ($pay_points || $user_money) {
             $user = $this->pay->getUser();
             if ($user['is_lock'] == 1) {

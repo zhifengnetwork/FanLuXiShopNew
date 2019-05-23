@@ -411,7 +411,7 @@ class Pay
             }
             
             if($isReceive['status'] == 2){
-                if ($this->payList[0]['goods']->sign_free_receive == 2) {
+                if ($this->payList[0]['goods']->sign_free_receive == 2 ) {
                     // 免费领取
                     $this->orderAmount = $this->orderAmount - $this->payList[0]['goods']->shop_price * $this->totalNum; // 应付金额
                     $this->totalAmount = $this->totalAmount - $this->payList[0]['goods']->shop_price * $this->totalNum;
