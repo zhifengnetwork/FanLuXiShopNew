@@ -2301,15 +2301,27 @@ function provingReceive($user, $type, $num = 1)
 * $user 
 * $order 
 */
-function ReturnReceiveNumber($user, $order)
+function ReturnReceiveNumber($userId, $order)
 {
     if ($order['sign_price'] > 0 || $order['discount'] > 0) {
-        $signNum = M('order_sign_receive')->where(array('order_id'=>$order['order_id'],'uid'=>$user))->select();
+        $signNum = M('order_sign_receive')->where(array('order_id'=>$order['order_id'],'uid'=>$userId))->select();
+        $users = M('Users')->where(array('user_id'=>$userId))->find();
+
+
         foreach ($signNum as $key => $value) {
             if ($value['type'] == 1) {
-                M('Users')->where(array('user_id' => $user ))->setInc('sign_free_num',$value['goods_num']);
+
+                if ($users['level'] >= 2) {
+                    M('Users')->where(array('user_id' => $userId ))->setInc('sign_free_num',$value['goods_num']);
+                }
+                // 扫码用户修改成1（未领取面膜）
+                if ($users['is_code'] == 2 && $users['level'] <= 1){
+                    Db::name('users')->where('user_id', $userId)->update(['is_code'=>1]);
+                    M('order_sign_receive')->where(array('order_id'=>$order['order_id'],'uid'=>$userId))->delete();
+                }
+
             } elseif ($value['type'] == 2) {
-                M('Users')->where(array('user_id' => $user ))->setInc('distribut_free_num',$value['goods_num']);
+                M('Users')->where(array('user_id' => $userId ))->setInc('distribut_free_num',$value['goods_num']);
             }
         }
     }
