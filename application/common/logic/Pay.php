@@ -392,7 +392,7 @@ class Pay
 
         if ($this->payList[0]['goods']->sign_free_receive != 0 ) {
 
-            if ( $this->user['is_code'] == 1 && $this->payList[0]['goods']->sign_free_receive == 2) {
+            if ( $this->user['is_code'] == 1 && $this->payList[0]['goods']->sign_free_receive == 1) {
 
                 // 能否领取商品
                 $data = M('order_sign_receive')->where(['uid' => $this->user['user_id'], 'type' => 1])->select();
