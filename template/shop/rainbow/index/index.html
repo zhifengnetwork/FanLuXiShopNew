@@ -112,7 +112,18 @@
 				</li>
 			</ul>
 		</div>
-
+        <!-- 公告区域 -->
+        <div class="tututututu">
+			<div class="tubiao">
+			<img src="__STATIC__/images/home_zp/laba.png"/>
+			<span>公告</span>
+			</div>
+			<div class="tubiao1" style="position: relative;right:0rem;top:-1.5rem;height: .8rem;">
+			 <marquee>
+				<a href="{:U('Shop/Article/detail',array('article_id'=>$article['article_id']))}">{$article.title}</a>
+			 </marquee>
+		   </div>
+        </div>
 
 		<div class="floors">
 			<!-- 秒杀 -->
@@ -280,8 +291,8 @@
 		})
 
 		/**
-			* 继续加载猜您喜欢
-			* */
+		* 继续加载猜您喜欢
+		* */
 		var before_request = 1; // 上一次请求是否已经有返回来, 有才可以进行下一次请求
 		var page = 0;
 		function ajax_sourch_submit() {

@@ -335,4 +335,59 @@ body{
 .free-receive .dialog-content img{
     width: 1.26rem;
 }
+.tututututu{
+
+        position: relative;
+        overflow: hidden;
+        height: .8rem;
+
+
+}
+marquee{
+  
+  
+  position: absolute;
+  left: 1.3rem;
+  font-size: .28rem;
+  height: 1.5rem;
+  line-height: 2.49rem;
+  /* top: 0rem;
+  right: 2.8rem;
+  left: 2.8rem;
+  background: #f7f7f7;
+  /* color: white */
+  /* border: 1px solid green;  */
+  /* overflow: hidden; */
+
+}
+.tubiao{
+  background: #fda8bb;
+  height: .5rem;
+
+}
+.tubiao img{
+    width: .4rem;
+    height: .5rem;
+    margin-left: .1rem;
+    margin-top: 0rem
+}
+.tubiao1 a{
+    color: #000;
+}
+.tubiao span{
+     
+     display: inline-block;
+     height: 100%;
+     line-height: .6rem;
+     font-size: .28rem;
+     vertical-align: center; 
+     margin-top:-.01rem;
+     margin-left: -.07rem
+
+
+}
+
+
+
+
 
