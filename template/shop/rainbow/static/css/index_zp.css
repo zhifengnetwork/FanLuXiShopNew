@@ -348,6 +348,7 @@ marquee{
   
   position: absolute;
   left: 1.3rem;
+  right:0rem;
   font-size: .28rem;
   height: 1.5rem;
   line-height: 2.49rem;
@@ -362,14 +363,14 @@ marquee{
 }
 .tubiao{
   background: #fda8bb;
-  height: .5rem;
+  height: .62rem;
 
 }
 .tubiao img{
     width: .4rem;
     height: .5rem;
     margin-left: .1rem;
-    margin-top: 0rem
+    margin-top: .1rem
 }
 .tubiao1 a{
     color: #000;
@@ -378,7 +379,7 @@ marquee{
      
      display: inline-block;
      height: 100%;
-     line-height: .6rem;
+     line-height: .7rem;
      font-size: .28rem;
      vertical-align: center; 
      margin-top:-.01rem;
