@@ -362,6 +362,7 @@ marquee{
 
 }
 .tubiao{
+  position:relative;  
   background: #fda8bb;
   height: .52rem;
 
@@ -377,13 +378,15 @@ marquee{
 }
 .tubiao span{
      
+     position: absolute;
      display: inline-block;
-     height: 100%;
-     line-height: .7rem;
+     line-height: .9rem;
      font-size: .28rem;
      vertical-align: center; 
-     margin-top:-.105rem;
-     margin-left: -.07rem
+     left: .52rem;
+     top:50%;
+     transform: translate(0%,-50%);
+
 
 
 }
