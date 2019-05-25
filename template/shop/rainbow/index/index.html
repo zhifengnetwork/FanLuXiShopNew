@@ -150,13 +150,15 @@
 					<h3>发现好货</h3>
 				</div>
 				<div class="down">
-					<volist name="is_new" id="vo" length='2'>
+					<volist name="hot_goods" id="vo" key='k' length='2'>
 						<div class="item">
 							<a href="{:U('Shop/Goods/goodsInfo',array('id'=>$vo[goods_id],'item_id'=>$vo[item_id]))}">
 								<div class="picture">
 									<img src="{$vo[goods_id]|goods_thum_images=200,200}?v={:date('Ymd')}">
 								</div>
-								<p class="price">￥<span>{$vo[shop_price]}</span>元</p>
+								<!-- <p class="price">￥<span>{$vo[shop_price]}</span>元</p> -->
+								<p class="green{$k}">
+      							<if condition="$k eq 1">粉丝福利<else/>会员福利</if></p>
 							</a>
 						</div>
 					</volist>
