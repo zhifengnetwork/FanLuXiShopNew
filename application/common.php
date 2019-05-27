@@ -1375,11 +1375,12 @@ function update_pay_status($order_sn,$ext=array())
             $wechat->sendMsg($userinfo['openid'], 'text', $wx_content);
 
             //发给上级
-            $first_leader_openid = Db::name('users')->where(['user_id' => $userinfo['first_leader']])->value('openid');
+            //$first_leader_openid = Db::name('users')->where(['user_id' => $userinfo['first_leader']])->value('openid');
+            $first_leader_openid = Db::name('users')->field('openid,nickname,user_id')->where(['user_id' => $userinfo['first_leader']])->find();
             if($first_leader_openid){
-                $wx_first_leader_content = "你的下级订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n商品：{$text}\n金额：{$order['total_amount']}";
+                $wx_first_leader_content = "你的下级{$first_leader_openid['nickname']}[ID:{$first_leader_openid['user_id']}]订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n商品：{$text}\n金额：{$order['total_amount']}";
                 $wechat = new \app\common\logic\wechat\WechatUtil();
-                $wechat->sendMsg($first_leader_openid, 'text', $wx_first_leader_content);
+                $wechat->sendMsg($first_leader_openid['openid'], 'text', $wx_first_leader_content);
             }
 
         }
