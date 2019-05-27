@@ -118,14 +118,17 @@
                                     <p class="num">{$user.user_money}</p>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{:U('/shop/Goods/goodsList/id/1')}">
-                                <img src="__STATIC__/images/user_zp/商品.png" />
-                                <p>鱼子面膜</p>
-                                <p class="num">{$user.sign_free_num}</p>
-                                </a>
-                            </li>
-                            <if condition="$user.level gt 2">
+
+                            <if condition="$user.level neq 2">
+                                <li>
+                                    <a href="{:U('/shop/Goods/goodsList/id/1')}">
+                                    <img src="__STATIC__/images/user_zp/商品.png" />
+                                    <p>鱼子面膜</p>
+                                    <p class="num">{$user.sign_free_num}</p>
+                                    </a>
+                                </li>
+                            </if>
+                            <if condition="$user.level gt 1">
                                 <li>
                                 	<a href="{:U('/shop/Goods/goodsList/id/9')}">
                                     <img src="__STATIC__/images/user_zp/商品.png" />
