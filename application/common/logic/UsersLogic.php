@@ -1703,5 +1703,12 @@ class UsersLogic extends Model
         return $arr;
 	}
 	
+	/**
+	 * 获取某个ID下面的团队总人数
+	 */
+	public function get_team_num($user_id){
+		$arr = [];
+		return count($this->getUserLevBotAll($user_id,$arr));
+	}
 
 }

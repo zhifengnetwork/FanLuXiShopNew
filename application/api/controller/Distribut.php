@@ -5,6 +5,7 @@
 namespace app\api\controller;
 use app\common\model\Users;
 use app\common\logic\LevelLogic;
+use app\common\logic\UsersLogic;
 
 use think\Db;
 use think\Controller;
@@ -94,54 +95,19 @@ class Distribut extends Controller
         return $total + $mun;
     }
 
-
-
-
     /**
      * 通过 user_id  查  所有
      */
     public function get_team_num(){
         ini_set('max_execution_time', '0');
-
         $user_id = I('user_id');
-        $all = M('users')->field('user_id,first_leader')->select();
-
-        $values = [];
-        foreach ($all as $item) {
-            $values[$item['first_leader']][] = $item;
+        if(!$user_id){
+            echo 0;
+            exit;
         }
-        //foreach ($all as $k => $v) {
-            $coumun = $this->membercount($user_id, $values);
-            
-            //M('users')->where(['user_id'=>$v['user_id']])->update(['underling_number'=>$coumun]);
-            //$coumun += $coumun;
-       // }
-        
-       M('users')->where(['user_id'=>$user_id])->update(['underling_number'=>$coumun]);
-        
-       echo $coumun;
-       
-    }
-
-
-    public function membercount($id, $data)
-    {
-        $count = 0;
-        $num = count($data[$id]);
-        if (empty($data[$id])) {
-            return $num;
-        } else {
-            $mun = 0;
-            foreach ($data[$id] as $key => $value) {
-                if (empty($data[$value['user_id']])) {
-                    continue;
-                } else {
-                    $mun += intval($this->membercount($value['user_id'], $data));
-                }
-            }
-            $num += $count;
-        }
-        return $num + $mun;
+        $logic = new UsersLogic();
+        $num = $logic->get_team_num($user_id);
+        echo $num;
     }
 
 }
