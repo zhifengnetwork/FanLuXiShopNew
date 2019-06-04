@@ -553,6 +553,7 @@ class User extends Base
 			$con_name = I('con_name');
 			$rebate_id = I('rebate');
 			$rebate = I('rebate');
+			$rate = I('rate');
 			$reward_id = I('reward_id');
 			$reward = I('reward');
 			$get_num = I('get_num');
@@ -587,6 +588,7 @@ class User extends Base
 				'type'=>$type,
 				'con_name'=>$con_name,
 				'rebate'=>$rebate_id,
+				'rate'=>$rate,
 				//'rebate'=>$rebate,
 				'reward_id'=>$reward_id,
 				'reward'=>$reward,
