@@ -33,10 +33,17 @@ class OrderLogic
 			return array('status'=>-1,'msg'=>'订单不存在','result'=>'');
 		if($order['order_status'] == 3){
 			return array('status'=>-1,'msg'=>'该订单已取消','result'=>'');
-		}
+        }
+        
 		//检查是否未支付的订单
-		if($order['pay_status'] > 0 || $order['order_status'] > 0)
-			return array('status'=>-1,'msg'=>'支付状态或订单状态不允许','result'=>'');
+        if ($order['pay_status'] > 0 || $order['order_status'] > 0) {
+            return array('status'=>-1,'msg'=>'支付状态或订单状态不允许','result'=>'');
+        }
+        if ($order['pay_status'] == 1) {
+            return array('status'=>-1,'msg'=>'请联系客服取消','result'=>'');
+        }
+
+        
 		//获取记录表信息
 		//$log = M('account_log')->where(array('order_id'=>$order_id))->find();
 		if($order['prom_type'] == 6){
