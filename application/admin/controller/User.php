@@ -1011,6 +1011,10 @@ class User extends Base
                     exit;
                 }
                 if ($r !== false) { 
+
+                    //操作成功
+                    $this->chenggong($falg);
+
                     $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
                 } else {
                     $this->ajaxReturn(array('status' => 0, 'msg' => "操作失败"), 'JSON');
@@ -1019,6 +1023,10 @@ class User extends Base
                 //修改流程后的提现流程
                 $r = Db::name('withdrawals')->whereIn('id', $ids)->update($data);
                 if ($r !== false) { 
+                    
+                    //操作成功
+                    $this->chenggong($falg);
+
                     $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
                 } else {
                     $this->ajaxReturn(array('status' => 0, 'msg' => "操作失败"), 'JSON');
@@ -1039,6 +1047,54 @@ class User extends Base
                 $this->ajaxReturn(array('status' => 0, 'msg' => "操作失败"), 'JSON');
             }
         }   
+    }
+
+
+    /**
+     * 成功
+     */
+    private function chenggong($falg){
+        $user_find = M('users')->where(['user_id'=>$falg['user_id']])->find();
+
+        //操作成功
+        //微信
+        $result = $this->withdrawals_weixin($falg['id']);
+        if(isset($result['status'])){
+            // 发送公众号消息给用户
+            $wechat = new \app\common\logic\wechat\WechatUtil();
+            $wechat->sendMsg($user_find['openid'], 'text', '您提交的提现申请操作失败！');
+            $this->ajaxReturn(array('status' => 0, 'msg' => $result['msg']), 'JSON');
+            exit;
+        }else{
+            $result['payment_time'] = strtotime($result['payment_time']);
+            $result['money'] = $falg['money'];
+            $result['user_id'] = $falg['user_id'];
+            M('withdrawals_weixin')->insert($result);
+        } 
+    }
+
+
+    //用户微信提现
+    private function withdrawals_weixin($id){
+        $falg = M('withdrawals')->where(['id'=>$id])->find();
+        $openid = M('users')->where('user_id', $falg['user_id'])->value('openid');
+        $data['openid'] = $openid;
+        $data['pay_code'] = $falg['id'].$falg['user_id'];
+        $data['desc'] = '提现ID'.$falg['id'];
+        if($falg['taxfee'] >= $falg['money']){
+            return array('status'=>1, 'msg'=>"提现额度必须大于手续费！" );
+        }else{
+            $data['money'] = bcsub($falg['money'], $falg['taxfee'], 2);
+        }
+        include_once PLUGIN_PATH . "payment/weixin/weixin.class.php";
+        $weixin_obj = new \weixin();
+        $result = $weixin_obj->transfer($data);
+        // if($result){
+        //     $result['payment_time'] = strtotime($result['payment_time']);
+        //     $result['money'] = $falg['money'];
+        //     $result['user_id'] = $falg['user_id'];
+        // }
+        return $result;
     }
 
 
