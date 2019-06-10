@@ -192,8 +192,13 @@ EOF;
     	$sign .= '&key='.WxPayConfig::$key;
         $webdata['sign']=strtoupper(md5($sign));
         
+        dump($webdata);
+        dump($wxchat);
+
+
         $wget = $this->array2xml($webdata);
-       
+        dump($wget);
+        
         $pay_url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers';
 
         $res = $this->http_post($pay_url, $wget, $wxchat);
@@ -273,7 +278,11 @@ EOF;
     	}
     	$sContent = curl_exec($oCurl);
     	$aStatus = curl_getinfo($oCurl);
-    	curl_close($oCurl);
+        curl_close($oCurl);
+        
+        dump($sContent);
+        dump($aStatus);
+
     	if (intval($aStatus["http_code"]) == 200) {
     		return $sContent;
     	} else {
