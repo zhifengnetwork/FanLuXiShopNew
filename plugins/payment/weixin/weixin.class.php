@@ -190,8 +190,14 @@ EOF;
     	sort($tarr);
     	$sign = implode($tarr, '&');
     	$sign .= '&key='.WxPayConfig::$key;
-    	$webdata['sign']=strtoupper(md5($sign));
-    	$wget = $this->array2xml($webdata);
+        $webdata['sign']=strtoupper(md5($sign));
+        
+        dump($webdata);
+        dump($wxchat);
+
+
+        $wget = $this->array2xml($webdata);
+        dump($wget);
         $pay_url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers';
 
         $res = $this->http_post($pay_url, $wget, $wxchat);
