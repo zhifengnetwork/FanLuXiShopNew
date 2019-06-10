@@ -166,8 +166,9 @@ EOF;
     	$wxchat['appid'] = WxPayConfig::$appid;
     	$wxchat['mchid'] = WxPayConfig::$mchid;
 
-    	$wxchat['api_cert'] = '/plugins/payment/weixin/cert/apiclient_cert.pem';
-    	$wxchat['api_key'] = '/plugins/payment/weixin/cert/apiclient_key.pem';
+    	$wxchat['api_cert'] = PLUGIN_PATH.'/payment/weixin/cert/apiclient_cert.pem';
+        $wxchat['api_key'] = PLUGIN_PATH.'/payment/weixin/cert/apiclient_key.pem';
+        
         // $wxchat['api_ca'] = '/plugins/payment/weixin/cert/rootca.pem';
     	$webdata = array(
     			'mch_appid' => $wxchat['appid'],
