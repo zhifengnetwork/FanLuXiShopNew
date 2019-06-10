@@ -1065,9 +1065,12 @@ class User extends Base
         //操作成功
         //微信
         $result = $this->withdrawals_weixin($falg['id']);
+
+        $wechat = new \app\common\logic\wechat\WechatUtil();
+
         if(isset($result['status'])){
+            
             // 发送公众号消息给用户
-            $wechat = new \app\common\logic\wechat\WechatUtil();
             $wechat->sendMsg($user_find['openid'], 'text', '您提交的提现申请操作失败！');
             $this->ajaxReturn(array('status' => 0, 'msg' => $result['msg']), 'JSON');
             exit;
@@ -1076,6 +1079,10 @@ class User extends Base
             $result['money'] = $falg['money'];
             $result['user_id'] = $falg['user_id'];
             M('withdrawals_weixin')->insert($result);
+
+            // 发送公众号消息给用户
+            $wechat->sendMsg($user_find['openid'], 'text', '提现申请（微信）已通过！请查收！');
+            
         } 
     }
 
