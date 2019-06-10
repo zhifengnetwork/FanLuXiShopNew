@@ -1003,6 +1003,11 @@ class User extends Base
                 $user_arr = array(
                     'user_money' => $user_find['user_money'] - $falg['money']
                 );
+
+                if($falg['bank_name'] == '微信'){  
+                    $this->chenggong($falg);
+                }
+
                 $result = Db::name('users')->whereIn('user_id', $falg['user_id'])->update($user_arr);
                 if($result){
                     $r = Db::name('withdrawals')->whereIn('id', $ids)->update($data);
@@ -1012,21 +1017,22 @@ class User extends Base
                 }
                 if ($r !== false) { 
 
-                    //操作成功
-                    $this->chenggong($falg);
-
                     $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
                 } else {
                     $this->ajaxReturn(array('status' => 0, 'msg' => "操作失败"), 'JSON');
                 }
+
             }else{
+
+                if($falg['bank_name'] == '微信'){  
+                    $this->chenggong($falg);
+                }
+
+
                 //修改流程后的提现流程
                 $r = Db::name('withdrawals')->whereIn('id', $ids)->update($data);
                 if ($r !== false) { 
-                    
-                    //操作成功
-                    $this->chenggong($falg);
-
+        
                     $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
                 } else {
                     $this->ajaxReturn(array('status' => 0, 'msg' => "操作失败"), 'JSON');
