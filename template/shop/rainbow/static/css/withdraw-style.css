@@ -9508,7 +9508,8 @@ p.nike-price .throughli {
 }
 /*移动端layer弹出层样式*/
 div.layui-m-layercont {
-	font-size:.853333rem;
+	font-size: .853333rem;
+    line-height: 1.5rem;
 }
 div.layui-m-layerbtn span {
 	font-size:.59733rem;
