@@ -1548,8 +1548,16 @@ class User extends MobileBase
             if($cash_open!=1){
                 $this->ajaxReturn(['status'=>0, 'msg'=>'提现功能已关闭,请联系商家']);
             }
-
+            
             $data = I('post.');
+
+            //关闭支付宝
+            if($data['bank_name'] == '支付宝'){
+                $this->ajaxReturn(['status'=>0, 'msg'=>'请选择微信提现，支付宝暂时关闭']);
+            }
+            //关闭支付宝
+            
+
             $data['user_id'] = $this->user_id;
             $data['create_time'] = time();
             $cash = tpCache('cash');
