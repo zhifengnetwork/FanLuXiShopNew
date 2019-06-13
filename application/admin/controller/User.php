@@ -966,7 +966,7 @@ class User extends Base
         $data['remark'] = I('remark');
         $ids = implode(',', $id_arr);
 
-        $falg = M('withdrawals')->where(['id'=>$ids])->select();
+        $falg = M('withdrawals')->whereIn('id',$ids)->select();
 
         if($falg){
             foreach($falg as $k => $v){
