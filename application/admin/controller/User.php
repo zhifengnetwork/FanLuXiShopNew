@@ -1087,7 +1087,7 @@ class User extends Base
             $this->ajaxReturn(array('status' => 0, 'msg' => "ID不能为空"), 'JSON');
         }
         $falg = M('withdrawals')->where(['id'=>$id])->find();
-        if($res['bank_name'] != '微信'){
+        if($falg['bank_name'] != '微信'){
             $this->ajaxReturn(array('status' => 0, 'msg' => "不是微信提现"), 'JSON');
         }
 
