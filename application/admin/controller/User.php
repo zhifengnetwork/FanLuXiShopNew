@@ -974,6 +974,9 @@ class User extends Base
             }
         }
        
+        //提示在这里
+        $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
+
     }
 
     /**
@@ -1009,7 +1012,8 @@ class User extends Base
                 }
                 if ($r !== false) { 
 
-                    $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
+                    // $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
+
                 } else {
                     $this->ajaxReturn(array('status' => 0, 'msg' => "操作失败"), 'JSON');
                 }
@@ -1024,7 +1028,8 @@ class User extends Base
                 $r = Db::name('withdrawals')->where(['id' => $falg['id']])->update($data);
                 if ($r !== false) { 
         
-                    $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
+                    // $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
+
                 } else {
                     $this->ajaxReturn(array('status' => 0, 'msg' => "操作失败"), 'JSON');
                 }
@@ -1040,7 +1045,7 @@ class User extends Base
 
             $r = Db::name('withdrawals')->where(['id'=>$falg['id']])->update($data);
             if ($r !== false) { 
-                $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
+                // $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
             } else {
                 $this->ajaxReturn(array('status' => 0, 'msg' => "操作失败"), 'JSON');
             }
