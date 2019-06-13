@@ -1,6 +1,25 @@
 <?php
 
+/**
+ * 查询
+ */
+function get_withdrawals_weixin($id){
+	$res = M('withdrawals')->where(['id'=>$id])->find();
+	if($res['status'] == 0){
+		return '';
+	}
+	if($res['bank_name'] != '微信'){
+		return '';
+	}
 
+	$partner_trade_no = M('withdrawals_weixin')->where(['partner_trade_no'=>$id.$res['user_id']])->find();
+	if(!$partner_trade_no){
+		return "<span onclick='bufa(".$id.")'><font color='red'>到账失败</font><span>";
+	}else{
+		return "<font color='green'>".$partner_trade_no['result_code']."</font>";
+	}
+
+}
 
 /**
  * 获取昵称

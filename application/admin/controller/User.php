@@ -960,36 +960,28 @@ class User extends Base
      */
     public function withdrawals_update()
     {
-        // $id_arr = I('id/a');
-        // $data['status'] = $status = I('status');
-        // $data['remark'] = I('remark');
-        // if ($status == 1) $data['check_time'] = time();
-        // if ($status != 1) $data['refuse_time'] = time();
-        // $ids = implode(',', $id_arr);
-        // $falg = M('withdrawals')->where(['id'=>$ids])->find();
-        // $user_find = M('users')->where(['user_id'=>$falg['user_id']])->find();
-        // if($user_find['user_money'] < $falg['money'])
-        // {
-        //     $this->ajaxReturn(array('status' => 0, 'msg' => "当前用户余额不足"), 'JSON');
-        // }
-        // $user_arr = array(
-        //     'user_money' => $user_find['user_money'] - $falg['money']
-        // );
-        // $r = Db::name('withdrawals')->whereIn('id', $ids)->update($data);
-        // if ($r !== false) {
-        //     Db::name('users')->whereIn('user_id', $falg['user_id'])->update($user_arr);
-        //     $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
-        // } else {
-        //     $this->ajaxReturn(array('status' => 0, 'msg' => "操作失败"), 'JSON');
-        // }
-
+    
         $id_arr = I('id/a');
         $data['status'] = $status = I('status');
         $data['remark'] = I('remark');
         $ids = implode(',', $id_arr);
-        $falg = M('withdrawals')->where(['id'=>$ids])->find();
 
-        if ($status == 1){
+        $falg = M('withdrawals')->where(['id'=>$ids])->select();
+
+        if($falg){
+            foreach($falg as $k => $v){
+                $this->handle($v,$data);
+            }
+        }
+       
+    }
+
+    /**
+     * 处理
+     */
+    private function handle($falg,$data){
+
+        if ($data['status'] == 1){
             $data['check_time']  = time();
 
             if($falg['id'] <= 217){
@@ -1028,9 +1020,8 @@ class User extends Base
                     $this->chenggong($falg);
                 }
 
-
                 //修改流程后的提现流程
-                $r = Db::name('withdrawals')->whereIn('id', $ids)->update($data);
+                $r = Db::name('withdrawals')->where(['id' => $falg['id']])->update($data);
                 if ($r !== false) { 
         
                     $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
@@ -1046,13 +1037,14 @@ class User extends Base
                 //审核未通过退还金额
                 accountLog($falg['user_id'], $falg['money'] , 0, '提现未通过退款',  0, 0, '');
             }
-            $r = Db::name('withdrawals')->whereIn('id', $ids)->update($data);
+
+            $r = Db::name('withdrawals')->where(['id'=>$falg['id']])->update($data);
             if ($r !== false) { 
                 $this->ajaxReturn(array('status' => 1, 'msg' => "操作成功"), 'JSON');
             } else {
                 $this->ajaxReturn(array('status' => 0, 'msg' => "操作失败"), 'JSON');
             }
-        }   
+        }  
     }
 
 
@@ -1086,6 +1078,26 @@ class User extends Base
         } 
     }
 
+    /**
+     * 补充微信提现
+     */
+    public function withdrawals_weixin_bufa(){
+        $id = I('id');
+        if(!$id){
+            $this->ajaxReturn(array('status' => 0, 'msg' => "ID不能为空"), 'JSON');
+        }
+        $falg = M('withdrawals')->where(['id'=>$id])->find();
+        if($res['bank_name'] != '微信'){
+            $this->ajaxReturn(array('status' => 0, 'msg' => "不是微信提现"), 'JSON');
+        }
+
+        $partner_trade_no = M('withdrawals_weixin')->where(['partner_trade_no'=>$id.$falg['user_id']])->find();
+        if($partner_trade_no){
+            $this->ajaxReturn(array('status' => 1, 'msg' => "操作已成功"), 'JSON');
+        }
+        //补发
+        $this->chenggong($falg);
+    }
 
     //用户微信提现
     private function withdrawals_weixin($id){

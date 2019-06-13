@@ -104,7 +104,7 @@
                             <div style="text-align: center; width: 100px;" class="">账户开户名</div>
                         </th>
                         <th align="center" abbr="article_time" axis="col6" class="">
-                            <div style="text-align: center; width: 100px;" class="">状态</div>
+                            <div style="text-align: center; width: 150px;" class="">状态</div>
                         </th>
                         <th align="center" axis="col1" class="handle">
                             <div style="text-align: center; width: 250px;">操作</div>
@@ -199,7 +199,7 @@
                                 <div style="text-align: center; width: 100px;">{$v.realname}</div>
                             </td>
                             <td align="center" class="">
-                                <div style="text-align: center; width: 100px;">{$withdraw_status[$v[status]]}</div>
+                                <div style="text-align: center; width: 150px;">{$withdraw_status[$v[status]]}{$v.id|get_withdrawals_weixin}</div>
                             </td>
                             <td align="left" class="handle">
                                 <div style="text-align: center; width: 170px; max-width:250px;">
@@ -308,6 +308,32 @@
             url: "/index.php?m=Admin&c=User&a=withdrawals_update",//+tab,
             
             data: {id:chks,status:wst,remark:remark},
+            dataType: 'json',
+            success: function (data) {
+                if(data.status == 1){
+                    layer.alert(data.msg, {icon: 1, closeBtn: 0}, function(){
+                        window.location.reload();
+                    });
+                }else{
+                    layer.alert(data.msg, {icon: 2,time: 3000});
+                }
+            },
+            error:function(){
+                layer.alert('网络异常', {icon: 2,time: 3000});
+            }
+        });
+    }
+
+    /**
+    *  补发
+    */
+    function bufa(id){
+        $.ajax({
+            type: "POST",
+            url: "/index.php?m=Admin&c=User&a=withdrawals_weixin_bufa",//补发
+            
+            data: {id:id},
+
             dataType: 'json',
             success: function (data) {
                 if(data.status == 1){
