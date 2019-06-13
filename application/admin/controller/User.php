@@ -1097,6 +1097,8 @@ class User extends Base
         }
         //补发
         $this->chenggong($falg);
+
+        $this->ajaxReturn(array('status' => 1, 'msg' => "已成功补发"), 'JSON');
     }
 
     //用户微信提现
