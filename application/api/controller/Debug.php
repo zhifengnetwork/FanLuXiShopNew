@@ -22,14 +22,21 @@ class Debug extends Controller
             echo "提现记录不存在";
             exit;
         }
+
+
         dump($res);
 
         if($res['status'] != -1){
             echo "不能更改";
             exit;
         }
-        
-        echo "<a href='/api/debug/change?id=$id'>转成未审核</a>";
+
+        if($res['remark'] == ' ' || $res['remark'] == ''){
+            echo "<a href='/api/debug/change?id=$id'>转成未审核</a>";
+        }else{
+            echo "这个已经处理了，备注是：".$res['remark'];
+        }
+
     }
 
     public function change(){
@@ -50,10 +57,14 @@ class Debug extends Controller
             exit;
         }
 
-        M('withdrawals')->where(['id'=>$id])->update(['status'=>0]);
 
-        
-        $this->redirect('tixian');
+        if($res['remark'] == ' ' || $res['remark'] == ''){
+            echo "<a href='/api/debug/change?id=$id'>转成未审核</a>";
+        }else{
+            M('withdrawals')->where(['id'=>$id])->update(['status'=>0]);
+            $this->redirect('tixian');
+        }
+
 
     }
 
