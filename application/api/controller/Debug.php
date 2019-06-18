@@ -59,10 +59,11 @@ class Debug extends Controller
 
 
         if($res['remark'] == ' ' || $res['remark'] == ''){
-            echo "<a href='/api/debug/change?id=$id'>转成未审核</a>";
-        }else{
+           
             M('withdrawals')->where(['id'=>$id])->update(['status'=>0]);
             $this->redirect('tixian');
+        }else{
+            echo "这个已经处理了，备注是：".$res['remark'];
         }
 
 
