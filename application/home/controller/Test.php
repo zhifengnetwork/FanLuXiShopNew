@@ -13,10 +13,13 @@ class Test extends Controller{
 
     //更换 user_id
     public function index(){
-        exit();
-        
-        $old_user_id = '16239111';
-        $new_user_id = '17953394';
+        exit;
+
+        $old_user_id = '15081494';
+        $new_user_id = '17952187';
+
+        // 要  老的 ，删掉  新的
+
 
         $old_user = M('users')->where(['user_id'=>$old_user_id])->field('user_id,nickname,openid,old_openid,level,user_money,head_pic')->find();
         echo '老用户';
@@ -77,10 +80,8 @@ class Test extends Controller{
 
 
         $first_leader = M('users')->where(['first_leader'=>$first_leader])->select();
-
-        // dump($first_leader);
-
-        //$this->update($old_user_id,$new_user_id);
+        dump($first_leader);
+        $this->update($old_user_id,$new_user_id);
     }
 
 
@@ -99,15 +100,18 @@ class Test extends Controller{
 
         //删掉原来的user
         $res = M('users')->where(['user_id'=>$old_user_id])->delete();
-        if ($res) {
+        //if ($res) {
             //把原来的id  给  新的
             M('users')->where(['openid'=>$new_user['openid']])->update(['user_id'=>$old_user_id]);
 
             M('order')->where(['user_id'=>$new_user_id])->update(['user_id'=>$old_user_id]);
+        //}
+
+        //改 oauth_users
+        if($new_user['openid']){
+            M('oauth_users')->where(['openid'=>$new_user['openid']])->update(['user_id'=>$old_user_id]);
         }
 
-
-        
     }
 
 
