@@ -1,18 +1,31 @@
 <?php
 
-
 namespace app\common\logic;
 
 use app\common\model\Coupon;
-use think\Model;
 use think\Db;
+use think\Model;
 
 /**
  * 活动逻辑类
  */
 class ActivityLogic extends Model
 {
-    
+
+    /**
+     * 获得免费领取资格
+     */
+    public function add_activity_free($order_id,$user_id,$goods_id){
+        $data = array(
+            'user_id'=>$user_id,
+            'free' => 1,
+            'time' => date('Y-m-d H:i:s'),
+            'order_id' => $order_id,
+            'goods_id' => $goods_id
+        );
+        M('activity_free')->add($data);
+    }
+
     /**
      * 团购总数
      * @param type $sort_type
@@ -22,17 +35,17 @@ class ActivityLogic extends Model
     public function getGroupBuyCount()
     {
         $group_by_where = array(
-            'start_time'=>array('lt',time()),
-            'end_time'=>array('gt',time()),
+            'start_time' => array('lt', time()),
+            'end_time' => array('gt', time()),
         );
         $count = M('group_buy')->alias('b')
-                ->field('b.goods_id,b.rebate,b.virtual_num,b.buy_num,b.title,b.goods_price,b.end_time,b.price,b.order_num,g.comment_count')
-                ->join('__GOODS__ g', 'b.goods_id=g.goods_id AND g.prom_type=2 AND g.is_on_sale=1')
-                ->where($group_by_where)
-                ->count();
+            ->field('b.goods_id,b.rebate,b.virtual_num,b.buy_num,b.title,b.goods_price,b.end_time,b.price,b.order_num,g.comment_count')
+            ->join('__GOODS__ g', 'b.goods_id=g.goods_id AND g.prom_type=2 AND g.is_on_sale=1')
+            ->where($group_by_where)
+            ->count();
         return $count;
     }
-    
+
     /**
      * 团购列表
      * @param type $sort_type
@@ -48,19 +61,19 @@ class ActivityLogic extends Model
         } else {
             $type = '';
         }
-        
+
         $group_by_where = array(
-            'start_time'=>array('lt',time()),
-            'end_time'=>array('gt',time()),
-            'is_end' => 0
+            'start_time' => array('lt', time()),
+            'end_time' => array('gt', time()),
+            'is_end' => 0,
         );
         $list = M('group_buy')->alias('b')
-                ->field('b.goods_id,b.item_id,b.rebate,b.virtual_num,b.buy_num,b.title,b.goods_price,b.end_time,b.price,b.order_num,g.comment_count')
-                ->join('__GOODS__ g', 'b.goods_id=g.goods_id AND g.prom_type=2 AND g.is_on_sale=1')
-                ->where($group_by_where)->page($page_index, $page_size)
-                ->order($type, 'desc')
-                ->select(); // 找出这个商品
-        
+            ->field('b.goods_id,b.item_id,b.rebate,b.virtual_num,b.buy_num,b.title,b.goods_price,b.end_time,b.price,b.order_num,g.comment_count')
+            ->join('__GOODS__ g', 'b.goods_id=g.goods_id AND g.prom_type=2 AND g.is_on_sale=1')
+            ->where($group_by_where)->page($page_index, $page_size)
+            ->order($type, 'desc')
+            ->select(); // 找出这个商品
+
         $groups = array();
         $server_time = time();
         foreach ($list as $v) {
@@ -80,17 +93,14 @@ class ActivityLogic extends Model
     public function getSalesList($sort_type = 0, $page_index = 1, $page_size = 4)
     {
 
-
         $map = array(
-            'start_time'=>array('lt',time()),
-            'end_time'=>array('gt',time()),
+            'start_time' => array('lt', time()),
+            'end_time' => array('gt', time()),
             'is_end' => 0,
-            'type'=>$sort_type
+            'type' => $sort_type,
         );
 
-
-
-        $list = D('prom_goods')->with('prom_goods_item')->where($map)->field('id,type,expression,end_time')->page($page_index , $page_size)->order('id desc')->select();
+        $list = D('prom_goods')->with('prom_goods_item')->where($map)->field('id,type,expression,end_time')->page($page_index, $page_size)->order('id desc')->select();
         $list && collection($list)->append(['prom_detail'])->toArray();
         return $list;
     }
@@ -105,7 +115,7 @@ class ActivityLogic extends Model
     public function getCouponList($atype, $user_id, $p = 1)
     {
         $time = time();
-        $where = array('type' => 2,'status'=>1,'send_start_time'=>['elt',time()],'send_end_time'=>['egt',time()]);
+        $where = array('type' => 2, 'status' => 1, 'send_start_time' => ['elt', time()], 'send_end_time' => ['egt', time()]);
         $order = array('id' => 'desc');
         if ($atype == 2) {
             //即将过期
@@ -119,12 +129,12 @@ class ActivityLogic extends Model
             ->where($where)->page($p, 15)->order($order)->select();
         if (is_array($coupon_list) && count($coupon_list) > 0) {
             if ($user_id) {
-                $user_coupon = M('coupon_list')->where(['uid' => $user_id, 'type' => 2])->getField('cid',true);
+                $user_coupon = M('coupon_list')->where(['uid' => $user_id, 'type' => 2])->getField('cid', true);
             }
             if (!empty($user_coupon)) {
                 foreach ($coupon_list as $k => $val) {
                     $coupon_list[$k]['isget'] = 0;
-                    if (in_array($val['id'],$user_coupon)) {
+                    if (in_array($val['id'], $user_coupon)) {
                         $coupon_list[$k]['isget'] = 1;
                         unset($coupon_list[$k]);
                         continue;
@@ -135,7 +145,7 @@ class ActivityLogic extends Model
         }
         return $coupon_list;
     }
-    
+
     /**
      * 获取优惠券查询对象
      * @param int $queryType 0:count 1:select
@@ -145,7 +155,7 @@ class ActivityLogic extends Model
      * @param int $order_money
      * @return Query
      */
-    public function getCouponQuery($queryType, $user_id, $type = 0, $orderBy = null , $order_money = 0)
+    public function getCouponQuery($queryType, $user_id, $type = 0, $orderBy = null, $order_money = 0)
     {
         $where['l.uid'] = $user_id;
         $where['c.status'] = 1;
@@ -171,21 +181,21 @@ class ActivityLogic extends Model
             $order['c.use_end_time'] = 'asc';
         } elseif ($orderBy == 'send_time') {
             //最近到账，$type = 0 AND $orderBy = 'send_time'
-            $where['l.send_time'] = array('lt',time());
+            $where['l.send_time'] = array('lt', time());
             $order['l.send_time'] = 'desc';
         } elseif (empty($orderBy)) {
             $order = array('l.send_time' => 'DESC', 'l.use_time');
         }
-        $condition = floatval($order_money) ? ' AND c.condition <= '.$order_money : '';
+        $condition = floatval($order_money) ? ' AND c.condition <= ' . $order_money : '';
         $query = M('coupon_list')->alias('l')
-            ->join('__COUPON__ c','l.cid = c.id'.$condition)
+            ->join('__COUPON__ c', 'l.cid = c.id' . $condition)
             ->where($where);
-        
+
         if ($queryType != 0) {
             $query = $query->field('l.*,c.name,c.money,c.use_start_time,c.use_end_time,c.condition,c.use_type')
-                    ->order($order);
+                ->order($order);
         }
-        
+
         return $query;
     }
 
@@ -197,9 +207,9 @@ class ActivityLogic extends Model
      * @param int $order_money
      * @return mixed
      */
-    public function getUserCouponNum($user_id, $type = 0, $orderBy = null,$order_money = 0)
+    public function getUserCouponNum($user_id, $type = 0, $orderBy = null, $order_money = 0)
     {
-        $query = $this->getCouponQuery(0, $user_id, $type, $orderBy,$order_money);
+        $query = $this->getCouponQuery(0, $user_id, $type, $orderBy, $order_money);
         return $query->count();
     }
 
@@ -213,12 +223,12 @@ class ActivityLogic extends Model
      * @param int $order_money
      * @return mixed
      */
-    public function getUserCouponList($firstRow, $listRows, $user_id, $type = 0, $orderBy = null,$order_money = 0)
+    public function getUserCouponList($firstRow, $listRows, $user_id, $type = 0, $orderBy = null, $order_money = 0)
     {
-        $query = $this->getCouponQuery(1, $user_id, $type, $orderBy,$order_money);
+        $query = $this->getCouponQuery(1, $user_id, $type, $orderBy, $order_money);
         return $query->limit($firstRow, $listRows)->select();
     }
-    
+
     /**
      * 领券中心
      * @param type $cat_id 领券类型id
@@ -227,25 +237,25 @@ class ActivityLogic extends Model
      * @param type $goods_id 指定商品id
      * @return type
      */
-    public function getCouponCenterList($cat_id, $user_id, $p = 1,$goods_id=0)
+    public function getCouponCenterList($cat_id, $user_id, $p = 1, $goods_id = 0)
     {
         /* 获取优惠券列表 */
         $cur_time = time();
-        $coupon_where = ['type'=>2, 'status'=>1, 'send_start_time'=>['elt',time()], 'send_end_time'=>['egt',time()]];
+        $coupon_where = ['type' => 2, 'status' => 1, 'send_start_time' => ['elt', time()], 'send_end_time' => ['egt', time()]];
         $query = db('coupon')->alias('c')
-            ->field('gc.goods_id,gc.goods_category_id,c.use_type,c.name,c.id,c.money,c.condition,c.createnum,c.use_start_time,c.use_end_time,c.send_num,c.send_end_time-'.$cur_time.' as spacing_time')
-            ->where('((createnum-send_num>0 AND createnum>0) OR (createnum=0))')    //领完的也不要显示了
+            ->field('gc.goods_id,gc.goods_category_id,c.use_type,c.name,c.id,c.money,c.condition,c.createnum,c.use_start_time,c.use_end_time,c.send_num,c.send_end_time-' . $cur_time . ' as spacing_time')
+            ->where('((createnum-send_num>0 AND createnum>0) OR (createnum=0))') //领完的也不要显示了
             ->where($coupon_where)->page($p, 15)
             ->order('condition', 'desc');
 //        if ($cat_id > 0) {
-//            $query = $query->join('__GOODS_COUPON__ gc', 'gc.coupon_id=c.id AND gc.goods_category_id='.$cat_id);
-//        }
-        $query = $query->join('__GOODS_COUPON__ gc', 'gc.coupon_id=c.id ','left');
+        //            $query = $query->join('__GOODS_COUPON__ gc', 'gc.coupon_id=c.id AND gc.goods_category_id='.$cat_id);
+        //        }
+        $query = $query->join('__GOODS_COUPON__ gc', 'gc.coupon_id=c.id ', 'left');
         $coupon_list = $query->select();
         if (!(is_array($coupon_list) && count($coupon_list) > 0)) {
             return [];
         }
-        
+
         $user_coupon = [];
         if ($user_id) {
             $user_coupon = M('coupon_list')->where(['uid' => $user_id, 'type' => 2])->column('cid');
@@ -272,26 +282,26 @@ class ActivityLogic extends Model
 
             /* 构造封面和标题 */
             $coupon_list[$k]['image'] = $store_logo;
-            $coupon_list[$k]['use_end_time'] = date('Y-m-d',$coupon['use_end_time']);
-            $coupon_list[$k]['use_start_time'] = date('Y-m-d',$coupon['use_start_time']);
-            switch ($coupon['use_type']){
+            $coupon_list[$k]['use_end_time'] = date('Y-m-d', $coupon['use_end_time']);
+            $coupon_list[$k]['use_start_time'] = date('Y-m-d', $coupon['use_start_time']);
+            switch ($coupon['use_type']) {
                 case 1;
-                    if($goods_id > 0 && $goods_id != $coupon['goods_id']){
+                    if ($goods_id > 0 && $goods_id != $coupon['goods_id']) {
                         unset($coupon_list[$k]);
                     }
                     break;
                 case 2;
-                    if($cat_id > 0 && $cat_id != $coupon['goods_category_id']){
+                    if ($cat_id > 0 && $cat_id != $coupon['goods_category_id']) {
                         unset($coupon_list[$k]);
                     }
                     break;
 
             }
         }
-        
-        return  $coupon_list;
+
+        return $coupon_list;
     }
-    
+
     /**
      * 优惠券类型列表
      * @param type $p 第几页
@@ -301,17 +311,17 @@ class ActivityLogic extends Model
     public function getCouponTypes($p = 1, $num = null)
     {
         $list = M('coupon')->alias('c')
-                ->join('__GOODS_COUPON__ gc', 'gc.coupon_id=c.id AND gc.goods_category_id!=0')
-                ->where(['type' => 2, 'status' => 1])
-                ->column('gc.goods_category_id');
-        
+            ->join('__GOODS_COUPON__ gc', 'gc.coupon_id=c.id AND gc.goods_category_id!=0')
+            ->where(['type' => 2, 'status' => 1])
+            ->column('gc.goods_category_id');
+
         $result = M('goods_category')->field('id, mobile_name')->where("id", "IN", $list)->page($p, $num)->select();
         $result = $result ?: [];
-        array_unshift($result, ['id'=>0, 'mobile_name'=>'精选']);
+        array_unshift($result, ['id' => 0, 'mobile_name' => '精选']);
 
         return $result;
     }
-    
+
     /**
      * 领券
      * @param $id 优惠券id
@@ -319,38 +329,38 @@ class ActivityLogic extends Model
      */
     public function get_coupon($id, $user_id)
     {
-        if (empty($id)){
+        if (empty($id)) {
             $return = ['status' => 0, 'msg' => '参数错误'];
         }
         if ($user_id) {
             $_SERVER['HTTP_REFERER'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : U('Home/Activity/coupon_list');
             $coupon_info = M('coupon')->where(array('id' => $id, 'status' => 1))->find();
             if (empty($coupon_info)) {
-                $return = ['status' => 0, 'msg' => '活动已结束或不存在，看下其他活动吧~','return_url'=>$_SERVER['HTTP_REFERER']];
+                $return = ['status' => 0, 'msg' => '活动已结束或不存在，看下其他活动吧~', 'return_url' => $_SERVER['HTTP_REFERER']];
             } elseif ($coupon_info['send_end_time'] < time()) {
                 //来晚了，过了领取时间
-                $return = ['status' => 0, 'msg' => '抱歉，已经过了领取时间','return_url'=>$_SERVER['HTTP_REFERER']];
+                $return = ['status' => 0, 'msg' => '抱歉，已经过了领取时间', 'return_url' => $_SERVER['HTTP_REFERER']];
             } elseif ($coupon_info['send_num'] >= $coupon_info['createnum'] && $coupon_info['createnum'] != 0) {
                 //来晚了，优惠券被抢完了
-                $return = ['status' => 0, 'msg' => '来晚了，优惠券被抢完了','return_url'=>$_SERVER['HTTP_REFERER']];
+                $return = ['status' => 0, 'msg' => '来晚了，优惠券被抢完了', 'return_url' => $_SERVER['HTTP_REFERER']];
             } else {
                 if (M('coupon_list')->where(array('cid' => $id, 'uid' => $user_id))->find()) {
                     //已经领取过
-                    $return = ['status' => 2, 'msg' => '您已领取过该优惠券','return_url'=>$_SERVER['HTTP_REFERER']];
+                    $return = ['status' => 2, 'msg' => '您已领取过该优惠券', 'return_url' => $_SERVER['HTTP_REFERER']];
                 } else {
-                    $data = array('uid' => $user_id, 'cid' => $id, 'type' => 2, 'send_time' => time(),'status'=>0);
+                    $data = array('uid' => $user_id, 'cid' => $id, 'type' => 2, 'send_time' => time(), 'status' => 0);
                     M('coupon_list')->add($data);
                     M('coupon')->where(array('id' => $id, 'status' => 1))->setInc('send_num');
-                    $return = ['status' => 1, 'msg' => '恭喜您，抢到' . $coupon_info['money'] . '元优惠券!','return_url'=>$_SERVER['HTTP_REFERER']];
+                    $return = ['status' => 1, 'msg' => '恭喜您，抢到' . $coupon_info['money'] . '元优惠券!', 'return_url' => $_SERVER['HTTP_REFERER']];
                 }
             }
         } else {
-            $return = ['status' => 0, 'msg' => '请先登录','return_url'=>U('User/login')];
+            $return = ['status' => 0, 'msg' => '请先登录', 'return_url' => U('User/login')];
         }
-        
+
         return $return;
     }
-    
+
     /**
      * 获取活动简要信息
      */
@@ -358,20 +368,20 @@ class ActivityLogic extends Model
     {
         //1.商品促销
         $activity = $this->getGoodsPromSimpleInfo($user, $goods);
-        
+
         //2.订单促销
         $activity_order = $this->getOrderPromSimpleInfo($user, $goods);
-        
+
         if ($activity['data'] || $activity_order) {
             empty($activity['data']) && $activity['data'] = [];
             $activity['data'] = array_merge($activity['data'], $activity_order);
         }
 
-        $activity['server_current_time'] = time();//服务器时间
-        
+        $activity['server_current_time'] = time(); //服务器时间
+
         return $activity;
     }
-    
+
     /**
      * 获取商品促销简单信息
      */
@@ -379,40 +389,40 @@ class ActivityLogic extends Model
     {
         $goods['prom_is_able'] = 0;
         $activity['prom_type'] = 0;
-    
+
         //1.商品促销
         $goodsPromFactory = new \app\common\logic\GoodsPromFactory;
         if (!$goodsPromFactory->checkPromType($goods['prom_type'])) {
             return $activity;
-        } 
+        }
         $goodsPromLogic = $goodsPromFactory->makeModule($goods, $goods['prom_id']);
         //上面会自动更新商品活动状态，所以商品需要重新查询
-        $goods  = M('Goods')->where('goods_id', $goods['goods_id'])->find();
+        $goods = M('Goods')->where('goods_id', $goods['goods_id'])->find();
         unset($goods['goods_content']);
         $goods['prom_is_able'] = 0;
-        
+
         //prom_type:0默认 1抢购 2团购 3优惠促销 4预售(不考虑)
         if (!$goodsPromLogic->checkActivityIsAble()) {
             return $activity;
         }
         $prom = $goodsPromLogic->getPromModel()->getData();
         if (in_array($goods['prom_type'], [1, 2])) {
-            $prom['virtual_num'] = $prom['virtual_num'] + $prom['buy_num'];//参与人数
+            $prom['virtual_num'] = $prom['virtual_num'] + $prom['buy_num']; //参与人数
             $goods['prom_is_able'] = 1;
             $activity = [
                 'prom_type' => $goods['prom_type'],
                 'prom_price' => $prom['price'],
-                'virtual_num' => $prom['virtual_num']
+                'virtual_num' => $prom['virtual_num'],
             ];
-            if($prom['start_time']){
+            if ($prom['start_time']) {
                 $activity['prom_start_time'] = $prom['start_time'];
             }
-            if($prom['end_time']) {
+            if ($prom['end_time']) {
                 $activity['prom_end_time'] = $prom['end_time'];
             }
             return $activity;
         }
-        
+
         // 3优惠促销
         $levels = explode(',', $prom['group']);
         if ($prom['group'] && (isset($user['level']) && in_array($user['level'], $levels))) {
@@ -434,20 +444,20 @@ class ActivityLogic extends Model
                 $goods['prom_is_able'] = 1;
                 $activity = [
                     'prom_type' => $goods['prom_type'],
-                    'data' => $activityData
+                    'data' => $activityData,
                 ];
-                if($prom['start_time']){
+                if ($prom['start_time']) {
                     $activity['prom_start_time'] = $prom['start_time'];
                 }
-                if($prom['end_time']) {
+                if ($prom['end_time']) {
                     $activity['prom_end_time'] = $prom['end_time'];
                 }
             }
         }
-        
+
         return $activity;
     }
-    
+
     /**
      * 获取
      * @param type $user_level
@@ -465,7 +475,7 @@ class ActivityLogic extends Model
             foreach ($po as $p) {
                 //type:0满额打折,1满额优惠金额,2满额送积分,3满额送优惠券
                 if ($p['type'] == 0) {
-                    $data[] = ['title' => '折扣', 'content' => "满{$p['money']}元打".round($p['expression']/10, 1)."折"];
+                    $data[] = ['title' => '折扣', 'content' => "满{$p['money']}元打" . round($p['expression'] / 10, 1) . "折"];
                 } elseif ($p['type'] == 1) {
                     $data[] = ['title' => '优惠', 'content' => "满{$p['money']}元优惠{$p['expression']}元"];
                 } elseif ($p['type'] == 2) {
@@ -479,35 +489,35 @@ class ActivityLogic extends Model
                 }
             }
         }
-        
+
         return $data;
     }
-    
+
     /**
      * 订单支付时显示的优惠显示
      * @param type $user
      * @param type $store_id
      * @return type
      */
-    public function getOrderPayProm($order_amount=0)
+    public function getOrderPayProm($order_amount = 0)
     {
-       
+
         $cur_time = time();
         $sql = "select * from __PREFIX__prom_order where type<2 and start_time <= $cur_time "
-                . "AND end_time > $cur_time AND  money<=$order_amount order by money desc limit 1"; //显示满额打折,减价优惠信息
+            . "AND end_time > $cur_time AND  money<=$order_amount order by money desc limit 1"; //显示满额打折,减价优惠信息
         $data = '';
         $po = Db::query($sql);
         if (!empty($po)) {
             foreach ($po as $p) {
                 //type:0满额打折,1满额优惠金额,2满额送积分,3满额送优惠券
                 if ($p['type'] == 0) {
-                    $data = "满{$p['money']}元打".round($p['expression']/10, 1)."折";
+                    $data = "满{$p['money']}元打" . round($p['expression'] / 10, 1) . "折";
                 } elseif ($p['type'] == 1) {
                     $data = "满{$p['money']}元优惠{$p['expression']}元";
                 }
             }
         }
-        
+
         return $data;
     }
 }

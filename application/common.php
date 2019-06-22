@@ -1349,6 +1349,7 @@ function update_pay_status($order_sn,$ext=array())
         change_role($order['order_id']);
         fanli($order['order_id']);
 
+        
         //奖金池
         // $BonusPoolLogic = new BonusPoolLogic();
         // $BonusPoolLogic->is_receive($order);
@@ -1368,6 +1369,14 @@ function update_pay_status($order_sn,$ext=array())
             $goods = Db::name('OrderGoods')->where(['order_id'=>$order['order_id']])->select();
                 $text = '';
                 foreach ($goods as $key => $value) {
+
+                    //额外添加，如果购买的除了 53,54，给这个人加免费领资格
+                    if($value['goods_id'] != 53 && $value['goods_id'] != 54){
+                        //符合条件
+                        $freelogic = new \app\common\logic\ActivityLogic();
+                        $freelogic->add_activity_free($order['order_id'],$order['user_id'],$value['goods_id']);
+                    }
+
                     $text .= $value['goods_name'].'(规格：'.$value['spec_key_name'].',数量：'.$value['goods_num'].',价格：'.$value['final_price'].');';
                 }
             $wx_content = "订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n商户：凡露希环球直供\n商品：{$text}\n金额：{$order['total_amount']}\n\n【凡露希环球直供】欢迎您的再次购物！";
@@ -1401,7 +1410,6 @@ function update_pay_status($order_sn,$ext=array())
         $wechat->sendTemplateMsgOnPaySuccess($order);
     }
 }
-
 
 
 /**
