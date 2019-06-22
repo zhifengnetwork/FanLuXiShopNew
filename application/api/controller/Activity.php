@@ -13,6 +13,36 @@ use think\Page;
 class Activity extends ApiBase
 {
 
+    /**
+     * 跑了 20190622 的单
+     */
+    public function test20190622(){
+
+        exit();
+
+        $con['add_time'] = array('egt',1561161600);
+        $order = M('order')->where($con)->field('order_id,user_id,consignee')->select();
+
+        $num = 0;
+        foreach($order as $k =>$v ){
+
+            $goods = Db::name('OrderGoods')->where(['order_id'=>$v['order_id']])->select();
+           
+            foreach ($goods as $key => $value) {
+                
+                //额外添加，如果购买的除了 53,54，给这个人加免费领资格
+                if($value['goods_id'] != 53 && $value['goods_id'] != 54){
+                    //符合条件
+                    $freelogic = new \app\common\logic\ActivityLogic();
+                    $freelogic->add_activity_free($v['order_id'],$v['user_id'],$value['goods_id']);
+                    $num = $num +1;
+                }
+            }
+
+        }
+        dump('成功添加'.$num.'人');
+        dump($order);
+    }
 
     /**
      * 抢购活动列表
