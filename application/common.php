@@ -1370,8 +1370,8 @@ function update_pay_status($order_sn,$ext=array())
         $text = '';
         foreach ($goods as $key => $value) {
 
-            //额外添加，如果购买的除了 53,54，给这个人加免费领资格
-            if($value['goods_id'] != 53 && $value['goods_id'] != 54){
+            //额外添加，如果购买的除了 47,37，给这个人加免费领资格
+            if($value['goods_id'] != 47 && $value['goods_id'] != 37){
                 //符合条件
                 $freelogic = new \app\common\logic\ActivityLogic();
                 $freelogic->add_activity_free($order['order_id'],$order['user_id'],$value['goods_id']);
