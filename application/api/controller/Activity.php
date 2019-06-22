@@ -14,6 +14,15 @@ class Activity extends ApiBase
 {
 
     /**
+     * 测试
+     */
+    public function test(){
+
+        
+    }
+
+
+    /**
      * 跑了 20190622 的单
      */
     public function test20190622(){

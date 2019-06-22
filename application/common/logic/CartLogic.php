@@ -115,21 +115,28 @@ class CartLogic extends Model
      */
     public function buyNow()
     {
+        
         if (empty($this->goods)) {
             throw new TpshopException('立即购买', 0, ['status' => 0, 'msg' => '购买商品不存在', 'result' => '']);
         }
+       
         // 是否可免费领取
         if ($this->goods['sign_free_receive'] != 0 ) {
 
-             $isReceive = provingReceive($this->user, $this->goods['sign_free_receive'], $this->goodsBuyNum); 
-
+            $isReceive = provingReceive($this->user, $this->goods['sign_free_receive'], $this->goodsBuyNum); 
+          
             if($isReceive['status'] == 0){
                 throw new TpshopException("立即购买",0, $isReceive);
             }
+
         }
+       
         if (empty($this->goodsBuyNum)) {
             throw new TpshopException('立即购买', 0, ['status' => 0, 'msg' => '购买商品数量不能为0', 'result' => '']);
         }
+      
+        
+
         if($this->goods['is_virtual'] == 1){
             if($this->goods['virtual_indate'] < time()){
                 throw new TpshopException('立即购买',0,['status'=>0,'msg'=>'虚拟商品有效期已过','result'=>'']);

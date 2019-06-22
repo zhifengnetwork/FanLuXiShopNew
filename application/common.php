@@ -2177,7 +2177,10 @@ function continue_sign($user_id){
 */
 function provingReceive($user, $type, $num = 1)
 {
- 
+    // 活动领取 不限次数
+    if($type == 8){
+        return array('status' => 2, 'msg' => '可领取', 'result' => array());
+    }
 
     //获得当日凌晨的时间戳
     // $today = strtotime(date("Y-m-d"),time());

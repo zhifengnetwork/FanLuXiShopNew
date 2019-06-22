@@ -620,21 +620,39 @@ class Goods extends MobileBase
     {
         $type = I('type/d');
         $goods_num = I('num', 0);
+        if ($type == 8) {
+            $user = Db::name('users')->where(['user_id' => cookie('user_id')])->find();
+            if (empty($user)) {
+                $result = ['status' => -9, 'msg' => '未找到用户', 'result' => ''];
+            }
 
-        $logic = new UsersLogic();
-        $logic->update_receipt_num(); // 更新每月免费领取次数
-        $logic->get_curr_time_section(); // VIP更新每天免费领取次数
+            $user_id = $user['user_id'];
+            //检查是否有免费领取权限
+            $is_free = M('activity_free')->where(['user_id'=>$user_id])->find();
+            if(!$is_free){
+                $result['msg']=  "没有权限领取，请购买任意一款商品";
+                $redult['result']= [];
+                $result['status'] = 0;
+                $this->ajaxReturn($result);
+            }else{
+                $result = array('status' => 2, 'msg' => '可领取', 'result' => array());
+                $this->ajaxReturn($result);
+            }
 
-        $user = Db::name('users')->where(['user_id' => cookie('user_id')])->find();
-
-        if(empty($user)){
-            $result = ['status' => -9, 'msg' => '未找到用户', 'result' => ''];
+        } else {
+            
+            $logic = new UsersLogic();
+            $logic->update_receipt_num(); // 更新每月免费领取次数
+            $logic->get_curr_time_section(); // VIP更新每天免费领取次数
+            $user = Db::name('users')->where(['user_id' => cookie('user_id')])->find();
+            if (empty($user)) {
+                $result = ['status' => -9, 'msg' => '未找到用户', 'result' => ''];
+            }
+            $result = provingReceive($user, $type, $goods_num);
+            $this->ajaxReturn($result);
         }
-
-        $result = provingReceive($user, $type, $goods_num);
-
-        $this->ajaxReturn($result);
     }
+    
 
     /**
      * 搭配详情页

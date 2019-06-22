@@ -472,10 +472,13 @@
                         <input id="sign_free_receive" type="radio" name="sign_free_receive" value="1" <if condition="$goods['sign_free_receive'] eq 1">checked="checked"</if>><label for="">店主以上领取</label>
                         <input id="sign_free_receive" type="radio" name="sign_free_receive" value="2" <if condition="$goods['sign_free_receive'] eq 2">checked="checked"</if>><label for="">每天领取</label>
 
+                        <input id="sign_free_receive" type="radio" name="sign_free_receive" value="8" <if condition="$goods['sign_free_receive'] eq 8">checked="checked"</if>><label for="">活动免费领取</label>
+
                     <span class="err" id="err_is_virtual"></span>
                     <p class="notic"></p>
                 </dd>
             </dl>
+            
             <if condition="$goods['sign_free_receive']!=0">
               <dl class="row">
                 <dt class="tit">

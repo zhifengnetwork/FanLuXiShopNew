@@ -618,13 +618,15 @@
     var join_cart = $('#join_cart');
     var buy_now_li = $('#buy_now_li');
     var join_cart_li = $('#join_cart_li');
-    function buy_button(){
 
+    function buy_button(){
+       
         var is_virtual = $("input[name='is_virtual']").val();//是否是虚拟商品
         var exchange_integral = $("input[name='exchange_integral']").val();//是否是为积分商品
         var goods_prom_type = $('input[name="goods_prom_type"]').attr('value');//活动商品
         var activity_is_on = $('input[name="activity_is_on"]').attr('value'); //活动是否进行中
         var is_sign = $('input[name="is_sign"]').attr('value'); //签到免费商品
+
         buy_now.hide();
         buy_now_li.hide();
         join_cart.hide();
@@ -648,6 +650,8 @@
             buy_now.html('立即预订').show();
             return;
         }
+
+        //签到免费商品
         if(is_sign != 0){
             buy_now_li.find('.choise_num').html('免费领取');
             buy_now_li.width('100%').show();
@@ -854,6 +858,7 @@
     
     //验证是否可以免费领取
     function sign_receive(type,num){
+        
         $.ajax({
             type : "GET",
             dataType: "json",

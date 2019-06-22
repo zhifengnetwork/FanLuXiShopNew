@@ -405,6 +405,14 @@
                     </div>
                     <div class="p z-monry-cont">
                         <div class="fl">
+                            活动抵扣
+                        </div>
+                        <div class="fr">
+                            <a> ￥<span id="activityFee">0</span>元</a>
+                        </div>
+                    </div>
+                    <div class="p z-monry-cont">
+                        <div class="fl">
                             优惠券抵扣
                         </div>
                         <div class="fr">
@@ -1252,6 +1260,11 @@
     }
     //刷新价格
     function refresh_price(data) {
+
+        console.log('-------')
+        console.log(data)
+        console.log('-------')
+
         if(typeof(data.result.user_money) != 'undefined'){
             $("#balance").text(data.result.user_money.toFixed(2));// 余额
         }
@@ -1272,6 +1285,9 @@
         }
         if(typeof(data.result.sign_price) != 'undefined'){
             $("#signFee").text(data.result.sign_price.toFixed(2));// 签到抵消
+        }
+        if(typeof(data.result.free_activity) != 'undefined'){
+            $("#activityFee").text(data.result.free_activity.toFixed(2));// 活动抵消
         }
         if(typeof(data.result.order_amount) != 'undefined'){
             $("#payables").text(data.result.order_amount.toFixed(2));// 应付

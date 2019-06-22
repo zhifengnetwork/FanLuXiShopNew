@@ -39,6 +39,9 @@ class Pay
     private $couponId;
     private $shop;//自提点
 
+    private $freeActivity = 0;//活动抵扣金额
+    public $bbb = 0;//活动抵扣金额
+
     /**
      * 计算订单表的普通订单商品
      * @param $order_goods
@@ -390,7 +393,26 @@ class Pay
     {
         $isReceive['status'] = 0;
 
-        if ($this->payList[0]['goods']->sign_free_receive != 0 ) {
+        //活动全免
+        if ($this->payList[0]['goods']->sign_free_receive == 8) {
+        
+    
+            // 签到领取
+            $this->orderAmount = $this->shippingPrice; // 应付金额
+
+            $this->totalAmount = $this->totalAmount - ($this->payList[0]['goods']->shop_price) * $this->totalNum;
+
+            $this->freeActivity = $this->payList[0]['goods']->shop_price * $this->totalNum; //活动抵扣
+
+            // $this->freeActivity = 8888;
+            // $this->signPrice = 11111;
+            // $this->bbb = 11111;
+
+        }
+
+
+        //签到的
+        if ($this->payList[0]['goods']->sign_free_receive != 0 && $this->payList[0]['goods']->sign_free_receive != 8 ) {
 
             if ( $this->user['is_code'] == 1 && $this->payList[0]['goods']->sign_free_receive == 1) {
 
@@ -427,6 +449,10 @@ class Pay
 
         return $this;
     }
+
+
+   
+
 
     /**
      * 竞拍使用订金

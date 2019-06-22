@@ -123,6 +123,7 @@ class Cart extends MobileBase {
      * 购物车第二步确定页面
      */
     public function cart2(){
+
         $goods_id = input("goods_id/d"); // 商品id
         $goods_num = input("goods_num/d");// 商品数量
         $item_id = input("item_id/d"); // 商品规格id
@@ -134,22 +135,28 @@ class Cart extends MobileBase {
         $couponLogic = new CouponLogic();
         $cartLogic->setUserId($this->user_id);
         
+
         //立即购买
         if($action == 'buy_now'){
+
             $cartLogic->setGoodsModel($goods_id);
             $cartLogic->setSpecGoodsPriceById($item_id);
             $cartLogic->setGoodsBuyNum($goods_num);
             $buyGoods = [];
+
             try{
                 $buyGoods = $cartLogic->buyNow();
             }catch (TpshopException $t){
                 $error = $t->getErrorArr();
                 $this->error($error['msg']);
             }
+            
             $cartList['cartList'][0] = $buyGoods;
             $cartGoodsTotalNum = $goods_num;
             $setRedirectUrl = new UsersLogic();
             $setRedirectUrl->orderPageRedirectUrl($_SERVER['REQUEST_URI'],'',$goods_id,$goods_num,$item_id ,$action);
+
+
         }else{
             if ($cartLogic->getUserCartOrderCount() == 0){
                 $this->error('你的购物车没有选中商品', 'Cart/index');
@@ -158,6 +165,9 @@ class Cart extends MobileBase {
             $cartList['cartList'] = $cartLogic->getCombination($cartList['cartList']);  //找出搭配购副商品
             $cartGoodsTotalNum = count($cartList['cartList']);
         }
+
+
+     
         $cartGoodsList = get_arr_column($cartList['cartList'],'goods');
         $cartGoodsId = get_arr_column($cartGoodsList,'goods_id');
         $cartGoodsCatId = get_arr_column($cartGoodsList,'cat_id');
@@ -178,6 +188,7 @@ class Cart extends MobileBase {
      * ajax 获取订单商品价格 或者提交 订单
      */
     public function cart3(){
+
         if ($this->user_id == 0) {
             exit(json_encode(array('status' => -100, 'msg' => "登录超时请重新登录!", 'result' => null))); // 返回结果状态
         }
@@ -220,21 +231,29 @@ class Cart extends MobileBase {
                 $buyGoods = $cartLogic->buyNow();
                 $cartList[0] = $buyGoods;
                 $pay->payGoodsList($cartList);
+
             } else {
                 $userCartList = $cartLogic->getCartList(1);
                 $cartLogic->checkStockCartList($userCartList);
                 $pay->payCart($userCartList);
             }
+
+            //dump($pay->toArray());
+
+            //签到抵扣
             $pay->setUserId($this->user_id)->setShopById($shop_id)->delivery($address['district'])->orderPromotion()
-            ->getAuction()->getUserSign()->useCouponById($coupon_id)->useUserMoney($user_money)
+            ->getAuction()->useCouponById($coupon_id)->getUserSign()->useUserMoney($user_money)
             ->usePayPoints($pay_points,false,'mobile');
+
 
             // 提交订单
             if ($_REQUEST['act'] == 'submit_order') {
                 $placeOrder = new PlaceOrder($pay);
                         
-                    // $this->ajaxReturn(['status' => 1, 'msg' => $this->order['order_sn']]);
-               $placeOrder->setMobile($mobile)->setUserAddress($address)->setConsignee($consignee)->setInvoiceTitle($invoice_title)->setUserNote($user_note)->setTaxpayer($taxpayer)->setInvoiceDesc($invoice_desc)->setPayPsw($pay_pwd)->setTakeTime($take_time)->addNormalOrder();
+                // $this->ajaxReturn(['status' => 1, 'msg' => $this->order['order_sn']]);
+                $placeOrder->setMobile($mobile)->setUserAddress($address)->setConsignee($consignee)
+                ->setInvoiceTitle($invoice_title)->setUserNote($user_note)->setTaxpayer($taxpayer)
+                ->setInvoiceDesc($invoice_desc)->setPayPsw($pay_pwd)->setTakeTime($take_time)->addNormalOrder();
                 $cartLogic->clear();
                 $order = $placeOrder->getOrder();
 				
@@ -245,7 +264,12 @@ class Cart extends MobileBase {
 				
                 $this->ajaxReturn(['status' => 1, 'msg' => '提交订单成功', 'result' => $order['order_sn']]);
             }
-            $this->ajaxReturn(['status' => 1, 'msg' => '计算成功', 'result' => $pay->toArray()]);
+            $result = $pay->toArray();
+            
+            $result['free_activity'] = $result['goods_price'];
+
+            $this->ajaxReturn(['status' => 1, 'msg' => '计算成功', 'result' => $result]);
+
         } catch (TpshopException $t) {
             $error = $t->getErrorArr();
             $this->ajaxReturn($error);
