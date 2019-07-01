@@ -303,12 +303,12 @@ class Preform extends Base {
                     foreach($list as $kk=>$vv)
                       {
   
-                      if($p_y[$k]>=$vv['lower'] && $p_y[$k]<=$vv['upper'])
+                      if($p_y[$k]>=$vv['lower'] && $p_y[$k]<$vv['upper'])
                       {
                         $team_p = $p_y[$k]* ($vv['rate'] / 100);//上上级业绩
                      
                       }
-                      if($steam_p_new>=$vv['lower'] && $steam_p_new<=$vv['upper'])
+                      if($steam_p_new>=$vv['lower'] && $steam_p_new<$vv['upper'])
                       {
                          $steam_p =$steam_p_new* ($vv['rate'] / 100);
                       }
@@ -333,7 +333,7 @@ class Preform extends Base {
                   {
                      foreach($list as $kk=>$vv)
                   {
-                      if($p_y[$k]>=$vv['lower'] && $p_y[$k]<=$vv['upper'])
+                      if($p_y[$k]>=$vv['lower'] && $p_y[$k]<$vv['upper'])
                       {
                         $team_p = $p_y[$k]* ($vv['rate'] / 100);//上上级业绩
                      
@@ -362,7 +362,7 @@ class Preform extends Base {
 
               foreach($list as $kk=>$vv)
                   {
-                      if($p_y[$k]>=$vv['lower'] && $p_y[$k]<=$vv['upper'])
+                      if($p_y[$k]>=$vv['lower'] && $p_y[$k]<$vv['upper'])
                       {
                         $team_p = $p_y[$k]* ($vv['rate'] / 100);//上上级业绩
                      
