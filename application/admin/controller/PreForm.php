@@ -320,7 +320,7 @@ class Preform extends Base {
                       {
                         $bool = M('users')->where('user_id',$k)->setInc('user_money',$commission);
                          if ($bool !== false) {
-                         $desc = "第".$jidu."季度业绩分红1";
+                         $desc = "第".$jidu."季度业绩分红";
                         $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year(),$team_p,$steam_p); //写入日志
                        $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
                        } else {
@@ -346,7 +346,7 @@ class Preform extends Base {
                       {
                         $bool = M('users')->where('user_id',$k)->setInc('user_money',$commission);
                          if ($bool !== false) {
-                         $desc = "第".$jidu."季度业绩分红2";
+                         $desc = "第".$jidu."季度业绩分红";
                         $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year(),$team_p,0); //写入日志
                        $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
                        } else {
@@ -377,7 +377,7 @@ class Preform extends Base {
                         $bool = M('users')->where('user_id',$k)->setInc('user_money',$commission);
                       
                          if ($bool !== false) {
-                         $desc = "第".$jidu."季度业绩分红3";
+                         $desc = "第".$jidu."季度业绩分红";
                         $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year(),$team_p,0); //写入日志
                        $log = $this->writeLog_user($k,$commission,$desc,10); //写入日志
                        } else {
