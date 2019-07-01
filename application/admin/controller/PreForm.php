@@ -216,7 +216,6 @@ class Preform extends Base {
               ->join('users u','u.user_id=od.user_id','LEFT')
             // ->limit($Page->firstRow,$Page->listRows)
              ->select();
-            //print_r($order_goods);exit;
            // print_r(Db::name('order_goods')->getlastsql());exit;
           $parent =array();
           $p_y  =array();
@@ -243,20 +242,28 @@ class Preform extends Base {
               }
               
             }*/
+
             //无限找上上级
-            $user_data = $this->getAllUp_p($v['user_id']);
-            foreach($user_data as $kk=>$yy)
+            if(!empty($v['first_leader']))  //统计订单用户上级业绩
             {
-              $p_y[$yy['user_id']] +=$v['sale_amount'];
+            $user_data = $this->getAllUp_p($v['user_id']);
+            if(!empty($user_data) && count($user_data)>1)
+            {
+              unset($user_data[0]);
+              foreach($user_data as $kk=>$yy)
+            {
+              $p_y[$yy['user_id']]+=$v['sale_amount'];
 
             }
-
-
+            }
+       
+            }
           }
         if(empty($p_y))
         {
           $this->ajaxReturn(['status' => 0,'msg'   => '第'.$jidu.'季度没有业绩分红']);exit;
         }
+        //var_dump($p_y);exit;
         $result=$this->count_userreward_new($p_y,$jidu);
         if($result){
             //设置成功后跳转页面的地址，默认的返回页面是$_SERVER['HTTP_REFERER']
@@ -372,7 +379,7 @@ class Preform extends Base {
                          if ($bool !== false) {
                          $desc = "第".$jidu."季度业绩分红3";
                         $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year(),$team_p,0); //写入日志
-                       $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
+                       $log = $this->writeLog_user($k,$commission,$desc,10); //写入日志
                        } else {
                         return false;
                        }
@@ -424,7 +431,7 @@ class Preform extends Base {
                   if ($bool !== false) {
                      $desc = "第".$jidu."季度业绩分红1";
                     $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year(),$team_p,$steam_p); //写入日志
-                   $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
+                   $log = $this->writeLog_user($k,$commission,$desc,10); //写入日志
                    } else {
                     return false;
                    }
@@ -457,7 +464,7 @@ class Preform extends Base {
                   if ($bool !== false) {
                     $desc = "第".$jidu."季度业绩分红";
                     $log = $this->writeLog($k,$commission,$desc,$jidu,$this->c_year()); //写入日志
-                    $log = $this->writeLog_user($k,$commission,$desc,-1); //写入日志
+                    $log = $this->writeLog_user($k,$commission,$desc,10); //写入日志
                    } else {
                     return false;
                    }
@@ -565,14 +572,14 @@ class Preform extends Base {
    */
    public function getAllUp_p($invite_id,&$userList=array())
   {           
-      $field  = "user_id";
+      $field  = "user_id,first_leader";
       $UpInfo = M('users')->field($field)->where(['user_id'=>$invite_id])->find();
       if($UpInfo)  //有上级
       {
           $userList[] = $UpInfo;                                      
           $this->getAllUp_p($UpInfo['first_leader'],$userList);
       }
-      
+      //unset($userList[0]);
       return $userList;     
       
   }
