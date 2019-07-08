@@ -107,6 +107,9 @@ class Distribut extends Controller
         }
         $logic = new UsersLogic();
         $num = $logic->get_team_num($user_id);
+
+        M('users')->where(['user_id'=>$user_id])->update(['underling_number'=>$num]);
+
         echo $num;
     }
 
