@@ -1686,20 +1686,28 @@ class UsersLogic extends Model
         }else
             $sql = "select user_id from tp_users where first_leader = $uid";
             
-        $res = M('users')->query($sql);
+		$res = M('users')->query($sql);
+		
         $arr1 = $this->getArrayValue($res);          
         return $arr1;
     }
 
     //获取用户下级链
     public function getUserLevBotAll($uid,&$arr){
-        if(!$arr)$arr = [];
-        $arr1 = $this->getUserLevBot($uid); 
-        if($arr1)$arr = array_merge($arr,$arr1);
+        if(!$arr){
+			$arr = [];
+		}
+		
+		$arr1 = $this->getUserLevBot($uid); 
+		
+		if($arr1){
+			$arr = array_merge($arr,$arr1);
+		}
 
         if($arr1){
             $this->getUserLevBotAll($arr1,$arr);
-        }
+		}
+
         return $arr;
 	}
 	
