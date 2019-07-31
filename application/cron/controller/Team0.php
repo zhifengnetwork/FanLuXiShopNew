@@ -35,20 +35,20 @@ class Team extends Controller{
                 }
                 $n = $QuarterBonus->where(['user_id'=>$v['user_id'],'year_m'=>date('Y-m')])->count();
                 if($n)continue;
-                $grade = $Share->where(['lower'=>['elt',$v['team_per']],'upper'=>['egt',$v['team_per']]])->order('lower desc')->value('rate');
+                $grade = $Share->where(['lower'=>['elt',$v['team_per']],'upper'=>['egt',$v['team_per']]])->order('lower desc')->value('grade');
                 if(!$grade)continue;
     
                 $price = floor($v['team_per'] * $grade)/100;
-
+    
                 //找出用户的下级
                 $childlist = $AgentPerformance->alias('ap')->join('users u','ap.user_id=u.user_id','left')->field('ap.performance_id,ap.user_id,ap.team_per')->where('u.first_leader='.$v['user_id'])->select();
                 foreach($childlist as $v1){
                     $grade = $Share->where(['lower'=>['elt',$v1['team_per']],'upper'=>['egt',$v1['team_per']]])->order('lower desc')->value('rate');
                     if(!$grade)continue;  
-                    $price1 = floor($v1['team_per'] * $grade)/100; 
+                    $price1 = floor($v1['team_per'] * $grade)/100;  
                     $price -= $price1;
                 }
-
+    
                 $this->writeLog($v['user_id'],$price,date('Y-m').'季度分红',72,$v['performance_id']);
             }  
             //M()->query('TRUNCATE tp_agent_performance');
