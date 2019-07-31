@@ -16,7 +16,7 @@ class Test extends Controller{
 
         set_time_limit(0);
 
-        $data = M('agent_performance_log')->limit(1000)->select();
+        $data = M('agent_performance_log')->field('performance_id,user_id,money')->limit(1000)->select();
 
         dump($data);
 
@@ -25,7 +25,7 @@ class Test extends Controller{
 
             $shang = $shangji['recUser'];
 
-dump($shang);
+            dump($shang);
 
 
             $order_amount = $vv['money'];
