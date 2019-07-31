@@ -20,12 +20,12 @@ class Message extends Controller
         $openid = I('openid');
         $event = I('event');
 
-        $model = new WxMessage();
+        // $model = new WxMessage();
 
-        $model->eventkey = $eventkey;
-        $model->openid = $openid;
-        $model->event = $event;
-        $res = $model->save();
+        // $model->eventkey = $eventkey;
+        // $model->openid = $openid;
+        // $model->event = $event;
+        // $res = $model->save();
       
         if( $event == 'SCAN'){
            // $this->deal($openid,$eventkey);
@@ -37,7 +37,7 @@ class Message extends Controller
         }
         
         //$this->handle();
-        echo $res;
+        //echo $res;
     }
 
 
