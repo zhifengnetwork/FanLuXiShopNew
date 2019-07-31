@@ -10,11 +10,44 @@ use app\common\logic\UsersLogic;
 
 class Test extends Controller{
 
-   
+
     public function aaa(){
+        set_time_limit(0);
+
+        // M('order_copy')->where(['pay_status'=>0])->delete();
+
+      
+
+        $order = M('order')->field('order_id')->limit(500)->select();
+
+        foreach($order as $k => $v){
+
+            agent_performance($v['order_id']);
+
+            M('order')->where(['order_id'=>$v['order_id']])->delete();
+
+        }
+
+        $zong  = M('order')->count('order_id');
+
+        dump("还有：".$zong);
+
+    }
+
+
+
+
+
+
+   
+    public function eeeeeee(){
 
 
         set_time_limit(0);
+
+        // 结束
+        exit();
+
 
         $data = M('agent_performance_log')->field('performance_id,user_id,money')->limit(1000)->select();
 
