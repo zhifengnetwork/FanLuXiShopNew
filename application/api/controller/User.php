@@ -1193,9 +1193,9 @@ class User extends ApiBase
 
         $userinfo = M('Users')->field('user_money,paypwd')->find($user_id);
         $user_money = $userinfo['user_money'];
-        if(encrypt($data['paypwd']) != $userinfo['paypwd']){
-            $this->ajaxReturn(['status' => -3 , 'msg'=>'支付密码错误','data'=>(object)null]);
-        }
+//        if(encrypt($data['paypwd']) != $userinfo['paypwd']){
+//            $this->ajaxReturn(['status' => -3 , 'msg'=>'支付密码错误','data'=>(object)null]);
+//        }
         if ($data['money'] > $user_money) {
             $this->ajaxReturn(['status' => -4 , 'msg'=>'本次提现余额不足','data'=>(object)null]);
         } 
