@@ -743,7 +743,7 @@
             $('.no_shipping_div').show();
             $('.shipping_div').hide();
         }
-        // pay_pwd_view();
+        pay_pwd_view();
         get_address_list();
     });
     //各种弹窗返回上一步
@@ -1092,7 +1092,7 @@
     $(function () {
         //选择使用积分和余额
         $(document).on('click', '#pay_points,#user_money', function () {
-            // pay_pwd_view();
+            pay_pwd_view();
             ajax_order_price();
         });
         //支付密码点击事件
@@ -1133,11 +1133,11 @@
         }else{
             $("input[name='pay_points']").val('');
         }
-        if (user_money.is(':checked') || pay_points.is(':checked')) {
-            $('#paypwd_view').show();
-        } else {
-            $('#paypwd_view').hide();
-        }
+        // if (user_money.is(':checked') || pay_points.is(':checked')) {
+        //     $('#paypwd_view').show();
+        // } else {
+        //     $('#paypwd_view').hide();
+        // }
     }
     //兑换优惠券
     function wield() {
