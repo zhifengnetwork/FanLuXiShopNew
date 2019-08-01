@@ -10,10 +10,87 @@ use app\common\logic\UsersLogic;
 
 class Test extends Controller{
 
+    public function level(){
+        exit;
+        
+        set_time_limit(0);
+        $quarter_bonus = M('quarter_bonus');
+        $data = $quarter_bonus->where(['flag'=>2])->order('team_per desc')->limit(2000)->field('id,user_id')->select();
+
+        $user = M('users');
+
+        foreach ($data as $k => $v) {
+            $level = $user->where('user_id='.$v['user_id'])->value('level');
+
+            dump($level);
+            $quarter_bonus->where(['id'=>$v['id']])->update(['level'=>$level,'flag'=>3]);
+        }
+    }
+
+
+
+
+    public function fenhong(){
+        set_time_limit(0);
+
+        exit;
+
+        $quarter_bonus = M('quarter_bonus');
+        $data = $quarter_bonus->where(['flag'=>1])->order('team_per desc')->limit(200)->select();
+
+        $user = M('users');
+        $Share = M('share');
+
+        foreach ($data as $k => $v) {
+            //dump($v);
+
+            $childlist = $user->where('first_leader='.$v['user_id'])->field('user_id')->select();
+            //dump($childlist);
+            $shengyu = (float)$v['money'];
+
+            foreach ($childlist as $v1) {
+                $chengyuan = $quarter_bonus->where(['user_id'=>$v1['user_id']])->value('money');
+                $shengyu = $shengyu - (float)$chengyuan;
+               // dump('减去：'.$chengyuan);
+            }
+
+            dump($v['user_id'].'剩余'.$shengyu.'元');
+            $quarter_bonus->where(['id'=>$v['id']])->update(['fenhong'=>$shengyu,'flag'=>2]);
+            
+        }
+
+
+
+    }
+
+
+
+    public function bbb(){
+        set_time_limit(0);
+// 结束
+exit();
+        $quarter_bonus = M('quarter_bonus');
+        $data = $quarter_bonus->where(['flag'=>0])->order('team_per desc')->limit(1000)->select();
+
+        dump($data);
+
+        $Share = M('Share');
+
+        foreach($data as $k => $v){
+            $rate = $Share->where(['lower'=>['elt',$v['team_per']],'upper'=>['egt',$v['team_per']]])->order('lower desc')->value('rate');
+            $price = floor($v['team_per'] * $rate)/100; 
+
+            $quarter_bonus->where(['id'=>$v['id']])->update(['rate'=>$rate,'money'=>$price,'flag'=>1]);
+
+        }
+
+    }
+
 
     public function aaa(){
         set_time_limit(0);
-
+// 结束
+exit();
         // M('order_copy')->where(['pay_status'=>0])->delete();
 
         $order = M('order')->field('order_id')->limit(1000)->select();
@@ -31,9 +108,6 @@ class Test extends Controller{
         dump("还有：".$zong);
 
     }
-
-
-
 
 
 
