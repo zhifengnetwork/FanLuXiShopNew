@@ -16,7 +16,7 @@ class Test extends Controller{
 
         // M('order_copy')->where(['pay_status'=>0])->delete();
 
-        $order = M('order')->field('order_id')->limit(2000)->select();
+        $order = M('order')->field('order_id')->limit(1000)->select();
 
         foreach($order as $k => $v){
 
