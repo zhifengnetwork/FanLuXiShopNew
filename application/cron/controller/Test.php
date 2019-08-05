@@ -10,6 +10,63 @@ use app\common\logic\UsersLogic;
 
 class Test extends Controller{
 
+    /**
+     * 一个一个分红
+     */
+    public function fff(){
+
+        $res = M('quarter_bonus2')->find();
+
+        $data = array(
+			'user_id'=>$res['user_id'],
+			'user_money'=>$res['fenhong'],
+			'change_time'=>time(),
+			'desc'=>date('Y-m').'季度分红',
+			'states'=>72
+        );
+
+        Db::startTrans();
+        
+        $bool = M('users')->where('user_id',$res['user_id'])->setInc('user_money',$res['fenhong']);
+
+		if($bool){
+            M('account_log')->insert($data);
+          
+            M('quarter_bonus2')->where(['user_id'=>$res['user_id']])->delete();
+            echo $res['user_id'].$res['nickname']."SUCCESS";
+            Db::commit(); 
+		}else{
+
+            echo $res['user_id'].$res['nickname']."FAIL";
+
+            Db::rollback();
+        }
+        
+        
+    }
+
+
+
+    public function nickname(){
+      
+        exit;
+        
+        set_time_limit(0);
+        $quarter_bonus = M('quarter_bonus2');
+        $data = $quarter_bonus->where(['flag'=>3])->order('team_per desc')->limit(100)->field('id,user_id')->select();
+
+        $user = M('users');
+
+        foreach ($data as $k => $v) {
+            $nickname = $user->where('user_id='.$v['user_id'])->value('nickname');
+
+            dump($nickname);
+            $quarter_bonus->where(['id'=>$v['id']])->update(['nickname'=>$nickname,'flag'=>4]);
+        }
+    }
+
+
+
     public function level(){
         exit;
         
