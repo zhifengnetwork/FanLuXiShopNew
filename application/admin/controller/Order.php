@@ -1070,18 +1070,18 @@ class Order extends Base {
         foreach($data as $key=>$val){
 
             for($i=0;$i<$fieldnum-1;$i++){
-                if($val['A'] && $val['G'] && $val['M']){
+                if($val['A'] && $val['E'] && $val['N']){
                     //手动修改字段与值
                     $arr[$key]['order_sn']   =  preg_replace('/\D/s', '', $val['A']);
-                    $arr[$key]['mobile']     =  strval(trim($val['G']));
-                    $arr[$key]['consignee']  =  $val['F'];
-                    $arr[$key]['address']    =  $val['I'];
-                    $arr[$key]['invoice_no'] =  $val['M'];
-                    $arr[$key]['goods']      =  $val['J'];
+                    $arr[$key]['mobile']     =  strval(trim($val['E']));
+                    $arr[$key]['consignee']  =  $val['D'];
+                    $arr[$key]['address']    =  $val['F'].$val['G'].$val['H'].$val['I'];
+                    $arr[$key]['invoice_no'] =  $val['N'];
+                    $arr[$key]['goods']      =  $val['L'];
                     $arr[$key]['add_time']   =  time();
                     //快递信息
-                    $arr[$key]['shipping_name'] = $val['K'];
-                    $arr[$key]['shipping_code'] = Db::name('shipping')->where('shipping_name', $val['K'])
+                    $arr[$key]['shipping_name'] = $val['M']!='百世快递'?$val['M']:'百世汇通快递';
+                    $arr[$key]['shipping_code'] = Db::name('shipping')->where('shipping_name', $arr[$key]['shipping_name'])
                         ->value('shipping_code');
                 }
             }
@@ -1558,45 +1558,81 @@ class Order extends Base {
         $orderList = Db::name('order')->field("*,FROM_UNIXTIME(add_time,'%Y-%m-%d') as create_time")->where($where)->order('order_id')->select();
     	$strTable ='<table width="500" border="0">';
     	$strTable .= '<tr>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;width:120px;">订单编号</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="100">日期</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">收货人</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">收货地址</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">电话</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">订单金额</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">实际支付</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付方式</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付状态</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">发货状态</td>';
-        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品信息</td>';
+    	$strTable .= '<td style="text-align:center;font-size:12px;width:120px;">业务单号</td>';
+    	$strTable .= '<td style="text-align:center;font-size:12px;" width="100">物流公司</td>';
+    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">运单号</td>';
+    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">寄件单位</td>';
+    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">寄件人姓名</td>';
+    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">寄件人电话</td>';
+    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">寄件人手机</td>';
+    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">寄件人省</td>';
+    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">寄件人市</td>';
+    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">寄件人区/县</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">寄件人邮编</td>';
+    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">寄件人地址</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收件单位</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收件人姓名</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收件人电话</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收件人手机</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收件人省</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收件人市</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收件人区/县</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收件人地址</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收件人邮编</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">运费</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">订单金额</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品名称</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品编号</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">销售属性</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品金额</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">数量</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">留言</td>';
+        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">备注</td>';
+
     	$strTable .= '</tr>';
 	    if(is_array($orderList)){
 	    	$region	= get_region_list();
 	    	foreach($orderList as $k=>$val){
 	    		$strTable .= '<tr>';
 	    		$strTable .= '<td style="text-align:center;font-size:12px;">&nbsp;'.$val['order_sn'].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['create_time'].' </td>';	    		
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['consignee'].'</td>';
-                $strTable .= '<td style="text-align:left;font-size:12px;">'."{$region[$val['province']]},{$region[$val['city']]},{$region[$val['district']]},{$region[$val['twon']]}{$val['address']}".' </td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['mobile'].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['goods_price'].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['order_amount'].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['pay_name'].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$this->pay_status[$val['pay_status']].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$this->shipping_status[$val['shipping_status']].'</td>';
+	    		$strTable .= '<td style="text-align:left;font-size:12px;"></td>';
+	    		$strTable .= '<td style="text-align:left;font-size:12px;"></td>';
+	    		$strTable .= '<td style="text-align:left;font-size:12px;"></td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">凡露希</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;"></td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">18820111335</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">广东省</td>';
+	    		$strTable .= '<td style="text-align:left;font-size:12px;">广州市</td>';
+	    		$strTable .= '<td style="text-align:left;font-size:12px;">白云区</td>';
+	    		$strTable .= '<td style="text-align:left;font-size:12px;"></td>';
+	    		$strTable .= '<td style="text-align:left;font-size:12px;">百世云仓 嘉禾仓</td>';
+	    		$strTable .= '<td style="text-align:left;font-size:12px;"></td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['consignee'].'</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;"></td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['mobile'].'</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$region[$val['province']].'</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$region[$val['city']].' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$region[$val['district']].' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['address'].' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;"></td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['shipping_price'].'</td>';
+	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['total_amount'].'</td>';
 	    		$orderGoods = D('order_goods')->where('order_id='.$val['order_id'])->select();
-	    		$strGoods="";
-                $goods_num = 0;
-	    		foreach($orderGoods as $goods){
-                    $goods_num = $goods_num + $goods['goods_num'];
-	    			$strGoods .= $goods['goods_name']."  数量：".$goods['goods_num'];
-	    			if ($goods['spec_key_name'] != '') $strGoods .= " 规格：".$goods['spec_key_name'];
-	    			$strGoods .= "<br />";
-	    		}
+                $strGoodsNum = $strGoods=$strPrice="";
+                foreach ($orderGoods as $goods) {
+                    $strGoods .= ($strGoods ? ', ' : '') . $goods['goods_name'];
+                    if ($goods['spec_key_name'] != '') $strGoods .= " 规格：" . $goods['spec_key_name'];
+                    $strGoodsNum .= ($strGoodsNum ? ', ' : '') . $goods['goods_num'];
+                    $strPrice.=($strPrice ? ', ' : '') . $goods['goods_price'];
+                }
 	    		unset($orderGoods);
-                $strTable .= '<td style="text-align:left;font-size:12px;">总'.$goods_num.' </td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;"></td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;"></td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoodsNum.' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['user_note'].'</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['admin_note'].'</td>';
 	    		$strTable .= '</tr>';
 	    	}
 	    }
