@@ -22,8 +22,9 @@ class FanliLogic extends Model
 	private $goodNum;//商品数量
 	private $orderSn;//订单编号
 	private $orderId;//订单id
+    private $promType;//订单商品下单类型:0 普通订单,1 限时抢购, 2 团购 , 3 促销优惠,4预售
 
-	public function __construct($userId,  $goodId, $goodNum, $orderSn, $orderId)
+	public function __construct($userId,  $goodId, $goodNum, $orderSn, $orderId,$promType = 0)
 	{	
 		$this->userId = $userId;
 		$this->goodId = $goodId;
@@ -31,6 +32,7 @@ class FanliLogic extends Model
 		$this->orderSn = $orderSn;
 		$this->orderId = $orderId;
 		$this->tgoodsid = $this->catgoods();
+        $this->promType = $promType;
 	}
 	//获取返利数据
 	public function getconfing()
@@ -56,13 +58,6 @@ class FanliLogic extends Model
     //会员返利
 	public function fanliModel()
 	{
-
-		$price = M('goods')->where(['goods_id'=>$this->goodId])->value('shop_price');
-		//判断商品是否是活动商品
-		$good = M('goods')
-				->where('goods_id', $this->goodId)
-				->field('is_distribut,is_agent')
-                ->find();
            //获取每个产品返利数据
          $rebase = $this->getconfing();
         //查询会员当前等级
@@ -78,8 +73,6 @@ class FanliLogic extends Model
 		 $this->checkuserlevel($this->userId,$this->orderId);
 	    }
 
-		$pro_num = $this->getproductnum();
-		//echo $this->goodId.'-'.$this->tgoodsid.'-'.$user_info['level'];exit;
         if($this->goodId==$this->tgoodsid )//是否特殊产品
         {
         	 
@@ -91,60 +84,59 @@ class FanliLogic extends Model
         }
         else
         {
-        	//不是特产品按照佣金比例反给用户 ，自购返利
-        	$goods_info=$this->getgoodsinfo();
-        	if($goods_info['sign_free_receive']==0) //免费领取，签到产品不参与返利
-        	{
-        	  if($user_info['level']>=3)//自购只返利给店主以上级别
-              {
-               $distribut_level = M('user_level')->where('level',$user_info['level'])->field('direct_rate')->find();
-                 //计算返利金额
-		        $goods = $this->goods();
-		        $commission = $goods['shop_price'] * ($distribut_level['direct_rate'] / 100) * $this->goodNum;
-		           //计算佣金
-		          //按上一级等级各自比例分享返利
-		        $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
-		         if ($bool !== false) {
-			        	$desc = "自购返利";
-			        	$log = $this->writeLog($user_info['user_id'],$commission,$desc,7); 
-			        	//return true;
-			         } else {
-			        	return false;
-			         }
-              }
-            // 购买商品返利给上一级
-            if(empty($rebase)||$rebase[$parent_info['level']]<=0) //计算返利比列
-		       {
-                   $fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
-		       }else
-		       {
-		           $fanli['rate'] = $rebase[$parent_info['level']];
-		       }
-	          //查询会员等级返利数据
-		       if($parent_info['level']!=1 && !empty($parent_info)){ //上一级是普通会员则不反钱
-		         //计算返利金额
-		          $goods = $this->goods();
-		          $commission = $goods['shop_price'] * ($fanli['rate'] / 100) * $this->goodNum;
-		           //计算佣金
-		          //按上一级等级各自比例分享返利
-		          $bool = M('users')->where('user_id',$user_info['first_leader'])->setInc('user_money',$commission);
-			      if ($bool !== false) {
-			        	$desc = "分享返利";
-			        	$log = $this->writeLog($user_info['first_leader'],$commission,$desc,1); //写入日志
-			            //检查返利管理津贴
-			          //  $this->jintie($user_info['first_leader'],$commission);
-			        	//return true;
-			         } else {
-			        	return false;
-			         }
-			     }else{
-			     	//return false;
-			     }
+            if ($this->promType == 0) {
+                //不是特产品,不是营销订单，按照佣金比例反给用户 ，自购返利
+                $goods_info=$this->getgoodsinfo();
+                if($goods_info['sign_free_receive']==0) //免费领取，签到产品不参与返利
+                {
+                    if($user_info['level']>=3)//自购只返利给店主以上级别
+                    {
+                        $distribut_level = M('user_level')->where('level',$user_info['level'])->field('direct_rate')->find();
+                        //计算返利金额
+                        $goods = $this->goods();
+                        $commission = $goods['shop_price'] * ($distribut_level['direct_rate'] / 100) * $this->goodNum;
+                        //计算佣金
+                        //按上一级等级各自比例分享返利
+                        $bool = M('users')->where('user_id',$user_info['user_id'])->setInc('user_money',$commission);
+                        if ($bool !== false) {
+                            $desc = "自购返利";
+                            $log = $this->writeLog($user_info['user_id'],$commission,$desc,7);
+                            //return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                    // 购买商品返利给上一级
+                    if(empty($rebase)||$rebase[$parent_info['level']]<=0) //计算返利比列
+                    {
+                        $fanli = M('user_level')->where('level',$parent_info['level'])->field('rate')->find();
+                    }else
+                    {
+                        $fanli['rate'] = $rebase[$parent_info['level']];
+                    }
+                    //查询会员等级返利数据
+                    if($parent_info['level']!=1 && !empty($parent_info)){ //上一级是普通会员则不反钱
+                        //计算返利金额
+                        $goods = $this->goods();
+                        $commission = $goods['shop_price'] * ($fanli['rate'] / 100) * $this->goodNum;
+                        //计算佣金
+                        //按上一级等级各自比例分享返利
+                        $bool = M('users')->where('user_id',$user_info['first_leader'])->setInc('user_money',$commission);
+                        if ($bool !== false) {
+                            $desc = "分享返利";
+                            $log = $this->writeLog($user_info['first_leader'],$commission,$desc,1); //写入日志
+                            //检查返利管理津贴
+                            //  $this->jintie($user_info['first_leader'],$commission);
+                            //return true;
+                        } else {
+                            return false;
+                        }
+                    }else{
+                        //return false;
+                    }
 
-        	}
-
-           
-        	 
+                }
+            }
 
             /*
 		    elseif($user_info['level']>=4) //是复购

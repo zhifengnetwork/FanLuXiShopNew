@@ -67,7 +67,7 @@ class Distribut extends Base {
             foreach($goods_list as $k => $v){
                 $goodId = $v['goods_id'];
                 $goodNum = $v['goods_num'];
-                $model = new FanliLogic($userId, $goodId,$goodNum,$orderSn,$order_id);
+                $model = new FanliLogic($userId, $goodId,$goodNum,$orderSn,$order_id,$v['prom_type']);
                 $res = $model->fanliModel();
             }
             //补业绩
