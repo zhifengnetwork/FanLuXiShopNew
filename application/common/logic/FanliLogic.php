@@ -22,9 +22,8 @@ class FanliLogic extends Model
 	private $goodNum;//商品数量
 	private $orderSn;//订单编号
 	private $orderId;//订单id
-    private $promType;//订单商品下单类型:0 普通订单,1 限时抢购, 2 团购 , 3 促销优惠,4预售
 
-	public function __construct($userId,  $goodId, $goodNum, $orderSn, $orderId,$promType = 0)
+	public function __construct($userId,  $goodId, $goodNum, $orderSn, $orderId)
 	{	
 		$this->userId = $userId;
 		$this->goodId = $goodId;
@@ -32,7 +31,6 @@ class FanliLogic extends Model
 		$this->orderSn = $orderSn;
 		$this->orderId = $orderId;
 		$this->tgoodsid = $this->catgoods();
-        $this->promType = $promType;
 	}
 	//获取返利数据
 	public function getconfing()
@@ -84,7 +82,6 @@ class FanliLogic extends Model
         }
         else
         {
-            if ($this->promType == 0) {
                 //不是特产品,不是营销订单，按照佣金比例反给用户 ，自购返利
                 $goods_info=$this->getgoodsinfo();
                 if($goods_info['sign_free_receive']==0) //免费领取，签到产品不参与返利
@@ -135,7 +132,6 @@ class FanliLogic extends Model
                         //return false;
                     }
 
-                }
             }
 
             /*
