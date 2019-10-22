@@ -1719,4 +1719,48 @@ class UsersLogic extends Model
 		return count($this->getUserLevBotAll($user_id,$arr));
 	}
 
+    /**
+     * 查找user_id的上级等级为level,逐层获取一定数量的上级
+     * @param int $user_id
+     * @param int $level
+     * @param int $num
+     * @return array
+     */
+    public function getUserLeader($user_id = 0,$level = 2){
+        $arr = [2=>1,3=>1,4=>2,5=>2];
+        $res = [];
+        $leadersArr = $this->leader($user_id);
+        $count = 0;
+        foreach ($leadersArr as $leader){
+            $leader_level = M('users')->where(['user_id' => $leader])->value('level');
+            if($leader_level==$level){
+                $res[] = ['user_id'=>$leader,'level'=>$leader_level];
+                $count++;
+            }
+            if($count==$arr[$level]) {
+                ++$level;
+                $count = 0;
+            }
+            if($level>5) break;
+        }
+        return $res;
+    }
+
+    /**
+     * 查找user_id的所有上级
+     * @param int $user_id
+     * @param int $level
+     * @param int $num
+     * @return array
+     */
+    public function leader($user_id, &$arr = array())
+    {
+        $user = M('users')->where(['user_id' => $user_id])->value('first_leader');
+        if ($user > 0) {
+            $arr[] = $user;
+            $this->leader($user, $arr);
+        }
+        return $arr;
+    }
+
 }
