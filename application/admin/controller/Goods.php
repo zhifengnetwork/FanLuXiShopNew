@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 use app\admin\logic\GoodsLogic;
 use app\admin\logic\SearchWordLogic;
+use app\common\logic\UsersLogic;
 use app\common\model\GoodsAttr;
 use app\common\model\GoodsAttribute;
 use app\common\model\GoodsType;
@@ -203,8 +204,8 @@ class Goods extends Base {
     /**
      *  商品列表
      */
-    public function goodsList(){      
-        $GoodsLogic = new GoodsLogic();        
+    public function goodsList(){
+        $GoodsLogic = new GoodsLogic();
         // $brandList = $GoodsLogic->getSortBrands();
         // $categoryList = $GoodsLogic->getSortCategory();
         $this->assign('categoryList',$categoryList);
@@ -404,6 +405,14 @@ class Goods extends Base {
             $return_arr = ['status' => 0, 'msg' => $error_msg[0], 'result' => $error];
             $this->ajaxReturn($return_arr);
         }
+
+        $data['fanli_data'] = serialize([
+            2=>$data['two'],
+            3=>$data['third'],
+            4=>$data['forth'],
+            5=>$data['fifth']
+        ]);
+
         if ($data['goods_id'] > 0) {
             $goods = \app\common\model\Goods::get($data['goods_id']);
             $store_count_change_num = $data['store_count'] - $goods['store_count'];//库存变化量

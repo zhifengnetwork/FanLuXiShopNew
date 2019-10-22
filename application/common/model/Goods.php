@@ -186,4 +186,9 @@ class Goods extends Model
             return $price = round($data['shop_price'] - $data['exchange_integral'] / 10, 2);
         }
     }
+
+    public function getFanliObjectAttr($value, $data)
+    {
+        return $data['fanli_data']?unserialize($data['fanli_data']):[];
+    }
 }

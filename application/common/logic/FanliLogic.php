@@ -41,7 +41,7 @@ class FanliLogic extends Model
 		//获取返利数据
 	public function getgoodsinfo()
 	{
-         $goods_info = M('goods')->where(['goods_id'=>$this->goodId])->field('sign_free_receive,goods_name')->find();
+         $goods_info = M('goods')->where(['goods_id'=>$this->goodId])->field('sign_free_receive,goods_name,fanli_data')->find();
          return $goods_info;
 	}
 	//获取用户购买特殊产品数量
@@ -83,7 +83,6 @@ class FanliLogic extends Model
         else
         {
                 //不是特产品,不是营销订单，按照佣金比例反给用户 ，自购返利
-                $goods_info=$this->getgoodsinfo();
                 if($goods_info['sign_free_receive']==0) //免费领取，签到产品不参与返利
                 {
                     if($user_info['level']>=3)//自购只返利给店主以上级别
@@ -130,6 +129,17 @@ class FanliLogic extends Model
                         }
                     }else{
                         //return false;
+                    }
+
+                    // 2019.10.22 新增商品设置的一层层用户等级的返利
+                    if ($parent_info['level'] > 1 && $parent_info['level'] < 6) {
+                        $data = (new UsersLogic)->getUserLeader($this->userId, $parent_info['level']);
+                        $fanyong = unserialize($goods_info['fanli_data']);
+                        foreach ($data as $k => $v) {
+                            if ($fanyong[$parent_info['level']][$k] > 0) {
+                                $this->writeLog($v['user_id'], $fanyong[$parent_info['level']][$k], '等级返利', 1);
+                            }
+                        }
                     }
 
             }
