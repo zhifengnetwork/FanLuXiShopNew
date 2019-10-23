@@ -1730,16 +1730,41 @@ class UsersLogic extends Model
         $arr = [2=>1,3=>1,4=>2,5=>2];
         $res = [];
         $leadersArr = $this->leader($user_id);
-        $count = 0;
+        $count = $l4 = $l5= $l= 0;
+        $last_level = $level;
         foreach ($leadersArr as $leader){
             $leader_level = M('users')->where(['user_id' => $leader])->value('level');
+
             if($leader_level==$level){
+                if ($level == 4||$level == 5) {
+                    $leader_level = $level * 10 + $l;
+                    $l == 0 && ++$l;
+                }
                 $res[] = ['user_id'=>$leader,'level'=>$leader_level];
                 $count++;
+                $last_level=$leader_level;
+            }elseif($leader_level>$level){
+                $count =$l= 0;
+                $level = $leader_level;
+                if ($level == 4||$level == 5) {
+                    $leader_level = $level * 10 + $l;
+                    $l == 0 && ++$l;
+                }
+                $res[] = ['user_id'=>$leader,'level'=>$leader_level];
+                $count++;
+                $last_level=$leader_level;
             }
-            if($count==$arr[$level]) {
+            $leader_level>10&&$leader_level = floor(bcdiv($leader_level,10));
+
+            if(($count==$arr[$level])) {
                 ++$level;
                 $count = 0;
+                $l=0;
+            }
+            if($leader_level>$last_level) {
+                $level = $leader_level;
+                $count = 0;
+                $l=0;
             }
             if($level>5) break;
         }

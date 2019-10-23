@@ -135,11 +135,10 @@ class FanliLogic extends Model
                     if ($parent_info['level'] > 1 && $parent_info['level'] < 6) {
                         $data = (new UsersLogic)->getUserLeader($this->userId, $parent_info['level']);
                         $fanyong = unserialize($goods_info['fanli_data']);
-                        write_log(json_encode($data).'//fanli_data//'.json_encode($fanyong));
+                        write_log($this->goodId.'//user_id//'.$this->userId.'//data//'.json_encode($data).'//fanyong//'.json_encode($fanyong));
                         foreach ($data as $k => $v) {
-                            write_log($fanyong[$parent_info['level']][$k]);
-                            if ($fanyong[$parent_info['level']][$k] > 0) {
-                                $this->writeLog($v['user_id'], $fanyong[$parent_info['level']][$k], '等级返利', 1);
+                            if ($fanyong[$parent_info['level']][$v['level']] > 0) {
+                                $this->writeLog($v['user_id'], $fanyong[$parent_info['level']][$v['level']], '等级返利', 1);
                             }
                         }
                     }
