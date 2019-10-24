@@ -137,8 +137,12 @@ class FanliLogic extends Model
                         $fanyong = unserialize($goods_info['fanli_data']);
                         write_log($this->goodId.'//user_id//'.$this->userId.'//data//'.json_encode($data).'//fanyong//'.json_encode($fanyong));
                         foreach ($data as $k => $v) {
-                            if ($fanyong[$parent_info['level']][$v['level']] > 0) {
-                                $this->writeLog($v['user_id'], $fanyong[$parent_info['level']][$v['level']], '等级返利', 1);
+                            $commission = $fanyong[$parent_info['level']][$v['level']];
+                            if ($commission > 0) {
+                                $bool = M('users')->where('user_id', $v['user_id'])->setInc('user_money', $commission);
+                                if ($bool !== false) {
+                                    $this->writeLog($v['user_id'], $commission, '等级返利', 1);
+                                }
                             }
                         }
                     }
