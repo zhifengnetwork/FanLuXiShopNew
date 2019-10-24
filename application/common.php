@@ -1386,13 +1386,16 @@ function update_pay_status($order_sn,$ext=array())
             $wechat = new \app\common\logic\wechat\WechatUtil();
             $wechat->sendMsg($userinfo['openid'], 'text', $wx_content);
 
-            //发给上级
-            //$first_leader_openid = Db::name('users')->where(['user_id' => $userinfo['first_leader']])->value('openid');
-            $first_leader_openid = Db::name('users')->field('openid,nickname,user_id')->where(['user_id' => $userinfo['first_leader']])->find();
-            if($first_leader_openid){
-                $wx_first_leader_content = "你的下级{$userinfo['nickname']}[ID:{$userinfo['user_id']}]订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n商品：{$text}\n金额：{$order['total_amount']}";
-                $wechat = new \app\common\logic\wechat\WechatUtil();
-                $wechat->sendMsg($first_leader_openid['openid'], 'text', $wx_first_leader_content);
+            //发给有返利的上级
+            $list = Db::name('order_divide')->field('user_id,money')->where(['order_id'=>$order['order_id'],'status'=>1])->select();
+            foreach ($list as $v){
+                $first_leader_openid = Db::name('users')->where(['user_id' => $v['user_id']])->value('openid');
+                if ($first_leader_openid && $v['money'] > 0) {
+                    $content = "您的下级{$userinfo['nickname']}[ID:{$userinfo['user_id']}]订单支付成功！\n\n订单：{$order_sn}\n支付时间：{$time}\n商品：{$text}\n金额：{$order['total_amount']}\n"
+                        .'您获得返利' .$v['money'];
+                    $wechat = new \app\common\logic\wechat\WechatUtil();
+                    $wechat->sendMsg($first_leader_openid, 'text', $content);
+                }
             }
 
         }
