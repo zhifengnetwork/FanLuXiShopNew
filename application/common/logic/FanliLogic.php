@@ -139,6 +139,7 @@ class FanliLogic extends Model
                         foreach ($data as $k => $v) {
                             $commission = $fanyong[$parent_info['level']][$v['level']];
                             if ($commission > 0) {
+                                $commission = bcmul($commission, $this->goodNum, 2);
                                 $bool = M('users')->where('user_id', $v['user_id'])->setInc('user_money', $commission);
                                 if ($bool !== false) {
                                     $this->writeLog($v['user_id'], $commission, '等级返利', 1);
